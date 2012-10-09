@@ -1,0 +1,7 @@
+*.swp
+*.old
+*.pyc
+*.egg
+*-stamp
+build
+trace
