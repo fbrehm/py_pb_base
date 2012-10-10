@@ -1,8 +1,23 @@
-profitbricks-python-base (0.1.2-2) stable; urgency=low
+profitbricks-python-base (0.1.2-4) stable; urgency=low
 
   * Version bump
+  * Added Debian build dependency to ghostscript
 
- -- Frank Brehm <frank.brehm@profitbricks.com>  Wed, 10 Oct 2012 16:08:59 +0200
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Wed, 10 Oct 2012 16:12:03 +0200
+
+profitbricks-python-base (0.1.2-3) stable; urgency=low
+
+  * Version bump
+  * Declared for stable
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Wed, 10 Oct 2012 15:54:40 +0200
+
+profitbricks-python-base (0.1.2-2) unstable; urgency=low
+
+  * Version bump
+  * Declared for unstable
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Wed, 10 Oct 2012 15:52:39 +0200
 
 profitbricks-python-base (0.1.2-1) stable; urgency=low
 
