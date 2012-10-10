@@ -1,0 +1,6 @@
+*.debhelper
+*.log
+*.substvars
+files
+profitbricks-python-base
+profitbricks-python-base-doc
