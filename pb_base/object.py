@@ -54,6 +54,7 @@ class PbBaseObject(object):
                 verbose = 0,
                 version = __version__,
                 base_dir = None,
+                use_stderr = False,
                 initialized = False,
                 ):
         '''
@@ -69,6 +70,10 @@ class PbBaseObject(object):
         @type version: str
         @param base_dir: the base directory of all operations
         @type base_dir: str
+        @param use_stderr: a flag indicating, that on handle_error() the output
+                           should go to STDERR, even if logging has
+                           initialized logging handlers.
+        @type use_stderr: bool
         @param initialized: initialisation is complete after __init__()
                             of this object
         @type initialized: bool
@@ -109,6 +114,13 @@ class PbBaseObject(object):
                after __init__() of this object
         @type: bool
         '''
+
+        self._use_stderr = bool(use_stderr)
+        """
+        @ivar: a flag indicating, that on handle_error() the output should go
+               to STDERR, even if logging has initialized logging handlers
+        @type: bool
+        """
 
         self._base_dir = base_dir
         '''
@@ -169,6 +181,18 @@ class PbBaseObject(object):
                 self._verbose = v
             else:
                 log.warn("Wrong verbose level %r, must be >= 0", value)
+        def fdel(self):
+            pass
+        return property(**locals())
+
+    #------------------------------------------------------------
+    @apply
+    def use_stderr():
+        doc = "A flag indicating, that on handle_error() the output should go to STDERR."
+        def fget(self):
+            return self._use_stderr
+        def fset(self, value):
+            self._use_stderr = bool(value)
         def fdel(self):
             pass
         return property(**locals())
@@ -266,12 +290,13 @@ class PbBaseObject(object):
             if do_traceback:
                 log.error(traceback.format_exc())
 
-        curdate = datetime.datetime.now()
-        curdate_str = "[" + curdate.isoformat(' ') + "]: "
-        msg = curdate_str + msg + "\n"
-        sys.stderr.write(msg)
-        if do_traceback:
-            traceback.print_exc()
+        if self.use_stderr or not log.handlers:
+            curdate = datetime.datetime.now()
+            curdate_str = "[" + curdate.isoformat(' ') + "]: "
+            msg = curdate_str + msg + "\n"
+            sys.stderr.write(msg)
+            if do_traceback:
+                traceback.print_exc()
 
         return
 
