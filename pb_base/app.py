@@ -35,7 +35,7 @@ from pb_base.object import PbBaseObject
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
 __copyright__ = '(C) 2010-2012 by profitbricks.com'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.3.0'
+__version__ = '0.3.1'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)
@@ -378,7 +378,13 @@ class PbApplication(PbBaseObject):
     def init_arg_parser(self):
         """
         Public available method to initiate the argument parser.
+
+        Note: avoid adding the general options '--verbose', '--help', '--usage'
+              and '--version'. These options are allways added after executing
+              this method.
+
         Descendant classes may override this method.
+
         """
 
         pass
@@ -404,6 +410,19 @@ class PbApplication(PbBaseObject):
 
         if self.args.verbose > self.verbose:
             self.verbose = self.args.verbose
+
+        self.perform_arg_parser()
+
+    #--------------------------------------------------------------------------
+    def perform_arg_parser(self):
+        """
+        Public available method to execute some actions after parsing
+        the command line parameters.
+
+        Descendant classes may override this method.
+        """
+
+        pass
 
 #==============================================================================
 
