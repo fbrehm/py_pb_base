@@ -23,16 +23,19 @@ import traceback
 # Own modules
 from pb_base.common import pp
 
+from pb_base.errors import PbError
+from pb_base.errors import FunctionNotImplementedError
+
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
 __copyright__ = '(C) 2010-2012 by profitbricks.com'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)
 
 #==============================================================================
-class PbBaseError(Exception):
+class PbBaseObjectError(PbError):
     '''
     Base error class useable by all descendand objects.
     '''
