@@ -32,7 +32,7 @@ from pb_base.object import PbBaseObject
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
 __copyright__ = '(C) 2010-2012 by profitbricks.com'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)
@@ -99,10 +99,32 @@ class PbApplication(PbBaseObject):
         @type: Namespace
         """
 
+        self._exit_value = 0
+        """
+        @ivar: return value of the application for exiting with sys.exit().
+        @type: int
+        """
+
         self.init_logging()
 
         if initialized:
             self.initialized = True
+
+    #------------------------------------------------------------
+    @apply
+    def exit_value():
+        doc = "The return value of the application for exiting with sys.exit()."
+        def fget(self):
+            return self._exit_value
+        def fset(self, value):
+            v = int(value)
+            if v >= 0:
+                self._exit_value = v
+            else:
+                log.warn("Wrong exit_value %r, must be >= 0", value)
+        def fdel(self):
+            pass
+        return property(**locals())
 
     #--------------------------------------------------------------------------
     def init_logging(self):
@@ -140,6 +162,73 @@ class PbApplication(PbBaseObject):
         root_log.addHandler(lh_console)
 
         return
+
+    #--------------------------------------------------------------------------
+    def pre_run(self):
+        '''
+        Dummy function to run before the main routine.
+        Could be overwritten by descendant classes.
+
+        '''
+
+        if self.verbose > 1:
+            log.info("executing pre_run() ...")
+
+    #--------------------------------------------------------------------------
+    def _run(self):
+        '''
+        Dummy function as main routine.
+
+        MUST be overwritten by descendant classes.
+
+        '''
+
+        raise FunctionNotImplementedError('_run()', self.__class__.__name__)
+
+    #--------------------------------------------------------------------------
+    def run(self):
+        '''
+        The visible start point of this object.
+        '''
+
+        try:
+            self.pre_run()
+        except Exception, e:
+            self.handle_error(str(e), e.__class__.__name__, True)
+            sys.exit(98)
+
+        if not self.initialized:
+            raise PbApplicationError(("Object '%s' seems not to be completely " +
+                                    "initialized.") %
+                    (self.__class__.__name__))
+
+        try:
+            self._run()
+        except Exception, e:
+            self.handle_error(str(e), e.__class__.__name__, True)
+            self.exit_value = 99
+
+        if self.verbose > 1:
+            log.info("Ending.")
+
+        try:
+            self.post_run()
+        except Exception, e:
+            self.handle_error(str(e), e.__class__.__name__, True)
+            self.exit_value = 97
+
+        sys.exit(self.exit_value)
+
+    #--------------------------------------------------------------------------
+    def post_run(self):
+        '''
+        Dummy function to run after the main routine.
+        Could be overwritten by descendant classes.
+
+        '''
+
+        if self.verbose > 1:
+            log.info("executing post_run() ...")
 
 #==============================================================================
 
