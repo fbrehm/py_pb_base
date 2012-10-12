@@ -16,13 +16,17 @@ import sys
 import os
 import logging
 
+from textwrap import dedent
 from gettext import gettext as _
+from cStringIO import StringIO
 
 # Third party modules
 from configobj import ConfigObj
+from validate import Validator
+from validate import ValidateError
 
 # Own modules
-from pb_base.common import pp
+from pb_base.common import pp, to_unicode_or_bust
 
 from pb_base.rec_dict import RecursiveDictionary
 
@@ -37,7 +41,7 @@ from pb_base.app import PbApplication
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
 __copyright__ = '(C) 2010-2012 by profitbricks.com'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.3.0'
+__version__ = '0.4.0'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)
@@ -149,6 +153,16 @@ class PbCfgApp(PbApplication):
         """
         self.init_cfgfiles()
 
+        self.cfg_spec = ''
+        """
+        @ivar: a specification of the configuration, which should
+               be found in the configuration files.
+               See: http://www.voidspace.org.uk/python/configobj.html#validation
+               how to write such a specification.
+        @type: str
+        """
+        self._init_cfg_spec()
+
         self._read_config()
 
     #------------------------------------------------------------
@@ -234,6 +248,41 @@ class PbCfgApp(PbApplication):
             self.cfg_files.append(cmdline_cfg)
 
     #--------------------------------------------------------------------------
+    def _init_cfg_spec(self):
+        """
+        Initialize self.cfg_spec with the content of a config specification
+        file (See: http://www.voidspace.org.uk/python/configobj.html#validation)
+
+        The content of self.cfg_spec will be used on reading the configuration
+        for the validation of their content.
+
+        """
+
+        self.cfg_spec = ''
+
+        self.init_cfg_spec()
+
+        self.cfg_spec = "\n" + dedent("""\
+        [general]
+        verbose = integer(0, 10, default = 0)
+        """) + self.cfg_spec
+
+    #--------------------------------------------------------------------------
+    def init_cfg_spec(self):
+        """
+        Dummy method to complete the initialisation of the config
+        specification file.
+
+        It will called before reading the configuration files and
+        their validation.
+
+        This method can be overriden in descsendant classes.
+
+        """
+
+        pass
+
+    #--------------------------------------------------------------------------
     def _read_config(self):
         """
         Read in configuration from all configuration files
@@ -249,23 +298,93 @@ class PbCfgApp(PbApplication):
             log.debug("Read cfg files with character set '%s' ...",
                     self.cfg_encoding)
 
+        configspec = ConfigObj(
+                StringIO(self.cfg_spec),
+                encoding = self.cfg_encoding,
+                list_values = False,
+                _inspec = True
+        )
+        if self.verbose > 2:
+            log.debug("Used config specification:\n%s", pp(configspec))
+        validator = Validator()
+
+        cfgfiles_ok = True
+
         for cfg_file in self.cfg_files:
 
             if self.verbose > 1:
                 log.debug("Reading in configuration file '%s' ...", cfg_file)
+
             cfg = ConfigObj(
                     cfg_file,
                     encoding = self.cfg_encoding,
                     stringify = True,
+                    configspec = configspec,
             )
+
             if self.verbose > 2:
                 log.debug("Found configuration:\n%r", pp(cfg))
 
+            result = cfg.validate(validator, preserve_errors = True)
+            if self.verbose > 2:
+                log.debug("Validation result:\n%s", pp(result))
+
+            if not result is True:
+                cfgfiles_ok = False
+                msg = _("Wrong configuration in '%s' found:") % (cfg_file)
+                msg += '\n' + self._transform_cfg_errors(result)
+                self.handle_error(msg, _("Configuration error"))
+                continue
+
             self.cfg.rec_update(cfg)
+
+        if not cfgfiles_ok:
+            sys.exit(2)
 
         if self.verbose > 2:
             log.debug("Merged configuration:\n%r", pp(self.cfg))
 
+    #--------------------------------------------------------------------------
+    def _transform_cfg_errors(self, result, div = None):
+        """
+        Transforms a validation result of the form::
+            {u'general': {u'verbose': VdtValueTooSmallError('the value "-1" is too small.',)}}
+
+        to a string in the form::
+            In section [general] key 'verbose': the value "-1" is too small.
+
+        Every found error in this result is placed a new line at the
+        end of this string.
+
+        @return: a textual representation of the configuration errors (multilined)
+        @rtype: str
+
+        """
+
+        if result is None:
+            return "Undefined error"
+
+        error_str = ''
+        for key in result:
+            val = result[key]
+            if isinstance(val, dict):
+                ndiv = []
+                if div:
+                    for a in div:
+                        ndiv.append(a)
+                ndiv.append(key)
+                part_err_str = self._transform_cfg_errors(val, ndiv)
+                error_str += part_err_str
+            else:
+                section = '-'
+                if div:
+                    section = ', '.join(map(
+                            lambda x: ('[' + x.encode('utf8') + ']'), div))
+                msg = (_("In section %s key '%s': %s") + "\n") % (
+                        section, key.encode('utf8'), str(val).encode('utf8'))
+                error_str += msg
+
+        return error_str
 
 #==============================================================================
 
