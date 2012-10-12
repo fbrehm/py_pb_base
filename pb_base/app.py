@@ -8,13 +8,15 @@
 @license: GPL3
 @summary: The module for a base application object.
           It provides methods for commandline parsing, initialising
-          the logging mechanism and running the application.
+          the logging mechanism, read in all application spcific
+          environment variables and running the application.
 '''
 
 # Standard modules
 import sys
 import os
 import logging
+import re
 
 from gettext import gettext as _
 
@@ -65,6 +67,7 @@ class PbApplication(PbBaseObject):
                 description = None,
                 argparse_epilog = None,
                 argparse_prefix_chars = '-',
+                env_prefix = None,
                 ):
         '''
         Initialisation of the base object.
@@ -96,6 +99,11 @@ class PbApplication(PbBaseObject):
         @param argparse_prefix_chars: The set of characters that prefix
                                       optional arguments.
         @type argparse_prefix_chars: str
+        @param env_prefix: a prefix for environment variables to find them
+                           and assign them to the current application,
+                           if not given, the appname in uppercase letters
+                           and a trailing underscore is assumed.
+        @type env_prefix: str
 
         @return: None
         '''
@@ -151,6 +159,36 @@ class PbApplication(PbBaseObject):
         @ivar: The set of characters that prefix optional arguments.
         @type: str
         """
+
+        self.env = {}
+        """
+        @ivar: a dictionary with all application specifiv environment variables,
+               they will detected by the env_prefix property of this object,
+               and their names will transformed before saving their values in
+               self.env by removing the env_prefix from the variable name.
+        @type: dict
+        """
+
+        self._env_prefix = self.appname.upper() + '_'
+        """
+        @ivar: a prefix for environment variables to detect them and to assign
+               their transformed names and their values in self.env
+        @type: str
+        """
+        if env_prefix:
+            ep = str(env_prefix).strip()
+            if not ep:
+                msg = "Invalid env_prefix %r given - it may not be empty." % (
+                        env_prefix)
+                raise PbApplicationError(msg)
+            match = re.search(r'^[a-z0-9][a-z0-9_]*$', ep, re.IGNORECASE)
+            if not match:
+                msg = ("Invalid characters found in env_prefix %r, only " +
+                        "alphanumeric characters and digits and underscore " +
+                        "(this not as the first character) are allowed.") % (
+                        env_prefix)
+                raise PbApplicationError(msg)
+            self._env_prefix = ep
 
         self._init_arg_parser()
         self._perform_arg_parser()
@@ -218,6 +256,18 @@ class PbApplication(PbBaseObject):
         doc = "The set of characters that prefix optional arguments."
         def fget(self):
             return self._argparse_prefix_chars
+        def fset(self, value):
+            pass
+        def fdel(self):
+            pass
+        return property(**locals())
+
+    #------------------------------------------------------------
+    @apply
+    def env_prefix():
+        doc = "A prefix for environment variables to detect them."
+        def fget(self):
+            return self._env_prefix
         def fset(self, value):
             pass
         def fdel(self):
