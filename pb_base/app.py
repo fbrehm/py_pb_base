@@ -52,7 +52,7 @@ class PbApplicationError(PbBaseObjectError):
 #==============================================================================
 class PbApplication(PbBaseObject):
     """
-    Base class for all objects.
+    Base class for all application objects.
     """
 
     #--------------------------------------------------------------------------
@@ -432,9 +432,10 @@ class PbApplication(PbBaseObject):
         """
         Public available method to initiate the argument parser.
 
-        Note: avoid adding the general options '--verbose', '--help', '--usage'
-              and '--version'. These options are allways added after executing
-              this method.
+        Note::
+             avoid adding the general options '--verbose', '--help', '--usage'
+             and '--version'. These options are allways added after executing
+             this method.
 
         Descendant classes may override this method.
 
