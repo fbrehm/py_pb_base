@@ -1,3 +1,11 @@
+profitbricks-python-base (0.1.6-1) unstable; urgency=low
+
+  * Version bump
+  * Reading and basic performing of environment variables by the
+    base application object
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Fri, 12 Oct 2012 11:29:42 +0200
+
 profitbricks-python-base (0.1.5-2) unstable; urgency=low
 
   * Version bump
