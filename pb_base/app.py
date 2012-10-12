@@ -193,6 +193,9 @@ class PbApplication(PbBaseObject):
         self._init_arg_parser()
         self._perform_arg_parser()
 
+        self._init_env()
+        self._perform_env()
+
         self.init_logging()
 
         if initialized:
@@ -470,6 +473,73 @@ class PbApplication(PbBaseObject):
         the command line parameters.
 
         Descendant classes may override this method.
+        """
+
+        pass
+
+    #--------------------------------------------------------------------------
+    def _init_env(self):
+        """
+        Initialization of self.env by application specific environment
+        variables.
+
+        It calls self.init_env(), after it has done his job.
+
+        """
+
+        for (key, value) in os.environ.items():
+
+            if not key.startswith(self.env_prefix):
+                continue
+
+            newkey = key.replace(self.env_prefix, '', 1)
+            self.env[newkey] = value
+
+        self.init_env()
+
+    #--------------------------------------------------------------------------
+    def init_env(self):
+        """
+        Public available method to initiate self.env additional to the implicit
+        initialization done by this module.
+        Maybe it can be used to import environment variables, their
+        names not starting with self.env_prefix.
+
+        Currently a dummy method, which ca be overriden by descendant classes.
+
+        """
+
+        pass
+
+    #--------------------------------------------------------------------------
+    def _perform_env(self):
+        """
+        Method to do some useful things with the found environment.
+
+        It calls self.perform_env(), after it has done his job.
+
+        """
+
+        # try to detect verbosity level from environment
+        if 'VERBOSE' in self.env and self.env['VERBOSE']:
+            v = 0
+            try:
+                v = int(self.env['VERBOSE'])
+            except ValueError:
+                v = 1
+            if v > self.verbose:
+                self.verbose = v
+
+        self.perform_env()
+
+    #--------------------------------------------------------------------------
+    def perform_env(self):
+        """
+        Public available method to perform found environment variables after
+        initialization of self.env.
+
+        Currently a dummy method, which ca be overriden by descendant classes.
+
         """
 
         pass
