@@ -220,6 +220,30 @@ class PbCfgApp(PbApplication):
             pass
         return property(**locals())
 
+    #------------------------------------------------------------
+    @apply
+    def cfg_dir():
+        doc = "The directory containing the configuration files."
+        def fget(self):
+            return self._cfg_dir
+        def fset(self, value):
+            pass
+        def fdel(self):
+            pass
+        return property(**locals())
+
+    #------------------------------------------------------------
+    @apply
+    def cfg_stem():
+        doc = "The basename of the configuration file without any file extension."
+        def fget(self):
+            return self._cfg_stem
+        def fset(self, value):
+            pass
+        def fdel(self):
+            pass
+        return property(**locals())
+
     #--------------------------------------------------------------------------
     def init_arg_parser(self):
         """
@@ -280,7 +304,11 @@ class PbCfgApp(PbApplication):
         etc_dir = os.sep + 'etc'
         if os.environ.has_key('VIRTUAL_ENV'):
             etc_dir = os.path.join(os.environ['VIRTUAL_ENV'], 'etc')
-        syscfg_fn = os.path.join(etc_dir, self.appname, '%s.cfg' % self.appname)
+        syscfg_fn = None
+        if self.cfg_dir:
+            syscfg_fn = os.path.join(etc_dir, self.cfg_dir, '%s.cfg' % (self.cfg_stem))
+        else:
+            syscfg_fn = os.path.join(etc_dir, '%s.cfg' % (self.cfg_stem))
         self.cfg_files.append(syscfg_fn)
 
         # add $HOME/.app/app.cfg
@@ -289,8 +317,13 @@ class PbCfgApp(PbApplication):
             home_dir = os.environ['HOME']
             if self.verbose > 1:
                 log.debug("home_dir: %s", home_dir)
-            usercfg_fn = os.path.join(home_dir, (".%s" % (self.appname)),
-                    (self.appname + '.cfg'))
+            usercfg_fn = None
+            if self.cfg_dir:
+                usercfg_fn = os.path.join(home_dir, (".%s" % (self.cfg_dir)),
+                        ('%s.cfg' % (self.cfg_stem)))
+            else:
+                usercfg_fn = os.path.join(home_dir,
+                        (".%s.cfg" % (self.cfg_stem)))
             self.cfg_files.append(usercfg_fn)
 
         # add a configfile given on command line with --cfg-file
