@@ -1,3 +1,11 @@
+profitbricks-python-base (0.1.8-1) unstable; urgency=low
+
+  * Version bump
+  * Added a comandline parameter and a method to print out the default
+    configuration
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Mon, 15 Oct 2012 11:16:51 +0200
+
 profitbricks-python-base (0.1.7-1) unstable; urgency=low
 
   * Version bump
