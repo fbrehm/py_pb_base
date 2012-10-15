@@ -153,7 +153,7 @@ class PbCfgApp(PbApplication):
         """
         self.init_cfgfiles()
 
-        self.cfg_spec = ''
+        self.cfg_spec = None
         """
         @ivar: a specification of the configuration, which should
                be found in the configuration files.
@@ -258,14 +258,28 @@ class PbCfgApp(PbApplication):
 
         """
 
-        self.cfg_spec = ''
+        self.cfg_spec = ConfigObj()
+        self.cfg_spec.initial_comment.append(u'Configuration of %s' % (self.appname))
+        self.cfg_spec.initial_comment.append('')
 
         self.init_cfg_spec()
 
-        self.cfg_spec = "\n" + dedent("""\
-        [general]
-        verbose = integer(0, 10, default = 0)
-        """) + self.cfg_spec
+        if not u'general' in self.cfg_spec:
+            self.cfg_spec[u'general'] = {}
+
+        self.cfg_spec.comments[u'general'].append('')
+        self.cfg_spec.comments[u'general'].append(
+                u'General configuration parameters')
+
+        self.cfg_spec[u'general'] = {u'verbose': u'integer(0, 10, default = 0)'}
+        self.cfg_spec[u'general'].comments[u'verbose'].append('')
+        self.cfg_spec[u'general'].comments[u'verbose'].append(
+                u'Defines a minimum verbosity of the application')
+
+        self.cfg_spec.final_comment.append('')
+        self.cfg_spec.final_comment.append('')
+        self.cfg_spec.final_comment.append(
+                u'vim: filetype=cfg fileencoding=utf-8 ts=4 expandtab')
 
     #--------------------------------------------------------------------------
     def init_cfg_spec(self):
@@ -298,14 +312,13 @@ class PbCfgApp(PbApplication):
             log.debug("Read cfg files with character set '%s' ...",
                     self.cfg_encoding)
 
-        configspec = ConfigObj(
-                StringIO(self.cfg_spec),
-                encoding = self.cfg_encoding,
-                list_values = False,
-                _inspec = True
-        )
-        if self.verbose > 2:
-            log.debug("Used config specification:\n%s", pp(configspec))
+        if self.verbose > 3:
+            cfgspec = StringIO()
+            self.cfg_spec.write(cfgspec)
+            log.debug("Used config specification:\n%s", cfgspec.getvalue())
+            cfgspec.close()
+            del cfgspec
+
         validator = Validator()
 
         cfgfiles_ok = True
@@ -319,13 +332,14 @@ class PbCfgApp(PbApplication):
                     cfg_file,
                     encoding = self.cfg_encoding,
                     stringify = True,
-                    configspec = configspec,
+                    configspec = self.cfg_spec,
             )
 
             if self.verbose > 2:
                 log.debug("Found configuration:\n%r", pp(cfg))
 
-            result = cfg.validate(validator, preserve_errors = True)
+            result = cfg.validate(
+                    validator, preserve_errors = True, copy = True)
             if self.verbose > 2:
                 log.debug("Validation result:\n%s", pp(result))
 
