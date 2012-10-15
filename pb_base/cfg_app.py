@@ -15,6 +15,7 @@
 import sys
 import os
 import logging
+import datetime
 
 from textwrap import dedent
 from gettext import gettext as _
@@ -200,6 +201,14 @@ class PbCfgApp(PbApplication):
                 dest = "cfg_encoding",
                 default = self.cfg_encoding,
                 help = _("The encoding character set of the configuration files")
+        )
+
+        self.arg_parser.add_argument(
+                "--default-config",
+                action = 'store_true',
+                dest = "show_default_config",
+                help = _('Generates a default configuration, prints ' +
+                        'it out to STDOUT and exit'),
         )
 
     #--------------------------------------------------------------------------
@@ -399,6 +408,40 @@ class PbCfgApp(PbApplication):
                 error_str += msg
 
         return error_str
+
+    #--------------------------------------------------------------------------
+    def run(self):
+        '''
+        The visible start point of this object.
+
+        If the command line parameter '--default-config' was given, the defined
+        default configuration is printed out to stdout, else the method run()
+        from parent class is called.
+
+        '''
+
+        if not self.args.show_default_config:
+            return super(PbCfgApp, self).run()
+
+        curdate = datetime.datetime.utcnow()
+
+        self.cfg_spec.initial_comment.append('')
+        self.cfg_spec.initial_comment.append(
+                (u'Generated at: %s UTC' % (curdate.isoformat(' '))))
+        self.cfg_spec.initial_comment.append('')
+
+        cfg = ConfigObj(
+                infile = None,
+                encoding = self.cfg_encoding,
+                stringify = True,
+                configspec = self.cfg_spec,
+        )
+
+        vdt = Validator()
+        cfg.validate(vdt, copy = True)
+        cfg.write(sys.stdout)
+
+        sys.exit(0)
 
 #==============================================================================
 
