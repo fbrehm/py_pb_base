@@ -73,6 +73,8 @@ class PbCfgApp(PbApplication):
                 argparse_epilog = None,
                 argparse_prefix_chars = '-',
                 env_prefix = None,
+                cfg_dir = None,
+                cfg_stem = None,
                 cfg_encoding = 'utf8',
                 ):
         '''
@@ -110,6 +112,15 @@ class PbCfgApp(PbApplication):
                            if not given, the appname in uppercase letters
                            and a trailing underscore is assumed.
         @type env_prefix: str
+        @param cfg_dir: directory name under /etc or $HOME respectively, where the
+                        normal configuration file should be located.
+                        It defaults to self.appname.
+                        If no seperate configuration dir should used, give an
+                        empty string ('') as directory name.
+        @type cfg_dir: str
+        @param cfg_stem: the basename of the configuration file without any
+                         file extension.
+        @type cfg_stem: str
         @param cfg_encoding: encoding character set of the configuration files
                              must be a valid Python encoding
                              (See: http://docs.python.org/library/codecs.html#standard-encodings)
@@ -144,6 +155,37 @@ class PbCfgApp(PbApplication):
                different configuration files and other sources.
         @type: RecursiveDictionary
         """
+
+        self._cfg_dir = None
+        """
+        @ivar: Directory name under /etc or $HOME respectively, where the the
+               normal configuration file should be located.
+               For looking under $HOME, a leading '.' on this directory name
+               is assumed.
+        @type: str
+        """
+        if cfg_dir is None:
+            self._cfg_dir = self.appname
+        else:
+            d = str(cfg_dir).strip()
+            if d == '':
+                self._cfg_dir = None
+            else:
+                self._cfg_dir = d
+
+        self._cfg_stem = None
+        """
+        @ivar: the basename of the configuration file without any file extension
+        @type: str
+        """
+        if cfg_stem:
+            s = str(cfg_stem).strip()
+            if not s:
+                msg = "Invalid configuration stem %r given." % (cfg_stem)
+                raise PbCfgAppError(msg)
+            self._cfg_stem = s
+        else:
+            self._cfg_stem = self.appname
 
         self.cfg_files = []
         """
