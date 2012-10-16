@@ -6,8 +6,8 @@ Build-Depends: debhelper (>= 7.0.50~), python-setuptools, python-epydoc, python-
  python-support, texlive-latex-base, texlive-latex-extra, python-argparse, ghostscript,
  profitbricks-python-logging, python-configobj
 Standards-Version: 3.8.4
-Vcs-Git: git+ssh://git.profitbricks.localdomain/srv/git/python/pb_base.git
-Vcs-Browser: http://git.profitbricks.localdomain/gitweb/?p=python/pb_base.git;a=summary
+Vcs-Git: git+ssh://git.profitbricks.localdomain/srv/git/python/pb-base.git
+Vcs-Browser: http://git.profitbricks.localdomain/gitweb/?p=python/pb-base.git;a=summary
 
 Package: profitbricks-python-base
 Architecture: all
