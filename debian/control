@@ -2,15 +2,17 @@ Source: profitbricks-python-base
 Section: python
 Priority: extra
 Maintainer: Frank Brehm <frank.brehm@profitbricks.com>
-Build-Depends: debhelper (>= 7.0.50~), python-setuptools, python-epydoc, python-docutils,
- python-support, texlive-latex-base, texlive-latex-extra, python-argparse, ghostscript
+Build-Depends: debhelper (>= 7.0.50~), python-epydoc, python-docutils,
+ python-support, texlive-latex-base, texlive-latex-extra, python-argparse, ghostscript,
+ profitbricks-python-logging, python-configobj
 Standards-Version: 3.8.4
-Vcs-Git: git+ssh://git.profitbricks.localdomain/srv/git/python/pb_base.git
-Vcs-Browser: http://git.profitbricks.localdomain/gitweb/?p=python/pb_base.git;a=summary
+Vcs-Git: git+ssh://git.profitbricks.localdomain/srv/git/python/pb-base.git
+Vcs-Browser: http://git.profitbricks.localdomain/gitweb/?p=python/pb-base.git;a=summary
 
 Package: profitbricks-python-base
 Architecture: all
-Depends: ${misc:Depends}, python, python-support, python-argparse
+Depends: ${misc:Depends}, python, python-support, python-argparse,
+ profitbricks-python-logging, python-configobj
 Description: Python modules for common used objects, error classes and functions
 
 Package: profitbricks-python-base-doc
