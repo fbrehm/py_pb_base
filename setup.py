@@ -1,18 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-@author: Frank Brehm
-@contact: frank.brehm@profitbricks.com
-@license: GPL3
-@copyright: (c) 2010-2012 by Profitbricks GmbH
-@summary: Modules for common used objects, error classes and methods.
-"""
-
-from setuptools import setup
 import os
 import sys
-import os.path
+from distutils.core import setup, Command
 
 # own modules:
 cur_dir = os.getcwd()
@@ -26,15 +17,39 @@ import pb_base
 
 packet_version = pb_base.__version__
 
+def read(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(
     name = 'pb_base',
     version = packet_version,
     description = 'Modules for common used objects, error classes and methods.',
+    long_description = read('README.txt'),
     author = 'Frank Brehm',
     author_email = 'frank.brehm@profitbricks.com',
     url = 'ssh://git.profitbricks.localdomain/srv/git/python/pb_base.git',
+    license = 'LGPLv3+',
+    platforms = ['posix'],
     packages = ['pb_base'],
+    classifiers = [
+        'Development Status :: 2 - Pre-Alpha',
+        'Environment :: Console',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
+        'Natural Language :: English',
+        'Operating System :: POSIX',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+    ],
+    provides = [
+        'pb_base',
+    ],
+    requires = [
+        'pb_logging',
+        'argparse',
+        'configobj',
+    ]
 )
 
 #========================================================================
