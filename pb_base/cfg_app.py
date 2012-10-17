@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
-@author: Frank Brehm
-@contact: frank.brehm@profitbricks.com
-@organization: Profitbricks GmbH
-@copyright: (c) 2010-2012 by Profitbricks GmbH
-@license: GPL3
 @summary: The module for a base configured application object.
           It provides all from the base application object with additional
           methods and properties to read different configuration files.
@@ -39,11 +34,7 @@ from pb_base.object import PbBaseObjectError
 from pb_base.app import PbApplicationError
 from pb_base.app import PbApplication
 
-__author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
-__copyright__ = '(C) 2010-2012 by profitbricks.com'
-__contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.4.0'
-__license__ = 'GPL3'
+__version__ = '0.4.1'
 
 log = logging.getLogger(__name__)
 

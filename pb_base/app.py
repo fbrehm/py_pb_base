@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
-@author: Frank Brehm
-@contact: frank.brehm@profitbricks.com
-@organization: Profitbricks GmbH
-@copyright: (c) 2010-2012 by Profitbricks GmbH
-@license: GPL3
 @summary: The module for a base application object.
           It provides methods for commandline parsing, initialising
           the logging mechanism, read in all application spcific
@@ -34,11 +29,7 @@ from pb_base.errors import FunctionNotImplementedError
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
-__author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
-__copyright__ = '(C) 2010-2012 by profitbricks.com'
-__contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.4.1'
-__license__ = 'GPL3'
+__version__ = '0.4.2'
 
 log = logging.getLogger(__name__)
 

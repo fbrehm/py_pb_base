@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
-@author: Frank Brehm
-@contact: frank.brehm@profitbricks.com
-@organization: Profitbricks GmbH
-@copyright: (c) 2010-2012 by Profitbricks GmbH
-@license: GPL3
 @summary: The module for the base object.
           It provides properties and methods used
           by all objects.
@@ -26,11 +21,7 @@ from pb_base.common import pp
 from pb_base.errors import PbError
 from pb_base.errors import FunctionNotImplementedError
 
-__author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
-__copyright__ = '(C) 2010-2012 by profitbricks.com'
-__contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.2.2'
-__license__ = 'GPL3'
+__version__ = '0.2.3'
 
 log = logging.getLogger(__name__)
 
