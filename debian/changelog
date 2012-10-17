@@ -1,3 +1,10 @@
+profitbricks-python-base (0.1.11-1) unstable; urgency=low
+
+  * Version bump
+  * Declared for unstable
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Wed, 17 Oct 2012 12:52:12 +0200
+
 profitbricks-python-base (0.1.10-2) stable; urgency=low
 
   * Version bump
