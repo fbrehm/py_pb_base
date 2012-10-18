@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-'''
+"""
 @summary: The module for a base daemon application object.
           It provides all from the configured application object with
           additional methods and properties to daemonize itself.
-'''
+"""
 
 # Standard modules
 import sys
@@ -63,7 +63,7 @@ class PbDaemon(PbCfgApp):
                 cfg_stem = None,
                 cfg_encoding = 'utf8',
                 ):
-        '''
+        """
         Initialisation of the daemon object.
 
         @raise PbDaemonError: on a uncoverable error.
@@ -113,7 +113,7 @@ class PbDaemon(PbCfgApp):
         @type cfg_encoding: str
 
         @return: None
-        '''
+        """
 
         super(PbDaemon, self).__init__(
                 appname = appname,
