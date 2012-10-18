@@ -12,7 +12,6 @@ import os
 import logging
 import datetime
 
-from textwrap import dedent
 from gettext import gettext as _
 from cStringIO import StringIO
 
@@ -71,7 +70,7 @@ class PbCfgApp(PbApplication):
         """
         Initialisation of the base object.
 
-        Raises an exception on a uncoverable error.
+        @raise PbCfgAppError: on a uncoverable error.
 
         @param appname: name of the current running application
         @type appname: str
