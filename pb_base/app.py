@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-'''
+"""
 @summary: The module for a base application object.
           It provides methods for commandline parsing, initialising
           the logging mechanism, read in all application spcific
           environment variables and running the application.
-'''
+"""
 
 # Standard modules
 import sys
@@ -60,7 +60,7 @@ class PbApplication(PbBaseObject):
                 argparse_prefix_chars = '-',
                 env_prefix = None,
                 ):
-        '''
+        """
         Initialisation of the base object.
 
         Raises an exception on a uncoverable error.
@@ -97,7 +97,7 @@ class PbApplication(PbBaseObject):
         @type env_prefix: str
 
         @return: None
-        '''
+        """
 
         super(PbApplication, self).__init__(
                 appname = appname,
@@ -307,31 +307,31 @@ class PbApplication(PbBaseObject):
 
     #--------------------------------------------------------------------------
     def pre_run(self):
-        '''
+        """
         Dummy function to run before the main routine.
         Could be overwritten by descendant classes.
 
-        '''
+        """
 
         if self.verbose > 1:
             log.info("executing pre_run() ...")
 
     #--------------------------------------------------------------------------
     def _run(self):
-        '''
+        """
         Dummy function as main routine.
 
         MUST be overwritten by descendant classes.
 
-        '''
+        """
 
         raise FunctionNotImplementedError('_run()', self.__class__.__name__)
 
     #--------------------------------------------------------------------------
     def run(self):
-        '''
+        """
         The visible start point of this object.
-        '''
+        """
 
         try:
             self.pre_run()
@@ -363,11 +363,11 @@ class PbApplication(PbBaseObject):
 
     #--------------------------------------------------------------------------
     def post_run(self):
-        '''
+        """
         Dummy function to run after the main routine.
         Could be overwritten by descendant classes.
 
-        '''
+        """
 
         if self.verbose > 1:
             log.info("executing post_run() ...")

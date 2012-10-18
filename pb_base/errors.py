@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-'''
+"""
 @summary: module for some common used error classes
-'''
+"""
 
 # Standard modules
 import errno

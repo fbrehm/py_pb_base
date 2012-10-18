@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-'''
+"""
 @summary: The module for a base configured application object.
           It provides all from the base application object with additional
           methods and properties to read different configuration files.
-'''
+"""
 
 # Standard modules
 import sys
@@ -68,7 +68,7 @@ class PbCfgApp(PbApplication):
                 cfg_stem = None,
                 cfg_encoding = 'utf8',
                 ):
-        '''
+        """
         Initialisation of the base object.
 
         Raises an exception on a uncoverable error.
@@ -118,7 +118,7 @@ class PbCfgApp(PbApplication):
         @type cfg_encoding: str
 
         @return: None
-        '''
+        """
 
         self._cfg_encoding = cfg_encoding
         """
@@ -477,14 +477,14 @@ class PbCfgApp(PbApplication):
 
     #--------------------------------------------------------------------------
     def run(self):
-        '''
+        """
         The visible start point of this object.
 
         If the command line parameter '--default-config' was given, the defined
         default configuration is printed out to stdout, else the method run()
         from parent class is called.
 
-        '''
+        """
 
         if not self.args.show_default_config:
             return super(PbCfgApp, self).run()

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-'''
+"""
 @summary: module for some common used checksum functions
-'''
+"""
 
 # Standard modules
 
@@ -88,7 +88,7 @@ def crc64_digest(aString):
 
 #==============================================================================
 def checksum(string):
-    '''
+    """
     A simple checksum algorithm of a given string.
 
     Taken from:
@@ -99,13 +99,13 @@ def checksum(string):
 
     @return: the checksum
     @rtype: int
-    '''
+    """
 
     return reduce(lambda x, y: x + y, map(ord, string))
 
 #==============================================================================
 def checksum256(string):
-    '''
+    """
     A simple checksum algorithm of a given string. It's similar
     to checksum(), but gives back the modulo to 256 of the checksum.
 
@@ -117,7 +117,7 @@ def checksum256(string):
 
     @return: the modulo to 256 of the checksum
     @rtype: int
-    '''
+    """
 
     return reduce(lambda x, y: x + y, map(ord, string)) % 256
 

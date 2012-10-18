@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-'''
+"""
 @summary: The module provides an object class with a dict, which can
           be updated in a recursive way.
           It is originated by Jannis Andrija Schnitzer::
             https://gist.github.com/114831
-'''
+"""
 
 # Standard modules
 #import sys

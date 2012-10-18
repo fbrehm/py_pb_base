@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-'''
+"""
 @summary: The module for the base object.
           It provides properties and methods used
           by all objects.
-'''
+"""
 
 # Standard modules
 import sys
@@ -27,9 +27,9 @@ log = logging.getLogger(__name__)
 
 #==============================================================================
 class PbBaseObjectError(PbError):
-    '''
+    """
     Base error class useable by all descendand objects.
-    '''
+    """
 
     pass
 
@@ -48,7 +48,7 @@ class PbBaseObject(object):
                 use_stderr = False,
                 initialized = False,
                 ):
-        '''
+        """
         Initialisation of the base object.
 
         Raises an exception on a uncoverable error.
@@ -70,13 +70,13 @@ class PbBaseObject(object):
         @type initialized: bool
 
         @return: None
-        '''
+        """
 
         self._appname = None
-        '''
+        """
         @ivar: name of the current running application
         @type: str
-        '''
+        """
         if appname:
             v = str(appname).strip()
             if v:
@@ -85,26 +85,26 @@ class PbBaseObject(object):
             self._appname = os.path.basename(sys.argv[0])
 
         self._version = version
-        '''
+        """
         @ivar: version string of the current object or application
         @type: str
-        '''
+        """
 
         self._verbose = int(verbose)
-        '''
+        """
         @ivar: verbosity level (0 - 9)
         @type: int
-        '''
+        """
         if self._verbose < 0:
             msg = "Wrong verbose level %r, must be >= 0" % (verbose)
             raise ValueError(msg)
 
         self._initialized = False
-        '''
+        """
         @ivar: initialisation of this object is complete
                after __init__() of this object
         @type: bool
-        '''
+        """
 
         self._use_stderr = bool(use_stderr)
         """
@@ -114,11 +114,11 @@ class PbBaseObject(object):
         """
 
         self._base_dir = base_dir
-        '''
+        """
         @ivar: base directory used for different purposes, must be an existent
                directory. Defaults to directory of current script daemon.py.
         @type: str
-        '''
+        """
         if base_dir:
             if not os.path.exists(base_dir):
                 msg = "Base dir '%s' doesn't exists." % (base_dir)
@@ -220,24 +220,24 @@ class PbBaseObject(object):
 
     #--------------------------------------------------------------------------
     def __str__(self):
-        '''
+        """
         Typecasting function for translating object structure
         into a string
 
         @return: structure as string
         @rtype:  str
-        '''
+        """
 
         return pp(self.as_dict())
 
     #--------------------------------------------------------------------------
     def as_dict(self):
-        '''
+        """
         Transforms the elements of the object into a dict
 
         @return: structure as dict
         @rtype:  dict
-        '''
+        """
 
         res = self.__dict__
         res = {}
@@ -254,7 +254,7 @@ class PbBaseObject(object):
     #--------------------------------------------------------------------------
     def handle_error(self, error_message = None, exception_name = None,
                         do_traceback = False):
-        '''
+        """
         Handle an error gracefully.
 
         Print a traceback and continue.
@@ -266,7 +266,7 @@ class PbBaseObject(object):
         @param do_traceback: allways show a traceback
         @type do_traceback: bool
 
-        '''
+        """
 
         msg = 'Exception happened'
         if exception_name:
