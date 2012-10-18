@@ -1,13 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-'''
-@author: Frank Brehm
-@contact: frank.brehm@profitbricks.com
-@organization: Profitbricks GmbH
-@copyright: (c) 2010-2012 by Profitbricks GmbH
-@license: GPL3
+"""
 @summary: module for some common used objects and routines
-'''
+"""
 
 # Standard modules
 import sys
@@ -21,17 +16,13 @@ import pprint
 
 # Own modules
 
-__author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
-__copyright__ = '(C) 2010-2012 by profitbricks.com'
-__contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.3.0'
-__license__ = 'GPL3'
+__version__ = '0.3.1'
 
 log = logging.getLogger(__name__)
 
 #==============================================================================
 def human2mbytes(value, si_conform = False, as_float = False):
-    '''
+    """
     Converts the given human readable byte value (e.g. 5MB, 8.4GiB etc.)
     with a prefix into an integer/float value (without a prefix) of MiBiBytes.
     It raises a ValueError on invalid values.
@@ -55,7 +46,7 @@ def human2mbytes(value, si_conform = False, as_float = False):
 
     @return: amount of MibiBytes
     @rtype:  int or float
-    '''
+    """
 
     if value is None:
         msg = ("Given value is 'None'.")
@@ -192,21 +183,21 @@ def bytes2human(value, si_conform = False, precision = 0):
 
 #==============================================================================
 def pp(value):
-    '''
+    """
     Returns a pretty print string of the given value.
 
     @return: pretty print string
     @rtype: str
-    '''
+    """
 
     pretty_printer = pprint.PrettyPrinter(indent = 4)
     return pretty_printer.pformat(value)
 
 #==============================================================================
 def to_bool(value):
-    '''
+    """
     Converter from string to boolean values (e.g. from configurations)
-    '''
+    """
 
     if not value:
         return False
@@ -242,13 +233,13 @@ def to_bool(value):
 
 #==============================================================================
 def caller_search_path():
-    '''
+    """
     Builds a search path for executables from environment $PATH
     including some standard paths.
 
     @return: all existing search paths
     @rtype: list
-    '''
+    """
 
     path_list = []
     search_path = os.environ['PATH']
@@ -288,7 +279,7 @@ def caller_search_path():
 
 #==============================================================================
 def to_unicode_or_bust(obj, encoding = 'utf-8'):
-    '''
+    """
     Transforms a string, what is not a unicode string, into a unicode string.
     All other objects are left untouched.
 
@@ -300,7 +291,7 @@ def to_unicode_or_bust(obj, encoding = 'utf-8'):
     @return: the maybe decoded object
     @rtype:  object
 
-    '''
+    """
 
     if isinstance(obj, basestring):
         if not isinstance(obj, unicode):
@@ -310,7 +301,7 @@ def to_unicode_or_bust(obj, encoding = 'utf-8'):
 
 #==============================================================================
 def to_utf8_or_bust(obj):
-    '''
+    """
     Transforms a string, what is a unicode string, into a utf-8 encoded string.
     All other objects are left untouched.
 
@@ -320,7 +311,7 @@ def to_utf8_or_bust(obj):
     @return: the maybe encoded object
     @rtype:  object
 
-    '''
+    """
 
     return encode_or_bust(obj, 'utf-8')
 

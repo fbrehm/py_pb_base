@@ -1,21 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-'''
-@author: Frank Brehm
-@contact: frank.brehm@profitbricks.com
-@organization: Profitbricks GmbH
-@copyright: (c) 2010-2012 by Profitbricks GmbH
-@license: GPL3
+"""
 @summary: module for some common used checksum functions
-'''
+"""
 
 # Standard modules
 
-__author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
-__copyright__ = '(C) 2010-2012 by profitbricks.com'
-__contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.1.0'
-__license__ = 'GPL3'
+__version__ = '0.1.1'
 
 #------------------------------------------------------------------------------
 # Module variables
@@ -97,7 +88,7 @@ def crc64_digest(aString):
 
 #==============================================================================
 def checksum(string):
-    '''
+    """
     A simple checksum algorithm of a given string.
 
     Taken from:
@@ -108,13 +99,13 @@ def checksum(string):
 
     @return: the checksum
     @rtype: int
-    '''
+    """
 
     return reduce(lambda x, y: x + y, map(ord, string))
 
 #==============================================================================
 def checksum256(string):
-    '''
+    """
     A simple checksum algorithm of a given string. It's similar
     to checksum(), but gives back the modulo to 256 of the checksum.
 
@@ -126,7 +117,7 @@ def checksum256(string):
 
     @return: the modulo to 256 of the checksum
     @rtype: int
-    '''
+    """
 
     return reduce(lambda x, y: x + y, map(ord, string)) % 256
 

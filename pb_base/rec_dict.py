@@ -1,16 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-'''
-@author: Frank Brehm
-@contact: frank.brehm@profitbricks.com
-@organization: Profitbricks GmbH
-@copyright: (c) 2010-2012 by Profitbricks GmbH
-@license: GPL3
+"""
 @summary: The module provides an object class with a dict, which can
           be updated in a recursive way.
           It is originated by Jannis Andrija Schnitzer::
             https://gist.github.com/114831
-'''
+"""
 
 # Standard modules
 #import sys
@@ -20,7 +15,7 @@ import logging
 __author__ = 'jannis@itisme.org (Jannis Andrija Schnitzer)'
 __copyright__ = '(c) 2009 Jannis Andrija Schnitzer'
 __contact__ = 'jannis@itisme.org'
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)

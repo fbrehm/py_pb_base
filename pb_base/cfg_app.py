@@ -1,15 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-'''
-@author: Frank Brehm
-@contact: frank.brehm@profitbricks.com
-@organization: Profitbricks GmbH
-@copyright: (c) 2010-2012 by Profitbricks GmbH
-@license: GPL3
+"""
 @summary: The module for a base configured application object.
           It provides all from the base application object with additional
           methods and properties to read different configuration files.
-'''
+"""
 
 # Standard modules
 import sys
@@ -17,7 +12,6 @@ import os
 import logging
 import datetime
 
-from textwrap import dedent
 from gettext import gettext as _
 from cStringIO import StringIO
 
@@ -39,11 +33,7 @@ from pb_base.object import PbBaseObjectError
 from pb_base.app import PbApplicationError
 from pb_base.app import PbApplication
 
-__author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
-__copyright__ = '(C) 2010-2012 by profitbricks.com'
-__contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.4.0'
-__license__ = 'GPL3'
+__version__ = '0.4.1'
 
 log = logging.getLogger(__name__)
 
@@ -77,10 +67,10 @@ class PbCfgApp(PbApplication):
                 cfg_stem = None,
                 cfg_encoding = 'utf8',
                 ):
-        '''
+        """
         Initialisation of the base object.
 
-        Raises an exception on a uncoverable error.
+        @raise PbCfgAppError: on a uncoverable error.
 
         @param appname: name of the current running application
         @type appname: str
@@ -127,7 +117,7 @@ class PbCfgApp(PbApplication):
         @type cfg_encoding: str
 
         @return: None
-        '''
+        """
 
         self._cfg_encoding = cfg_encoding
         """
@@ -209,40 +199,22 @@ class PbCfgApp(PbApplication):
         self._read_config()
 
     #------------------------------------------------------------
-    @apply
-    def cfg_encoding():
-        doc = "The encoding character set of the configuration files."
-        def fget(self):
-            return self._cfg_encoding
-        def fset(self, value):
-            pass
-        def fdel(self):
-            pass
-        return property(**locals())
+    @property
+    def cfg_encoding(self):
+        """The encoding character set of the configuration files."""
+        return self._cfg_encoding
 
     #------------------------------------------------------------
-    @apply
-    def cfg_dir():
-        doc = "The directory containing the configuration files."
-        def fget(self):
-            return self._cfg_dir
-        def fset(self, value):
-            pass
-        def fdel(self):
-            pass
-        return property(**locals())
+    @property
+    def cfg_dir(self):
+        """The directory containing the configuration files."""
+        return self._cfg_dir
 
     #------------------------------------------------------------
-    @apply
-    def cfg_stem():
-        doc = "The basename of the configuration file without any file extension."
-        def fget(self):
-            return self._cfg_stem
-        def fset(self, value):
-            pass
-        def fdel(self):
-            pass
-        return property(**locals())
+    @property
+    def cfg_stem(self):
+        """The basename of the configuration file without any file extension."""
+        return self._cfg_stem
 
     #--------------------------------------------------------------------------
     def init_arg_parser(self):
@@ -486,14 +458,14 @@ class PbCfgApp(PbApplication):
 
     #--------------------------------------------------------------------------
     def run(self):
-        '''
+        """
         The visible start point of this object.
 
         If the command line parameter '--default-config' was given, the defined
         default configuration is printed out to stdout, else the method run()
         from parent class is called.
 
-        '''
+        """
 
         if not self.args.show_default_config:
             return super(PbCfgApp, self).run()

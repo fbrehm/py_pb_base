@@ -1,16 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-'''
-@author: Frank Brehm
-@contact: frank.brehm@profitbricks.com
-@organization: Profitbricks GmbH
-@copyright: (c) 2010-2012 by Profitbricks GmbH
-@license: GPL3
+"""
 @summary: The module for a base application object.
           It provides methods for commandline parsing, initialising
           the logging mechanism, read in all application spcific
           environment variables and running the application.
-'''
+"""
 
 # Standard modules
 import sys
@@ -34,11 +29,7 @@ from pb_base.errors import FunctionNotImplementedError
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
-__author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
-__copyright__ = '(C) 2010-2012 by profitbricks.com'
-__contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.4.1'
-__license__ = 'GPL3'
+__version__ = '0.4.2'
 
 log = logging.getLogger(__name__)
 
@@ -69,7 +60,7 @@ class PbApplication(PbBaseObject):
                 argparse_prefix_chars = '-',
                 env_prefix = None,
                 ):
-        '''
+        """
         Initialisation of the base object.
 
         Raises an exception on a uncoverable error.
@@ -106,7 +97,7 @@ class PbApplication(PbBaseObject):
         @type env_prefix: str
 
         @return: None
-        '''
+        """
 
         super(PbApplication, self).__init__(
                 appname = appname,
@@ -202,80 +193,48 @@ class PbApplication(PbBaseObject):
             self.initialized = True
 
     #------------------------------------------------------------
-    @apply
-    def exit_value():
-        doc = "The return value of the application for exiting with sys.exit()."
-        def fget(self):
-            return self._exit_value
-        def fset(self, value):
-            v = int(value)
-            if v >= 0:
-                self._exit_value = v
-            else:
-                log.warn("Wrong exit_value %r, must be >= 0", value)
-        def fdel(self):
-            pass
-        return property(**locals())
+    @property
+    def exit_value(self):
+        """The return value of the application for exiting with sys.exit()."""
+        return self._exit_value
+
+    @exit_value.setter
+    def exit_value(self, value):
+        v = int(value)
+        if v >= 0:
+            self._exit_value = v
+        else:
+            log.warn("Wrong exit_value %r, must be >= 0", value)
 
     #------------------------------------------------------------
-    @apply
-    def usage():
-        doc = "The usage text used on argparse."
-        def fget(self):
-            return self._usage
-        def fset(self, value):
-            pass
-        def fdel(self):
-            pass
-        return property(**locals())
+    @property
+    def usage(self):
+        """The usage text used on argparse."""
+        return self._usage
 
     #------------------------------------------------------------
-    @apply
-    def description():
-        doc = "A short text describing the application."
-        def fget(self):
-            return self._description
-        def fset(self, value):
-            pass
-        def fdel(self):
-            pass
-        return property(**locals())
+    @property
+    def description(self):
+        """A short text describing the application."""
+        return self._description
 
     #------------------------------------------------------------
-    @apply
-    def argparse_epilog():
-        doc = "An epilog displayed at the end of the argparse help screen."
-        def fget(self):
-            return self._argparse_epilog
-        def fset(self, value):
-            pass
-        def fdel(self):
-            pass
-        return property(**locals())
+    @property
+    def argparse_epilog(self):
+        """An epilog displayed at the end of the argparse help screen."""
+        return self._argparse_epilog
 
     #------------------------------------------------------------
-    @apply
-    def argparse_prefix_chars():
-        doc = "The set of characters that prefix optional arguments."
-        def fget(self):
-            return self._argparse_prefix_chars
-        def fset(self, value):
-            pass
-        def fdel(self):
-            pass
-        return property(**locals())
+    @property
+    def argparse_prefix_chars(self):
+        """The set of characters that prefix optional arguments."""
+        return self._argparse_prefix_chars
 
     #------------------------------------------------------------
-    @apply
-    def env_prefix():
-        doc = "A prefix for environment variables to detect them."
-        def fget(self):
-            return self._env_prefix
-        def fset(self, value):
-            pass
-        def fdel(self):
-            pass
-        return property(**locals())
+    @property
+    def env_prefix(self):
+        """A prefix for environment variables to detect them."""
+        return self._env_prefix
 
     #--------------------------------------------------------------------------
     def init_logging(self):
@@ -316,31 +275,31 @@ class PbApplication(PbBaseObject):
 
     #--------------------------------------------------------------------------
     def pre_run(self):
-        '''
+        """
         Dummy function to run before the main routine.
         Could be overwritten by descendant classes.
 
-        '''
+        """
 
         if self.verbose > 1:
             log.info("executing pre_run() ...")
 
     #--------------------------------------------------------------------------
     def _run(self):
-        '''
+        """
         Dummy function as main routine.
 
         MUST be overwritten by descendant classes.
 
-        '''
+        """
 
         raise FunctionNotImplementedError('_run()', self.__class__.__name__)
 
     #--------------------------------------------------------------------------
     def run(self):
-        '''
+        """
         The visible start point of this object.
-        '''
+        """
 
         try:
             self.pre_run()
@@ -372,11 +331,11 @@ class PbApplication(PbBaseObject):
 
     #--------------------------------------------------------------------------
     def post_run(self):
-        '''
+        """
         Dummy function to run after the main routine.
         Could be overwritten by descendant classes.
 
-        '''
+        """
 
         if self.verbose > 1:
             log.info("executing post_run() ...")
