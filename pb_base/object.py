@@ -134,89 +134,73 @@ class PbBaseObject(object):
         self._initialized = bool(initialized)
 
     #------------------------------------------------------------
-    @apply
-    def appname():
-        doc = "The name of the current running application."
-        def fget(self):
-            return self._appname
-        def fset(self, value):
-            if value:
-                v = str(value).strip()
-                if v:
-                    self._appname = v
-        def fdel(self):
-            pass
-        return property(**locals())
+    @property
+    def appname(self):
+        """The name of the current running application."""
+        return self._appname
+
+    @appname.setter
+    def appname(self, value):
+        if value:
+            v = str(value).strip()
+            if v:
+                self._appname = v
 
     #------------------------------------------------------------
-    @apply
-    def version():
-        doc = "The version string of the current object or application."
-        def fget(self):
-            return self._version
-        def fset(self, value):
-            pass
-        def fdel(self):
-            pass
-        return property(**locals())
+    @property
+    def version(self):
+        """The version string of the current object or application."""
+        return self._version
 
     #------------------------------------------------------------
-    @apply
-    def verbose():
-        doc = "The verbosity level."
-        def fget(self):
-            return self._verbose
-        def fset(self, value):
-            v = int(value)
-            if v >= 0:
-                self._verbose = v
-            else:
-                log.warn("Wrong verbose level %r, must be >= 0", value)
-        def fdel(self):
-            pass
-        return property(**locals())
+    @property
+    def verbose(self):
+        """The verbosity level."""
+        return self._verbose
+
+    @verbose.setter
+    def verbose(self, value):
+        v = int(value)
+        if v >= 0:
+            self._verbose = v
+        else:
+            log.warn("Wrong verbose level %r, must be >= 0", value)
 
     #------------------------------------------------------------
-    @apply
-    def use_stderr():
-        doc = "A flag indicating, that on handle_error() the output should go to STDERR."
-        def fget(self):
-            return self._use_stderr
-        def fset(self, value):
-            self._use_stderr = bool(value)
-        def fdel(self):
-            pass
-        return property(**locals())
+    @property
+    def use_stderr(self):
+        """A flag indicating, that on handle_error() the output should go to STDERR."""
+        return self._use_stderr
+
+    @use_stderr.setter
+    def use_stderr(self, value):
+        self._use_stderr = bool(value)
 
     #------------------------------------------------------------
-    @apply
-    def initialized():
-        doc = "The initialisation of this object is complete."
-        def fget(self):
-            return self._initialized
-        def fset(self, value):
-            self._initialized = bool(value)
-        def fdel(self):
-            pass
-        return property(**locals())
+    @property
+    def initialized(self):
+        """The initialisation of this object is complete."""
+        return self._initialized
+
+    @initialized.setter
+    def initialized(self, value):
+        self._initialized = bool(value)
 
     #------------------------------------------------------------
-    @apply
-    def base_dir():
-        doc = "The base directory used for different purposes."
-        def fget(self):
-            return self._base_dir
-        def fset(self, value):
-            if not os.path.exists(value):
-                msg = "Base dir '%s' doesn't exists." % (value)
-                log.error("Base dir '%s' doesn't exists.", value)
-            elif not os.path.isdir(value):
-                log.error("Base dir '%s' isn't a directory.", value)
-            else:
-                self._base_dir = value
-        def fdel(self):
-            pass
-        return property(**locals())
+    @property
+    def base_dir(self):
+        """The base directory used for different purposes."""
+        return self._base_dir
+
+    @base_dir.setter
+    def base_dir(self, value):
+        if not os.path.exists(value):
+            msg = "Base dir '%s' doesn't exists." % (value)
+            log.error("Base dir '%s' doesn't exists.", value)
+        elif not os.path.isdir(value):
+            log.error("Base dir '%s' isn't a directory.", value)
+        else:
+            self._base_dir = value
 
     #--------------------------------------------------------------------------
     def __str__(self):

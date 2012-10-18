@@ -199,40 +199,22 @@ class PbCfgApp(PbApplication):
         self._read_config()
 
     #------------------------------------------------------------
-    @apply
-    def cfg_encoding():
-        doc = "The encoding character set of the configuration files."
-        def fget(self):
-            return self._cfg_encoding
-        def fset(self, value):
-            pass
-        def fdel(self):
-            pass
-        return property(**locals())
+    @property
+    def cfg_encoding(self):
+        """The encoding character set of the configuration files."""
+        return self._cfg_encoding
 
     #------------------------------------------------------------
-    @apply
-    def cfg_dir():
-        doc = "The directory containing the configuration files."
-        def fget(self):
-            return self._cfg_dir
-        def fset(self, value):
-            pass
-        def fdel(self):
-            pass
-        return property(**locals())
+    @property
+    def cfg_dir(self):
+        """The directory containing the configuration files."""
+        return self._cfg_dir
 
     #------------------------------------------------------------
-    @apply
-    def cfg_stem():
-        doc = "The basename of the configuration file without any file extension."
-        def fget(self):
-            return self._cfg_stem
-        def fset(self, value):
-            pass
-        def fdel(self):
-            pass
-        return property(**locals())
+    @property
+    def cfg_stem(self):
+        """The basename of the configuration file without any file extension."""
+        return self._cfg_stem
 
     #--------------------------------------------------------------------------
     def init_arg_parser(self):
