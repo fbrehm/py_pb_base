@@ -66,6 +66,7 @@ class PbCfgApp(PbApplication):
                 cfg_dir = None,
                 cfg_stem = None,
                 cfg_encoding = 'utf8',
+                cfg_spec = None,
                 ):
         """
         Initialisation of the base object.
@@ -186,7 +187,7 @@ class PbCfgApp(PbApplication):
         """
         self.init_cfgfiles()
 
-        self.cfg_spec = None
+        self.cfg_spec = cfg_spec
         """
         @ivar: a specification of the configuration, which should
                be found in the configuration files.
@@ -194,7 +195,8 @@ class PbCfgApp(PbApplication):
                how to write such a specification.
         @type: str
         """
-        self._init_cfg_spec()
+        if not self.cfg_spec:
+            self._init_cfg_spec()
 
         self._read_config()
 
