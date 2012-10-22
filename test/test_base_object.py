@@ -18,7 +18,7 @@ sys.path.insert(0, libdir)
 
 import pb_base.object
 
-from pb_base.object import PbBaseError
+from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
 #==============================================================================
