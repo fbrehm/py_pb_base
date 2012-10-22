@@ -187,7 +187,6 @@ class PbCfgApp(PbApplication):
         """
         self.init_cfgfiles()
 
-        self.cfg_spec = cfg_spec
         """
         @ivar: a specification of the configuration, which should
                be found in the configuration files.
@@ -195,7 +194,13 @@ class PbCfgApp(PbApplication):
                how to write such a specification.
         @type: str
         """
-        if not self.cfg_spec:
+        if cfg_spec:
+            if type(cfg_spec) is str:
+                self.cfg_spec = ConfigObj(cfg_spec.split('\n'))
+            elif type(cfg_spec) is ConfigObj:
+                self.cfg_spec = cfg_spec
+        else:
+            self.cfg_spec = ConfigObj()
             self._init_cfg_spec()
 
         self._read_config()
@@ -316,7 +321,6 @@ class PbCfgApp(PbApplication):
 
         """
 
-        self.cfg_spec = ConfigObj()
         self.cfg_spec.initial_comment.append(u'Configuration of %s' % (self.appname))
         self.cfg_spec.initial_comment.append('')
 
@@ -386,6 +390,11 @@ class PbCfgApp(PbApplication):
             if self.verbose > 1:
                 log.debug("Reading in configuration file '%s' ...", cfg_file)
 
+            if not os.path.isfile(cfg_file):
+                log.debug("Skipping non-existing configuration file: '%s' ...",
+                          cfg_file)
+                continue
+
             cfg = ConfigObj(
                     cfg_file,
                     encoding = self.cfg_encoding,
@@ -448,6 +457,10 @@ class PbCfgApp(PbApplication):
                 part_err_str = self._transform_cfg_errors(val, ndiv)
                 error_str += part_err_str
             else:
+                if val is True:
+                    continue
+                if val is False:
+                    val = "missing"
                 section = '-'
                 if div:
                     section = ', '.join(map(
