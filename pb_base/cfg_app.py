@@ -187,6 +187,7 @@ class PbCfgApp(PbApplication):
         """
         self.init_cfgfiles()
 
+        self.cfg_spec = None
         """
         @ivar: a specification of the configuration, which should
                be found in the configuration files.

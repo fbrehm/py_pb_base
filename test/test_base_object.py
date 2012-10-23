@@ -6,7 +6,7 @@
 @organization: Profitbricks GmbH
 @copyright: (c) 2010-2012 by Profitbricks GmbH
 @license: GPL3
-@summary: test script (and module) for unut tests on base object
+@summary: test script (and module) for unit tests on base object
 '''
 
 import unittest
