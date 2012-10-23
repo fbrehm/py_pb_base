@@ -186,7 +186,30 @@ if __name__ == '__main__':
             dest = 'verbose', help = 'Increase the verbosity level')
     args = arg_parser.parse_args()
 
-    unittest.main(verbosity = args.verbose)
+    loader = unittest.TestLoader()
+    suite = unittest.TestSuite()
+
+    suite.addTests(loader.loadTestsFromName(
+            'test_base_object.TestPbBaseObject.test_object'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_base_object.TestPbBaseObject.test_verbose1'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_base_object.TestPbBaseObject.test_verbose2'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_base_object.TestPbBaseObject.test_basedir1'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_base_object.TestPbBaseObject.test_basedir2'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_base_object.TestPbBaseObject.test_as_dict1'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_base_object.TestPbBaseObject.test_as_dict2'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_base_object.TestPbBaseObject.test_as_dict3'))
+
+    runner = unittest.TextTestRunner(verbosity = args.verbose)
+
+    result = runner.run(suite)
+
 
 #==============================================================================
 

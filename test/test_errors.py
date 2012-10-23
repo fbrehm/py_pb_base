@@ -95,7 +95,23 @@ if __name__ == '__main__':
             dest = 'verbose', help = 'Increase the verbosity level')
     args = arg_parser.parse_args()
 
-    unittest.main(verbosity = args.verbose)
+    loader = unittest.TestLoader()
+    suite = unittest.TestSuite()
+
+    suite.addTests(loader.loadTestsFromName(
+            'test_errors.TestPbErrors.test_pb_error'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_errors.TestPbErrors.test_func_not_implemented'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_errors.TestPbErrors.test_io_timeout_error'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_errors.TestPbErrors.test_read_timeout_error'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_errors.TestPbErrors.test_write_timeout_error'))
+
+    runner = unittest.TextTestRunner(verbosity = args.verbose)
+
+    result = runner.run(suite)
 
 #==============================================================================
 

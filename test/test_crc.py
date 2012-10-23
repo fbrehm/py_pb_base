@@ -21,7 +21,7 @@ import pb_base.crc
 
 #==============================================================================
 
-class TestPbErrors(unittest.TestCase):
+class TestPbCrc(unittest.TestCase):
 
     #--------------------------------------------------------------------------
     def setUp(self):
@@ -67,7 +67,21 @@ if __name__ == '__main__':
             dest = 'verbose', help = 'Increase the verbosity level')
     args = arg_parser.parse_args()
 
-    unittest.main(verbosity = args.verbose)
+    loader = unittest.TestLoader()
+    suite = unittest.TestSuite()
+
+    suite.addTests(loader.loadTestsFromName(
+            'test_crc.TestPbCrc.test_checksum'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_crc.TestPbCrc.test_checksum256'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_crc.TestPbCrc.test_crc64'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_crc.TestPbCrc.test_crc64_digest'))
+
+    runner = unittest.TextTestRunner(verbosity = args.verbose)
+
+    result = runner.run(suite)
 
 #==============================================================================
 
