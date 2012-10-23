@@ -20,7 +20,7 @@ from pb_base.errors import FunctionNotImplementedError
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 
 log = logging.getLogger(__name__)
 
@@ -141,6 +141,40 @@ class PidFile(PbBaseObject):
         """The pidfile was created by this current object."""
         return self._created
 
+    #------------------------------------------------------------
+    @property
+    def dir(self):
+        """The directory containing the pidfile."""
+        return os.path.dirname(self.filename)
+
+    #--------------------------------------------------------------------------
+    def __del__(self):
+        """Destructor. Removes the pidfile, if it was created by ourselfes."""
+
+        if not self.created:
+            return
+
+        if not os.path.exists(self.filename):
+            if self.verbose > 3:
+                log.debug("Pidfile '%s' doesn't exists, not removing.",
+                        self.filename)
+            return
+
+        if not self.auto_remove:
+            if self.verbose > 3:
+                log.debug("Auto removing disabled, don't deleting '%s'.",
+                        self.filename)
+            return
+
+        log.debug("Removing pidfile '%s' ...", self.filename)
+        if self.simulate:
+            return
+        try:
+            os.remove(self.filename)
+        except OSError, e:
+            log.err("Could not delete pidfile '%s': %s", self.filename, str(e))
+        except Exception, e:
+            self.handle_error(str(e), e.__class__.__name__, True)
 
 #==============================================================================
 
