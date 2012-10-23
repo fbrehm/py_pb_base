@@ -6,6 +6,7 @@
 
 # Standard modules
 import errno
+from gettext import gettext as _
 
 __version__ = '0.1.1'
 
@@ -48,8 +49,8 @@ class FunctionNotImplementedError(PbError, NotImplementedError):
         Typecasting into a string for error output.
         """
 
-        msg = "Function %s() has to be overridden in class '%s'."
-        return msg % (self.function_name, self.class_name)
+        msg = _("Function %(func)s() has to be overridden in class '%(cls)s'.")
+        return msg % {'func': self.function_name, 'cls': self.class_name}
 
 #==============================================================================
 class PbIoTimeoutError(PbError, IOError):
@@ -79,7 +80,7 @@ class PbIoTimeoutError(PbError, IOError):
         self.timeout = t_o
 
         if t_o is not None:
-            strerror += " (timeout after %0.1f secs)" % (t_o)
+            strerror += _(" (timeout after %0.1f secs)") % (t_o)
 
         if filename is None:
             super(PbIoTimeoutError, self).__init__(errno.ETIMEDOUT, strerror)
@@ -105,7 +106,7 @@ class PbReadTimeoutError(PbIoTimeoutError):
 
         """
 
-        strerror = "Timeout error on reading"
+        strerror = _("Timeout error on reading")
         super(PbReadTimeoutError, self).__init__(strerror, timeout, filename)
 
 #==============================================================================
@@ -126,7 +127,7 @@ class PbWriteTimeoutError(PbIoTimeoutError):
 
         """
 
-        strerror = "Timeout error on writing"
+        strerror = _("Timeout error on writing")
         super(PbWriteTimeoutError, self).__init__(strerror, timeout, filename)
 
 #==============================================================================

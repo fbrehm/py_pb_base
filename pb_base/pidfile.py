@@ -11,11 +11,17 @@ import sys
 import os
 import logging
 import re
+import signal
+import errno
 
 from gettext import gettext as _
 
+# Own modules
+
 from pb_base.errors import PbError
 from pb_base.errors import FunctionNotImplementedError
+from pb_base.errors import PbReadTimeoutError
+from pb_base.errors import PbWriteTimeoutError
 
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
@@ -30,6 +36,68 @@ class PidFileError(PbBaseObjectError):
     handling a pidfile."""
 
     pass
+
+#==============================================================================
+class InvalidPidFileError(PidFileError):
+    """An error class indicating, that the given pidfile is unusable"""
+
+    def __init__(self, pidfile, reason = None):
+        """
+        Constructor.
+
+        @param pidfile: the filename of the invalid pidfile.
+        @type pidfile: str
+        @param reason: the reason, why the pidfile is invalid.
+        @type reason: str
+
+        """
+
+        self.pidfile = pidfile
+        self.reason = reason
+
+    #--------------------------------------------------------------------------
+    def __str__(self):
+        """Typecasting into a string for error output."""
+
+        msg = None
+        if self.reason:
+            msg = _("Invalid pidfile '%(pidfile)s' given: %(reason)s") % {
+                    'pidfile': self.pidfile, 'reason': self.reason}
+        else:
+            msg = _("Invalid pidfile '%s' given.") % (self.pidfile)
+
+        return msg
+
+#==============================================================================
+class PidFileInUseError(PidFileError):
+    """
+    An error class indicating, that the given pidfile is in use
+    by another application.
+    """
+
+    def __init__(self, pidfile, pid):
+        """
+        Constructor.
+
+        @param pidfile: the filename of the pidfile.
+        @type pidfile: str
+        @param pid: the PID of the process owning the pidfile
+        @type pid: int
+
+        """
+
+        self.pidfile = pidfile
+        self.pid = pid
+
+    #--------------------------------------------------------------------------
+    def __str__(self):
+        """Typecasting into a string for error output."""
+
+        msg = _("The pidfile '%(pidfile)s is currently in use by the " +
+                "application with the PID %d.") % {'pidfile': self.pidfile,
+                'pid': self.pid}
+
+        return msg
 
 #==============================================================================
 class PidFile(PbBaseObject):
@@ -48,6 +116,7 @@ class PidFile(PbBaseObject):
                 use_stderr = False,
                 initialized = False,
                 simulate = False,
+                timeout = 10,
                 ):
         """
         Initialisation of the pidfile object.
@@ -77,8 +146,16 @@ class PidFile(PbBaseObject):
         @type initialized: bool
         @param simulate: simulation mode
         @type simulate: bool
+        @param timeout: timeout in seconds for IO operations on pidfile
+        @type timeout: int
 
         @return: None
+        """
+
+        self._created = False
+        """
+        @ivar: the pidfile was created by this current object
+        @type: bool
         """
 
         super(PidFile, self).__init__(
@@ -111,10 +188,10 @@ class PidFile(PbBaseObject):
         @type: bool
         """
 
-        self._created = False
+        self._timeout = int(timeout)
         """
-        @ivar: the pidfile was created by this current object
-        @type: bool
+        @ivar: timeout in seconds for IO operations on pidfile
+        @type: int
         """
 
     #------------------------------------------------------------
@@ -143,7 +220,13 @@ class PidFile(PbBaseObject):
 
     #------------------------------------------------------------
     @property
-    def dir(self):
+    def timeout(self):
+        """The timeout in seconds for IO operations on pidfile."""
+        return self._timeout
+
+    #------------------------------------------------------------
+    @property
+    def parent_dir(self):
         """The directory containing the pidfile."""
         return os.path.dirname(self.filename)
 
@@ -175,6 +258,136 @@ class PidFile(PbBaseObject):
             log.err("Could not delete pidfile '%s': %s", self.filename, str(e))
         except Exception, e:
             self.handle_error(str(e), e.__class__.__name__, True)
+
+    #--------------------------------------------------------------------------
+    def create(self, pid = None):
+        """
+        The main method of this class. It tries to write the PID of the process
+        into the pidfile.
+
+        @param pid: the pid to write into the pidfile. If not given, the PID of
+                    the current process will taken.
+        @type pid: int
+
+        """
+
+        if pid:
+            pid = int(pid)
+            if pid <= 0:
+                msg = _("Invalid PID %(pid)d for creating pidfile " +
+                        "'%(pidfile)s' given.") % {
+                        'pid': pid, 'pidfile': self.filename}
+                raise PidFileError(msg)
+        else:
+            pid = os.getpid()
+
+        exists = self.check()
+
+    #--------------------------------------------------------------------------
+    def check(self):
+        """
+        This methods checks the usability of the pidfile.
+        If the method doesn't raise an exception, the pidfile is usable.
+
+        It returns, whether the pidfile exist and can be deleted or not.
+
+        @raise InvalidPidFileError: if the pidfile is unusable
+        @raise PidFileInUseError: if the pidfile is in use by another application
+        @raise PbReadTimeoutError: on timeout reading an existing pidfile
+        @raise OSError: on some other reasons, why the existing pidfile
+                        couldn't be read
+
+        @return: the pidfile exists, but can be deleted - or it doesn't
+                 exists.
+        @rtype: bool
+
+        """
+
+        if not os.path.exists(self.filename):
+            if not os.path.exists(self.parent_dir):
+                reason = _("Pidfile parent directory '%s' doesn't exists.") % (
+                        self.parent_dir)
+                raise InvalidPidFileError(self.filename, self.parent_dir)
+            if not os.path.isdir(self.parent_dir):
+                reason = _("Pidfile parent directory '%s' is not a directory.") % (
+                        self.parent_dir)
+                raise InvalidPidFileError(self.filename, self.parent_dir)
+            if not os.access(self.parent_dir, os.X_OK):
+                reason = _("No write access to pidfile parent directory '%s'.") % (
+                        self.parent_dir)
+                raise InvalidPidFileError(self.filename, self.parent_dir)
+
+            return False
+
+        if not os.path.isfile(self.filename):
+            reason = _("It is not a regular file.")
+            raise InvalidPidFileError(self.filename, self.parent_dir)
+
+        #----------
+        def pidfile_read_alarm_caller(signum, sigframe):
+            """
+            This nested function will be called in event of a timeout.
+
+            @param signum: the signal number (POSIX) which happend
+            @type signum: int
+            @param sigframe: the frame of the signal
+            @type sigframe: object
+            """
+
+            return PbReadTimeoutError(self.timeout, self.filename)
+
+        if self.verbose > 1:
+            log.debug("Reading content of pidfile %r ...", self.filename)
+
+        signal.signal(signal.SIGALRM, pidfile_read_alarm_caller)
+        signal.alarm(self.timeout)
+
+        content = ''
+        fh = None
+
+        try:
+            fh = open(self.filename, 'r')
+            for line in fh.readlines():
+                content += line
+        finally:
+            if fh:
+                fh.close()
+            signal.alarm(0)
+
+        # Performing content of pidfile
+
+        pid = None
+        line = content.strip()
+        match = re.search(r'^\s*(\d+)\s*$', line)
+        if match:
+            pid = int(match.group(1))
+        else:
+            msg = _("No useful information found in pidfile " +
+                     "'%(file)s': '%(line)s'")
+            log.warn(msg % {'file': self.filename, 'line': line})
+            return True
+
+        if self.verbose > 1:
+            msg = _("Trying check for process with PID %d ...") % (pid)
+            log.debug(msg)
+
+        try:
+            os.kill(pid, 0)
+        except OSError, err:
+            if err.errno == errno.ESRCH:
+                log.info(_("Process with PID %d anonymous died."), pid)
+                return True
+            elif err.errno == errno.EPERM:
+                msg = _("No permission to signal the process %d ...") % (pid)
+                raise PidFileError(msg)
+            else:
+                msg = _("Unknown error: '%s'.") % (str(err))
+                raise PidFileError(msg)
+        else:
+            raise PidFileInUseError(self.filename, pid)
+
+        return False
+
 
 #==============================================================================
 
