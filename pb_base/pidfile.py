@@ -26,7 +26,7 @@ from pb_base.errors import PbWriteTimeoutError
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
-__version__ = '0.2.0'
+__version__ = '0.3.0'
 
 log = logging.getLogger(__name__)
 
@@ -281,7 +281,37 @@ class PidFile(PbBaseObject):
         else:
             pid = os.getpid()
 
-        exists = self.check()
+        if self.check():
+
+            log.info(_("Deleting pidfile '%s' ..."), self.filename)
+            try:
+                os.remove(self.filename)
+            except OSError, e:
+                raise InvalidPidFileError(self.filename, str(e))
+
+        if self.verbose > 1:
+            log.debug(_("Trying opening '%s' exclusive ..."), self.filename)
+
+        fd = None
+        try:
+            fd = os.open(self.filename,
+                    os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0644)
+        except OSError, e:
+            msg = _("Error on creating pidfile '%(pidfile)s': %(err)s") % {
+                    'pidfile': self.filename, 'err': str(e)}
+            raise PidFileError(msg)
+
+        if self.verbose > 2:
+            log.debug(_("Writing %(pid)d into '%(pidfile)s' ...") % {
+                    'pid': pid, 'pidfile': self.filename})
+
+        out = "%d\n" %(pid)
+        try:
+            os.write(fd, out)
+        finally:
+            os.close(fd)
+
+        self._created = True
 
     #--------------------------------------------------------------------------
     def check(self):
@@ -307,15 +337,15 @@ class PidFile(PbBaseObject):
             if not os.path.exists(self.parent_dir):
                 reason = _("Pidfile parent directory '%s' doesn't exists.") % (
                         self.parent_dir)
-                raise InvalidPidFileError(self.filename, self.parent_dir)
+                raise InvalidPidFileError(self.filename, reason)
             if not os.path.isdir(self.parent_dir):
                 reason = _("Pidfile parent directory '%s' is not a directory.") % (
                         self.parent_dir)
-                raise InvalidPidFileError(self.filename, self.parent_dir)
+                raise InvalidPidFileError(self.filename, reason)
             if not os.access(self.parent_dir, os.X_OK):
                 reason = _("No write access to pidfile parent directory '%s'.") % (
                         self.parent_dir)
-                raise InvalidPidFileError(self.filename, self.parent_dir)
+                raise InvalidPidFileError(self.filename, reason)
 
             return False
 
