@@ -13,6 +13,7 @@ import unittest
 import os
 import sys
 import time
+import re
 
 libdir = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
 sys.path.insert(0, libdir)
@@ -28,6 +29,26 @@ from pb_base.pidfile import PidFile
 pidfile_normal = 'test_pidfile.pid'
 pidfile_forbidden = '/root/test_pidfile.pid'
 pidfile_invalid = '/bla/blub/blubber.pid'
+
+#==============================================================================
+def file_content(filename):
+
+    if not os.path.isfile(filename):
+        sys.stderr.write("File '%s' doesn't exists.\n" % (filename))
+        return None
+
+    fh = None
+    content = None
+    try:
+        fh = open(filename)
+        content = ''.join(fh.readlines())
+    except IOError, e:
+        sys.stderr.write("Could not read file '%s': %s\n" % (filename, str(e)))
+    finally:
+        if fh:
+            fh.close()
+
+    return content
 
 #==============================================================================
 
@@ -93,6 +114,24 @@ class TestPidFile(unittest.TestCase):
                         pidfile_normal)
             if not os.path.exists(pidfile_normal):
                 self.fail("Pidfile '%s' not created.", pidfile_normal)
+            fcontent = file_content(pidfile_normal)
+            if fcontent is None:
+                self.fail("Could not read pidfile '%s'.", pidfile_normal)
+            elif not fcontent:
+                self.fail("Pidfile '%s' seems to be empty.", pidfile_normal)
+            else:
+                match = re.search(r'^\s*(\d+)\s*$', fcontent)
+                if not match:
+                    self.fail("Pidfile '%s' with invalid content: %r",
+                            pidfile_normal, fcontent)
+                else:
+                    pid = int(match.group(1))
+                    if pid == os.getpid():
+                        sys.stderr.write("Found correct PID %d in '%s'. " % (
+                                pid, pidfile_normal))
+                    else:
+                        self.fail("Found invalid PID %d in '%s', but should be %d.",
+                                pid, pidfile_normal, os.getpid())
         finally:
             del pid_file
 
@@ -154,6 +193,7 @@ class TestPidFile(unittest.TestCase):
                     pidfile_invalid))
         finally:
             del pid_file
+
 
 #==============================================================================
 
