@@ -360,7 +360,7 @@ class PbApplication(PbBaseObject):
 
         self.init_arg_parser()
 
-        general_group = self.arg_parser.add_argument_group('General options:')
+        general_group = self.arg_parser.add_argument_group('General options')
         general_group.add_argument(
                 "-v", "--verbose",
                 action = "count",

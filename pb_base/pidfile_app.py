@@ -138,9 +138,6 @@ class PidfileApp(PbCfgApp):
         @ivar: a default filename for a pidfile
         @type: str
         """
-        if not self._default_pidfilename:
-            self._default_pidfilename = os.path.join(
-                    self.base_dir, self.appname + '.pid')
 
         super(PidfileApp, self).__init__(
                 appname = appname,
@@ -159,7 +156,6 @@ class PidfileApp(PbCfgApp):
                 cfg_encoding = cfg_encoding,
         )
 
-
     #--------------------------------------------------------------------------
     def __del__(self):
 
@@ -174,12 +170,17 @@ class PidfileApp(PbCfgApp):
         methods in descendant classes.
         """
 
+        if not self._default_pidfilename:
+            self._default_pidfilename = os.path.join(
+                    self.base_dir, self.appname + '.pid')
+
         self.arg_parser.add_argument(
-                "--pidfile",
+                '--pfile', "--pidfile",
+                metavar = 'FILE',
                 action = 'store',
                 dest = "pidfile",
                 default = self._default_pidfilename,
-                help = _('The name of the pidfile (Default: %default).'),
+                help = _('The name of the pidfile (Default: %(default)s).'),
         )
 
         super(PidfileApp, self).init_arg_parser()
