@@ -420,6 +420,14 @@ class PbCfgApp(PbApplication):
 
             self.cfg.rec_update(cfg)
 
+        existing_cfg_files = [file for file in self.cfg_files
+                              if os.path.isfile(file)]
+        if not existing_cfg_files:
+            msg = "Could not find any configuration file at these locations:"
+            for file in self.cfg_files:
+                msg += '\n' + file
+            self.handle_error(msg, _("Configuration error"))
+
         if not cfgfiles_ok:
             sys.exit(2)
 
