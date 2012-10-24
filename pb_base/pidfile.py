@@ -94,7 +94,7 @@ class PidFileInUseError(PidFileError):
         """Typecasting into a string for error output."""
 
         msg = _("The pidfile '%(pidfile)s is currently in use by the " +
-                "application with the PID %d.") % {'pidfile': self.pidfile,
+                "application with the PID %(pid)d.") % {'pidfile': self.pidfile,
                 'pid': self.pid}
 
         return msg

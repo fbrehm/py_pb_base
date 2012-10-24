@@ -84,7 +84,7 @@ class TestPidFile(unittest.TestCase):
             )
 
         except ValueError, e:
-            pass
+            sys.stderr.write("%s: %r " % (e.__class__.__name__, str(e)))
         except Exception, e:
             self.fail("Could not instatiate PidFile by a %s: %s" % (
                     e.__class__.__name__, str(e)))
@@ -154,7 +154,7 @@ class TestPidFile(unittest.TestCase):
         try:
             pid_file.create()
         except InvalidPidFileError, e:
-            pass
+            sys.stderr.write("%s: %r " % (e.__class__.__name__, str(e)))
         else:
             if os.geteuid():
                 self.fail(("No InvalidPidFileError raised on a forbidden " +
@@ -186,7 +186,7 @@ class TestPidFile(unittest.TestCase):
         try:
             pid_file.create()
         except InvalidPidFileError, e:
-            pass
+            sys.stderr.write("%s: %r " % (e.__class__.__name__, str(e)))
         else:
             self.fail(("No InvalidPidFileError raised on a invalid " +
                     "pidfile path '%s'.") % (
@@ -194,6 +194,49 @@ class TestPidFile(unittest.TestCase):
         finally:
             del pid_file
 
+    #--------------------------------------------------------------------------
+    def test_create_concurrent(self):
+
+        pid_file1 = None
+        pid_file2 = None
+        carry_on = True
+
+        try:
+            pid_file1 = PidFile(
+                filename = pidfile_normal,
+                appname = 'test_pidfile',
+                verbose = 3,
+            )
+            pid_file2 = PidFile(
+                filename = pidfile_normal,
+                appname = 'test_pidfile',
+                verbose = 3,
+            )
+
+        except Exception, e:
+            self.fail("Could not instatiate PidFile by a %s: %s" % (
+                    e.__class__.__name__, str(e)))
+            return
+
+        try:
+            pid_file1.create()
+        except Exception, e:
+            del pid_file1
+            del pid_file2
+            self.fail("Could not create pidfile '%s' by a %s: %s" % (
+                    pidfile_normal, e.__class__.__name__, str(e)))
+            return
+
+        try:
+            pid_file2.create()
+        except PidFileInUseError, e:
+            sys.stderr.write("%s: %r " % (e.__class__.__name__, str(e)))
+        except Exception, e:
+            self.fail("Could not create pidfile '%s' by a %s: %s" % (
+                    pidfile_normal, e.__class__.__name__, str(e)))
+        finally:
+            del pid_file1
+            del pid_file2
 
 #==============================================================================
 
@@ -219,6 +262,8 @@ if __name__ == '__main__':
             'test_pidfile.TestPidFile.test_create_forbidden'))
     suite.addTests(loader.loadTestsFromName(
             'test_pidfile.TestPidFile.test_create_invalid'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_pidfile.TestPidFile.test_create_concurrent'))
 
     runner = unittest.TextTestRunner(verbosity = args.verbose)
 
