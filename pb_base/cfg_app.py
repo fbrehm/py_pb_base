@@ -33,7 +33,7 @@ from pb_base.object import PbBaseObjectError
 from pb_base.app import PbApplicationError
 from pb_base.app import PbApplication
 
-__version__ = '0.4.3'
+__version__ = '0.5.1'
 
 log = logging.getLogger(__name__)
 
@@ -215,8 +215,13 @@ class PbCfgApp(PbApplication):
             self.cfg_spec = ConfigObj()
             self._init_cfg_spec()
 
+        enc = getattr(self.args, 'cfg_encoding', None)
+        if enc:
+            enc = enc.lower()
+            if enc != self.cfg_encoding:
+                self._cfg_encoding = enc
+
         self._read_config()
-        self.perform_config()
 
     #------------------------------------------------------------
     @property
@@ -278,23 +283,6 @@ class PbCfgApp(PbApplication):
                     help = _('Generates a default configuration, prints ' +
                             'it out to STDOUT and exit'),
             )
-
-    #--------------------------------------------------------------------------
-    def perform_arg_parser(self):
-        """
-        Execute some actions after parsing the command line parameters.
-
-        This method should be explicitely called by all perform_arg_parser()
-        methods in descendant classes.
-        """
-
-        # Store a maybe other character set of configuration files
-        # in self.cfg_encoding
-        enc = getattr(self.args, 'cfg_encoding', None)
-        if enc:
-            enc = enc.lower()
-            if enc != self.cfg_encoding:
-                self._cfg_encoding = enc
 
     #--------------------------------------------------------------------------
     def init_cfgfiles(self):
@@ -511,24 +499,43 @@ class PbCfgApp(PbApplication):
         pass
 
     #--------------------------------------------------------------------------
-    def run(self):
+    def post_init(self):
         """
-        The visible start point of this object.
+        Method to execute before calling run(). Here could be done some
+        finishing actions after reading in commandline parameters,
+        configuration a.s.o.
+
+        This method could be overwritten by descendant classes, these
+        methhods should allways include a call to post_init() of the
+        parent class.
+
+        """
+
+        self.perform_config()
+        self.perform_arg_parser()
+        self.init_logging()
+
+        self.initialized = True
+
+    #--------------------------------------------------------------------------
+    def pre_run(self):
+        """
+        Code executing before executing the main routine.
+
+        This method should be explicitely called by all pre_run()
+        methods in descendant classes.
 
         If the command line parameter '--default-config' was given, the defined
-        default configuration is printed out to stdout, else the method run()
-        from parent class is called.
+        default configuration is printed out to stdout and the application
+        exit with a return value of 0.
 
         """
 
-        do_default_config = True
         if self.hide_default_config:
-            do_default_config = False
-        elif not self.args.show_default_config:
-            do_default_config = False
+            return
 
-        if not do_default_config:
-            return super(PbCfgApp, self).run()
+        if not self.args.show_default_config:
+            return
 
         curdate = datetime.datetime.utcnow()
 

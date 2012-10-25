@@ -36,7 +36,7 @@ from pb_base.pidfile import InvalidPidFileError
 from pb_base.pidfile import PidFileInUseError
 from pb_base.pidfile import PidFile
 
-__version__ = '0.2.1'
+__version__ = '0.3.1'
 
 log = logging.getLogger(__name__)
 
@@ -288,6 +288,38 @@ class PidfileApp(PbCfgApp):
             log.debug("Setting pidfile to '%s' by commandline parameter.",
                     pidfile)
             self._pidfilename = pidfile
+
+    #--------------------------------------------------------------------------
+    def pre_run(self):
+        """
+        Code executing before executing the main routine.
+
+        This method should be explicitely called by all pre_run()
+        methods in descendant classes.
+
+        It tries to generate the pidfile.
+        In case of no success, the application returns with a
+        return value of 2.
+
+        """
+
+        super(PidfileApp, self).pre_run()
+
+        if self.verbose > 1:
+            log.info(_("Creating pidfile '%s' ..."), self.pidfile.filename)
+
+        try:
+            self.pidfile.create()
+        except PidFileInUseError, e:
+            self.handle_error(str(e), '', False)
+            sys.exit(2)
+        except PidFileError, e:
+            self.handle_error(str(e), '', False)
+            sys.exit(3)
+        except Exception, e:
+            self.handle_error(str(e), e.__class__.__name__, True)
+            sys.exit(5)
+
 
 #==============================================================================
 

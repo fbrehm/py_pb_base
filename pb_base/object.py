@@ -21,7 +21,7 @@ from pb_base.common import pp
 from pb_base.errors import PbError
 from pb_base.errors import FunctionNotImplementedError
 
-__version__ = '0.2.3'
+__version__ = '0.3.1'
 
 log = logging.getLogger(__name__)
 
@@ -252,26 +252,71 @@ class PbBaseObject(object):
 
         """
 
-        msg = 'Exception happened'
-        if exception_name:
-            msg = exception_name
+        msg = 'Exception happened: '
+        if exception_name is not None:
+            exception_name = exception_name.strip()
+            if exception_name:
+                msg = exception_name + ': '
+            else:
+                msg = ''
         if error_message:
-            msg += ': ' + str(error_message)
+            msg += str(error_message)
         else:
-            msg += '.'
+            msg += 'undefined error.'
 
-        if log.handlers:
+        root_log = logging.getLogger()
+        has_handlers = False
+        if root_log.handlers:
+            has_handlers = True
+
+        if has_handlers:
             log.error(msg)
             if do_traceback:
                 log.error(traceback.format_exc())
 
-        if self.use_stderr or not log.handlers:
+        if self.use_stderr or not has_handlers:
             curdate = datetime.datetime.now()
             curdate_str = "[" + curdate.isoformat(' ') + "]: "
             msg = curdate_str + msg + "\n"
             sys.stderr.write(msg)
             if do_traceback:
                 traceback.print_exc()
+
+        return
+
+    #--------------------------------------------------------------------------
+    def handle_info(self, message, info_name = None):
+        """
+        Shows an information. This happens both to STDERR and to all
+        initialized log handlers.
+
+        @param message: the info message to display
+        @type message: str
+        @param info_name: Title of information
+        @type info_name: str
+
+        """
+
+        msg = ''
+        if info_name is not None:
+            info_name = info_name.strip()
+            if info_name:
+                msg = info_name + ': '
+        msg += str(message).strip()
+
+        root_log = logging.getLogger()
+        has_handlers = False
+        if root_log.handlers:
+            has_handlers = True
+
+        if has_handlers:
+            log.info(msg)
+
+        if self.use_stderr or not has_handlers:
+            curdate = datetime.datetime.now()
+            curdate_str = "[" + curdate.isoformat(' ') + "]: "
+            msg = curdate_str + msg + "\n"
+            sys.stderr.write(msg)
 
         return
 

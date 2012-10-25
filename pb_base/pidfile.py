@@ -26,7 +26,7 @@ from pb_base.errors import PbWriteTimeoutError
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
-__version__ = '0.3.0'
+__version__ = '0.3.1'
 
 log = logging.getLogger(__name__)
 
@@ -168,7 +168,7 @@ class PidFile(PbBaseObject):
         )
 
         if not filename:
-            raise ValueError('No filename given on initializing PidFile object.')
+            raise ValueError(_('No filename given on initializing PidFile object.'))
 
         self._filename = os.path.abspath(str(filename))
         """
@@ -239,23 +239,24 @@ class PidFile(PbBaseObject):
 
         if not os.path.exists(self.filename):
             if self.verbose > 3:
-                log.debug("Pidfile '%s' doesn't exists, not removing.",
+                log.debug(_("Pidfile '%s' doesn't exists, not removing."),
                         self.filename)
             return
 
         if not self.auto_remove:
             if self.verbose > 3:
-                log.debug("Auto removing disabled, don't deleting '%s'.",
+                log.debug(_("Auto removing disabled, don't deleting '%s'."),
                         self.filename)
             return
 
-        log.debug("Removing pidfile '%s' ...", self.filename)
+        if self.verbose > 1:
+            log.debug(_("Removing pidfile '%s' ..."), self.filename)
         if self.simulate:
             return
         try:
             os.remove(self.filename)
         except OSError, e:
-            log.err("Could not delete pidfile '%s': %s", self.filename, str(e))
+            log.err(_("Could not delete pidfile '%s': %s"), self.filename, str(e))
         except Exception, e:
             self.handle_error(str(e), e.__class__.__name__, True)
 
@@ -367,7 +368,7 @@ class PidFile(PbBaseObject):
             return PbReadTimeoutError(self.timeout, self.filename)
 
         if self.verbose > 1:
-            log.debug("Reading content of pidfile %r ...", self.filename)
+            log.debug(_("Reading content of pidfile %r ..."), self.filename)
 
         signal.signal(signal.SIGALRM, pidfile_read_alarm_caller)
         signal.alarm(self.timeout)
