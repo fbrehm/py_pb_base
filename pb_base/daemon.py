@@ -38,7 +38,7 @@ from pb_base.pidfile import PidFileInUseError
 from pb_base.pidfile_app import PidfileAppError
 from pb_base.pidfile_app import PidfileApp
 
-__version__ = '0.1.1'
+__version__ = '0.2.1'
 
 log = logging.getLogger(__name__)
 
@@ -58,7 +58,9 @@ class PbDaemon(PidfileApp):
     #--------------------------------------------------------------------------
     def __init__(self,
                 appname = None,
+                do_daemonize = True,
                 pidfile = None,
+                error_log = None,
                 facility = None,
                 verbose = 0,
                 version = __version__,
@@ -87,6 +89,11 @@ class PbDaemon(PidfileApp):
                         (what's the default), it tries to detect it from
                         configuration and from given commandline parameters.
         @type pidfile: str
+        @param error_log: the logfile for stderr substitute in daemon mode
+        @type error_log: str
+        @param do_daemonize: flag indicating, that the application should
+                             daemonize itself
+        @type do_daemonize: bool
         @param facility: the name of the facility to use to log to syslog
         @type facility: str
         @param verbose: verbose level
@@ -162,6 +169,24 @@ class PbDaemon(PidfileApp):
         @type: int
         """
 
+        self._do_daemonize = bool(do_daemonize)
+        """
+        @ivar: flag indicating, that the application should daemonize itself
+        @type: bool
+        """
+
+        self._default_error_log = error_log
+        """
+        @ivar: the default logfile for stderr substitute in daemon mode
+        @type: str
+        """
+
+        self._error_log = None
+        """
+        @ivar: the logfile for stderr substitute in daemon mode
+        @type: str
+        """
+
         super(PbDaemon, self).__init__(
                 appname = appname,
                 pidfile = pidfile,
@@ -182,6 +207,16 @@ class PbDaemon(PidfileApp):
                 hide_default_config = hide_default_config,
         )
 
+        self._is_daemon = False
+        """
+        @ivar: Flag, that the process is runnning as a damon in background
+               or in foreground
+        @type: bool
+        """
+
+        if not self._default_error_log:
+            self._default_error_log = os.path.join(self.base_dir, 'error.log')
+
     #--------------------------------------------------------------------------
     @property
     def facility_name(self):
@@ -193,6 +228,27 @@ class PbDaemon(PidfileApp):
     def facility(self):
         """The integer value of the elected syslog facility."""
         return self._facility
+
+    #--------------------------------------------------------------------------
+    @property
+    def do_daemonize(self):
+        """A flag indicating, that the application should daemonize itself."""
+        return self._do_daemonize
+
+    #--------------------------------------------------------------------------
+    @property
+    def is_daemon(self):
+        """
+        A flag indicating, that that the process is runnning as a damon
+        in background or in foreground.
+        """
+        return self._is_daemon
+
+    #--------------------------------------------------------------------------
+    @property
+    def error_log(self):
+        """The logfile for stderr substitute in daemon mode."""
+        return self._error_log
 
     #--------------------------------------------------------------------------
     def init_cfg_spec(self):
@@ -221,6 +277,19 @@ class PbDaemon(PidfileApp):
             self.cfg_spec[u'general'].comments[u'syslog_facility'].append(
                     u'The syslog facility to use when logging as a daemon.')
 
+        def_errlog = self._default_error_log
+        if not def_errlog:
+            def_errlog = os.path.join(self.base_dir, 'error.log')
+
+        log_spec = u"string(default = '%s')" % (
+                to_unicode_or_bust(def_errlog))
+
+        if not u'error_log' in self.cfg_spec[u'general']:
+            self.cfg_spec[u'general'][u'error_log'] = log_spec
+            self.cfg_spec[u'general'].comments[u'error_log'].append('')
+            self.cfg_spec[u'general'].comments[u'error_log'].append(
+                    u'The logfile for stderr substitute in daemon mode.')
+
     #--------------------------------------------------------------------------
     def perform_config(self):
         """
@@ -241,6 +310,15 @@ class PbDaemon(PidfileApp):
             if fac_name and (fac_name != self._default_facility_name):
                 self._facility_name = fac_name
                 self._facility = valid_syslog_facility[fac_name]
+
+        if ((not self.error_log) and u'general' in self.cfg and
+                u'error_log' in self.cfg[u'general']):
+
+            # Not set by commandline, but set in configuration
+            error_log = to_utf8_or_bust(self.cfg[u'general'][u'error_log'])
+
+            if error_log:
+                self._error_log = error_log
 
     #--------------------------------------------------------------------------
     def init_arg_parser(self):
@@ -344,6 +422,9 @@ class PbDaemon(PidfileApp):
 
         if not self.facility_name:
             self._facility_name = self._default_facility_name
+
+        if not self.error_log:
+            self._error_log = self._default_error_log
 
         self.initialized = True
 

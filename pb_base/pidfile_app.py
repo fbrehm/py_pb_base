@@ -151,6 +151,12 @@ class PidfileApp(PbCfgApp):
         @type: str
         """
 
+        self._simulate = False
+        """
+        @ivar: simulation mode, nothing is really done
+        @type: bool
+        """
+
         super(PidfileApp, self).__init__(
                 appname = appname,
                 verbose = verbose,
@@ -175,6 +181,8 @@ class PidfileApp(PbCfgApp):
         if self.verbose > 3:
             log.debug("Using pidfile: '%s'.", self.pidfilename)
 
+        self._simulate = getattr(self.args, 'simulate', False)
+
         if self.verbose > 1:
             log.debug("Initialising pidfile object ...")
         self.pidfile = PidFile(
@@ -183,7 +191,7 @@ class PidfileApp(PbCfgApp):
                 verbose = self.verbose,
                 base_dir = self.base_dir,
                 use_stderr = self.use_stderr,
-                simulate = False,
+                simulate = self.simulate,
         )
         self.pidfile.initialized = True
 
@@ -192,6 +200,12 @@ class PidfileApp(PbCfgApp):
     def pidfilename(self):
         """The resulting filename of the pidfile."""
         return self._pidfilename
+
+    #------------------------------------------------------------
+    @property
+    def simulate(self):
+        """Simulation mode, nothing is really done."""
+        return self._simulate
 
     #--------------------------------------------------------------------------
     def __del__(self):
@@ -270,6 +284,13 @@ class PidfileApp(PbCfgApp):
                 help = help_txt,
         )
 
+        self.arg_parser.add_argument(
+                '-T', '--test', '--simulate', '--dry-run',
+                action = "store_true",
+                dest = "simulate",
+                help = _("Simulation mode, nothing is really done."),
+        )
+
         super(PidfileApp, self).init_arg_parser()
 
     #--------------------------------------------------------------------------
@@ -288,6 +309,8 @@ class PidfileApp(PbCfgApp):
             log.debug("Setting pidfile to '%s' by commandline parameter.",
                     pidfile)
             self._pidfilename = pidfile
+
+        self._simulate = getattr(self.args, 'simulate', False)
 
     #--------------------------------------------------------------------------
     def pre_run(self):
