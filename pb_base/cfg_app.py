@@ -409,15 +409,19 @@ class PbCfgApp(PbApplication):
 
         cfgfiles_ok = True
 
-        for cfg_file in self.cfg_files:
+        existing_cfg_files = [file for file in self.cfg_files
+                              if os.path.isfile(file)]
+        if not existing_cfg_files:
+            msg = "Could not find any configuration file at these locations:"
+            for file in self.cfg_files:
+                msg += '\n' + file
+            self.handle_error(msg, _("Configuration error"))
+
+        for cfg_file in existing_cfg_files:
 
             if self.verbose > 1:
-                log.debug("Reading in configuration file '%s' ...", cfg_file)
-
-            if not os.path.isfile(cfg_file):
-                log.debug("Skipping non-existing configuration file: '%s' ...",
+                log.debug("Reading in configuration file '%s' ...",
                           cfg_file)
-                continue
 
             cfg = ConfigObj(
                     cfg_file,
@@ -442,14 +446,6 @@ class PbCfgApp(PbApplication):
                 continue
 
             self.cfg.rec_update(cfg)
-
-        existing_cfg_files = [file for file in self.cfg_files
-                              if os.path.isfile(file)]
-        if not existing_cfg_files:
-            msg = "Could not find any configuration file at these locations:"
-            for file in self.cfg_files:
-                msg += '\n' + file
-            self.handle_error(msg, _("Configuration error"))
 
         if not cfgfiles_ok:
             sys.exit(2)
