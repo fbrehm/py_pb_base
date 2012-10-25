@@ -33,7 +33,7 @@ from pb_base.object import PbBaseObjectError
 from pb_base.app import PbApplicationError
 from pb_base.app import PbApplication
 
-__version__ = '0.5.1'
+__version__ = '0.5.2'
 
 log = logging.getLogger(__name__)
 
@@ -496,7 +496,12 @@ class PbCfgApp(PbApplication):
         methods in descendant classes.
         """
 
-        pass
+        if (u'general' in self.cfg and
+                u'verbose' in self.cfg[u'general']):
+
+            new_verbose = self.cfg[u'general'][u'verbose']
+            if new_verbose > self.verbose:
+                self.verbose = new_verbose
 
     #--------------------------------------------------------------------------
     def post_init(self):

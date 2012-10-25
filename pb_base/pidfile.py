@@ -26,7 +26,7 @@ from pb_base.errors import PbWriteTimeoutError
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
-__version__ = '0.3.1'
+__version__ = '0.4.1'
 
 log = logging.getLogger(__name__)
 
@@ -206,6 +206,10 @@ class PidFile(PbBaseObject):
         """Remove the self created pidfile on destroying the current object."""
         return self._auto_remove
 
+    @auto_remove.setter
+    def auto_remove(self, value):
+        self._auto_remove = bool(value)
+
     #------------------------------------------------------------
     @property
     def simulate(self):
@@ -252,6 +256,8 @@ class PidFile(PbBaseObject):
         if self.verbose > 1:
             log.debug(_("Removing pidfile '%s' ..."), self.filename)
         if self.simulate:
+            if self.verbose > 1:
+                log.debug(_("Just kidding .."))
             return
         try:
             os.remove(self.filename)
@@ -285,13 +291,22 @@ class PidFile(PbBaseObject):
         if self.check():
 
             log.info(_("Deleting pidfile '%s' ..."), self.filename)
-            try:
-                os.remove(self.filename)
-            except OSError, e:
-                raise InvalidPidFileError(self.filename, str(e))
+            if self.simulate:
+                log.debug(_("Just kidding .."))
+            else:
+                try:
+                    os.remove(self.filename)
+                except OSError, e:
+                    raise InvalidPidFileError(self.filename, str(e))
 
         if self.verbose > 1:
             log.debug(_("Trying opening '%s' exclusive ..."), self.filename)
+
+        if self.simulate:
+            log.debug(_("Simulation mode - don't real writing in '%s'."),
+                    self.filename)
+            self._created = True
+            return
 
         fd = None
         try:
@@ -313,6 +328,57 @@ class PidFile(PbBaseObject):
             os.close(fd)
 
         self._created = True
+
+    #--------------------------------------------------------------------------
+    def recreate(self, pid = None):
+        """
+        Rewrites an even created pidfile with the current PID.
+
+        @param pid: the pid to write into the pidfile. If not given, the PID of
+                    the current process will taken.
+        @type pid: int
+
+        """
+
+        if not self.created:
+            msg = _("Calling recreate() on a note opened pidfile.")
+            raise PidFileError(msg)
+
+        if pid:
+            pid = int(pid)
+            if pid <= 0:
+                msg = _("Invalid PID %(pid)d for creating pidfile " +
+                        "'%(pidfile)s' given.") % {
+                        'pid': pid, 'pidfile': self.filename}
+                raise PidFileError(msg)
+        else:
+            pid = os.getpid()
+
+        if self.verbose > 1:
+            log.debug(_("Trying opening '%s' for recreate ..."), self.filename)
+
+        if self.simulate:
+            log.debug(_("Simulation mode - don't real writing in '%s'."),
+                    self.filename)
+            return
+
+        fh = None
+        try:
+            fh = open(self.filename, 'w')
+        except OSError, e:
+            msg = _("Error on recreating pidfile '%(pidfile)s': %(err)s") % {
+                    'pidfile': self.filename, 'err': str(e)}
+            raise PidFileError(msg)
+
+        if self.verbose > 2:
+            log.debug(_("Writing %(pid)d into '%(pidfile)s' ...") % {
+                    'pid': pid, 'pidfile': self.filename})
+
+        try:
+            fh.write("%d\n" %(pid))
+        finally:
+            fh.close()
+
 
     #--------------------------------------------------------------------------
     def check(self):

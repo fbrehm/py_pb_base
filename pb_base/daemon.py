@@ -10,6 +10,7 @@
 import sys
 import os
 import logging
+import signal
 
 from gettext import gettext as _
 
@@ -38,9 +39,21 @@ from pb_base.pidfile import PidFileInUseError
 from pb_base.pidfile_app import PidfileAppError
 from pb_base.pidfile_app import PidfileApp
 
-__version__ = '0.2.1'
+__version__ = '0.3.1'
 
 log = logging.getLogger(__name__)
+
+#--------------------------------------------------------------------------
+
+signal_names = {
+    signal.SIGHUP: 'HUP',
+    signal.SIGINT: 'INT',
+    signal.SIGABRT: 'ABRT',
+    signal.SIGTERM: 'TERM',
+    signal.SIGKILL: 'KILL',
+    signal.SIGUSR1: 'USR1',
+    signal.SIGUSR2: 'USR2',
+}
 
 #==============================================================================
 class PbDaemonError(PidfileAppError):
@@ -364,6 +377,10 @@ class PbDaemon(PidfileApp):
             self._facility_name = fac_name
             self._facility = valid_syslog_facility[fac_name]
 
+        no_syslog = getattr(self.args, "no_syslog", False)
+        if no_syslog:
+            self._do_daemonize = False
+
     #--------------------------------------------------------------------------
     def init_logging(self):
         """
@@ -427,6 +444,152 @@ class PbDaemon(PidfileApp):
             self._error_log = self._default_error_log
 
         self.initialized = True
+
+    #--------------------------------------------------------------------------
+    def signal_handler(self, signum, frame):
+        """
+        Handler as a callback function for getting a signal from somewhere.
+
+        @param signum: the gotten signal number
+        @type signum: int
+        @param frame: the current stack frame
+        @type frame: None or a frame object
+
+        """
+
+        signame = "%d"  % (signum)
+        if signum in signal_names:
+            signame = signal_names[signum]
+        log.info(_("Got a signal %s.") % (signame))
+
+        msg = _("process with PID %(pid)d got signal %(signal)s.") % {
+                'pid': os.getpid(), 'signal': signame}
+        self.handle_info(msg, self.appname)
+
+        if (signum == signal.SIGUSR1) or (signum == signal.SIGUSR2):
+            log.info("Nothing to do on signal USR1 or USR2.")
+            return
+
+        # set forced shutdown, except SIGHUP
+        forced = False
+        if ( (signum == signal.SIGINT) or
+                (signum == signal.SIGABRT) or
+                (signum == signal.SIGTERM) ):
+            log.info("Got a signal for forced shutdown.")
+            forced = True
+
+        self.exit_action(forced)
+
+    #--------------------------------------------------------------------------
+    def exit_action(self, forced = False):
+        """
+        Method for indicating the application to clearly exit to OS.
+        In this implemention only a simple os.exit(0) is done, but this method
+        maybe overriden.
+
+        This method will be called by the signal_handler() method.
+
+        @param forced: flag indicating a forced shutdown of the application
+                       (in this implemention unused).
+        @type forced: bool
+
+        """
+
+        if self.verbose > 2:
+            log.debug(_("Exit from %s, so sad ..."), self.appname)
+
+        sys.exit(0)
+
+    #--------------------------------------------------------------------------
+    def _daemonize(self):
+        """
+        The underlaying daemonization process.
+
+        It performs a double fork, closes all standard file handles
+        and separates from parent process.
+
+        """
+
+        # do the first fork
+        log.debug(_("First fork ..."))
+        try:
+            pid = os.fork()
+            if pid > 0:
+                # exit first parent
+                sys.exit(0)
+        except OSError, e:
+            log.error((_("Fork #1 failed: ") + "%d (%s)"), e.errno, e.strerror)
+            sys.exit(1)
+
+        # decouple from parent environment
+        #os.chdir(self.base_dir)
+        os.setsid()
+        #os.umask(0)
+
+        # do second fork
+        log.debug(_("Second fork ..."))
+        try:
+            pid = os.fork()
+            if pid > 0:
+                # exit from second parent
+                sys.exit(0)
+        except OSError, e:
+            log.error((_("Fork #2 failed: ") + "%d (%s)"), e.errno, e.strerror)
+            sys.exit(1)
+
+        start_msg = _("%(app)s started as daemon with PID %(pid)d.") % {
+                'app': self.appname, 'pid': os.getpid()}
+
+        sys.stdout.write(start_msg + '\n')
+
+        # redirect standard file descriptors
+        log.debug(_("Redirect standard file descriptors ..."))
+        sys.stdout.flush()
+        sys.stderr.flush()
+
+        si = file('/dev/null', 'r')
+        so = file('/dev/null', 'a+')
+        se = file(self.error_log, 'a', 0)
+        os.dup2(si.fileno(), sys.stdin.fileno())
+        os.dup2(so.fileno(), sys.stdout.fileno())
+        os.dup2(se.fileno(), sys.stderr.fileno())
+
+        self._is_daemon = True
+        log.debug(_("I'm a daemon now - Boooaaaahhh!!!"))
+        self.handle_info(start_msg, self.appname)
+
+    #--------------------------------------------------------------------------
+    def pre_run(self):
+        """
+        Code executing before executing the main routine.
+
+        This method should be explicitely called by all pre_run()
+        methods in descendant classes.
+
+        It tries to generate the pidfile.
+        In case of no success, the application returns with a
+        return value of 2.
+
+        """
+
+        super(PbDaemon, self).pre_run()
+        self.pidfile.auto_remove = False
+
+        os.chdir(self.base_dir)
+        os.umask(0)
+
+        if self.do_daemonize:
+            self._daemonize()
+
+        self.pidfile.recreate()
+        self.pidfile.auto_remove = True
+
+        signal.signal(signal.SIGHUP, self.signal_handler)
+        signal.signal(signal.SIGINT, self.signal_handler)
+        signal.signal(signal.SIGABRT, self.signal_handler)
+        signal.signal(signal.SIGTERM, self.signal_handler)
+        signal.signal(signal.SIGUSR1, self.signal_handler)
+        signal.signal(signal.SIGUSR2, self.signal_handler)
 
 
 #==============================================================================
