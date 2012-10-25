@@ -36,7 +36,7 @@ from pb_base.pidfile import InvalidPidFileError
 from pb_base.pidfile import PidFileInUseError
 from pb_base.pidfile import PidFile
 
-__version__ = '0.0.1'
+__version__ = '0.1.1'
 
 log = logging.getLogger(__name__)
 
@@ -70,6 +70,8 @@ class PidfileApp(PbCfgApp):
                 cfg_dir = None,
                 cfg_stem = None,
                 cfg_encoding = 'utf8',
+                cfg_spec = None,
+                hide_default_config = False,
                 ):
         """
         Initialisation of the daemon object.
@@ -123,6 +125,9 @@ class PidfileApp(PbCfgApp):
                              must be a valid Python encoding
                              (See: http://docs.python.org/library/codecs.html#standard-encodings)
         @type cfg_encoding: str
+        @param hide_default_config: hide command line parameter --default-config and
+                                    don't execute generation of default config
+        @type hide_default_config: bool
 
         @return: None
         """
@@ -154,12 +159,43 @@ class PidfileApp(PbCfgApp):
                 cfg_dir = cfg_dir,
                 cfg_stem = cfg_stem,
                 cfg_encoding = cfg_encoding,
+                cfg_spec = cfg_spec,
+                hide_default_config = hide_default_config,
         )
 
     #--------------------------------------------------------------------------
     def __del__(self):
 
         self.pidfile = None
+
+    #--------------------------------------------------------------------------
+    def init_cfg_spec(self):
+        """
+        Method to complete the initialisation of the config
+        specification file.
+
+        It will called before reading the configuration files and
+        their validation.
+
+        """
+
+        super(PidfileApp, self).init_cfg_spec()
+
+        if not u'general' in self.cfg_spec:
+            self.cfg_spec[u'general'] = {}
+
+        if not self._default_pidfilename:
+            self._default_pidfilename = os.path.join(
+                    self.base_dir, self.appname + '.pid')
+
+        pidfile_spec = u"string(default = '%s')" % (
+                to_unicode_or_bust(self._default_pidfilename))
+
+        if not u'pidfile' in self.cfg_spec[u'general']:
+            self.cfg_spec[u'general'][u'pidfile'] = pidfile_spec
+            self.cfg_spec[u'general'].comments[u'pidfile'].append('')
+            self.cfg_spec[u'general'].comments[u'pidfile'].append(
+                    u'The filename of the pidfile.')
 
     #--------------------------------------------------------------------------
     def init_arg_parser(self):

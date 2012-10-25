@@ -33,7 +33,7 @@ from pb_base.object import PbBaseObjectError
 from pb_base.app import PbApplicationError
 from pb_base.app import PbApplication
 
-__version__ = '0.4.1'
+__version__ = '0.4.2'
 
 log = logging.getLogger(__name__)
 
@@ -67,6 +67,7 @@ class PbCfgApp(PbApplication):
                 cfg_stem = None,
                 cfg_encoding = 'utf8',
                 cfg_spec = None,
+                hide_default_config = False,
                 ):
         """
         Initialisation of the base object.
@@ -116,6 +117,9 @@ class PbCfgApp(PbApplication):
                              must be a valid Python encoding
                              (See: http://docs.python.org/library/codecs.html#standard-encodings)
         @type cfg_encoding: str
+        @param hide_default_config: hide command line parameter --default-config and
+                                    don't execute generation of default config
+        @type hide_default_config: bool
 
         @return: None
         """
@@ -124,6 +128,13 @@ class PbCfgApp(PbApplication):
         """
         @ivar: encoding character set of the configuration files
         @type: str
+        """
+
+        self._hide_default_config = hide_default_config
+        """
+        @ivar: hide command line parameter --default-config and
+               don't execute generation of default config
+        @type: bool
         """
 
         super(PbCfgApp, self).__init__(
@@ -208,6 +219,15 @@ class PbCfgApp(PbApplication):
 
     #------------------------------------------------------------
     @property
+    def hide_default_config(self):
+        """
+        hide command line parameter --default-config and
+        don't execute generation of default config
+        """
+        return getattr(self, '_hide_default_config', False)
+
+    #------------------------------------------------------------
+    @property
     def cfg_encoding(self):
         """The encoding character set of the configuration files."""
         return self._cfg_encoding
@@ -249,13 +269,14 @@ class PbCfgApp(PbApplication):
                 help = _("The encoding character set of the configuration files")
         )
 
-        self.arg_parser.add_argument(
-                "--default-config",
-                action = 'store_true',
-                dest = "show_default_config",
-                help = _('Generates a default configuration, prints ' +
-                        'it out to STDOUT and exit'),
-        )
+        if not self.hide_default_config:
+            self.arg_parser.add_argument(
+                    "--default-config",
+                    action = 'store_true',
+                    dest = "show_default_config",
+                    help = _('Generates a default configuration, prints ' +
+                            'it out to STDOUT and exit'),
+            )
 
     #--------------------------------------------------------------------------
     def perform_arg_parser(self):
@@ -334,10 +355,11 @@ class PbCfgApp(PbApplication):
         self.cfg_spec.comments[u'general'].append(
                 u'General configuration parameters')
 
-        self.cfg_spec[u'general'] = {u'verbose': u'integer(0, 10, default = 0)'}
-        self.cfg_spec[u'general'].comments[u'verbose'].append('')
-        self.cfg_spec[u'general'].comments[u'verbose'].append(
-                u'Defines a minimum verbosity of the application')
+        if not u'verbose' in self.cfg_spec[u'general']:
+            self.cfg_spec[u'general'][u'verbose'] = 'integer(0, 10, default = 0)'
+            self.cfg_spec[u'general'].comments[u'verbose'].append('')
+            self.cfg_spec[u'general'].comments[u'verbose'].append(
+                    u'Defines a minimum verbosity of the application')
 
         self.cfg_spec.final_comment.append('')
         self.cfg_spec.final_comment.append('')
@@ -491,7 +513,13 @@ class PbCfgApp(PbApplication):
 
         """
 
-        if not self.args.show_default_config:
+        do_default_config = True
+        if self.hide_default_config:
+            do_default_config = False
+        elif not self.args.show_default_config:
+            do_default_config = False
+
+        if not do_default_config:
             return super(PbCfgApp, self).run()
 
         curdate = datetime.datetime.utcnow()
