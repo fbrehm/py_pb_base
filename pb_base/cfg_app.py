@@ -33,7 +33,7 @@ from pb_base.object import PbBaseObjectError
 from pb_base.app import PbApplicationError
 from pb_base.app import PbApplication
 
-__version__ = '0.4.2'
+__version__ = '0.4.3'
 
 log = logging.getLogger(__name__)
 
@@ -216,6 +216,7 @@ class PbCfgApp(PbApplication):
             self._init_cfg_spec()
 
         self._read_config()
+        self.perform_config()
 
     #------------------------------------------------------------
     @property
@@ -501,6 +502,17 @@ class PbCfgApp(PbApplication):
                 error_str += msg
 
         return error_str
+
+    #--------------------------------------------------------------------------
+    def perform_config(self):
+        """
+        Execute some actions after reading the configuration.
+
+        This method should be explicitely called by all perform_config()
+        methods in descendant classes.
+        """
+
+        pass
 
     #--------------------------------------------------------------------------
     def run(self):

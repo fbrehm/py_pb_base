@@ -19,7 +19,7 @@ from gettext import gettext as _
 # Third party modules
 
 # Own modules
-from pb_base.common import pp, to_unicode_or_bust
+from pb_base.common import pp, to_unicode_or_bust, to_utf8_or_bust
 
 from pb_base.errors import PbError
 from pb_base.errors import FunctionNotImplementedError
@@ -36,7 +36,7 @@ from pb_base.pidfile import InvalidPidFileError
 from pb_base.pidfile import PidFileInUseError
 from pb_base.pidfile import PidFile
 
-__version__ = '0.1.1'
+__version__ = '0.2.1'
 
 log = logging.getLogger(__name__)
 
@@ -144,6 +144,13 @@ class PidfileApp(PbCfgApp):
         @type: str
         """
 
+        self._pidfilename = None
+        """
+        @ivar: the resulting filename of the pidfile after evaluating
+                configuration and commandline parameters
+        @type: str
+        """
+
         super(PidfileApp, self).__init__(
                 appname = appname,
                 verbose = verbose,
@@ -162,6 +169,29 @@ class PidfileApp(PbCfgApp):
                 cfg_spec = cfg_spec,
                 hide_default_config = hide_default_config,
         )
+
+        if not self.pidfilename:
+            self._pidfilename = self._default_pidfilename
+        if self.verbose > 3:
+            log.debug("Using pidfile: '%s'.", self.pidfilename)
+
+        if self.verbose > 1:
+            log.debug("Initialising pidfile object ...")
+        self.pidfile = PidFile(
+                self.pidfilename,
+                appname = self.appname,
+                verbose = self.verbose,
+                base_dir = self.base_dir,
+                use_stderr = self.use_stderr,
+                simulate = False,
+        )
+        self.pidfile.initialized = True
+
+    #------------------------------------------------------------
+    @property
+    def pidfilename(self):
+        """The resulting filename of the pidfile."""
+        return self._pidfilename
 
     #--------------------------------------------------------------------------
     def __del__(self):
@@ -198,6 +228,25 @@ class PidfileApp(PbCfgApp):
                     u'The filename of the pidfile.')
 
     #--------------------------------------------------------------------------
+    def perform_config(self):
+        """
+        Execute some actions after reading the configuration.
+
+        This method should be explicitely called by all perform_config()
+        methods in descendant classes.
+        """
+
+        super(PidfileApp, self).perform_config()
+
+        if ((not self.pidfilename) and u'general' in self.cfg and
+                u'pidfile' in self.cfg[u'general']):
+            # Not set by commandline, but set in configuration
+            pidfile = to_utf8_or_bust(self.cfg[u'general'][u'pidfile'])
+            if pidfile and (pidfile != self._default_pidfilename):
+                log.debug("Setting pidfile to '%s' by configuration.", pidfile)
+                self._pidfilename = pidfile
+
+    #--------------------------------------------------------------------------
     def init_arg_parser(self):
         """
         Method to initiate the argument parser.
@@ -210,16 +259,35 @@ class PidfileApp(PbCfgApp):
             self._default_pidfilename = os.path.join(
                     self.base_dir, self.appname + '.pid')
 
+        help_txt = _('The name of the pidfile (Default: %s).') % (
+                self._default_pidfilename)
+
         self.arg_parser.add_argument(
                 '--pfile', "--pidfile",
                 metavar = 'FILE',
                 action = 'store',
                 dest = "pidfile",
-                default = self._default_pidfilename,
-                help = _('The name of the pidfile (Default: %(default)s).'),
+                help = help_txt,
         )
 
         super(PidfileApp, self).init_arg_parser()
+
+    #--------------------------------------------------------------------------
+    def perform_arg_parser(self):
+        """
+        Execute some actions after parsing the command line parameters.
+
+        This method should be explicitely called by all perform_arg_parser()
+        methods in descendant classes.
+        """
+
+        super(PidfileApp, self).perform_arg_parser()
+
+        pidfile = getattr(self.args, 'pidfile', None)
+        if pidfile and (pidfile != self._default_pidfilename):
+            log.debug("Setting pidfile to '%s' by commandline parameter.",
+                    pidfile)
+            self._pidfilename = pidfile
 
 #==============================================================================
 
