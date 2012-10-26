@@ -30,6 +30,8 @@ from pb_base.errors import FunctionNotImplementedError
 
 from pb_base.object import PbBaseObjectError
 
+from pb_base.validator import pbvalidator_checks
+
 from pb_base.app import PbApplicationError
 from pb_base.app import PbApplication
 
@@ -393,7 +395,7 @@ class PbCfgApp(PbApplication):
             cfgspec.close()
             del cfgspec
 
-        validator = Validator()
+        validator = Validator(pbvalidator_checks)
 
         cfgfiles_ok = True
 
@@ -556,7 +558,7 @@ class PbCfgApp(PbApplication):
                 configspec = self.cfg_spec,
         )
 
-        vdt = Validator()
+        vdt = Validator(pbvalidator_checks)
         cfg.validate(vdt, copy = True)
         cfg.write(sys.stdout)
 
