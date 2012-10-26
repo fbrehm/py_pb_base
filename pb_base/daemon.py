@@ -39,7 +39,7 @@ from pb_base.pidfile import PidFileInUseError
 from pb_base.pidfile_app import PidfileAppError
 from pb_base.pidfile_app import PidfileApp
 
-__version__ = '0.3.1'
+__version__ = '0.3.2'
 
 log = logging.getLogger(__name__)
 
@@ -248,6 +248,10 @@ class PbDaemon(PidfileApp):
         """A flag indicating, that the application should daemonize itself."""
         return self._do_daemonize
 
+    @do_daemonize.setter
+    def do_daemonize(self, value):
+        self._do_daemonize = bool(value)
+
     #--------------------------------------------------------------------------
     @property
     def is_daemon(self):
@@ -354,11 +358,14 @@ class PbDaemon(PidfileApp):
                 help = help_txt,
         )
 
+        help_txt = _("Log to console instead to syslog. Don't daemonize " +
+                "the application, running in foreground.")
+
         self.arg_parser.add_argument(
-                "-N", "--no-syslog",
+                "-N", "--no-syslog", "--no-daemon",
                 action = "store_true",
                 dest = "no_syslog",
-                help = _("Log to console instead to syslog."),
+                help = help_txt,
         )
 
     #--------------------------------------------------------------------------
