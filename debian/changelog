@@ -1,3 +1,11 @@
+profitbricks-python-base (0.1.16-1) unstable; urgency=low
+
+  * Version bump
+  * Created and integrated pb_base/validator.py for self defined config
+    validation checks
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Fri, 26 Oct 2012 15:50:46 +0200
+
 profitbricks-python-base (0.1.15-1) unstable; urgency=low
 
   * Version bump
