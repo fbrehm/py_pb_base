@@ -39,7 +39,7 @@ from pb_base.pidfile import PidFileInUseError
 from pb_base.pidfile_app import PidfileAppError
 from pb_base.pidfile_app import PidfileApp
 
-__version__ = '0.3.2'
+__version__ = '0.3.3'
 
 log = logging.getLogger(__name__)
 
@@ -283,6 +283,17 @@ class PbDaemon(PidfileApp):
         if not u'general' in self.cfg_spec:
             self.cfg_spec[u'general'] = {}
 
+        daemon_spec = u'boolean(default = %r)' % (self.do_daemonize)
+
+        if not u'do_daemon' in self.cfg_spec[u'general']:
+            self.cfg_spec[u'general'][u'do_daemon'] = daemon_spec
+            self.cfg_spec[u'general'].comments[u'do_daemon'].append('')
+            self.cfg_spec[u'general'].comments[u'do_daemon'].append(
+                    u'Execute scstadmd as a standalone daemon (default) or ' +
+                    u'under control')
+            self.cfg_spec[u'general'].comments[u'do_daemon'].append(
+                    u'of some kind of daemonisation tool, e.g. supervisor')
+
         choices = u', '.join(map(lambda x: u"'" + to_unicode_or_bust(x) + u"'",
                 sorted(valid_syslog_facility.keys())))
         facility_spec = u"option(%s, default = '%s')" % (choices,
@@ -317,6 +328,9 @@ class PbDaemon(PidfileApp):
         """
 
         super(PbDaemon, self).perform_config()
+
+        if u'general' in self.cfg and u'do_daemon' in self.cfg[u'general']:
+            self.do_daemonize = self.cfg[u'general'][u'do_daemon']
 
         if ((not self.facility_name) and u'general' in self.cfg and
                 u'syslog_facility' in self.cfg[u'general']):
