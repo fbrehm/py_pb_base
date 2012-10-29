@@ -182,8 +182,6 @@ class PbApplication(PbBaseObject):
             self._env_prefix = ep
 
         self._init_arg_parser()
-        if parse_args:
-            self._perform_arg_parser()
 
         self._init_env()
         self._perform_env()
