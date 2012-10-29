@@ -37,7 +37,7 @@ from pb_base.socket_obj import GenericSocket
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
 __copyright__ = '(C) 2010-2012 by profitbricks.com'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.2.2'
+__version__ = '0.2.3'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)
@@ -81,6 +81,7 @@ class UnixSocket(GenericSocket):
             owner = None,
             group = None,
             timeout = 5,
+            request_queue_size = 5,
             appname = None,
             verbose = 0,
             version = __version__,
@@ -102,6 +103,9 @@ class UnixSocket(GenericSocket):
         @type group: str
         @param timeout: timeout in seconds for all opening and IO operations
         @type timeout: int
+        @param request_queue_size: the maximum number of queued connections
+                                    (between 0 and 5)
+        @type request_queue_size: int
         @param appname: name of the current running application
         @type appname: str
         @param verbose: verbose level
@@ -123,6 +127,7 @@ class UnixSocket(GenericSocket):
 
         super(UnixSocket, self).__init__(
                 timeout = timeout,
+                request_queue_size = request_queue_size,
                 appname = appname,
                 base_dir = base_dir,
                 verbose = verbose,
@@ -285,6 +290,11 @@ class UnixSocket(GenericSocket):
                             "%(uid)d:%(gid)d ...") % {'sock': self.filename,
                             'uid': uid, 'gid': gid})
                 os.chown(self.filename, uid, gid)
+
+        if self.verbose > 2:
+            log.debug(_("Start listening on socket with a queue size of %d."),
+                    self.request_queue_size)
+        self.sock.listen(self.request_queue_size)
 
 #==============================================================================
 

@@ -33,7 +33,7 @@ from pb_base.errors import FunctionNotImplementedError
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
 __copyright__ = '(C) 2010-2012 by profitbricks.com'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)
@@ -53,6 +53,7 @@ class GenericSocket(PbBaseObject):
     #--------------------------------------------------------------------------
     def __init__(self,
             timeout = 5,
+            request_queue_size = 5,
             appname = None,
             verbose = 0,
             version = __version__,
@@ -66,6 +67,9 @@ class GenericSocket(PbBaseObject):
 
         @param timeout: timeout in seconds for all opening and IO operations
         @type timeout: int
+        @param request_queue_size: the maximum number of queued connections
+                                    (between 0 and 5)
+        @type request_queue_size: int
         @param appname: name of the current running application
         @type appname: str
         @param verbose: verbose level
@@ -99,6 +103,15 @@ class GenericSocket(PbBaseObject):
         @ivar: timout in seconds for all opening and IO operations
         @type: int
         """
+
+        self._request_queue_size = int(request_queue_size)
+        """
+        @ivar: the maximum number of queued connections (between 0 and 5)
+        @type: int
+        """
+        if self._request_queue_size < 0 or self._request_queue_size > 5:
+            raise ValueError(_("Invalid request_queue_size %r, must be " +
+                    "between 0 and 5.") % (request_queue_size))
 
         self._bounded = False
         """
@@ -157,6 +170,12 @@ class GenericSocket(PbBaseObject):
     def bounded(self):
         """A flag indicating, that the socket is bounded for listening."""
         return self._bounded
+
+    #------------------------------------------------------------
+    @property
+    def request_queue_size(self):
+        """The maximum number of queued connections."""
+        return self._request_queue_size
 
     #------------------------------------------------------------
     @property
