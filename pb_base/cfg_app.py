@@ -70,7 +70,6 @@ class PbCfgApp(PbApplication):
                 cfg_encoding = 'utf8',
                 cfg_spec = None,
                 hide_default_config = False,
-                parse_args = True,
                 ):
         """
         Initialisation of the base object.
@@ -125,8 +124,6 @@ class PbCfgApp(PbApplication):
         @param hide_default_config: hide command line parameter --default-config and
                                     don't execute generation of default config
         @type hide_default_config: bool
-        @param parse_args: Parse args
-        @type parse_args: bool
 
         @return: None
         """

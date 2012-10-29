@@ -59,7 +59,6 @@ class PbApplication(PbBaseObject):
                 argparse_epilog = None,
                 argparse_prefix_chars = '-',
                 env_prefix = None,
-                parse_args = True,
                 ):
         """
         Initialisation of the base object.
@@ -96,8 +95,6 @@ class PbApplication(PbBaseObject):
                            if not given, the appname in uppercase letters
                            and a trailing underscore is assumed.
         @type env_prefix: str
-        @param parse_args: Parse args
-        @type parse_args: bool
 
         @return: None
         """
