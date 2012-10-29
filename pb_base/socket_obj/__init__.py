@@ -102,18 +102,18 @@ class GenericSocket(PbBaseObject):
 
         self._bounded = False
         """
-        @ivar: flag indicating, that the UNIX socket is bounded for listening
+        @ivar: flag indicating, that the socket is bounded for listening
         @type: bool
         """
 
         self._connected = False
         """
-        @ivar: flag indicating, that  the application is connected
+        @ivar: flag indicating, that the application is connected
                to the UNIX socket
         @type: bool
         """
 
-        self.socket = None
+        self.sock = None
         """
         @ivar: the underlaying socket object
         @type: socket
@@ -132,7 +132,13 @@ class GenericSocket(PbBaseObject):
     #------------------------------------------------------------
     @property
     def connected(self):
-        """A flag indicating, that  the application is connected to the UNIX socket."""
+        """A flag indicating, that the application is connected to the UNIX socket."""
+        return self._connected
+
+    #------------------------------------------------------------
+    @property
+    def bounded(self):
+        """A flag indicating, that the socket is bounded for listening."""
         return self._connected
 
     #------------------------------------------------------------
@@ -148,6 +154,14 @@ class GenericSocket(PbBaseObject):
 
         raise FunctionNotImplementedError('connect', self.__class__.__name__)
 
+    #--------------------------------------------------------------------------
+    def __del__(self):
+        """Destructor, closes current socket, if necessary."""
+
+        if self.sock and (self.connected or self.bounded):
+            if self.verbose > 1:
+                log.debug(_("Closing socket ..."))
+            self.sock.close()
 
 #==============================================================================
 

@@ -13,6 +13,8 @@
 import sys
 import os
 import logging
+import socket
+import errno
 
 from gettext import gettext as _
 
@@ -42,6 +44,17 @@ class UnixSocketError(GenericSocketError):
     """
     Base error class for all special exceptions raised in this module.
     """
+
+#==============================================================================
+class NoSocketFileError(UnixSocketError):
+    """
+    Error class indicating, that the Unix socket file was not found
+    on connecting.
+    """
+
+    def __init__(self, filename):
+        msg = _("The Unix socket file '%s' was not found.") % (filename)
+        super(NoSocketFileError, self).__init__(msg)
 
 #==============================================================================
 class UnixSocket(GenericSocket):
@@ -127,36 +140,51 @@ class UnixSocket(GenericSocket):
         @type: str
         """
 
-        #------------------------------------------------------------
-        @property
-        def filename(self):
-            """The filename of the socket, that should be used."""
-            return self._filename
+        # Create a UDS socket
+        self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 
+    #------------------------------------------------------------
+    @property
+    def filename(self):
+        """The filename of the socket, that should be used."""
+        return self._filename
 
-        #------------------------------------------------------------
-        @property
-        def mode(self):
-            """The creation mode of the scstadm communication socket."""
-            return self._mode
+    #------------------------------------------------------------
+    @property
+    def mode(self):
+        """The creation mode of the scstadm communication socket."""
+        return self._mode
 
-        #------------------------------------------------------------
-        @property
-        def owner(self):
-            """The owning user of the scstadm communication socket."""
-            return self._owner
+    #------------------------------------------------------------
+    @property
+    def owner(self):
+        """The owning user of the scstadm communication socket."""
+        return self._owner
 
-        #------------------------------------------------------------
-        @property
-        def group(self):
-            """The owning group of the scstadm communication socket."""
-            return self._group
+    #------------------------------------------------------------
+    @property
+    def group(self):
+        """The owning group of the scstadm communication socket."""
+        return self._group
 
     #--------------------------------------------------------------------------
     def connect(self):
         """Connecting to the saved socket as a client."""
 
-        raise FunctionNotImplementedError('connect', self.__class__.__name__)
+        if self.verbose > 1:
+            log.debug(_("Connecting to Unix Domain Socket '%s' ..."),
+                    self.filename)
+
+        try:
+            self.sock.connect(self.filename)
+        except socket.error, e:
+            if e.errno == errno.ENOENT:
+                raise NoSocketFileError(self.filename)
+            msg = _("Error connecting to Unix Socket '%(sock)s': %(err)s") % {
+                    'sock': self.filename, 'err': str(e)}
+            raise UnixSocketError(msg)
+
+        self._connected = True
 
 #==============================================================================
 
