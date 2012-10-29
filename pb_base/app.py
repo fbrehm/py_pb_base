@@ -182,6 +182,7 @@ class PbApplication(PbBaseObject):
             self._env_prefix = ep
 
         self._init_arg_parser()
+        self._perform_arg_parser()
 
         self._init_env()
         self._perform_env()
@@ -424,7 +425,6 @@ class PbApplication(PbBaseObject):
         """
         Underlaying method for parsing arguments.
         """
-
         self.args = self.arg_parser.parse_args()
 
         if self.args.version:
