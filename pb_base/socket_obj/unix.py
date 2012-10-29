@@ -37,7 +37,7 @@ from pb_base.socket_obj import GenericSocket
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
 __copyright__ = '(C) 2010-2012 by profitbricks.com'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)
@@ -197,6 +197,7 @@ class UnixSocket(GenericSocket):
             raise UnixSocketError(msg)
 
         self._connected = True
+        self.fileno = self.sock.fileno()
 
     #--------------------------------------------------------------------------
     def bind(self):
@@ -212,6 +213,7 @@ class UnixSocket(GenericSocket):
             raise NoSocketFileError(self.filename)
 
         self._bounded = True
+        self.fileno = self.sock.fileno()
 
         # Setting mode of socket
         sock_stat = os.stat(self.filename)

@@ -33,7 +33,7 @@ from pb_base.errors import FunctionNotImplementedError
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
 __copyright__ = '(C) 2010-2012 by profitbricks.com'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)
@@ -113,6 +113,13 @@ class GenericSocket(PbBaseObject):
         @type: bool
         """
 
+        self._fileno = None
+        """
+        @ivar: the file number of the socket after binding or connecting
+               (used for select())
+        @type: int
+        """
+
         self.sock = None
         """
         @ivar: the underlaying socket object
@@ -128,6 +135,16 @@ class GenericSocket(PbBaseObject):
     @timeout.setter
     def timeout(self, value):
         self._timeout = int(value)
+
+    #------------------------------------------------------------
+    @property
+    def fileno(self):
+        """The file number of the socket after binding or connecting."""
+        return self._fileno
+
+    @fileno.setter
+    def fileno(self, value):
+        self._fileno = int(value)
 
     #------------------------------------------------------------
     @property
