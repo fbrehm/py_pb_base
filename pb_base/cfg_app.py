@@ -153,7 +153,6 @@ class PbCfgApp(PbApplication):
                 argparse_epilog = argparse_epilog,
                 argparse_prefix_chars = argparse_prefix_chars,
                 env_prefix = env_prefix,
-                parse_args=parse_args
         )
 
         self.cfg = RecursiveDictionary()
