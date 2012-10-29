@@ -15,6 +15,9 @@ import os
 import logging
 import socket
 import errno
+import pwd
+import grp
+import re
 
 from gettext import gettext as _
 
@@ -34,7 +37,7 @@ from pb_base.socket_obj import GenericSocket
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
 __copyright__ = '(C) 2010-2012 by profitbricks.com'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)
@@ -63,7 +66,7 @@ class UnixSocket(GenericSocket):
     #--------------------------------------------------------------------------
     def __init__(self,
             filename,
-            mode = 0660,
+            mode = 040660,
             owner = None,
             group = None,
             timeout = 5,
@@ -168,6 +171,15 @@ class UnixSocket(GenericSocket):
         return self._group
 
     #--------------------------------------------------------------------------
+    def __del__(self):
+        """Destructor, closes current socket, if necessary."""
+
+        if self.sock and self.bounded and os.path.exists(self.filename):
+            if self.verbose > 1:
+                log.debug(_("Removing socket '%s' ..."), self.filename)
+            os.remove(self.filename)
+
+    #--------------------------------------------------------------------------
     def connect(self):
         """Connecting to the saved socket as a client."""
 
@@ -185,6 +197,79 @@ class UnixSocket(GenericSocket):
             raise UnixSocketError(msg)
 
         self._connected = True
+
+    #--------------------------------------------------------------------------
+    def bind(self):
+        """Create the socket and listen on it."""
+
+        if self.verbose > 1:
+            log.debug(_("Creating and binding to Unix Domain Socket '%s' ..."),
+                    self.filename)
+
+        self.sock.bind(self.filename)
+
+        if not os.path.exists(self.filename):
+            raise NoSocketFileError(self.filename)
+
+        self._bounded = True
+
+        # Setting mode of socket
+        sock_stat = os.stat(self.filename)
+
+        if self.mode is not None:
+            if self.verbose > 2:
+                log.debug(_("Setting permissions of '%(sock)s' to 0%(perm)o.") % {
+                        'sock': self.filename, 'perm': self.mode})
+            os.chmod(self.filename, self.mode)
+
+        # Setting owner and group of socket
+        uid = -1
+        if self.owner is not None:
+            if re.search(r'^\d+$', self.owner):
+                uid = int(self.owner)
+            else:
+                try:
+                    uid = pwd.getpwnam(self.owner).pw_uid
+                except KeyError, e:
+                    msg = _("Invalid owner name '%s' for socket creation " +
+                            "given.") % (self.owner)
+                    raise UnixSocketError(msg)
+
+        gid = -1
+        if self.group is not None:
+            if re.search(r'^\d+$', self.group):
+                gid = int(self.group)
+            else:
+                try:
+                    gid = grp.getgrnam(self.group).gr_gid
+                except KeyError, e:
+                    msg = _("Invalid group name '%s' for socket creation " +
+                            "given.") % (self.group)
+                    raise UnixSocketError(msg)
+
+        uid_changed = False
+        if uid >= 0:
+            if sock_stat.st_uid == uid:
+                uid = -1
+            else:
+                uid_changed = True
+
+        gid_changed = False
+        if gid >= 0:
+            if sock_stat.st_gid == gid:
+                gid = -1
+            else:
+                gid_changed = True
+
+        if uid_changed or gid_changed:
+            if os.geteuid():
+                log.warn(_("Only root may change ownership of a socket."))
+            else:
+                if self.verbose > 2:
+                    log.debug(_("Setting ownership of '%(sock)s' to " +
+                            "%(uid)d:%(gid)d ...") % {'sock': self.filename,
+                            'uid': uid, 'gid': gid})
+                os.chown(self.filename, uid, gid)
 
 #==============================================================================
 

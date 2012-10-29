@@ -33,7 +33,7 @@ from pb_base.errors import FunctionNotImplementedError
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
 __copyright__ = '(C) 2010-2012 by profitbricks.com'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)
@@ -139,7 +139,7 @@ class GenericSocket(PbBaseObject):
     @property
     def bounded(self):
         """A flag indicating, that the socket is bounded for listening."""
-        return self._connected
+        return self._bounded
 
     #------------------------------------------------------------
     @property
@@ -153,6 +153,13 @@ class GenericSocket(PbBaseObject):
         """Connecting to the saved socket as a client."""
 
         raise FunctionNotImplementedError('connect', self.__class__.__name__)
+
+    #--------------------------------------------------------------------------
+    @abstractmethod
+    def bind(self):
+        """Create the socket and listen on it."""
+
+        raise FunctionNotImplementedError('bind', self.__class__.__name__)
 
     #--------------------------------------------------------------------------
     def __del__(self):
