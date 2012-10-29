@@ -6,7 +6,7 @@
 @organization: Profitbricks GmbH
 @copyright: (c) 2010-2012 by Profitbricks GmbH
 @license: GPL3
-@summary: modules for socket object classes
+@summary: module for a UNIX socket object class
 """
 
 # Standard modules
@@ -16,42 +16,43 @@ import logging
 
 from gettext import gettext as _
 
-from abc import ABCMeta
-from abc import abstractmethod
-
 # Third party modules
 
 # Own modules
 import pb_base.common
 
 from pb_base.object import PbBaseObjectError
-from pb_base.object import PbBaseObject
 
 from pb_base.errors import PbError
 from pb_base.errors import FunctionNotImplementedError
 
+from pb_base.socket_obj import GenericSocketError
+from pb_base.socket_obj import GenericSocket
+
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
 __copyright__ = '(C) 2010-2012 by profitbricks.com'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.1.1'
+__version__ = '0.1.0'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)
 
 #==============================================================================
-class GenericSocketError(PbError):
+class UnixSocketError(GenericSocketError):
     """
     Base error class for all special exceptions raised in this module.
     """
 
 #==============================================================================
-class GenericSocket(PbBaseObject):
-    """Class for capsulation a generic socket somehow."""
-
-    __metaclass__ = ABCMeta
+class UnixSocket(GenericSocket):
+    """Class for capsulation a UNIX socket."""
 
     #--------------------------------------------------------------------------
     def __init__(self,
+            filename,
+            mode = 0660,
+            owner = None,
+            group = None,
             timeout = 5,
             appname = None,
             verbose = 0,
@@ -60,10 +61,18 @@ class GenericSocket(PbBaseObject):
             use_stderr = False,
             ):
         """
-        Initialisation of the GenericSocket object.
+        Initialisation of the UnixSocket object.
 
-        @raise GenericSocketError: on a uncoverable error.
+        @raise UnixSocketError: on a uncoverable error.
 
+        @param filename: the filename of the socket, that should be used
+        @type filename: str
+        @param mode: The creation mode of the scstadm communication socket.
+        @type mode: int
+        @param owner: The owning user of the scstadm communication socket
+        @type owner: str
+        @param group: The owning group of the scstadm communication socket
+        @type group: str
         @param timeout: timeout in seconds for all opening and IO operations
         @type timeout: int
         @param appname: name of the current running application
@@ -85,69 +94,69 @@ class GenericSocket(PbBaseObject):
         @return: None
         """
 
-        super(GenericSocket, self).__init__(
+        super(UnixSocket, self).__init__(
+                timeout = timeout,
                 appname = appname,
                 base_dir = base_dir,
                 verbose = verbose,
                 version = version,
                 use_stderr = use_stderr,
-                initialized = False,
         )
 
-        self._timeout = int(timeout)
+        self._filename = filename
         """
-        @ivar: timout in seconds for all opening and IO operations
+        @ivar: the filename of the socket, that should be used
+        @type: str
+        """
+
+        self._mode = mode
+        """
+        @ivar: The creation mode of the scstadm communication socket.
         @type: int
         """
 
-        self._bounded = False
+        self._owner = owner
         """
-        @ivar: flag indicating, that the UNIX socket is bounded for listening
-        @type: bool
-        """
-
-        self._connected = False
-        """
-        @ivar: flag indicating, that  the application is connected
-               to the UNIX socket
-        @type: bool
+        @ivar: The owning user of the scstadm communication socket
+        @type: str
         """
 
-        self.socket = None
+        self._group = group
         """
-        @ivar: the underlaying socket object
-        @type: socket
+        @ivar: The owning group of the scstadm communication socket
+        @type: str
         """
 
-    #------------------------------------------------------------
-    @property
-    def timeout(self):
-        """timeout in seconds for all opening and IO operations"""
-        return self._timeout
+        #------------------------------------------------------------
+        @property
+        def filename(self):
+            """The filename of the socket, that should be used."""
+            return self._filename
 
-    @timeout.setter
-    def timeout(self, value):
-        self._timeout = int(value)
 
-    #------------------------------------------------------------
-    @property
-    def connected(self):
-        """A flag indicating, that  the application is connected to the UNIX socket."""
-        return self._connected
+        #------------------------------------------------------------
+        @property
+        def mode(self):
+            """The creation mode of the scstadm communication socket."""
+            return self._mode
 
-    #------------------------------------------------------------
-    @property
-    def group(self):
-        """The owning group of the scstadm communication socket."""
-        return self._group
+        #------------------------------------------------------------
+        @property
+        def owner(self):
+            """The owning user of the scstadm communication socket."""
+            return self._owner
+
+        #------------------------------------------------------------
+        @property
+        def group(self):
+            """The owning group of the scstadm communication socket."""
+            return self._group
 
     #--------------------------------------------------------------------------
-    @abstractmethod
     def connect(self):
         """Connecting to the saved socket as a client."""
 
         raise FunctionNotImplementedError('connect', self.__class__.__name__)
-
 
 #==============================================================================
 
