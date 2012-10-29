@@ -37,7 +37,7 @@ from pb_base.socket_obj import GenericSocket
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
 __copyright__ = '(C) 2010-2012 by profitbricks.com'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.2.1'
+__version__ = '0.2.2'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)
@@ -58,6 +58,17 @@ class NoSocketFileError(UnixSocketError):
     def __init__(self, filename):
         msg = _("The Unix socket file '%s' was not found.") % (filename)
         super(NoSocketFileError, self).__init__(msg)
+
+#==============================================================================
+class NoPermissionsToSocketError(UnixSocketError):
+    """
+    Error class indicating, that the current user doesn't have the right
+    permissions to connect to Unix socket.
+    """
+
+    def __init__(self, filename):
+        msg = _("Invalid permissions to connect to Unix socket '%s'.") % (filename)
+        super(NoPermissionsToSocketError, self).__init__(msg)
 
 #==============================================================================
 class UnixSocket(GenericSocket):
@@ -192,6 +203,8 @@ class UnixSocket(GenericSocket):
         except socket.error, e:
             if e.errno == errno.ENOENT:
                 raise NoSocketFileError(self.filename)
+            if e.errno == errno.EACCES:
+                raise NoPermissionsToSocketError(self.filename)
             msg = _("Error connecting to Unix Socket '%(sock)s': %(err)s") % {
                     'sock': self.filename, 'err': str(e)}
             raise UnixSocketError(msg)
