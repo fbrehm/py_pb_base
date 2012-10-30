@@ -1,3 +1,11 @@
+profitbricks-python-base (0.2.1-1) unstable; urgency=low
+
+  * Version bump
+  * New property 'need_config_file' to all configured application
+    objects
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Tue, 30 Oct 2012 16:50:50 +0100
+
 profitbricks-python-base (0.2.0-1) unstable; urgency=low
 
   * Version bump
