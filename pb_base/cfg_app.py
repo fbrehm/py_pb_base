@@ -35,7 +35,7 @@ from pb_base.validator import pbvalidator_checks
 from pb_base.app import PbApplicationError
 from pb_base.app import PbApplication
 
-__version__ = '0.5.3'
+__version__ = '0.5.4'
 
 log = logging.getLogger(__name__)
 
@@ -422,7 +422,7 @@ class PbCfgApp(PbApplication):
 
         existing_cfg_files = [file for file in self.cfg_files
                               if os.path.isfile(file)]
-        if not existing_cfg_files and self.hide_default_config:
+        if not existing_cfg_files and self.need_config_file:
             msg = "Could not find any configuration file at these locations:"
             for file in self.cfg_files:
                 msg += '\n' + file

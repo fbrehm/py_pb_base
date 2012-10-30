@@ -39,7 +39,7 @@ from pb_base.pidfile import PidFileInUseError
 from pb_base.pidfile_app import PidfileAppError
 from pb_base.pidfile_app import PidfileApp
 
-__version__ = '0.3.4'
+__version__ = '0.3.5'
 
 log = logging.getLogger(__name__)
 
@@ -233,7 +233,7 @@ class PbDaemon(PidfileApp):
         """
 
         if not self._default_error_log:
-            self._default_error_log = os.path.join(self.base_dir, 'error.log')
+            self._default_error_log = 'error.log'
 
     #--------------------------------------------------------------------------
     @property
@@ -312,7 +312,7 @@ class PbDaemon(PidfileApp):
 
         def_errlog = self._default_error_log
         if not def_errlog:
-            def_errlog = os.path.join(self.base_dir, 'error.log')
+            def_errlog = 'error.log'
 
         log_spec = u"string(default = '%s')" % (
                 to_unicode_or_bust(def_errlog))
@@ -321,7 +321,8 @@ class PbDaemon(PidfileApp):
             self.cfg_spec[u'general'][u'error_log'] = log_spec
             self.cfg_spec[u'general'].comments[u'error_log'].append('')
             self.cfg_spec[u'general'].comments[u'error_log'].append(
-                    u'The logfile for stderr substitute in daemon mode.')
+                    u'The logfile for stderr substitute in daemon mode (' +
+                    u'absolute or relative to base_dir).')
 
     #--------------------------------------------------------------------------
     def perform_config(self):
@@ -548,9 +549,9 @@ class PbDaemon(PidfileApp):
             sys.exit(1)
 
         # decouple from parent environment
-        #os.chdir(self.base_dir)
+        os.chdir(self.base_dir)
         os.setsid()
-        #os.umask(0)
+        os.umask(0)
 
         # do second fork
         log.debug(_("Second fork ..."))
@@ -572,6 +573,11 @@ class PbDaemon(PidfileApp):
         log.debug(_("Redirect standard file descriptors ..."))
         sys.stdout.flush()
         sys.stderr.flush()
+
+        error_log = self.error_log
+        if not os.path.isabs(error_log):
+            error_log = os.path.join(self.base_dir, error_log)
+        log.debug(_("Using '%s' as error log file."), error_log)
 
         si = file('/dev/null', 'r')
         so = file('/dev/null', 'a+')

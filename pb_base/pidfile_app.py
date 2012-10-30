@@ -36,7 +36,7 @@ from pb_base.pidfile import InvalidPidFileError
 from pb_base.pidfile import PidFileInUseError
 from pb_base.pidfile import PidFile
 
-__version__ = '0.3.2'
+__version__ = '0.3.3'
 
 log = logging.getLogger(__name__)
 
@@ -183,6 +183,8 @@ class PidfileApp(PbCfgApp):
 
         if not self.pidfilename:
             self._pidfilename = self._default_pidfilename
+        if not os.path.isabs(self.pidfilename):
+            self._pidfilename = os.path.join(self.base_dir, self.pidfilename)
         if self.verbose > 3:
             log.debug("Using pidfile: '%s'.", self.pidfilename)
 
@@ -234,8 +236,7 @@ class PidfileApp(PbCfgApp):
             self.cfg_spec[u'general'] = {}
 
         if not self._default_pidfilename:
-            self._default_pidfilename = os.path.join(
-                    self.base_dir, self.appname + '.pid')
+            self._default_pidfilename = self.appname + '.pid'
 
         pidfile_spec = u"string(default = '%s')" % (
                 to_unicode_or_bust(self._default_pidfilename))
@@ -244,7 +245,8 @@ class PidfileApp(PbCfgApp):
             self.cfg_spec[u'general'][u'pidfile'] = pidfile_spec
             self.cfg_spec[u'general'].comments[u'pidfile'].append('')
             self.cfg_spec[u'general'].comments[u'pidfile'].append(
-                    u'The filename of the pidfile.')
+                    u'The filename of the pidfile (absolute or relative' +
+                    u' to base_dir).')
 
     #--------------------------------------------------------------------------
     def perform_config(self):
@@ -275,8 +277,7 @@ class PidfileApp(PbCfgApp):
         """
 
         if not self._default_pidfilename:
-            self._default_pidfilename = os.path.join(
-                    self.base_dir, self.appname + '.pid')
+            self._default_pidfilename = self.appname + '.pid'
 
         help_txt = _('The name of the pidfile (Default: %s).') % (
                 self._default_pidfilename)
