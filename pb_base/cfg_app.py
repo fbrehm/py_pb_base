@@ -35,7 +35,7 @@ from pb_base.validator import pbvalidator_checks
 from pb_base.app import PbApplicationError
 from pb_base.app import PbApplication
 
-__version__ = '0.5.2'
+__version__ = '0.5.3'
 
 log = logging.getLogger(__name__)
 
@@ -70,6 +70,7 @@ class PbCfgApp(PbApplication):
                 cfg_encoding = 'utf8',
                 cfg_spec = None,
                 hide_default_config = False,
+                need_config_file = False,
                 ):
         """
         Initialisation of the base object.
@@ -124,6 +125,9 @@ class PbCfgApp(PbApplication):
         @param hide_default_config: hide command line parameter --default-config and
                                     don't execute generation of default config
         @type hide_default_config: bool
+        @param need_config_file: through an error message, if none of the default
+                                 configuration files were found
+        @type need_config_file: bool
 
         @return: None
         """
@@ -134,10 +138,16 @@ class PbCfgApp(PbApplication):
         @type: str
         """
 
-        self._hide_default_config = hide_default_config
+        self._hide_default_config = bool(hide_default_config)
         """
         @ivar: hide command line parameter --default-config and
                don't execute generation of default config
+        @type: bool
+        """
+
+        self._need_config_file = bool(need_config_file)
+        """
+        @ivar: through an error message, if none of the default configuration files were found
         @type: bool
         """
 
@@ -229,10 +239,19 @@ class PbCfgApp(PbApplication):
 
     #------------------------------------------------------------
     @property
-    def hide_default_config(self):
+    def need_config_file(self):
         """
         hide command line parameter --default-config and
         don't execute generation of default config
+        """
+        return getattr(self, '_need_config_file', False)
+
+    #------------------------------------------------------------
+    @property
+    def hide_default_config(self):
+        """
+        Through an error message, if none of the default configuration files
+        were found.
         """
         return getattr(self, '_hide_default_config', False)
 
@@ -403,7 +422,7 @@ class PbCfgApp(PbApplication):
 
         existing_cfg_files = [file for file in self.cfg_files
                               if os.path.isfile(file)]
-        if not existing_cfg_files:
+        if not existing_cfg_files and self.hide_default_config:
             msg = "Could not find any configuration file at these locations:"
             for file in self.cfg_files:
                 msg += '\n' + file

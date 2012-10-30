@@ -36,7 +36,7 @@ from pb_base.pidfile import InvalidPidFileError
 from pb_base.pidfile import PidFileInUseError
 from pb_base.pidfile import PidFile
 
-__version__ = '0.3.1'
+__version__ = '0.3.2'
 
 log = logging.getLogger(__name__)
 
@@ -72,6 +72,7 @@ class PidfileApp(PbCfgApp):
                 cfg_encoding = 'utf8',
                 cfg_spec = None,
                 hide_default_config = False,
+                need_config_file = False,
                 ):
         """
         Initialisation of the daemon object.
@@ -128,6 +129,9 @@ class PidfileApp(PbCfgApp):
         @param hide_default_config: hide command line parameter --default-config and
                                     don't execute generation of default config
         @type hide_default_config: bool
+        @param need_config_file: through an error message, if none of the default
+                                 configuration files were found
+        @type need_config_file: bool
 
         @return: None
         """
@@ -174,6 +178,7 @@ class PidfileApp(PbCfgApp):
                 cfg_encoding = cfg_encoding,
                 cfg_spec = cfg_spec,
                 hide_default_config = hide_default_config,
+                need_config_file = need_config_file,
         )
 
         if not self.pidfilename:
