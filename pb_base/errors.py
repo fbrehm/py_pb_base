@@ -99,7 +99,7 @@ class PbReadTimeoutError(PbIoTimeoutError):
         """
         Constructor.
 
-        @param timeout: the timout in second leading to the error
+        @param timeout: the timout in seconds leading to the error
         @type timeout: float
         @param filename: the filename leading to the error
         @type filename: str
@@ -120,7 +120,7 @@ class PbWriteTimeoutError(PbIoTimeoutError):
         """
         Constructor.
 
-        @param timeout: the timout in second leading to the error
+        @param timeout: the timout in seconds leading to the error
         @type timeout: float
         @param filename: the filename leading to the error
         @type filename: str

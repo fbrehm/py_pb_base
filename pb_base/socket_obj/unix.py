@@ -37,7 +37,7 @@ from pb_base.socket_obj import GenericSocket
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
 __copyright__ = '(C) 2010-2012 by profitbricks.com'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.2.3'
+__version__ = '0.2.4'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)
@@ -82,6 +82,7 @@ class UnixSocket(GenericSocket):
             group = None,
             timeout = 5,
             request_queue_size = 5,
+            buffer_size = pb_base.socket_obj.default_buffer_size,
             appname = None,
             verbose = 0,
             version = __version__,
@@ -106,6 +107,8 @@ class UnixSocket(GenericSocket):
         @param request_queue_size: the maximum number of queued connections
                                     (between 0 and 5)
         @type request_queue_size: int
+        @param buffer_size: The size of the buffer for receiving data from sockets
+        @type buffer_size: int
         @param appname: name of the current running application
         @type appname: str
         @param verbose: verbose level
@@ -128,6 +131,7 @@ class UnixSocket(GenericSocket):
         super(UnixSocket, self).__init__(
                 timeout = timeout,
                 request_queue_size = request_queue_size,
+                buffer_size = buffer_size,
                 appname = appname,
                 base_dir = base_dir,
                 verbose = verbose,
@@ -190,7 +194,7 @@ class UnixSocket(GenericSocket):
     def __del__(self):
         """Destructor, closes current socket, if necessary."""
 
-        if self.sock and self.bounded and os.path.exists(self.filename):
+        if self.sock and self.bonded and os.path.exists(self.filename):
             if self.verbose > 1:
                 log.debug(_("Removing socket '%s' ..."), self.filename)
             os.remove(self.filename)
@@ -202,6 +206,15 @@ class UnixSocket(GenericSocket):
         if self.verbose > 1:
             log.debug(_("Connecting to Unix Domain Socket '%s' ..."),
                     self.filename)
+
+        if self.connected:
+            msg = _("The socket is even connected to '%s' ...") % (self.filename)
+            raise UnixSocketError(msg)
+
+        if self.bonded:
+            msg = _("The application is allready bonded to '%s' ...") % (
+                    self.filename)
+            raise UnixSocketError(msg)
 
         try:
             self.sock.connect(self.filename)
@@ -225,12 +238,21 @@ class UnixSocket(GenericSocket):
             log.debug(_("Creating and binding to Unix Domain Socket '%s' ..."),
                     self.filename)
 
+        if self.connected:
+            msg = _("The socket is even connected to '%s' ...") % (self.filename)
+            raise UnixSocketError(msg)
+
+        if self.bonded:
+            msg = _("The application is allready bonded to '%s' ...") % (
+                    self.filename)
+            raise UnixSocketError(msg)
+
         self.sock.bind(self.filename)
 
         if not os.path.exists(self.filename):
             raise NoSocketFileError(self.filename)
 
-        self._bounded = True
+        self._bonded = True
         self.fileno = self.sock.fileno()
 
         # Setting mode of socket
