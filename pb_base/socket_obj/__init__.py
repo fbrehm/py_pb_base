@@ -318,12 +318,33 @@ class GenericSocket(PbBaseObject):
         Resetting the socket after interruption of communication.
         """
 
-        if self.verbose > 3:
+        if self.verbose > 2:
             log.debug(_("Resetting connection ..."))
 
+        if self.connection:
+            self.connection.close()
         self.connection = None
         self.client_address = None
         self.interrupted = False
+
+    #--------------------------------------------------------------------------
+    def send(self, message):
+        """
+        Sends the message over the socket to the communication partner.
+
+        @param message: the message to send
+        @type message: str
+
+        """
+
+        if not self.connection or self.interrupted:
+            msg = _("Cannot send message to the receipient, because " +
+                    "the socket connection is closed.")
+            raise GenericSocketError(msg)
+
+        if self.verbose > 2:
+            log.debug(_("Sending %r to socket."), message)
+        self.connection.send(message)
 
     #--------------------------------------------------------------------------
     def accept(self):
