@@ -1,3 +1,10 @@
+profitbricks-python-base (0.2.2-1) unstable; urgency=low
+
+  * Version bump
+  * Made some paths relative to base_dir
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Tue, 30 Oct 2012 17:57:20 +0100
+
 profitbricks-python-base (0.2.1-1) unstable; urgency=low
 
   * Version bump
