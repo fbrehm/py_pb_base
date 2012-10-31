@@ -39,7 +39,7 @@ from pb_base.pidfile import PidFileInUseError
 from pb_base.pidfile_app import PidfileAppError
 from pb_base.pidfile_app import PidfileApp
 
-__version__ = '0.3.5'
+__version__ = '0.3.6'
 
 log = logging.getLogger(__name__)
 
@@ -204,6 +204,12 @@ class PbDaemon(PidfileApp):
         @type: str
         """
 
+        self._forced_shutdown = False
+        '''
+        @ivar: Flag for a forced shutdown. Will be set on exit handler.
+        @type: bool
+        '''
+
         super(PbDaemon, self).__init__(
                 appname = appname,
                 pidfile = pidfile,
@@ -265,6 +271,12 @@ class PbDaemon(PidfileApp):
         in background or in foreground.
         """
         return self._is_daemon
+
+    #--------------------------------------------------------------------------
+    @property
+    def forced_shutdown(self):
+        """Flag for a forced shutdown."""
+        return self._forced_shutdown
 
     #--------------------------------------------------------------------------
     @property
@@ -505,6 +517,7 @@ class PbDaemon(PidfileApp):
             log.info("Got a signal for forced shutdown.")
             forced = True
 
+        self._forced_shutdown = forced
         self.exit_action(forced)
 
     #--------------------------------------------------------------------------
