@@ -6,7 +6,7 @@
 @organization: Profitbricks GmbH
 @copyright: (c) 2010-2012 by Profitbricks GmbH
 @license: GPL3
-@summary: test script (and module) for unut tests on base object
+@summary: test script (and module) for unit tests on base object
 '''
 
 import unittest
@@ -18,7 +18,7 @@ sys.path.insert(0, libdir)
 
 import pb_base.object
 
-from pb_base.object import PbBaseError
+from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
 #==============================================================================
@@ -186,7 +186,30 @@ if __name__ == '__main__':
             dest = 'verbose', help = 'Increase the verbosity level')
     args = arg_parser.parse_args()
 
-    unittest.main(verbosity = args.verbose)
+    loader = unittest.TestLoader()
+    suite = unittest.TestSuite()
+
+    suite.addTests(loader.loadTestsFromName(
+            'test_base_object.TestPbBaseObject.test_object'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_base_object.TestPbBaseObject.test_verbose1'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_base_object.TestPbBaseObject.test_verbose2'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_base_object.TestPbBaseObject.test_basedir1'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_base_object.TestPbBaseObject.test_basedir2'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_base_object.TestPbBaseObject.test_as_dict1'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_base_object.TestPbBaseObject.test_as_dict2'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_base_object.TestPbBaseObject.test_as_dict3'))
+
+    runner = unittest.TextTestRunner(verbosity = args.verbose)
+
+    result = runner.run(suite)
+
 
 #==============================================================================
 

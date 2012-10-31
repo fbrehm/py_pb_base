@@ -1,3 +1,84 @@
+profitbricks-python-base (0.3.0-1) unstable; urgency=low
+
+  * Version bump
+  * Added pb_base/fork_daemon.py and made it usable
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Wed, 31 Oct 2012 12:46:45 +0100
+
+profitbricks-python-base (0.2.2-1) unstable; urgency=low
+
+  * Version bump
+  * Made some paths relative to base_dir
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Tue, 30 Oct 2012 17:57:20 +0100
+
+profitbricks-python-base (0.2.1-1) unstable; urgency=low
+
+  * Version bump
+  * New property 'need_config_file' to all configured application
+    objects
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Tue, 30 Oct 2012 16:50:50 +0100
+
+profitbricks-python-base (0.2.0-1) unstable; urgency=low
+
+  * Version bump
+  * Added socket handling stuff
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Tue, 30 Oct 2012 15:08:51 +0100
+
+profitbricks-python-base (0.1.19-1) unstable; urgency=low
+
+  * Version bump
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Tue, 30 Oct 2012 14:07:35 +0100
+
+profitbricks-python-base (0.1.18-1) unstable; urgency=low
+
+  * Version bump
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Mon, 29 Oct 2012 20:06:32 +0100
+
+profitbricks-python-base (0.1.17-1) unstable; urgency=low
+
+  * Version bump
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Mon, 29 Oct 2012 16:11:22 +0100
+
+profitbricks-python-base (0.1.16-1) unstable; urgency=low
+
+  * Version bump
+  * Created and integrated pb_base/validator.py for self defined config
+    validation checks
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Fri, 26 Oct 2012 15:50:46 +0200
+
+profitbricks-python-base (0.1.15-1) unstable; urgency=low
+
+  * Version bump
+  * Extended configuration of pb_base/daemon.py
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Fri, 26 Oct 2012 13:03:57 +0200
+
+profitbricks-python-base (0.1.14-2) unstable; urgency=low
+
+  * Version bump
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Thu, 25 Oct 2012 19:09:47 +0200
+
+profitbricks-python-base (0.1.14-1) unstable; urgency=low
+
+  * Version bump
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Thu, 25 Oct 2012 16:57:45 +0200
+
+profitbricks-python-base (0.1.13-1) unstable; urgency=low
+
+  * Version bump
+  * Declared for unstable
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Thu, 25 Oct 2012 16:26:02 +0200
+
 profitbricks-python-base (0.1.12-2) stable; urgency=low
 
   * Version bump

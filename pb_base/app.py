@@ -29,7 +29,7 @@ from pb_base.errors import FunctionNotImplementedError
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
-__version__ = '0.4.2'
+__version__ = '0.4.3'
 
 log = logging.getLogger(__name__)
 
@@ -187,11 +187,6 @@ class PbApplication(PbBaseObject):
         self._init_env()
         self._perform_env()
 
-        self.init_logging()
-
-        if initialized:
-            self.initialized = True
-
     #------------------------------------------------------------
     @property
     def exit_value(self):
@@ -274,6 +269,24 @@ class PbApplication(PbBaseObject):
         return
 
     #--------------------------------------------------------------------------
+    def post_init(self):
+        """
+        Method to execute before calling run(). Here could be done some
+        finishing actions after reading in commandline parameters,
+        configuration a.s.o.
+
+        This method could be overwritten by descendant classes, these
+        methhods should allways include a call to post_init() of the
+        parent class.
+
+        """
+
+        self.perform_arg_parser()
+        self.init_logging()
+
+        self.initialized = True
+
+    #--------------------------------------------------------------------------
     def pre_run(self):
         """
         Dummy function to run before the main routine.
@@ -300,6 +313,11 @@ class PbApplication(PbBaseObject):
         """
         The visible start point of this object.
         """
+
+        if not self.initialized:
+            self.handle_error(_("The application is not complete initialized."),
+                    '', True)
+            sys.exit(9)
 
         try:
             self.pre_run()
@@ -360,7 +378,7 @@ class PbApplication(PbBaseObject):
 
         self.init_arg_parser()
 
-        general_group = self.arg_parser.add_argument_group('General options:')
+        general_group = self.arg_parser.add_argument_group('General options')
         general_group.add_argument(
                 "-v", "--verbose",
                 action = "count",
@@ -407,7 +425,6 @@ class PbApplication(PbBaseObject):
         """
         Underlaying method for parsing arguments.
         """
-
         self.args = self.arg_parser.parse_args()
 
         if self.args.version:
@@ -423,8 +440,6 @@ class PbApplication(PbBaseObject):
 
         if self.args.verbose > self.verbose:
             self.verbose = self.args.verbose
-
-        self.perform_arg_parser()
 
     #--------------------------------------------------------------------------
     def perform_arg_parser(self):

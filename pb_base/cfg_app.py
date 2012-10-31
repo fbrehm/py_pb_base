@@ -30,10 +30,12 @@ from pb_base.errors import FunctionNotImplementedError
 
 from pb_base.object import PbBaseObjectError
 
+from pb_base.validator import pbvalidator_checks
+
 from pb_base.app import PbApplicationError
 from pb_base.app import PbApplication
 
-__version__ = '0.4.1'
+__version__ = '0.5.4'
 
 log = logging.getLogger(__name__)
 
@@ -66,6 +68,9 @@ class PbCfgApp(PbApplication):
                 cfg_dir = None,
                 cfg_stem = None,
                 cfg_encoding = 'utf8',
+                cfg_spec = None,
+                hide_default_config = False,
+                need_config_file = False,
                 ):
         """
         Initialisation of the base object.
@@ -115,6 +120,14 @@ class PbCfgApp(PbApplication):
                              must be a valid Python encoding
                              (See: http://docs.python.org/library/codecs.html#standard-encodings)
         @type cfg_encoding: str
+        @param cfg_spec: Specification for configfile
+        @type cfg_spec: str
+        @param hide_default_config: hide command line parameter --default-config and
+                                    don't execute generation of default config
+        @type hide_default_config: bool
+        @param need_config_file: through an error message, if none of the default
+                                 configuration files were found
+        @type need_config_file: bool
 
         @return: None
         """
@@ -123,6 +136,19 @@ class PbCfgApp(PbApplication):
         """
         @ivar: encoding character set of the configuration files
         @type: str
+        """
+
+        self._hide_default_config = bool(hide_default_config)
+        """
+        @ivar: hide command line parameter --default-config and
+               don't execute generation of default config
+        @type: bool
+        """
+
+        self._need_config_file = bool(need_config_file)
+        """
+        @ivar: through an error message, if none of the default configuration files were found
+        @type: bool
         """
 
         super(PbCfgApp, self).__init__(
@@ -194,9 +220,40 @@ class PbCfgApp(PbApplication):
                how to write such a specification.
         @type: str
         """
-        self._init_cfg_spec()
+        if cfg_spec:
+            if type(cfg_spec) is str:
+                self.cfg_spec = ConfigObj(cfg_spec.split('\n'))
+            elif type(cfg_spec) is ConfigObj:
+                self.cfg_spec = cfg_spec
+        else:
+            self.cfg_spec = ConfigObj()
+            self._init_cfg_spec()
+
+        enc = getattr(self.args, 'cfg_encoding', None)
+        if enc:
+            enc = enc.lower()
+            if enc != self.cfg_encoding:
+                self._cfg_encoding = enc
 
         self._read_config()
+
+    #------------------------------------------------------------
+    @property
+    def need_config_file(self):
+        """
+        hide command line parameter --default-config and
+        don't execute generation of default config
+        """
+        return getattr(self, '_need_config_file', False)
+
+    #------------------------------------------------------------
+    @property
+    def hide_default_config(self):
+        """
+        Through an error message, if none of the default configuration files
+        were found.
+        """
+        return getattr(self, '_hide_default_config', False)
 
     #------------------------------------------------------------
     @property
@@ -241,30 +298,14 @@ class PbCfgApp(PbApplication):
                 help = _("The encoding character set of the configuration files")
         )
 
-        self.arg_parser.add_argument(
-                "--default-config",
-                action = 'store_true',
-                dest = "show_default_config",
-                help = _('Generates a default configuration, prints ' +
-                        'it out to STDOUT and exit'),
-        )
-
-    #--------------------------------------------------------------------------
-    def perform_arg_parser(self):
-        """
-        Execute some actions after parsing the command line parameters.
-
-        This method should be explicitely called by all perform_arg_parser()
-        methods in descendant classes.
-        """
-
-        # Store a maybe other character set of configuration files
-        # in self.cfg_encoding
-        enc = getattr(self.args, 'cfg_encoding', None)
-        if enc:
-            enc = enc.lower()
-            if enc != self.cfg_encoding:
-                self._cfg_encoding = enc
+        if not self.hide_default_config:
+            self.arg_parser.add_argument(
+                    "--default-config",
+                    action = 'store_true',
+                    dest = "show_default_config",
+                    help = _('Generates a default configuration, prints ' +
+                            'it out to STDOUT and exit'),
+            )
 
     #--------------------------------------------------------------------------
     def init_cfgfiles(self):
@@ -314,7 +355,6 @@ class PbCfgApp(PbApplication):
 
         """
 
-        self.cfg_spec = ConfigObj()
         self.cfg_spec.initial_comment.append(u'Configuration of %s' % (self.appname))
         self.cfg_spec.initial_comment.append('')
 
@@ -327,10 +367,11 @@ class PbCfgApp(PbApplication):
         self.cfg_spec.comments[u'general'].append(
                 u'General configuration parameters')
 
-        self.cfg_spec[u'general'] = {u'verbose': u'integer(0, 10, default = 0)'}
-        self.cfg_spec[u'general'].comments[u'verbose'].append('')
-        self.cfg_spec[u'general'].comments[u'verbose'].append(
-                u'Defines a minimum verbosity of the application')
+        if not u'verbose' in self.cfg_spec[u'general']:
+            self.cfg_spec[u'general'][u'verbose'] = 'integer(0, 10, default = 0)'
+            self.cfg_spec[u'general'].comments[u'verbose'].append('')
+            self.cfg_spec[u'general'].comments[u'verbose'].append(
+                    u'Defines a minimum verbosity of the application')
 
         self.cfg_spec.final_comment.append('')
         self.cfg_spec.final_comment.append('')
@@ -375,14 +416,23 @@ class PbCfgApp(PbApplication):
             cfgspec.close()
             del cfgspec
 
-        validator = Validator()
+        validator = Validator(pbvalidator_checks)
 
         cfgfiles_ok = True
 
-        for cfg_file in self.cfg_files:
+        existing_cfg_files = [file for file in self.cfg_files
+                              if os.path.isfile(file)]
+        if not existing_cfg_files and self.need_config_file:
+            msg = "Could not find any configuration file at these locations:"
+            for file in self.cfg_files:
+                msg += '\n' + file
+            self.handle_error(msg, _("Configuration error"))
+
+        for cfg_file in existing_cfg_files:
 
             if self.verbose > 1:
-                log.debug("Reading in configuration file '%s' ...", cfg_file)
+                log.debug("Reading in configuration file '%s' ...",
+                          cfg_file)
 
             cfg = ConfigObj(
                     cfg_file,
@@ -446,6 +496,10 @@ class PbCfgApp(PbApplication):
                 part_err_str = self._transform_cfg_errors(val, ndiv)
                 error_str += part_err_str
             else:
+                if val is True:
+                    continue
+                if val is False:
+                    val = "missing"
                 section = '-'
                 if div:
                     section = ', '.join(map(
@@ -457,18 +511,59 @@ class PbCfgApp(PbApplication):
         return error_str
 
     #--------------------------------------------------------------------------
-    def run(self):
+    def perform_config(self):
         """
-        The visible start point of this object.
+        Execute some actions after reading the configuration.
+
+        This method should be explicitely called by all perform_config()
+        methods in descendant classes.
+        """
+
+        if (u'general' in self.cfg and
+                u'verbose' in self.cfg[u'general']):
+
+            new_verbose = self.cfg[u'general'][u'verbose']
+            if new_verbose > self.verbose:
+                self.verbose = new_verbose
+
+    #--------------------------------------------------------------------------
+    def post_init(self):
+        """
+        Method to execute before calling run(). Here could be done some
+        finishing actions after reading in commandline parameters,
+        configuration a.s.o.
+
+        This method could be overwritten by descendant classes, these
+        methhods should allways include a call to post_init() of the
+        parent class.
+
+        """
+
+        self.perform_config()
+        self.perform_arg_parser()
+        self.init_logging()
+
+        self.initialized = True
+
+    #--------------------------------------------------------------------------
+    def pre_run(self):
+        """
+        Code executing before executing the main routine.
+
+        This method should be explicitely called by all pre_run()
+        methods in descendant classes.
 
         If the command line parameter '--default-config' was given, the defined
-        default configuration is printed out to stdout, else the method run()
-        from parent class is called.
+        default configuration is printed out to stdout and the application
+        exit with a return value of 0.
 
         """
 
+        if self.hide_default_config:
+            return
+
         if not self.args.show_default_config:
-            return super(PbCfgApp, self).run()
+            return
 
         curdate = datetime.datetime.utcnow()
 
@@ -484,7 +579,7 @@ class PbCfgApp(PbApplication):
                 configspec = self.cfg_spec,
         )
 
-        vdt = Validator()
+        vdt = Validator(pbvalidator_checks)
         cfg.validate(vdt, copy = True)
         cfg.write(sys.stdout)
 

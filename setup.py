@@ -30,7 +30,10 @@ setup(
     url = 'ssh://git.profitbricks.localdomain/srv/git/python/pb_base.git',
     license = 'LGPLv3+',
     platforms = ['posix'],
-    packages = ['pb_base'],
+    packages = [
+            'pb_base',
+            'pb_base.socket_obj',
+    ],
     classifiers = [
         'Development Status :: 2 - Pre-Alpha',
         'Environment :: Console',
