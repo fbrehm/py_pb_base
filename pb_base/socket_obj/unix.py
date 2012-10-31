@@ -80,6 +80,7 @@ class UnixSocket(GenericSocket):
             mode = 040660,
             owner = None,
             group = None,
+            auto_remove = True,
             timeout = 5,
             request_queue_size = 5,
             buffer_size = pb_base.socket_obj.default_buffer_size,
@@ -102,6 +103,9 @@ class UnixSocket(GenericSocket):
         @type owner: str
         @param group: The owning group of the scstadm communication socket
         @type group: str
+        @param auto_remove: Remove the self created socket file on destroying
+                            the current object
+        @type auto_remove: bool
         @param timeout: timeout in seconds for all opening and IO operations
         @type timeout: int
         @param request_queue_size: the maximum number of queued connections
@@ -163,7 +167,14 @@ class UnixSocket(GenericSocket):
         @type: str
         """
 
-        # Create a UDS socket
+        self._auto_remove = bool(auto_remove)
+        """
+        @ivar: Remove the self created socket file on destroying
+               the current object
+        @type: bool
+        """
+
+        # Create an UDS socket
         self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 
     #------------------------------------------------------------
@@ -190,11 +201,25 @@ class UnixSocket(GenericSocket):
         """The owning group of the scstadm communication socket."""
         return self._group
 
+    #------------------------------------------------------------
+    @property
+    def auto_remove(self):
+        """
+        Remove the self created socket file on destroying
+        the current object.
+        """
+        return self._auto_remove
+
+    @auto_remove.setter
+    def auto_remove(self, value):
+        self._auto_remove = bool(value)
+
     #--------------------------------------------------------------------------
     def __del__(self):
         """Destructor, closes current socket, if necessary."""
 
-        if self.sock and self.bonded and os.path.exists(self.filename):
+        if (self.sock and self.bonded and os.path.exists(self.filename)
+                and self.auto_remove):
             if self.verbose > 1:
                 log.debug(_("Removing socket '%s' ..."), self.filename)
             os.remove(self.filename)
