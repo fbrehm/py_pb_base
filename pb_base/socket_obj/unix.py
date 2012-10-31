@@ -125,9 +125,6 @@ class UnixSocket(GenericSocket):
                            should go to STDERR, even if logging has
                            initialized logging handlers.
         @type use_stderr: bool
-        @param initialized: initialisation is complete after __init__()
-                            of this object
-        @type initialized: bool
 
         @return: None
         """
