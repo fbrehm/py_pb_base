@@ -39,7 +39,7 @@ from pb_base.pidfile import PidFileInUseError
 from pb_base.pidfile_app import PidfileAppError
 from pb_base.pidfile_app import PidfileApp
 
-__version__ = '0.3.6'
+__version__ = '0.3.7'
 
 log = logging.getLogger(__name__)
 
@@ -550,6 +550,37 @@ class PbDaemon(PidfileApp):
 
         """
 
+        error_log = self.error_log
+        if not os.path.isabs(error_log):
+            error_log = os.path.join(self.base_dir, error_log)
+        log.debug(_("Using '%s' as error log file."), error_log)
+
+        log_dir = os.path.dirname(error_log)
+        log.debug(_("Using '%s' as parent directory of error log file."),
+                log_dir)
+
+        if not os.path.exists(log_dir):
+            self.handle_error(_("Log directory '%s' doesn't exists.") %
+                    (log_dir), self.appname, False)
+            sys.exit(6)
+        if not os.path.isdir(log_dir):
+            self.handle_error(_("Log directory '%s' exists, but is not " +
+                    "a directory.") % (log_dir), self.appname, False)
+            sys.exit(6)
+
+        se = None
+        try:
+            se = file(self.error_log, 'a', 0)
+        except IOError, e:
+            msg = _("Could not open error logfile: %s") % (str(e))
+            self.handle_error(msg, self.appname, False)
+            sys.exit(7)
+        except Exception, e:
+            msg = _("Could not open error logfile %(log)s: %(err)s") % {
+                    'log': self.error_log, 'err': str(e)}
+            self.handle_error(msg, e.__class__.__name__, True)
+            sys.exit(8)
+
         # do the first fork
         log.debug(_("First fork ..."))
         try:
@@ -577,8 +608,8 @@ class PbDaemon(PidfileApp):
             log.error((_("Fork #2 failed: ") + "%d (%s)"), e.errno, e.strerror)
             sys.exit(1)
 
-        start_msg = _("%(app)s started as daemon with PID %(pid)d.") % {
-                'app': self.appname, 'pid': os.getpid()}
+        start_msg = _("%(app)s (v%(ver)s) started as daemon with PID %(pid)d.") % {
+                'app': self.appname, 'ver': self.version, 'pid': os.getpid()}
 
         sys.stdout.write(start_msg + '\n')
 
@@ -587,14 +618,9 @@ class PbDaemon(PidfileApp):
         sys.stdout.flush()
         sys.stderr.flush()
 
-        error_log = self.error_log
-        if not os.path.isabs(error_log):
-            error_log = os.path.join(self.base_dir, error_log)
-        log.debug(_("Using '%s' as error log file."), error_log)
-
         si = file('/dev/null', 'r')
         so = file('/dev/null', 'a+')
-        se = file(self.error_log, 'a', 0)
+        #se = file(self.error_log, 'a', 0)
         os.dup2(si.fileno(), sys.stdin.fileno())
         os.dup2(so.fileno(), sys.stdout.fileno())
         os.dup2(se.fileno(), sys.stderr.fileno())
