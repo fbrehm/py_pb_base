@@ -281,7 +281,6 @@ class PbCfgApp(PbApplication):
         This method should be explicitely called by all init_arg_parser()
         methods in descendant classes.
         """
-
         self.arg_parser.add_argument(
                 "-C", "--cfgfile", "--cfg-file", "--config",
                 metavar = "FILE",
@@ -387,7 +386,7 @@ class PbCfgApp(PbApplication):
         It will called before reading the configuration files and
         their validation.
 
-        This method can be overriden in descsendant classes.
+        This method can be overriden in descendant classes.
 
         """
 
@@ -422,11 +421,12 @@ class PbCfgApp(PbApplication):
 
         existing_cfg_files = [file for file in self.cfg_files
                               if os.path.isfile(file)]
+
         if not existing_cfg_files and self.need_config_file:
             msg = "Could not find any configuration file at these locations:"
             for file in self.cfg_files:
                 msg += '\n' + file
-            self.handle_error(msg, _("Configuration error"))
+            sys.exit(msg)
 
         for cfg_file in existing_cfg_files:
 
@@ -462,7 +462,10 @@ class PbCfgApp(PbApplication):
             sys.exit(2)
 
         if self.verbose > 2:
-            log.debug("Merged configuration:\n%r", pp(self.cfg))
+            if len(existing_cfg_files) > 1:
+                log.debug("Using merged configuration:\n%r", pp(self.cfg))
+            else:
+                log.debug("Using configuration:\n%r", pp(self.cfg))
 
     #--------------------------------------------------------------------------
     def _transform_cfg_errors(self, result, div = None):

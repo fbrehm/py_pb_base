@@ -37,7 +37,7 @@ from pb_base.errors import PbIoTimeoutError
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
 __copyright__ = '(C) 2010-2012 by profitbricks.com'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.2.1'
+__version__ = '0.2.2'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)
@@ -334,18 +334,36 @@ class GenericSocket(PbBaseObject):
 
         """
 
-        if not self.connection or self.interrupted:
+        if self.interrupted:
+            msg = _("Cannot send message to the receipient, because " +
+                    "the socket connection is interrupted.")
+            raise GenericSocketError(msg)
+
+        ok = False
+        if self.bonded and self.connection:
+            ok = True
+        elif self.connected:
+            ok = True
+
+        if not ok:
             msg = _("Cannot send message to the receipient, because " +
                     "the socket connection is closed.")
             raise GenericSocketError(msg)
 
         if self.verbose > 2:
             log.debug(_("Sending %r to socket."), message)
-        self.connection.send(message)
+
+        if self.bonded:
+            self.connection.sendall(message)
+        else:
+            self.sock.sendall(message)
 
     #--------------------------------------------------------------------------
     def accept(self):
         """Accept a connection, if the socket is bonded in listening mode."""
+
+        if self.connected:
+            return
 
         if not self.bonded:
             msg = _("Cannot accept connection, socket is not bonded.")
@@ -380,7 +398,11 @@ class GenericSocket(PbBaseObject):
 
         if self.verbose > 3:
             log.debug(_("Trying to get data ..."))
-        data = self.connection.recv(self.buffer_size)
+        data = ''
+        if self.bonded:
+            data = self.connection.recv(self.buffer_size)
+        else:
+            data = self.sock.recv(self.buffer_size)
 
         if data:
             if self.verbose > 2:
