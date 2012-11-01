@@ -229,47 +229,47 @@ class ForkingDaemon(PbDaemon):
                 need_config_file = need_config_file,
         )
 
-        #------------------------------------------------------------
-        @property
-        def is_child(self):
-            """Flag, whether the current process is a child handling process."""
-            return self._is_child
+    #------------------------------------------------------------
+    @property
+    def is_child(self):
+        """Flag, whether the current process is a child handling process."""
+        return self._is_child
 
-        #------------------------------------------------------------
-        @property
-        def max_children(self):
-            """The maximum number of child processes."""
-            return self._max_children
+    #------------------------------------------------------------
+    @property
+    def max_children(self):
+        """The maximum number of child processes."""
+        return self._max_children
 
-        @max_children.setter
-        def max_children(self, value):
-            v = int(value)
-            if v < 1 or v > maximum_max_children:
-                msg = _("Wrong value for max_children %(val)d, must be between " +
-                        "1 and %(max)d.") % {'val': v, 'max': maximum_max_children}
-                raise ValueError(msg)
-            self._max_children = v
+    @max_children.setter
+    def max_children(self, value):
+        v = int(value)
+        if v < 1 or v > maximum_max_children:
+            msg = _("Wrong value for max_children %(val)d, must be between " +
+                    "1 and %(max)d.") % {'val': v, 'max': maximum_max_children}
+            raise ValueError(msg)
+        self._max_children = v
 
-        #------------------------------------------------------------
-        @property
-        def child_id(self):
-            """The ID of the current child process."""
-            return self._child_id
+    #------------------------------------------------------------
+    @property
+    def child_id(self):
+        """The ID of the current child process."""
+        return self._child_id
 
-        #------------------------------------------------------------
-        @property
-        def timeout_collect_children(self):
-            """The maximum timeout on collecting finished children per stage"""
-            return self._timeout_collect_children
+    #------------------------------------------------------------
+    @property
+    def timeout_collect_children(self):
+        """The maximum timeout on collecting finished children per stage"""
+        return self._timeout_collect_children
 
-        @timeout_collect_children.setter
-        def timeout_collect_children(self, value):
-            v = int(value)
-            if v < 1:
-                msg = _("Wrong value for timeout_collect_children %d, " +
-                        "must be greater than zero.") % (v)
-                raise ValueError(msg)
-            self._timeout_collect_children = v
+    @timeout_collect_children.setter
+    def timeout_collect_children(self, value):
+        v = int(value)
+        if v < 1:
+            msg = _("Wrong value for timeout_collect_children %d, " +
+                    "must be greater than zero.") % (v)
+            raise ValueError(msg)
+        self._timeout_collect_children = v
 
     #--------------------------------------------------------------------------
     def init_cfg_spec(self):
