@@ -12,7 +12,7 @@ Vcs-Browser: http://git.profitbricks.localdomain/gitweb/?p=python/pb-base.git;a=
 Package: profitbricks-python-base
 Architecture: all
 Depends: ${misc:Depends}, python, python-support, python-argparse,
- profitbricks-python-logging, python-configobj
+ profitbricks-python-logging, python-configobj, coreutils, sudo
 Description: Python modules for common used objects, error classes and functions
 
 Package: profitbricks-python-base-doc

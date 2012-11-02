@@ -63,7 +63,7 @@ class PbApplication(PbBaseObject):
         """
         Initialisation of the base object.
 
-        Raises an exception on a uncoverable error.
+        @raise PbApplicationError: on a uncoverable error.
 
         @param appname: name of the current running application
         @type appname: str
