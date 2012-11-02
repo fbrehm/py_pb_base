@@ -30,7 +30,7 @@ from pb_base.errors import PbReadTimeoutError, PbWriteTimeoutError
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 
 log = logging.getLogger(__name__)
 
@@ -511,8 +511,8 @@ class PbBaseHandler(PbBaseObject):
         return content
 
     #--------------------------------------------------------------------------
-    def write_file_content(self, filename, content,
-                            timeout = 2, must_exists = True, quiet = False):
+    def write_file(self, filename, content,
+            timeout = 2, must_exists = True, quiet = False):
         """
         Writes the given content into the given filename.
         It should only be used for small things, because it writes unbuffered.
