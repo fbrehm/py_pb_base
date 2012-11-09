@@ -30,7 +30,7 @@ from pb_base.errors import PbReadTimeoutError, PbWriteTimeoutError
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
-__version__ = '0.1.1'
+__version__ = '0.1.3'
 
 log = logging.getLogger(__name__)
 
@@ -160,6 +160,12 @@ class PbBaseHandler(PbBaseObject):
         @type: bool
         """
 
+        self._sudo = sudo
+        """
+        @ivar: should the command executed by sudo by default
+        @type: bool
+        """
+
         self._chown_cmd = CHOWN_CMD
         """
         @ivar: the chown command for changing ownership of file objects
@@ -220,6 +226,16 @@ class PbBaseHandler(PbBaseObject):
     @quiet.setter
     def quiet(self, value):
         self._quiet = bool(value)
+
+    #------------------------------------------------------------
+    @property
+    def sudo(self):
+        """Should the command executed by sudo by default."""
+        return self._sudo
+
+    @sudo.setter
+    def sudo(self, value):
+        self._sudo = bool(value)
 
     #------------------------------------------------------------
     @property
@@ -361,7 +377,7 @@ class PbBaseHandler(PbBaseObject):
         if simulate is None:
             simulate = self.simulate
 
-        if do_simulate:
+        if simulate:
             cmd_list.insert(0, self.echo_cmd)
             quiet = False
 
@@ -371,11 +387,7 @@ class PbBaseHandler(PbBaseObject):
         use_shell = bool(shell)
 
         cmd_list = [str(element) for element in cmd_list]
-        cmd_str = ' '.join(map(lambda x: pipes.quote(x), cmd_list))
-        msg = "Executing '%s'" % (cmd_str)
-        if force:
-            msg = "Executing forced '%s'" % (cmd_str)
-        log.debug(msg)
+        log.debug("Executing %r", cmd_list)
 
         if quiet and self.verbose > 1:
             log.debug("Quiet execution")
@@ -499,8 +511,8 @@ class PbBaseHandler(PbBaseObject):
         return content
 
     #--------------------------------------------------------------------------
-    def write_file_content(self, filename, content,
-                            timeout = 2, must_exists = True, quiet = False):
+    def write_file(self, filename, content,
+            timeout = 2, must_exists = True, quiet = False):
         """
         Writes the given content into the given filename.
         It should only be used for small things, because it writes unbuffered.
