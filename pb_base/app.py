@@ -461,9 +461,9 @@ class PbApplication(PbBaseObject):
                 help = _("Display brief usage message and exit")
         )
         general_group.add_argument(
-                "-V", "--version",
-                action = 'store_true',
-                dest = 'version',
+                "-V", '--version',
+                action = 'version',
+                version = (_('Version of %%(prog)s: %s') % (self.version)),
                 help = _("Show program's version number and exit")
         )
 
@@ -500,13 +500,6 @@ class PbApplication(PbBaseObject):
             self._terminal_has_colors = self.terminal_can_color()
 
         self.args = self.arg_parser.parse_args()
-
-        if self.args.version:
-            msg = self.version
-            if self.args.verbose:
-                msg = _("Version of %s: %s") % (self.appname, self.version)
-            sys.stdout.write(msg + "\n")
-            sys.exit(0)
 
         if self.args.usage:
             self.arg_parser.print_usage(sys.stdout)
