@@ -12,6 +12,7 @@ import sys
 import os
 import logging
 import re
+import platform
 
 from gettext import gettext as _
 
@@ -29,7 +30,7 @@ from pb_base.errors import FunctionNotImplementedError
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
-__version__ = '0.4.3'
+__version__ = '0.5.1'
 
 log = logging.getLogger(__name__)
 
@@ -151,6 +152,12 @@ class PbApplication(PbBaseObject):
         @type: str
         """
 
+        self._terminal_has_colors = False
+        """
+        @ivar: flag, that the current terminal understands color ANSI codes
+        @type: bool
+        """
+
         self.env = {}
         """
         @ivar: a dictionary with all application specifiv environment variables,
@@ -227,6 +234,12 @@ class PbApplication(PbBaseObject):
 
     #------------------------------------------------------------
     @property
+    def terminal_has_colors(self):
+        """A flag, that the current terminal understands color ANSI codes."""
+        return self._terminal_has_colors
+
+    #------------------------------------------------------------
+    @property
     def env_prefix(self):
         """A prefix for environment variables to detect them."""
         return self._env_prefix
@@ -247,14 +260,21 @@ class PbApplication(PbBaseObject):
             root_log.setLevel(logging.DEBUG)
 
         # create formatter
-        format_str = '[%(asctime)s]: ' + self.appname + ': '
+        format_str = ''
+        if self.verbose > 1:
+            format_str = '[%(asctime)s]: '
+        format_str += self.appname + ': '
         if self.verbose:
             if self.verbose > 1:
                 format_str += '%(name)s(%(lineno)d) %(funcName)s() '
             else:
                 format_str += '%(name)s '
         format_str += '%(levelname)s - %(message)s'
-        color_formatter = ColoredFormatter(format_str)
+        formatter = None
+        if self.terminal_has_colors:
+            formatter = ColoredFormatter(format_str)
+        else:
+            formatter = logging.Formatter(format_str)
 
         # create log handler for console output
         lh_console = logging.StreamHandler(sys.stderr)
@@ -262,11 +282,44 @@ class PbApplication(PbBaseObject):
             lh_console.setLevel(logging.DEBUG)
         else:
             lh_console.setLevel(logging.INFO)
-        lh_console.setFormatter(color_formatter)
+        lh_console.setFormatter(formatter)
 
         root_log.addHandler(lh_console)
 
         return
+
+    #--------------------------------------------------------------------------
+    def terminal_can_color(self):
+        """
+        Method to detect, whether the current terminal (stdout and stderr)
+        is able to perform ANSI color sequences.
+
+        @return: both stdout and stderr can perform ANSI color sequences
+        @rtype: bool
+
+        """
+
+        cur_term = ''
+        if 'TERM' in os.environ:
+            cur_term = os.environ['TERM'].lower().strip()
+
+        ansi_term = False
+        #env_term_has_colors = False
+        #re_term = re.compile(r'^(?:ansi|linux.*|screen|[xeak]term.*|gnome.*|rxvt.*|interix)$')
+        #if cur_term and re_term.search(cur_term):
+        #    env_term_has_colors = True
+        if cur_term and cur_term == 'ansi':
+            ansi_term = True
+
+        has_colors = True
+        for handle in [sys.stdout, sys.stderr]:
+            if (hasattr(handle, "isatty") and handle.isatty()) or ansi_term:
+                if (platform.system() == 'Windows' and not ansi_term):
+                    has_colors = False
+            else:
+                has_colors = False
+
+        return has_colors
 
     #--------------------------------------------------------------------------
     def post_init(self):
@@ -380,6 +433,16 @@ class PbApplication(PbBaseObject):
 
         general_group = self.arg_parser.add_argument_group('General options')
         general_group.add_argument(
+                '--color',
+                action = "store",
+                dest = 'color',
+                const = 'yes',
+                default = 'auto',
+                nargs = '?',
+                choices = ['yes', 'no', 'auto'],
+                help = _("Use colored output for messages."),
+        )
+        general_group.add_argument(
                 "-v", "--verbose",
                 action = "count",
                 dest = 'verbose',
@@ -425,6 +488,17 @@ class PbApplication(PbBaseObject):
         """
         Underlaying method for parsing arguments.
         """
+
+        want_color = 'auto'
+        if want_color is None:
+            want_color = 'yes'
+        if want_color == 'yes':
+            self._terminal_has_colors = True
+        elif want_color == 'no':
+            self._terminal_has_colors = False
+        else:
+            self._terminal_has_colors = self.terminal_can_color()
+
         self.args = self.arg_parser.parse_args()
 
         if self.args.version:
