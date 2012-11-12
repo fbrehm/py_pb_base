@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-@summary: A special handler module for a handling the df-command and hist results.
+@summary: A special handler module for a handling the df-command and his results.
 """
 
 # Standard modules
@@ -247,7 +247,7 @@ class DfHandler(PbBaseHandler):
             ):
         """
         Initialisation of the df handler object.
-        The execution of executing 'df' shouldnever been simulated.
+        The execution of executing 'df' should never been simulated.
 
         @raise CommandNotFoundError: if the 'df' command could not be found.
         @raise DfError: on a uncoverable error.
@@ -323,6 +323,40 @@ class DfHandler(PbBaseHandler):
             fs_type = None, exclude_type = None):
         """
         Executes the df command and returns a list of all found filesystems.
+
+        Through the special name __call__() it's possible, the instance variable
+        of this class to use as a funktion. So there can be executet simple
+        df requests:
+
+            df = DfHandler()
+
+            df_list = df()
+            df_list = df('/tmp')
+            df_list = df(['/', '/var'])
+
+            ...
+
+        @param fs: the filesystem or filesystems, from where to get informations.
+                   if omitted, all filesystems are checked
+        @type fs: None, str or list of str
+        @param all_fs: include dummy file systems, ignored, if dedicated filesystems
+                       are given with parameter fs
+        @type all_fs: bool
+        @param local: limit listing to local file systems, ignored, if dedicated
+                      filesystems are given with parameter fs
+        @type local: bool
+        @param sync: invoke sync before getting usage info
+        @type sync: bool
+        @param fs_type: limit listing to file systems ofgiven types, ignored, if
+                        dedicated filesystems are given with parameter fs
+        @type fs_type: None or list of str
+        @param exclude_type: limit listing to file systems not ofgiven types,
+                             ignored, if dedicated filesystems are given with
+                             parameter fs
+        @type exclude_type: None or list of str
+
+        @return: informations about all requested filesystems
+        @rtype: list of DfResult
 
         """
 
