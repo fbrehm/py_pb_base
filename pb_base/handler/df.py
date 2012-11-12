@@ -26,7 +26,7 @@ from pb_base.handler import PbBaseHandlerError
 from pb_base.handler import CommandNotFoundError
 from pb_base.handler import PbBaseHandler
 
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 
 log = logging.getLogger(__name__)
 
@@ -47,6 +47,7 @@ class DfResult(PbBaseObject):
     #--------------------------------------------------------------------------
     def __init__(self,
             dev = None,
+            fs_type = None,
             total = 0l,
             used = 0l,
             free = 0l,
@@ -60,6 +61,8 @@ class DfResult(PbBaseObject):
 
         @param dev: the appropriate device of the filesystem from 'df'
         @type dev: str
+        @param fs_type: the type of the filesystem (e.g. 'ext3', 'nfs' a.s.o.)
+        @type fs_type: str
         @param total: the total size of the filesystem in Bytes
         @type total: long
         @param used: the used area of the filesystem in Bytes
@@ -81,6 +84,12 @@ class DfResult(PbBaseObject):
         self._dev = str(dev)
         """
         @ivar: appropriate device of the filesystem from 'df'
+        @type: str
+        """
+
+        self._fs_type = fs_type
+        """
+        @ivar: the type of the filesystem (e.g. 'ext3', 'nfs' a.s.o.)
         @type: str
         """
 
@@ -108,11 +117,19 @@ class DfResult(PbBaseObject):
         @type: str
         """
 
+        self.initialized = True
+
     #------------------------------------------------------------
     @property
     def dev(self):
         """The appropriate device of the filesystem from 'df'"""
         return self._dev
+
+    #------------------------------------------------------------
+    @property
+    def fs_type(self):
+        """The type of the filesystem (e.g. 'ext3', 'nfs' a.s.o.)"""
+        return self._fs_type
 
     #------------------------------------------------------------
     @property
@@ -284,6 +301,9 @@ class DfHandler(PbBaseHandler):
         if not self.df_cmd:
             failed_commands.append('df')
 
+        self.re_df_line = re.compile(
+                r'(\S+)\s+(\S+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\d+\s*%\s+(.*)')
+
         # Some commands are missing
         if failed_commands:
             raise CommandNotFoundError(failed_commands)
@@ -305,6 +325,108 @@ class DfHandler(PbBaseHandler):
         Executes the df command and returns a list of all found filesystems.
 
         """
+
+        if fs:
+            if isinstance(fs, basestring):
+                fs = [fs]
+        else:
+            fs = []
+
+        for fs_object in fs:
+            if self.verbose > 2:
+                log.debug(_("Checking existence of %r ..."), fs_object)
+            if not os.path.exists(fs_object):
+                raise DfError(_("Filesystem object %r doesn't exists.") %
+                        (fs_object))
+
+            if not os.path.isabs(fs_object):
+                raise DfError(_("%r is not given as an absolute path.") %
+                        (fs_object))
+
+        if self.verbose > 1:
+            if fs:
+                msg = _("Calling 'df' for the following objects:\n%r") % (fs)
+            else:
+                if all_fs:
+                    msg = _("Calling 'df' for real all filesystems.")
+                elif local:
+                    msg = _("Calling 'df' for local filesystems.")
+                else:
+                    msg = _("Calling 'df' for all filesystems.")
+            log.debug(msg)
+
+        cmd = [self.df_cmd, '-k', '-P', '--print-type']
+        if all_fs:
+            cmd.append('--all')
+        elif local:
+            cmd.append('--local')
+        if sync:
+            cmd.append('--sync')
+
+        if fs_type:
+            param = '--type=%s'
+            if isinstance(fs_type, basestring):
+                cmd.append(param % (fs_type))
+            else:
+                for fstype in fs_type:
+                    cmd.append(param % (fstype))
+
+        if exclude_type:
+            param = '--exclude-type=%s'
+            if isinstance(exclude_type, basestring):
+                cmd.append(param % (exclude_type))
+            else:
+                for ex_type in exclude_type:
+                    cmd.append(param % (ex_type))
+
+        for fs_object in fs:
+            cmd.append(fs_object)
+
+        cmdline = ' '.join(cmd)
+        (ret_code, std_out, std_err) = self.call(cmd)
+
+        if ret_code:
+            err = _('undefined error')
+            if std_err:
+                e = std_err.replace('\n', ' ').strip()
+                if e:
+                    err = e
+            msg = _("Error %d on getting free space of %r: %s") % (
+                    ret_code, fs, err)
+            raise DfError(msg)
+
+        lines = std_out.splitlines()
+        if not lines or len(lines) < 2:
+            msg = _("Didn't found any usable information in output of %r: %r") % (
+                    cmdline, std_out)
+            raise DfError(msg)
+
+        del lines[0]
+        df_list = []
+
+        for line in lines:
+
+            line = line.strip()
+            match = self.re_df_line.search(line)
+            if not match:
+                msg = _("Could not evaluate line %(line)r in output of command %(cmd)r.") % {
+                        'line': line, 'cmd': cmdline}
+                raise DfError(msg)
+
+            df_result = DfResult(
+                    dev = match.group(1),
+                    fs_type = match.group(2),
+                    total = long(match.group(3)) * 1024l,
+                    used = long(match.group(4)) * 1024l,
+                    free = long(match.group(5)) * 1024l,
+                    fs =  match.group(6),
+                    appname = self.appname,
+                    verbose = self.verbose,
+                    base_dir = self.base_dir,
+            )
+            df_list.append(df_result)
+
+        return df_list
 
 #==============================================================================
 
