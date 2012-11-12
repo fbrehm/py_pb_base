@@ -210,6 +210,20 @@ class PbApplication(PbBaseObject):
 
     #------------------------------------------------------------
     @property
+    def exitvalue(self):
+        """The return value of the application for exiting with sys.exit()."""
+        return self._exit_value
+
+    @exitvalue.setter
+    def exitvalue(self, value):
+        v = int(value)
+        if v >= 0:
+            self._exit_value = v
+        else:
+            log.warn("Wrong exit_value %r, must be >= 0", value)
+
+    #------------------------------------------------------------
+    @property
     def usage(self):
         """The usage text used on argparse."""
         return self._usage
