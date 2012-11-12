@@ -1,3 +1,11 @@
+profitbricks-python-base (0.3.9-1) unstable; urgency=low
+
+  * Version bump
+  * Renamed pb_base/handler.py -> pb_base/handler/__init__.py, added
+    pb_base/handler/df.py
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Mon, 12 Nov 2012 11:29:47 +0100
+
 profitbricks-python-base (0.3.8-2) unstable; urgency=low
 
   * Version bump
