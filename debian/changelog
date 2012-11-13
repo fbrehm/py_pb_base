@@ -1,3 +1,10 @@
+profitbricks-python-base (0.3.10-2) unstable; urgency=low
+
+  * Version bump
+  * Updated dependencies in debian/control
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Tue, 13 Nov 2012 10:17:54 +0100
+
 profitbricks-python-base (0.3.10-1) unstable; urgency=low
 
   * Version bump
