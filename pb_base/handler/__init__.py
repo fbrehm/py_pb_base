@@ -30,7 +30,7 @@ from pb_base.errors import PbReadTimeoutError, PbWriteTimeoutError
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
-__version__ = '0.1.3'
+__version__ = '0.2.0'
 
 log = logging.getLogger(__name__)
 
@@ -109,6 +109,8 @@ class PbBaseHandler(PbBaseObject):
         """
         Initialisation of the base handler object.
 
+        @raise CommandNotFoundError: if the commands 'chmod', 'echo' and
+                                     'sudo' could not be found.
         @raise PbBaseHandlerError: on a uncoverable error.
 
         @param appname: name of the current running application
@@ -173,7 +175,7 @@ class PbBaseHandler(PbBaseObject):
         """
         if not os.path.exists(self.chown_cmd) or not os.access(
                 self.chown_cmd, os.X_OK):
-            self.chown_cmd = self.get_command('chown')
+            self._chown_cmd = self.get_command('chown')
         if not self.chown_cmd:
             failed_commands.append('chown')
 
@@ -184,7 +186,7 @@ class PbBaseHandler(PbBaseObject):
         """
         if not os.path.exists(self.echo_cmd) or not os.access(
                 self.echo_cmd, os.X_OK):
-            self.echo_cmd = self.get_command('echo')
+            self._echo_cmd = self.get_command('echo')
         if not self.echo_cmd:
             failed_commands.append('echo')
 
@@ -194,7 +196,7 @@ class PbBaseHandler(PbBaseObject):
         @type: str
         """
         if not os.path.exists(self.sudo_cmd) or not os.access(
-                self.sudo_cmd, os.X_OK):
+                self._sudo_cmd, os.X_OK):
             self.sudo_cmd = self.get_command('sudo')
         if not self.sudo_cmd:
             failed_commands.append('sudo')
