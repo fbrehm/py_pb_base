@@ -32,6 +32,7 @@ setup(
     platforms = ['posix'],
     packages = [
             'pb_base',
+            'pb_base.handler',
             'pb_base.socket_obj',
     ],
     classifiers = [
