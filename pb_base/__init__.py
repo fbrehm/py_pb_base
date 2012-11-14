@@ -10,7 +10,7 @@
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
 __copyright__ = '(C) 2010-2012 by profitbricks.com'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.3.10-6'
+__version__ = '0.3.10-7'
 __license__ = 'LGPLv3+'
 
 # vim: fileencoding=utf-8 filetype=python ts=4
