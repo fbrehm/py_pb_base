@@ -21,7 +21,7 @@ from pb_base.common import pp
 from pb_base.errors import PbError
 from pb_base.errors import FunctionNotImplementedError
 
-__version__ = '0.3.1'
+__version__ = '0.3.2'
 
 log = logging.getLogger(__name__)
 
@@ -156,7 +156,7 @@ class PbBaseObject(object):
     @property
     def verbose(self):
         """The verbosity level."""
-        return self._verbose
+        return getattr(self, '_verbose', 0)
 
     @verbose.setter
     def verbose(self, value):
@@ -170,7 +170,7 @@ class PbBaseObject(object):
     @property
     def use_stderr(self):
         """A flag indicating, that on handle_error() the output should go to STDERR."""
-        return self._use_stderr
+        return getattr(self, '_use_stderr', False)
 
     @use_stderr.setter
     def use_stderr(self, value):
@@ -180,7 +180,7 @@ class PbBaseObject(object):
     @property
     def initialized(self):
         """The initialisation of this object is complete."""
-        return self._initialized
+        return getattr(self, '_initialized', False)
 
     @initialized.setter
     def initialized(self, value):
