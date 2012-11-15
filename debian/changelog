@@ -1,9 +1,23 @@
-profitbricks-python-base (0.3.10-6) unstable; urgency=low
+profitbricks-python-base (0.3.10-8) unstable; urgency=low
 
   * Version bump
   * Minor changes in pb_base/object.py
 
  -- Frank Brehm <frank.brehm@profitbricks.com>  Thu, 15 Nov 2012 15:50:39 +0100
+
+profitbricks-python-base (0.3.10-7) unstable; urgency=low
+
+  * Version bump
+  * Declared for unstable
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Wed, 14 Nov 2012 09:53:19 +0100
+
+profitbricks-python-base (0.3.10-6) stable; urgency=low
+
+  * Version bump
+  * Declared for stable
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Wed, 14 Nov 2012 09:20:31 +0100
 
 profitbricks-python-base (0.3.10-5) unstable; urgency=low
 
