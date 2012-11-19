@@ -12,9 +12,9 @@ Copyright:
 
     <Copyright (C) 2011 Frank Brehm + Profitbricks>
 
-ProfitBricks Python Provisioning Daemon
-is licensed under the GPL version 3,
-see "/usr/share/common-licenses/GPL-3".
+The Python module package for common used objects, error classes and functions
+is licensed under the LGPL version 3,
+see "/usr/share/common-licenses/LGPL-3".
 
 License:
 	
