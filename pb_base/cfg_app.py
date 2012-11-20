@@ -35,7 +35,7 @@ from pb_base.validator import pbvalidator_checks
 from pb_base.app import PbApplicationError
 from pb_base.app import PbApplication
 
-__version__ = '0.5.4'
+__version__ = '0.5.5'
 
 log = logging.getLogger(__name__)
 
@@ -272,6 +272,24 @@ class PbCfgApp(PbApplication):
     def cfg_stem(self):
         """The basename of the configuration file without any file extension."""
         return self._cfg_stem
+
+    #--------------------------------------------------------------------------
+    def as_dict(self):
+        """
+        Transforms the elements of the object into a dict
+
+        @return: structure as dict
+        @rtype:  dict
+        """
+
+        res = super(PbCfgApp, self).as_dict()
+        res['need_config_file'] = self.need_config_file
+        res['hide_default_config'] = self.hide_default_config
+        res['cfg_encoding'] = self.cfg_encoding
+        res['cfg_dir'] = self.cfg_dir
+        res['cfg_stem'] = self.cfg_stem
+
+        return res
 
     #--------------------------------------------------------------------------
     def init_arg_parser(self):

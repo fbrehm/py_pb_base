@@ -30,7 +30,7 @@ from pb_base.errors import PbReadTimeoutError, PbWriteTimeoutError
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 log = logging.getLogger(__name__)
 
@@ -256,6 +256,25 @@ class PbBaseHandler(PbBaseObject):
     def sudo_cmd(self):
         """The absolute path to the OS command 'sudo'."""
         return self._sudo_cmd
+
+    #--------------------------------------------------------------------------
+    def as_dict(self):
+        """
+        Transforms the elements of the object into a dict
+
+        @return: structure as dict
+        @rtype:  dict
+        """
+
+        res = super(PbBaseHandler, self).as_dict()
+        res['simulate'] = self.simulate
+        res['quiet'] = self.quiet
+        res['sudo'] = self.sudo
+        res['chown_cmd'] = self.chown_cmd
+        res['echo_cmd'] = self.echo_cmd
+        res['sudo_cmd'] = self.sudo_cmd
+
+        return res
 
     #--------------------------------------------------------------------------
     def get_command(self, cmd, quiet = False):

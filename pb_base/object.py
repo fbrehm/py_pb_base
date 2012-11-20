@@ -232,6 +232,12 @@ class PbBaseObject(object):
             else:
                 res[key] = val
         res['__class_name__'] = self.__class__.__name__
+        res['appname'] = self.appname
+        res['version'] = self.version
+        res['verbose'] = self.verbose
+        res['use_stderr'] = self.use_stderr
+        res['initialized'] = self.initialized
+        res['base_dir'] = self.base_dir
 
         return res
 

@@ -30,7 +30,7 @@ from pb_base.errors import FunctionNotImplementedError
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
-__version__ = '0.5.1'
+__version__ = '0.5.2'
 
 log = logging.getLogger(__name__)
 
@@ -257,6 +257,26 @@ class PbApplication(PbBaseObject):
     def env_prefix(self):
         """A prefix for environment variables to detect them."""
         return self._env_prefix
+
+    #--------------------------------------------------------------------------
+    def as_dict(self):
+        """
+        Transforms the elements of the object into a dict
+
+        @return: structure as dict
+        @rtype:  dict
+        """
+
+        res = super(PbApplication, self).as_dict()
+        res['exit_value'] = self.exit_value
+        res['usage'] = self.usage
+        res['description'] = self.description
+        res['argparse_epilog'] = self.argparse_epilog
+        res['argparse_prefix_chars'] = self.argparse_prefix_chars
+        res['terminal_has_colors'] = self.terminal_has_colors
+        res['env_prefix'] = self.env_prefix
+
+        return res
 
     #--------------------------------------------------------------------------
     def init_logging(self):
