@@ -285,6 +285,25 @@ class PbDaemon(PidfileApp):
         return self._error_log
 
     #--------------------------------------------------------------------------
+    def as_dict(self):
+        """
+        Transforms the elements of the object into a dict
+
+        @return: structure as dict
+        @rtype:  dict
+        """
+
+        res = super(PbDaemon, self).as_dict()
+        res['facility_name'] = self.facility_name
+        res['facility'] = self.facility
+        res['do_daemonize'] = self.do_daemonize
+        res['is_daemon'] = self.is_daemon
+        res['forced_shutdown'] = self.forced_shutdown
+        res['error_log'] = self.error_log
+
+        return res
+
+    #--------------------------------------------------------------------------
     def init_cfg_spec(self):
         """
         Method to complete the initialisation of the config

@@ -272,6 +272,23 @@ class ForkingDaemon(PbDaemon):
         self._timeout_collect_children = v
 
     #--------------------------------------------------------------------------
+    def as_dict(self):
+        """
+        Transforms the elements of the object into a dict
+
+        @return: structure as dict
+        @rtype:  dict
+        """
+
+        res = super(ForkingDaemon, self).as_dict()
+        res['is_child'] = self.is_child
+        res['max_children'] = self.max_children
+        res['child_id'] = self.child_id
+        res['timeout_collect_children'] = self.timeout_collect_children
+
+        return res
+
+    #--------------------------------------------------------------------------
     def init_cfg_spec(self):
         """
         Method to complete the initialisation of the config

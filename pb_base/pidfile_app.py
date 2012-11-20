@@ -215,6 +215,21 @@ class PidfileApp(PbCfgApp):
         return self._simulate
 
     #--------------------------------------------------------------------------
+    def as_dict(self):
+        """
+        Transforms the elements of the object into a dict
+
+        @return: structure as dict
+        @rtype:  dict
+        """
+
+        res = super(PidfileApp, self).as_dict()
+        res['pidfilename'] = self.pidfilename
+        res['simulate'] = self.simulate
+
+        return res
+
+    #--------------------------------------------------------------------------
     def __del__(self):
 
         self.pidfile = None

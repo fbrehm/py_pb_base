@@ -217,10 +217,19 @@ class DfResult(PbBaseObject):
         """
 
         res = super(DfResult, self).as_dict()
+        res['dev'] = self.dev
+        res['fs'] = self.fs
+        res['fs_type'] = self.fs_type
+        res['total'] = self.total
+        res['total_kb'] = self.total_kb
         res['total_mb'] = self.total_mb
+        res['used'] = self.used
+        res['used_kb'] = self.used_kb
         res['used_mb'] = self.used_mb
-        res['free_mb'] = self.free_mb
         res['used_percent'] = self.used_percent
+        res['free'] = self.free
+        res['free_kb'] = self.free_kb
+        res['free_mb'] = self.free_mb
         res['free_percent'] = self.free_percent
 
         return res
@@ -317,6 +326,20 @@ class DfHandler(PbBaseHandler):
     def df_cmd(self):
         """The absolute path to the OS command 'df'."""
         return self._df_cmd
+
+    #--------------------------------------------------------------------------
+    def as_dict(self):
+        """
+        Transforms the elements of the object into a dict
+
+        @return: structure as dict
+        @rtype:  dict
+        """
+
+        res = super(DfHandler, self).as_dict()
+        res['df_cmd'] = self.df_cmd
+
+        return res
 
     #--------------------------------------------------------------------------
     def __call__(self, fs = None, all_fs = False, local = False, sync = False,

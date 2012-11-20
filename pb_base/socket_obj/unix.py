@@ -212,6 +212,24 @@ class UnixSocket(GenericSocket):
         self._auto_remove = bool(value)
 
     #--------------------------------------------------------------------------
+    def as_dict(self):
+        """
+        Transforms the elements of the object into a dict
+
+        @return: structure as dict
+        @rtype:  dict
+        """
+
+        res = super(UnixSocket, self).as_dict()
+        res['filename'] = self.filename
+        res['mode'] = "%04o" % (self.mode)
+        res['owner'] = self.owner
+        res['group'] = self.group
+        res['auto_remove'] = self.auto_remove
+
+        return res
+
+    #--------------------------------------------------------------------------
     def __del__(self):
         """Destructor, closes current socket, if necessary."""
 

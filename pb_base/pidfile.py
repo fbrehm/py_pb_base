@@ -235,6 +235,25 @@ class PidFile(PbBaseObject):
         return os.path.dirname(self.filename)
 
     #--------------------------------------------------------------------------
+    def as_dict(self):
+        """
+        Transforms the elements of the object into a dict
+
+        @return: structure as dict
+        @rtype:  dict
+        """
+
+        res = super(PidFile, self).as_dict()
+        res['filename'] = self.filename
+        res['auto_remove'] = self.auto_remove
+        res['simulate'] = self.simulate
+        res['created'] = self.created
+        res['timeout'] = self.timeout
+        res['parent_dir'] = self.parent_dir
+
+        return res
+
+    #--------------------------------------------------------------------------
     def __del__(self):
         """Destructor. Removes the pidfile, if it was created by ourselfes."""
 

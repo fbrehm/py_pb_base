@@ -301,6 +301,27 @@ class GenericSocket(PbBaseObject):
         raise FunctionNotImplementedError('bind', self.__class__.__name__)
 
     #--------------------------------------------------------------------------
+    def as_dict(self):
+        """
+        Transforms the elements of the object into a dict
+
+        @return: structure as dict
+        @rtype:  dict
+        """
+
+        res = super(GenericSocket, self).as_dict()
+        res['timeout'] = self.timeout
+        res['fileno'] = self.fileno
+        res['connected'] = self.connected
+        res['bonded'] = self.bonded
+        res['interrupted'] = self.interrupted
+        res['request_queue_size'] = self.request_queue_size
+        res['buffer_size'] = self.buffer_size
+        res['group'] = self.group
+
+        return res
+
+    #--------------------------------------------------------------------------
     def __del__(self):
         """Destructor, closes current socket, if necessary."""
 
