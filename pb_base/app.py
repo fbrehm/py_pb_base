@@ -13,6 +13,7 @@ import os
 import logging
 import re
 import platform
+import gettext
 
 from gettext import gettext as _
 
@@ -33,6 +34,15 @@ from pb_base.object import PbBaseObject
 __version__ = '0.5.2'
 
 log = logging.getLogger(__name__)
+
+basedir = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
+locale_dir = os.path.join(basedir, 'po')
+if not os.path.isdir(locale_dir):
+    locale_dir = None
+
+translator = gettext.translation('py_pb_base', locale_dir, fallback = True)
+_ = translator.lgettext
+__ = translator.lngettext
 
 #==============================================================================
 class PbApplicationError(PbBaseObjectError):
@@ -413,7 +423,7 @@ class PbApplication(PbBaseObject):
             sys.exit(98)
 
         if not self.initialized:
-            raise PbApplicationError(("Object '%s' seems not to be completely " +
+            raise PbApplicationError(_("Object '%s' seems not to be completely " +
                                     "initialized.") %
                     (self.__class__.__name__))
 
@@ -424,7 +434,7 @@ class PbApplication(PbBaseObject):
             self.exit_value = 99
 
         if self.verbose > 1:
-            log.info("Ending.")
+            log.info(_("Ending."))
 
         try:
             self.post_run()
@@ -443,7 +453,7 @@ class PbApplication(PbBaseObject):
         """
 
         if self.verbose > 1:
-            log.info("executing post_run() ...")
+            log.info(_("executing post_run() ..."))
 
     #--------------------------------------------------------------------------
     def _init_arg_parser(self):
@@ -465,7 +475,7 @@ class PbApplication(PbBaseObject):
 
         self.init_arg_parser()
 
-        general_group = self.arg_parser.add_argument_group('General options')
+        general_group = self.arg_parser.add_argument_group(_('General options'))
         general_group.add_argument(
                 '--color',
                 action = "store",
@@ -624,7 +634,7 @@ class PbApplication(PbBaseObject):
 
 if __name__ == "__main__":
 
-    pass
+    print "Basedir: %s" % (basedir)
 
 #==============================================================================
 
