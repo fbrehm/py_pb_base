@@ -45,7 +45,7 @@ msgstr "Verwende farbige Ausgabe für Meldungen."
 
 #: pb_base/app.py:483
 msgid "Increase the verbosity level"
-msgstr "Erhöhen des Ausführlichkeits-Neveaus."
+msgstr "Erhöhen des Ausführlichkeits-Niveaus."
 
 #: pb_base/app.py:489
 msgid "Show this help message and exit"
