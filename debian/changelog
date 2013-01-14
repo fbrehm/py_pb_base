@@ -1,3 +1,10 @@
+profitbricks-python-base (0.3.12-1) unstable; urgency=low
+
+  * Version bump
+  * Started with internationalisation
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Mon, 14 Jan 2013 18:22:15 +0100
+
 profitbricks-python-base (0.3.11-1) unstable; urgency=low
 
   * Version bump
