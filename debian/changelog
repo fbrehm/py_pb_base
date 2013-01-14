@@ -1,3 +1,10 @@
+profitbricks-python-base (0.3.12-2) unstable; urgency=low
+
+  * Version bump
+  * Added i18n to debian/rules
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Mon, 14 Jan 2013 18:58:05 +0100
+
 profitbricks-python-base (0.3.12-1) unstable; urgency=low
 
   * Version bump

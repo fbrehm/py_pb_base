@@ -19,7 +19,13 @@ build-stamp:
 	$(info )
 
 	dh_testdir
+	@echo ""
+	@echo "Setup python sources ..."
 	python setup.py build
+
+	@echo ""
+	@echo "Compiling language message files ..."
+	$(MAKE) -C po
 	touch build-stamp
 
 clean:
@@ -33,6 +39,8 @@ clean:
 	rm -f build-stamp
 	rm -rf build
 	-find . -name '*.py[co]' | xargs rm -f
+	$(MAKE) -C po clean
+
 	dh_clean
 	rm -rf pb_base.egg-info
 	rm -rf build
@@ -52,6 +60,8 @@ install: build
 	@echo ""
 	@echo "Installing Python stuff ..."
 	python setup.py install --force --root=$(INSTALL_DIR) --no-compile -O0 --install-layout=deb
+
+	$(MAKE) -C po DESTDIR=$(CURDIR)/debian/$(BIN_PKGNAME) install
 
 	@echo ""
 	@echo "Documentation ..."
