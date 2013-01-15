@@ -15,7 +15,6 @@ import os
 import logging
 import datetime
 
-from gettext import gettext as _
 from cStringIO import StringIO
 
 # Third party modules
@@ -38,9 +37,14 @@ from pb_base.validator import pbvalidator_checks
 from pb_base.app import PbApplicationError
 from pb_base.app import PbApplication
 
+from pb_base.translate import translator
+
 __version__ = '0.5.5'
 
 log = logging.getLogger(__name__)
+
+_ = translator.lgettext
+__ = translator.lngettext
 
 #==============================================================================
 class PbCfgAppError(PbApplicationError):
@@ -426,13 +430,14 @@ class PbCfgApp(PbApplication):
         """
 
         if self.verbose > 2:
-            log.debug("Read cfg files with character set '%s' ...",
+            log.debug(_("Read cfg files with character set '%s' ..."),
                     self.cfg_encoding)
 
         if self.verbose > 3:
             cfgspec = StringIO()
             self.cfg_spec.write(cfgspec)
-            log.debug("Used config specification:\n%s", cfgspec.getvalue())
+            log.debug((_("Used config specification:") + "\n%s"),
+                    cfgspec.getvalue())
             cfgspec.close()
             del cfgspec
 
@@ -452,7 +457,7 @@ class PbCfgApp(PbApplication):
         for cfg_file in existing_cfg_files:
 
             if self.verbose > 1:
-                log.debug("Reading in configuration file '%s' ...",
+                log.debug(_("Reading in configuration file '%s' ..."),
                           cfg_file)
 
             cfg = ConfigObj(
@@ -463,12 +468,12 @@ class PbCfgApp(PbApplication):
             )
 
             if self.verbose > 2:
-                log.debug("Found configuration:\n%r", pp(cfg))
+                log.debug((_("Found configuration:") + "\n%r"), pp(cfg))
 
             result = cfg.validate(
                     validator, preserve_errors = True, copy = True)
             if self.verbose > 2:
-                log.debug("Validation result:\n%s", pp(result))
+                log.debug((_("Validation result:") + "\n%s"), pp(result))
 
             if not result is True:
                 cfgfiles_ok = False
@@ -484,9 +489,10 @@ class PbCfgApp(PbApplication):
 
         if self.verbose > 2:
             if len(existing_cfg_files) > 1:
-                log.debug("Using merged configuration:\n%r", pp(self.cfg))
+                log.debug((_("Using merged configuration:") + "\n%r"),
+                        pp(self.cfg))
             else:
-                log.debug("Using configuration:\n%r", pp(self.cfg))
+                log.debug((_("Using configuration:") + "\n%r", pp(self.cfg))
 
     #--------------------------------------------------------------------------
     def _transform_cfg_errors(self, result, div = None):
@@ -506,7 +512,7 @@ class PbCfgApp(PbApplication):
         """
 
         if result is None:
-            return "Undefined error"
+            return _("Undefined error")
 
         error_str = ''
         for key in result:
@@ -528,8 +534,9 @@ class PbCfgApp(PbApplication):
                 if div:
                     section = ', '.join(map(
                             lambda x: ('[' + x.encode('utf8') + ']'), div))
-                msg = (_("In section %s key '%s': %s") + "\n") % (
-                        section, key.encode('utf8'), str(val).encode('utf8'))
+                msg = (_("In section %(section)s key '%(key)s': %(value)s") +
+                        "\n") % {'section': section, 'key': key.encode('utf8'),
+                        'value': str(val).encode('utf8')}
                 error_str += msg
 
         return error_str

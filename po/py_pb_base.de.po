@@ -18,77 +18,117 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: pb_base/app.py:405
+#: pb_base/app.py:411
 msgid "The application is not complete initialized."
 msgstr "Die Anwendung wurde noch nicht vollständig initialisiert."
 
-#: pb_base/app.py:416
+#: pb_base/app.py:422
 #, python-format
 msgid "Object '%s' seems not to be completely initialized."
 msgstr "Das Objekt '%s' scheint noch nicht vollständig initialisiert worden zu sein."
 
-#: pb_base/app.py:427 pb_base/fork_daemon.py:355
+#: pb_base/app.py:433 pb_base/fork_daemon.py:355
 msgid "Ending."
 msgstr "Beenden."
 
-#: pb_base/app.py:446
+#: pb_base/app.py:452
 msgid "executing post_run() ..."
 msgstr "führe post_run(() aus ..."
 
-#: pb_base/app.py:478
+#: pb_base/app.py:474
 msgid "General options"
 msgstr "Allgemeine Optionen"
 
-#: pb_base/app.py:477
+#: pb_base/app.py:483
 msgid "Use colored output for messages."
 msgstr "Verwende farbige Ausgabe für Meldungen."
 
-#: pb_base/app.py:483
+#: pb_base/app.py:489
 msgid "Increase the verbosity level"
 msgstr "Erhöhen des Ausführlichkeits-Niveaus."
 
-#: pb_base/app.py:489
+#: pb_base/app.py:495
 msgid "Show this help message and exit"
 msgstr "Zeigt die Hilfe-Meldung an und beendet sich."
 
-#: pb_base/app.py:495
+#: pb_base/app.py:501
 msgid "Display brief usage message and exit"
 msgstr "Stellt eine kurze Meldung zur Verwendung dar und beendet sich."
 
-#: pb_base/app.py:500
+#: pb_base/app.py:506
 #, python-format
 msgid "Version of %(prog)s: %s"
 msgstr "Programmversion von %%(prog)s: %s"
 
-#: pb_base/app.py:501
+#: pb_base/app.py:507
 msgid "Show program's version number and exit"
 msgstr "Stellt die Programmversion dar und beendet sich."
 
-#: pb_base/cfg_app.py:306
-msgid "Configuration file to use additional to the "
+#: pb_base/cfg_app.py:313
+msgid ""
+"Configuration file to use additional to the standard configuration files."
 msgstr ""
+"Konfigurationsdatei, die zusätzlich zu den Standard-Konfigurations-Dateien "
+"verwendet werden soll"
 
-#: pb_base/cfg_app.py:315
+#: pb_base/cfg_app.py:322
 msgid "The encoding character set of the configuration files"
-msgstr ""
+msgstr "Der Encoding-Zeichensatz der Konfigurations-Dateien"
 
-#: pb_base/cfg_app.py:323
-msgid "Generates a default configuration, prints "
+#: pb_base/cfg_app.py:330
+msgid ""
+"Generates a default configuration, prints it out to STDOUT and exit"
 msgstr ""
+"Generiert eine Standard-Konfiguration, schreibt diese nach STDOUT "
+"und beendet sich."
 
-#: pb_base/cfg_app.py:472
+#: pb_base/cfg_app.py:433
+#, python-format
+msgid "Read cfg files with character set '%s' ..."
+msgstr "Lese Konfigurations-Dateien mit Zeichensatz '%s' ..."
+
+#: pb_base/cfg_app.py:451
+msgid "Used config specification:"
+msgstr "Verwendete Konfigurations-Beschreibung:"
+
+#: pb_base/cfg_app.py:460
+#, python-format
+msgid "Reading in configuration file '%s' ..."
+msgstr "Lese Konfigurations-Datei '%s' ein ..."
+
+#: pb_base/cfg_app.py:471
+msgid "Found configuration:"
+msgstr "Gefundene Konfiguration:"
+
+#: pb_base/cfg_app.py:476
+msgid "Validation result:"
+msgstr "Ergebnis der Validierung:"
+
+#: pb_base/cfg_app.py:480
 #, python-format
 msgid "Wrong configuration in '%s' found:"
-msgstr ""
+msgstr "Ungültige Konfigurationsanweisung in '%s' gefunden:"
 
-#: pb_base/cfg_app.py:474
+#: pb_base/cfg_app.py:482
 msgid "Configuration error"
-msgstr ""
+msgstr "Konfigurationsfehler"
 
-#: pb_base/cfg_app.py:528
+#: pb_base/cfg_app.py:492
+msgid "Using merged configuration:"
+msgstr "Verwende fusionierte Konfiguration:"
+
+#: pb_base/cfg_app.py:495
+msgid "Using configuration:"
+msgstr "Verwende Konfiguration:"
+
+#: pb_base/cfg_app.py:515
+msgid "Undefined error"
+msgstr "Undefinierter Fehler"
+
+#: pb_base/cfg_app.py:537
 #, python-format
-msgid "In section %s key '%s': %s"
-msgstr ""
+msgid "In section %(section)s key '%(key)s': %(value)s"
+msgstr "In Abschnitt %(section)s Schlüssel '%(key)s': %(value)s"
 
 #: pb_base/daemon.py:166
 #, python-format
@@ -631,3 +671,14 @@ msgstr ""
 #, python-format
 msgid "Start listening on socket with a queue size of %d."
 msgstr ""
+
+#: pb_base/translate.py:40
+#, python-format
+msgid "Basedir: %r"
+msgstr "Basis-Verzeichnis: %r"
+
+#: pb_base/translate.py:41
+#, python-format
+msgid "Found .mo-file: %r"
+msgstr "Gefundene .mo-Datei: %r"
+
