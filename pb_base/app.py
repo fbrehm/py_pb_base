@@ -16,9 +16,6 @@ import os
 import logging
 import re
 import platform
-import gettext
-
-from gettext import gettext as _
 
 # Third party modules
 import argparse
@@ -34,16 +31,12 @@ from pb_base.errors import FunctionNotImplementedError
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
+from pb_base.translate import translator
+
 __version__ = '0.5.2'
 
 log = logging.getLogger(__name__)
 
-basedir = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
-locale_dir = os.path.join(basedir, 'po')
-if not os.path.isdir(locale_dir):
-    locale_dir = None
-
-translator = gettext.translation('py_pb_base', locale_dir, fallback = True)
 _ = translator.lgettext
 __ = translator.lngettext
 
@@ -637,7 +630,7 @@ class PbApplication(PbBaseObject):
 
 if __name__ == "__main__":
 
-    print "Basedir: %s" % (basedir)
+    pass
 
 #==============================================================================
 
