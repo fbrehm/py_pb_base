@@ -1,3 +1,11 @@
+profitbricks-python-base (0.3.13-1) unstable; urgency=low
+
+  * Version bump
+  * Moved translation object into a seperate module
+  * Translation of messages in pb_base/app.py and pb_base/cfg_app.py
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Tue, 15 Jan 2013 12:57:05 +0100
+
 profitbricks-python-base (0.3.12-2) unstable; urgency=low
 
   * Version bump
