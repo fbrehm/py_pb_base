@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+@author: Frank Brehm
+@contact: frank.brehm@profitbricks.com
+@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: The module for a daemon application object, which is forking
           to execute the underlaying action.
           It provides all from the daemon application object with

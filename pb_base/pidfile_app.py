@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+@author: Frank Brehm
+@contact: frank.brehm@profitbricks.com
+@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: The module for a application object supporting an application,
           which should use a pidfile to ensure a singelton execution
           on the system.

@@ -4,7 +4,7 @@
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
 @organization: Profitbricks GmbH
-@copyright: (c) 2010-2012 by Profitbricks GmbH
+@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
 @license: GPL3
 @summary: module for a UNIX socket object class
 """
@@ -35,7 +35,7 @@ from pb_base.socket_obj import GenericSocketError
 from pb_base.socket_obj import GenericSocket
 
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
-__copyright__ = '(C) 2010-2012 by profitbricks.com'
+__copyright__ = '(C) 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin'
 __contact__ = 'frank.brehm@profitbricks.com'
 __version__ = '0.2.4'
 __license__ = 'GPL3'

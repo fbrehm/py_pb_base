@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+@author: Frank Brehm
+@contact: frank.brehm@profitbricks.com
+@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: The module provides an object class with a dict, which can
           be updated in a recursive way.
           It is originated by Jannis Andrija Schnitzer::
