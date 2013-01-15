@@ -492,7 +492,7 @@ class PbCfgApp(PbApplication):
                 log.debug((_("Using merged configuration:") + "\n%r"),
                         pp(self.cfg))
             else:
-                log.debug((_("Using configuration:") + "\n%r", pp(self.cfg))
+                log.debug((_("Using configuration:") + "\n%r"), pp(self.cfg))
 
     #--------------------------------------------------------------------------
     def _transform_cfg_errors(self, result, div = None):
