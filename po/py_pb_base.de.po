@@ -130,95 +130,110 @@ msgstr "Undefinierter Fehler"
 msgid "In section %(section)s key '%(key)s': %(value)s"
 msgstr "In Abschnitt %(section)s Schlüssel '%(key)s': %(value)s"
 
-#: pb_base/daemon.py:166
+#: pb_base/daemon.py:169
 #, python-format
 msgid "Invalid facility name '%s' given."
-msgstr ""
+msgstr "Ungültiger Facility-Name '%s' angegeben."
 
-#: pb_base/daemon.py:402
-msgid "The syslog facility to use when logging as a daemon "
+#: pb_base/daemon.py:405
+#, python-format
+msgid "The syslog facility to use when logging as a daemon (default: %s)."
 msgstr ""
+"Die zu verwendende Syslog-Facility, wenn die Anwendung als Daemon laufen "
+"soll (Default: %s)."
 
-#: pb_base/daemon.py:412
-msgid "Log to console instead to syslog. Don't daemonize "
+#: pb_base/daemon.py:415
+msgid ""
+"Log to console instead to syslog. Don't daemonize the application, "
+"running in foreground."
 msgstr ""
+"Logging zur Konsole anstatt nach Syslog. Die Anwendung soll im Verdergrund"
+"anstelle als eines Daemons laufen."
 
-#: pb_base/daemon.py:521
+#: pb_base/daemon.py:524
 #, python-format
 msgid "Got a signal %s."
-msgstr ""
+msgstr "Signal %s empfangen."
 
-#: pb_base/daemon.py:523
+#: pb_base/daemon.py:526
 #, python-format
-msgid "process with PID %(pid)d got signal %(signal)s."
-msgstr ""
+msgid "Process with PID %(pid)d got signal %(signal)s."
+msgstr "Der Prozess mit der PID %(pid)d hat das Signal %(signal)s empfangen."
 
-#: pb_base/daemon.py:558
+#: pb_base/daemon.py:531
+msgid "Nothing to do on signal USR1 or USR2."
+msgstr "Auf das Signal USR1 oder USR2 brauch ich nichts zu tun."
+
+#: pb_base/daemon.py:539
+msgid "Got a signal for forced shutdown."
+msgstr "Habe ein Signal zum forcierten Herunterfahren empfangen."
+
+#: pb_base/daemon.py:561
 #, python-format
 msgid "Exit from %s, so sad ..."
-msgstr ""
-
-#: pb_base/daemon.py:575
-#, python-format
-msgid "Using '%s' as error log file."
-msgstr ""
+msgstr "Beende %s, schade auch ..."
 
 #: pb_base/daemon.py:578
 #, python-format
-msgid "Using '%s' as parent directory of error log file."
-msgstr ""
+msgid "Using '%s' as error log file."
+msgstr "Verwende '%s' als Fehler-Logdatei."
 
-#: pb_base/daemon.py:582
+#: pb_base/daemon.py:581
+#, python-format
+msgid "Using '%s' as parent directory of error log file."
+msgstr "Verwende '%s' als übergeordnetes Verzeichnis der Fehler-Logdatei."
+
+#: pb_base/daemon.py:585
 #, python-format
 msgid "Log directory '%s' doesn't exists."
-msgstr ""
+msgstr "Das Log-Verzeichnis '%s' existiert nicht."
 
-#: pb_base/daemon.py:586
+#: pb_base/daemon.py:589
 #, python-format
-msgid "Log directory '%s' exists, but is not "
-msgstr ""
+msgid "Log directory '%s' exists, but is not a directory."
+msgstr "Das Log-Verzeichnis '%s' existiert, ist aber kein Verzeichnis."
 
-#: pb_base/daemon.py:594
+#: pb_base/daemon.py:597
 #, python-format
 msgid "Could not open error logfile: %s"
-msgstr ""
+msgstr "Konnte Fehler-Logdatei nicht öffnen: %s"
 
-#: pb_base/daemon.py:598
+#: pb_base/daemon.py:601
 #, python-format
 msgid "Could not open error logfile %(log)s: %(err)s"
-msgstr ""
+msgstr "Konnte Fehler-Logdatei %(log)s nicht öffnen: %(err)s"
 
 #. do the first fork
-#: pb_base/daemon.py:604
+#: pb_base/daemon.py:607
 msgid "First fork ..."
-msgstr ""
+msgstr "Erster Fork ..."
 
-#: pb_base/daemon.py:611
+#: pb_base/daemon.py:614
 msgid "Fork #1 failed: "
-msgstr ""
+msgstr "Fork Nr. 1 fehlgeschlagen: "
 
 #. do second fork
-#: pb_base/daemon.py:620
+#: pb_base/daemon.py:623
 msgid "Second fork ..."
-msgstr ""
-
-#: pb_base/daemon.py:627
-msgid "Fork #2 failed: "
-msgstr ""
+msgstr "Zweiter Fork ..."
 
 #: pb_base/daemon.py:630
+msgid "Fork #2 failed: "
+msgstr "Fork Nr. 2 fehlgeschlagen: "
+
+#: pb_base/daemon.py:633
 #, python-format
 msgid "%(app)s (v%(ver)s) started as daemon with PID %(pid)d."
-msgstr ""
+msgstr "%(app)s (v%(ver)s) als Daemon mit der PID %(pid)d gestartet."
 
 #. redirect standard file descriptors
-#: pb_base/daemon.py:636
+#: pb_base/daemon.py:639
 msgid "Redirect standard file descriptors ..."
-msgstr ""
+msgstr "Leite Standard-Dateideskriptoren um ..."
 
-#: pb_base/daemon.py:648
+#: pb_base/daemon.py:651
 msgid "I'm a daemon now - Boooaaaahhh!!!"
-msgstr ""
+msgstr "Ich bin dämonisiert worden, wau - ·▷▶◊◀◁·"
 
 #: pb_base/errors.py:52
 #, python-format

@@ -403,7 +403,7 @@ class PbDaemon(PidfileApp):
         super(PbDaemon, self).init_arg_parser()
 
         help_txt = _("The syslog facility to use when logging as a daemon " +
-                "(default: %s)") % (self._default_facility_name)
+                "(default: %s).") % (self._default_facility_name)
 
         self.arg_parser.add_argument(
                 "-F", "--syslog-facility",
@@ -523,12 +523,12 @@ class PbDaemon(PidfileApp):
             signame = signal_names[signum]
         log.info(_("Got a signal %s.") % (signame))
 
-        msg = _("process with PID %(pid)d got signal %(signal)s.") % {
+        msg = _("Process with PID %(pid)d got signal %(signal)s.") % {
                 'pid': os.getpid(), 'signal': signame}
         self.handle_info(msg, self.appname)
 
         if (signum == signal.SIGUSR1) or (signum == signal.SIGUSR2):
-            log.info("Nothing to do on signal USR1 or USR2.")
+            log.info(_("Nothing to do on signal USR1 or USR2."))
             return
 
         # set forced shutdown, except SIGHUP
@@ -536,7 +536,7 @@ class PbDaemon(PidfileApp):
         if ( (signum == signal.SIGINT) or
                 (signum == signal.SIGABRT) or
                 (signum == signal.SIGTERM) ):
-            log.info("Got a signal for forced shutdown.")
+            log.info(_("Got a signal for forced shutdown."))
             forced = True
 
         self._forced_shutdown = forced
