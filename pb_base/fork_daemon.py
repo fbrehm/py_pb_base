@@ -17,8 +17,6 @@ import logging
 import time
 import signal
 
-from gettext import gettext as _
-
 # Third party modules
 
 # Own modules
@@ -46,9 +44,14 @@ from pb_base.pidfile_app import PidfileAppError
 from pb_base.daemon import PbDaemonError
 from pb_base.daemon import PbDaemon
 
+from pb_base.translate import translator
+
 __version__ = '0.2.0'
 
 log = logging.getLogger(__name__)
+
+_ = translator.lgettext
+__ = translator.lngettext
 
 #--------------------------------------------------------------------------
 
@@ -348,7 +351,7 @@ class ForkingDaemon(PbDaemon):
         """Code executing after executing the main routine."""
 
         if self.verbose > 1:
-            log.info("Cleaning up ...")
+            log.info(_("Cleaning up ..."))
 
         # Collect all children processes
         self.collect_children(collect_all = True)
@@ -439,10 +442,10 @@ class ForkingDaemon(PbDaemon):
                     log.error(msg, (timeout * 3))
                     raise ForkingDaemonError(msg)
                 begin = time.time()
-                log.debug("New stage %d in waiting for child processes.", stage)
+                log.debug(_("New stage %d in waiting for child processes."), stage)
 
             if self.verbose > 1:
-                log.debug("Waiting for finished children, stage %d.", stage)
+                log.debug(_("Waiting for finished children, stage %d."), stage)
 
             # XXX: This will wait for any child process, not just ones
             # spawned by this library. This could confuse other

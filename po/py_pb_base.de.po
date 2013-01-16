@@ -27,7 +27,7 @@ msgstr "Die Anwendung wurde noch nicht vollständig initialisiert."
 msgid "Object '%s' seems not to be completely initialized."
 msgstr "Das Objekt '%s' scheint noch nicht vollständig initialisiert worden zu sein."
 
-#: pb_base/app.py:433 pb_base/fork_daemon.py:355
+#: pb_base/app.py:433 pb_base/fork_daemon.py:361
 msgid "Ending."
 msgstr "Beenden."
 
@@ -253,60 +253,78 @@ msgstr "Timeout beim Lesen"
 msgid "Timeout error on writing"
 msgstr "Timeout beim Schreiben"
 
-#: pb_base/fork_daemon.py:248
+#: pb_base/fork_daemon.py:254
 #, python-format
-msgid "Wrong value for max_children %(val)d, must be between "
+msgid "Wrong value for max_children %(val)d, must be between 1 and %(max)d."
 msgstr ""
+"Ungültiger Wert für max_children %(val)d, er muss zwischen 1 und %(max)d liegen."
 
-#: pb_base/fork_daemon.py:269
+#: pb_base/fork_daemon.py:275
 #, python-format
-msgid "Wrong value for timeout_collect_children %d, "
+msgid "Wrong value for timeout_collect_children %d, must be greater than zero."
 msgstr ""
+"Ungültiger Wert für timeout_collect_children %d, er muss größer als Null sein."
 
-#: pb_base/fork_daemon.py:358
+#: pb_base/fork_daemon.py:354
+msgid "Cleaning up ..."
+msgstr "Räume auf ..."
+
+#: pb_base/fork_daemon.py:364
 #, python-format
 msgid "Daemon (v%s) ended."
-msgstr ""
+msgstr "Daemon-Prozess (v%s) beendet."
 
-#: pb_base/fork_daemon.py:385
+#: pb_base/fork_daemon.py:391
 msgid "Collecting all child processes ..."
-msgstr ""
+msgstr "Sammle alle Kind-Prozesse zusammen ..."
 
-#: pb_base/fork_daemon.py:388
+#: pb_base/fork_daemon.py:394
 msgid "Collecting finished child processes ..."
-msgstr ""
+msgstr "Sammle alle beendeten Kind-Prozesse zusammen ..."
 
-#: pb_base/fork_daemon.py:392
+#: pb_base/fork_daemon.py:398
 msgid "No active children found."
-msgstr ""
+msgstr "Keine aktiven Kind-Prozesse gefunden."
 
-#: pb_base/fork_daemon.py:424
+#: pb_base/fork_daemon.py:430
 #, python-format
 msgid "Sending signal %d to all child processes."
-msgstr ""
+msgstr "Sende Signal %d an alle Kind-Prozesse."
 
-#: pb_base/fork_daemon.py:434
+#: pb_base/fork_daemon.py:440
 #, python-format
-msgid "Maximum timeout of %d seconds for waiting "
+msgid ""
+"Maximum timeout of %d seconds for waiting on finished child processes reached."
 msgstr ""
+"Maximalen Timeout von %d Sekunden beim Warten auf beendete Kind-Prozesse erreicht."
 
-#: pb_base/fork_daemon.py:490
+#: pb_base/fork_daemon.py:445
+#, python-format
+msgid "New stage %d in waiting for child processes."
+msgstr "Neues Level %d beim Warten auf Kind-Prozesse."
+
+#: pb_base/fork_daemon.py:448
+#, python-format
+msgid "Waiting for finished children, stage %d."
+msgstr "Warte auf beendete Kind-Prozesse, Level %d."
+
+#: pb_base/fork_daemon.py:496
 #, python-format
 msgid "Removing child %d from active child list ..."
-msgstr ""
+msgstr "Entferne Kind-Prozess %d von der Liste der aktiven Prozesse ..."
 
-#: pb_base/fork_daemon.py:513
+#: pb_base/fork_daemon.py:519
 msgid "Forking a child process ..."
-msgstr ""
+msgstr "Forke einen Kind-Prozess ..."
 
-#: pb_base/fork_daemon.py:531
+#: pb_base/fork_daemon.py:537
 #, python-format
 msgid "Forked with process ID %d."
-msgstr ""
+msgstr "Mit Prozess-ID %d geforkt."
 
-#: pb_base/fork_daemon.py:538
+#: pb_base/fork_daemon.py:544
 msgid "And here is the child ..."
-msgstr ""
+msgstr "Und hier ist das Baby ..."
 
 #: pb_base/handler/__init__.py:68
 msgid "Unknown OS command."

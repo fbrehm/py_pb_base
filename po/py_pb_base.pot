@@ -243,58 +243,73 @@ msgstr ""
 msgid "Timeout error on writing"
 msgstr ""
 
-#: pb_base/fork_daemon.py:248
+#: pb_base/fork_daemon.py:254
 #, python-format
-msgid "Wrong value for max_children %(val)d, must be between "
+msgid "Wrong value for max_children %(val)d, must be between 1 and %(max)d."
 msgstr ""
 
-#: pb_base/fork_daemon.py:269
+#: pb_base/fork_daemon.py:275
 #, python-format
-msgid "Wrong value for timeout_collect_children %d, "
+msgid "Wrong value for timeout_collect_children %d, must be greater than zero."
 msgstr ""
 
-#: pb_base/fork_daemon.py:358
+#: pb_base/fork_daemon.py:354
+msgid "Cleaning up ..."
+msgstr ""
+
+#: pb_base/fork_daemon.py:364
 #, python-format
 msgid "Daemon (v%s) ended."
 msgstr ""
 
-#: pb_base/fork_daemon.py:385
+#: pb_base/fork_daemon.py:391
 msgid "Collecting all child processes ..."
 msgstr ""
 
-#: pb_base/fork_daemon.py:388
+#: pb_base/fork_daemon.py:394
 msgid "Collecting finished child processes ..."
 msgstr ""
 
-#: pb_base/fork_daemon.py:392
+#: pb_base/fork_daemon.py:398
 msgid "No active children found."
 msgstr ""
 
-#: pb_base/fork_daemon.py:424
+#: pb_base/fork_daemon.py:430
 #, python-format
 msgid "Sending signal %d to all child processes."
 msgstr ""
 
-#: pb_base/fork_daemon.py:434
+#: pb_base/fork_daemon.py:440
 #, python-format
-msgid "Maximum timeout of %d seconds for waiting "
+msgid ""
+"Maximum timeout of %d seconds for waiting on finished child processes reached."
 msgstr ""
 
-#: pb_base/fork_daemon.py:490
+#: pb_base/fork_daemon.py:445
+#, python-format
+msgid "New stage %d in waiting for child processes."
+msgstr ""
+
+#: pb_base/fork_daemon.py:448
+#, python-format
+msgid "Waiting for finished children, stage %d."
+msgstr ""
+
+#: pb_base/fork_daemon.py:496
 #, python-format
 msgid "Removing child %d from active child list ..."
 msgstr ""
 
-#: pb_base/fork_daemon.py:513
+#: pb_base/fork_daemon.py:519
 msgid "Forking a child process ..."
 msgstr ""
 
-#: pb_base/fork_daemon.py:531
+#: pb_base/fork_daemon.py:537
 #, python-format
 msgid "Forked with process ID %d."
 msgstr ""
 
-#: pb_base/fork_daemon.py:538
+#: pb_base/fork_daemon.py:544
 msgid "And here is the child ..."
 msgstr ""
 
