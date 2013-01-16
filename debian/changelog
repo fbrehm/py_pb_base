@@ -1,3 +1,10 @@
+profitbricks-python-base (0.3.15-1) unstable; urgency=low
+
+  * Version bump
+  * Translated some more modules
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Wed, 16 Jan 2013 19:37:15 +0100
+
 profitbricks-python-base (0.3.14-1) unstable; urgency=low
 
   * Version bump
