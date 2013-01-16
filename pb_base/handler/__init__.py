@@ -21,8 +21,6 @@ import pipes
 import signal
 import errno
 
-from gettext import gettext as _
-
 # Own modules
 from pb_base.common import pp, caller_search_path
 
@@ -33,9 +31,14 @@ from pb_base.errors import PbReadTimeoutError, PbWriteTimeoutError
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
+from pb_base.translate import translator
+
 __version__ = '0.2.1'
 
 log = logging.getLogger(__name__)
+
+_ = translator.lgettext
+__ = translator.lngettext
 
 # Some module varriables
 CHOWN_CMD = os.sep + os.path.join('bin', 'chown')
@@ -84,10 +87,8 @@ class CommandNotFoundError(PbBaseHandlerError):
         """
 
         cmds = ', '.join(map(lambda x: ("'" + str(x) + "'"), self.cmd_list))
-        msg = "Could not found OS command"
-        if len(self.cmd_list) != 1:
-            msg += 's'
-        msg += ": " + cmds
+        msg = __("Could not found OS command", "Could not found OS commands",
+                len(self.cmd_list)) + ": " + cmds
         return msg
 
 

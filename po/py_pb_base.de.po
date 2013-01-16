@@ -326,13 +326,19 @@ msgstr "Mit Prozess-ID %d geforkt."
 msgid "And here is the child ..."
 msgstr "Und hier ist das Baby ..."
 
-#: pb_base/handler/__init__.py:68
+#: pb_base/handler/__init__.py:74
 msgid "Unknown OS command."
-msgstr ""
+msgstr "Unbekanntes Betriebssystemkommando."
 
-#: pb_base/handler/__init__.py:75
+#: pb_base/handler/__init__.py:81
 msgid "Empty command list given."
-msgstr ""
+msgstr "Leere Liste mit Kommandos gegeben."
+
+#: pb_base/handler/__init__.py:95
+msgid "Could not found OS command"
+msgid_plural "Could not found OS commands"
+msgstr[0] "Konnte Betriebssystemkommando nicht finden"
+msgstr[1] "Konnte Betriebssystemkommandos nicht finden"
 
 #: pb_base/handler/df.py:394
 #, python-format
