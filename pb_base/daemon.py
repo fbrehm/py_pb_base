@@ -15,8 +15,6 @@ import os
 import logging
 import signal
 
-from gettext import gettext as _
-
 # Third party modules
 
 # Own modules
@@ -42,9 +40,14 @@ from pb_base.pidfile import PidFileInUseError
 from pb_base.pidfile_app import PidfileAppError
 from pb_base.pidfile_app import PidfileApp
 
+from pb_base.translate import translator
+
 __version__ = '0.3.8'
 
 log = logging.getLogger(__name__)
+
+_ = translator.lgettext
+__ = translator.lngettext
 
 #--------------------------------------------------------------------------
 
