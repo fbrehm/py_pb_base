@@ -225,21 +225,21 @@ msgstr ""
 msgid "I'm a daemon now - Boooaaaahhh!!!"
 msgstr ""
 
-#: pb_base/errors.py:52
+#: pb_base/errors.py:61
 #, python-format
 msgid "Function %(func)s() has to be overridden in class '%(cls)s'."
 msgstr ""
 
-#: pb_base/errors.py:83
+#: pb_base/errors.py:92
 #, python-format
 msgid " (timeout after %0.1f secs)"
 msgstr ""
 
-#: pb_base/errors.py:109
+#: pb_base/errors.py:118
 msgid "Timeout error on reading"
 msgstr ""
 
-#: pb_base/errors.py:130
+#: pb_base/errors.py:139
 msgid "Timeout error on writing"
 msgstr ""
 

@@ -235,23 +235,23 @@ msgstr "Leite Standard-Dateideskriptoren um ..."
 msgid "I'm a daemon now - Boooaaaahhh!!!"
 msgstr "Ich bin dämonisiert worden, wau - ·▷▶◊◀◁·"
 
-#: pb_base/errors.py:52
+#: pb_base/errors.py:61
 #, python-format
 msgid "Function %(func)s() has to be overridden in class '%(cls)s'."
-msgstr ""
+msgstr "Die Funktion %(func)s() muss in der Klasse '%(cls)s' überschrieben werden."
 
-#: pb_base/errors.py:83
+#: pb_base/errors.py:92
 #, python-format
 msgid " (timeout after %0.1f secs)"
-msgstr ""
+msgstr " (Timeout nach %0.1f Sekunden)"
 
-#: pb_base/errors.py:109
+#: pb_base/errors.py:118
 msgid "Timeout error on reading"
-msgstr ""
+msgstr "Timeout beim Lesen"
 
-#: pb_base/errors.py:130
+#: pb_base/errors.py:139
 msgid "Timeout error on writing"
-msgstr ""
+msgstr "Timeout beim Schreiben"
 
 #: pb_base/fork_daemon.py:248
 #, python-format

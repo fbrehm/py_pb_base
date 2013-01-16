@@ -11,7 +11,13 @@
 import errno
 from gettext import gettext as _
 
+# Own modules
+from pb_base.translate import translator
+
 __version__ = '0.1.1'
+
+_ = translator.lgettext
+__ = translator.lngettext
 
 
 #==============================================================================
