@@ -13,8 +13,6 @@ import os
 import logging
 import re
 
-from gettext import gettext as _
-
 # Own modules
 from pb_base.common import pp
 
@@ -29,12 +27,17 @@ from pb_base.handler import PbBaseHandlerError
 from pb_base.handler import CommandNotFoundError
 from pb_base.handler import PbBaseHandler
 
-__version__ = '0.1.0'
+from pb_base.translate import translator
+
+__version__ = '0.1.1'
 
 log = logging.getLogger(__name__)
 
 # Some module varriables
 FUSER_CMD = os.sep + os.path.join('bin', 'fuser')
+
+_ = translator.lgettext
+__ = translator.lngettext
 
 #==============================================================================
 class FuserError(PbBaseHandlerError):
@@ -127,7 +130,7 @@ class FuserHandler(PbBaseHandler):
 
         self.initialized = True
         if self.verbose > 3:
-            log.debug("Initialized.")
+            log.debug(_("Initialized."))
 
     #------------------------------------------------------------
     @property
@@ -178,17 +181,17 @@ class FuserHandler(PbBaseHandler):
             if ret_code == 1:
 
                 if self.verbose > 1:
-                    log.debug("%r will not be used by some other processes.",
+                    log.debug(_("%r will not be used by some other processes."),
                             fs_object)
                 return []
 
-            err = _('undefined error')
+            err = _('Undefined error')
             if std_err:
                 e = std_err.replace('\n', ' ').strip()
                 if e:
                     err = e
-            msg = _("Error %d on getting fuser information of %r: %s") % (
-                    ret_code, fs_object, err)
+            msg = _("Error %(nr)d on getting fuser information of %(obj)r: %(err)s") % {
+                    'nr': ret_code, 'obj': fs_object, 'err': err}
             raise FuserError(msg)
 
         pid_list = []

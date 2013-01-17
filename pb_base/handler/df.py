@@ -450,7 +450,7 @@ class DfHandler(PbBaseHandler):
         (ret_code, std_out, std_err) = self.call(cmd)
 
         if ret_code:
-            err = _('undefined error')
+            err = _('Undefined error')
             if std_err:
                 e = std_err.replace('\n', ' ').strip()
                 if e:

@@ -115,7 +115,7 @@ msgstr ""
 msgid "Using configuration:"
 msgstr ""
 
-#: pb_base/cfg_app.py:515
+#: pb_base/cfg_app.py:515 pb_base/handler/df.py:453 pb_base/handler/fuser.py:188
 msgid "Undefined error"
 msgstr ""
 
@@ -449,10 +449,6 @@ msgstr ""
 msgid "Calling 'df' for all filesystems."
 msgstr ""
 
-#: pb_base/handler/df.py:453 pb_base/handler/fuser.py:182
-msgid "undefined error"
-msgstr ""
-
 #: pb_base/handler/df.py:458
 #, python-format
 msgid "Error %(nr)d on getting free space of %(obj)r: %(err)s"
@@ -468,22 +464,29 @@ msgstr ""
 msgid "Could not evaluate line %(line)r in output of command %(cmd)r."
 msgstr ""
 
-#: pb_base/handler/fuser.py:158
+#: pb_base/handler/fuser.py:164
 #, python-format
-msgid "Filesystem object %r doesn't seems to exist. "
+msgid ""
+"Filesystem object %r doesn't seems to exist. "
+"Continue because of the 'force' flag."
 msgstr ""
 
-#: pb_base/handler/fuser.py:161
+#: pb_base/handler/fuser.py:167
 #, python-format
 msgid "Filesystem object %r doesn't seems to exist."
 msgstr ""
 
-#: pb_base/handler/fuser.py:187
+#: pb_base/handler/fuser.py:184
 #, python-format
-msgid "Error %d on getting fuser information of %r: %s"
+msgid "%r will not be used by some other processes."
 msgstr ""
 
-#: pb_base/handler/fuser.py:201
+#: pb_base/handler/fuser.py:193
+#, python-format
+msgid "Error %(nr)d on getting fuser information of %(obj)r: %(err)s"
+msgstr ""
+
+#: pb_base/handler/fuser.py:207
 #, python-format
 msgid "%r is not an integer value usable as PID."
 msgstr ""

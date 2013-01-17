@@ -121,7 +121,7 @@ msgstr "Verwende fusionierte Konfiguration:"
 msgid "Using configuration:"
 msgstr "Verwende Konfiguration:"
 
-#: pb_base/cfg_app.py:515
+#: pb_base/cfg_app.py:515 pb_base/handler/df.py:453 pb_base/handler/fuser.py:188
 msgid "Undefined error"
 msgstr "Undefinierter Fehler"
 
@@ -426,7 +426,7 @@ msgstr "Öffne '%s' zum ungepufferten Schreiben ..."
 msgid "Closing '%s' ..."
 msgstr "Schließe '%s' ..."
 
-#: pb_base/handler/df.py:328
+#: pb_base/handler/df.py:328 pb_base/handler/fuser.py:133
 msgid "Initialized."
 msgstr "Initialisiert."
 
@@ -461,10 +461,6 @@ msgstr "Rufe 'df' für alle lokalen Dateisysteme auf."
 msgid "Calling 'df' for all filesystems."
 msgstr "Rufe 'df' für alle Dateisysteme auf."
 
-#: pb_base/handler/df.py:453 pb_base/handler/fuser.py:182
-msgid "undefined error"
-msgstr "unbestimmter Fehler"
-
 #: pb_base/handler/df.py:458
 #, python-format
 msgid "Error %(nr)d on getting free space of %(obj)r: %(err)s"
@@ -481,25 +477,35 @@ msgid "Could not evaluate line %(line)r in output of command %(cmd)r."
 msgstr ""
 "Konnte Zeile %(line)r in der Ausgabe des Kommandos %(cmd)r nicht auswerten."
 
-#: pb_base/handler/fuser.py:158
+#: pb_base/handler/fuser.py:164
 #, python-format
-msgid "Filesystem object %r doesn't seems to exist. "
+msgid ""
+"Filesystem object %r doesn't seems to exist. "
+"Continue because of the 'force' flag."
 msgstr ""
+"Das Dateisystemobjekt %r scheint nicht zu existieren. "
+"Mache wegen gesetztem 'force'-Flag trotzdem weiter."
 
-#: pb_base/handler/fuser.py:161
+#: pb_base/handler/fuser.py:167
 #, python-format
 msgid "Filesystem object %r doesn't seems to exist."
-msgstr ""
+msgstr "Das Dateisystemobjekt %r scheint nicht zu existieren."
 
-#: pb_base/handler/fuser.py:187
+#: pb_base/handler/fuser.py:184
 #, python-format
-msgid "Error %d on getting fuser information of %r: %s"
-msgstr ""
+msgid "%r will not be used by some other processes."
+msgstr "%r wird nicht von anderen Prozessen verwendet."
 
-#: pb_base/handler/fuser.py:201
+#: pb_base/handler/fuser.py:193
+#, python-format
+msgid "Error %(nr)d on getting fuser information of %(obj)r: %(err)s"
+msgstr ""
+"Fehler %(nr)d beim Ermitteln der fuser-Informationen von %(obj)r: %(err)s"
+
+#: pb_base/handler/fuser.py:207
 #, python-format
 msgid "%r is not an integer value usable as PID."
-msgstr ""
+msgstr "%r ist kein Integerwert, der als PID verwendet werden kann."
 
 #: pb_base/pidfile.py:64
 #, python-format
