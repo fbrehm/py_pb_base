@@ -682,85 +682,99 @@ msgstr "Setze PID-Datei auf Grund des Kommandozeilenparameters auf %r."
 msgid "Creating pidfile %r ..."
 msgstr "Erstelle PID-Datei %r ..."
 
-#: pb_base/socket_obj/__init__.py:73
+#: pb_base/socket_obj/__init__.py:76
 msgid "Timeout error on reading from socket"
-msgstr ""
+msgstr "Timeout beim Lesen vom Sockel"
 
-#: pb_base/socket_obj/__init__.py:92
+#: pb_base/socket_obj/__init__.py:95
 msgid "Timeout error on writing to socket"
-msgstr ""
+msgstr "Timeout beim Schreiben auf den Sockel"
 
-#: pb_base/socket_obj/__init__.py:161
+#: pb_base/socket_obj/__init__.py:164
 #, python-format
-msgid "Invalid request_queue_size %r, must be "
+msgid "Invalid request_queue_size %r, must be between 0 and 5."
 msgstr ""
+"Ungültiger Wert für request_queue_size %r, er muss zwischen 0 und 5 betragen."
 
-#: pb_base/socket_obj/__init__.py:171
+#: pb_base/socket_obj/__init__.py:174
 #, python-format
-msgid "Invalid buffer size %(bs)r, must be "
+msgid "Invalid buffer size %(bs)r, must be between %(min)d and %(max)d."
 msgstr ""
+"Ungültige Puffergröße %(bs)r, sie muss zwischen %(min)d und %(max)d betragen."
 
-#: pb_base/socket_obj/__init__.py:330
+#: pb_base/socket_obj/__init__.py:333
 msgid "Closing socket ..."
-msgstr ""
+msgstr "Schließe Sockel ..."
 
-#: pb_base/socket_obj/__init__.py:340
-msgid "Resetting connection ..."
-msgstr ""
+#: pb_base/socket_obj/__init__.py:343
+msgid "Resetting socket connection ..."
+msgstr "Setze Sockel-Verbindung zurück ..."
 
-#: pb_base/socket_obj/__init__.py:359 pb_base/socket_obj/__init__.py:370
-msgid "Cannot send message to the receipient, because "
+#: pb_base/socket_obj/__init__.py:362
+msgid ""
+"Cannot send message to the receipient, because the socket connection "
+"is interrupted."
 msgstr ""
+"Kann Nachricht nicht zum Empfänger schicken, da die Sockel-Verbindung"
+"unterbrochen wurde."
 
-#: pb_base/socket_obj/__init__.py:375
+#: pb_base/socket_obj/__init__.py:373
+msgid ""
+"Cannot send message to the receipient, because the socket connection "
+"is closed."
+msgstr ""
+"Kann Nachricht nicht zum Empfänger schicken, da die Sockel-Verbindung"
+"geschlossen wurde."
+
+#: pb_base/socket_obj/__init__.py:378
 #, python-format
 msgid "Sending %r to socket."
-msgstr ""
+msgstr "Sende %r zum Sockel."
 
-#: pb_base/socket_obj/__init__.py:390
+#: pb_base/socket_obj/__init__.py:393
 msgid "Cannot accept connection, socket is not bonded."
-msgstr ""
+msgstr "Kann keine Verbindung akzeptieren, da der Sockel nicht gebunden ist."
 
-#: pb_base/socket_obj/__init__.py:398
+#: pb_base/socket_obj/__init__.py:401
 #, python-format
 msgid "Got a request from '%s'."
-msgstr ""
+msgstr "Anfrage von '%s' erhalten."
 
-#: pb_base/socket_obj/__init__.py:400
+#: pb_base/socket_obj/__init__.py:403
 msgid "Got a request from somewhere from system."
-msgstr ""
+msgstr "Anfrage von irgendwo aus dem System erhalten."
 
-#: pb_base/socket_obj/__init__.py:421
+#: pb_base/socket_obj/__init__.py:424
 msgid "Trying to get data ..."
-msgstr ""
+msgstr "Versuche, irgendwie die Daten herauszuziehen ..."
 
-#: pb_base/socket_obj/__init__.py:430
+#: pb_base/socket_obj/__init__.py:433
 #, python-format
 msgid "Got data: %r."
-msgstr ""
+msgstr "Erhaltene Daten: %r"
 
-#: pb_base/socket_obj/__init__.py:435
+#: pb_base/socket_obj/__init__.py:438
 msgid "Got EOF, counterpart has interrupted ..."
-msgstr ""
+msgstr "EOF erhalten, die gegenseite hat unterbrochen ..."
 
-#: pb_base/socket_obj/__init__.py:486
+#: pb_base/socket_obj/__init__.py:489
 msgid "Performing input buffer ..."
-msgstr ""
+msgstr "Verarbeite Eingabe-Puffer ..."
 
-#: pb_base/socket_obj/__init__.py:490
+#: pb_base/socket_obj/__init__.py:493
 #, python-format
 msgid "Current input buffer: %r"
-msgstr ""
+msgstr "Aktueller Eingabe-Puffer: %r"
 
-#: pb_base/socket_obj/__init__.py:496
+#: pb_base/socket_obj/__init__.py:499
 #, python-format
 msgid "Got a line: %r"
-msgstr ""
+msgstr "Erhaltene Zeile: %r"
 
-#: pb_base/socket_obj/__init__.py:497
+#: pb_base/socket_obj/__init__.py:500
 #, python-format
 msgid "Current input buffer after read_line(): %r"
-msgstr ""
+msgstr "Aktueller Eingabe-Puffer nach read_line(): %r"
 
 #: pb_base/socket_obj/unix.py:59
 #, python-format

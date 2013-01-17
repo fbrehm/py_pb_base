@@ -17,8 +17,6 @@ import re
 import select
 import time
 
-from gettext import gettext as _
-
 from abc import ABCMeta
 from abc import abstractmethod
 
@@ -34,13 +32,18 @@ from pb_base.errors import PbError
 from pb_base.errors import FunctionNotImplementedError
 from pb_base.errors import PbIoTimeoutError
 
+from pb_base.translate import translator
+
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
 __copyright__ = '(C) 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.2.2'
+__version__ = '0.2.3'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)
+
+_ = translator.lgettext
+__ = translator.lngettext
 
 default_buffer_size = 8192
 min_buffer_size = 512
@@ -337,7 +340,7 @@ class GenericSocket(PbBaseObject):
         """
 
         if self.verbose > 2:
-            log.debug(_("Resetting connection ..."))
+            log.debug(_("Resetting socket connection ..."))
 
         if self.connection:
             self.connection.close()

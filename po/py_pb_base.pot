@@ -662,82 +662,90 @@ msgstr ""
 msgid "Creating pidfile %r ..."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:73
+#: pb_base/socket_obj/__init__.py:76
 msgid "Timeout error on reading from socket"
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:92
+#: pb_base/socket_obj/__init__.py:95
 msgid "Timeout error on writing to socket"
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:161
+#: pb_base/socket_obj/__init__.py:164
 #, python-format
-msgid "Invalid request_queue_size %r, must be "
+msgid "Invalid request_queue_size %r, must be between 0 and 5."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:171
+#: pb_base/socket_obj/__init__.py:174
 #, python-format
-msgid "Invalid buffer size %(bs)r, must be "
+msgid "Invalid buffer size %(bs)r, must be between %(min)d and %(max)d."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:330
+#: pb_base/socket_obj/__init__.py:333
 msgid "Closing socket ..."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:340
-msgid "Resetting connection ..."
+#: pb_base/socket_obj/__init__.py:343
+msgid "Resetting socket connection ..."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:359 pb_base/socket_obj/__init__.py:370
-msgid "Cannot send message to the receipient, because "
+#: pb_base/socket_obj/__init__.py:362
+msgid ""
+"Cannot send message to the receipient, because the socket connection "
+"is interrupted."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:375
+#: pb_base/socket_obj/__init__.py:373
+msgid ""
+"Cannot send message to the receipient, because the socket connection "
+"is closed."
+msgstr ""
+
+#: pb_base/socket_obj/__init__.py:378
 #, python-format
 msgid "Sending %r to socket."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:390
+#: pb_base/socket_obj/__init__.py:393
 msgid "Cannot accept connection, socket is not bonded."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:398
+#: pb_base/socket_obj/__init__.py:401
 #, python-format
 msgid "Got a request from '%s'."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:400
+#: pb_base/socket_obj/__init__.py:403
 msgid "Got a request from somewhere from system."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:421
+#: pb_base/socket_obj/__init__.py:424
 msgid "Trying to get data ..."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:430
+#: pb_base/socket_obj/__init__.py:433
 #, python-format
 msgid "Got data: %r."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:435
+#: pb_base/socket_obj/__init__.py:438
 msgid "Got EOF, counterpart has interrupted ..."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:486
+#: pb_base/socket_obj/__init__.py:489
 msgid "Performing input buffer ..."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:490
+#: pb_base/socket_obj/__init__.py:493
 #, python-format
 msgid "Current input buffer: %r"
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:496
+#: pb_base/socket_obj/__init__.py:499
 #, python-format
 msgid "Got a line: %r"
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:497
+#: pb_base/socket_obj/__init__.py:500
 #, python-format
 msgid "Current input buffer after read_line(): %r"
 msgstr ""
