@@ -507,140 +507,147 @@ msgstr ""
 msgid "%r is not an integer value usable as PID."
 msgstr "%r ist kein Integerwert, der als PID verwendet werden kann."
 
-#: pb_base/pidfile.py:64
+#: pb_base/pidfile.py:70
 #, python-format
 msgid "Invalid pidfile '%(pidfile)s' given: %(reason)s"
-msgstr ""
+msgstr "Ungültige PID-Datei %(pidfile)r angegeben: %(reason)s"
 
-#: pb_base/pidfile.py:67
+#: pb_base/pidfile.py:73
 #, python-format
-msgid "Invalid pidfile '%s' given."
-msgstr ""
+msgid "Invalid pidfile %r given."
+msgstr "Ungültige PID-Datei %r angegeben."
 
-#: pb_base/pidfile.py:96
+#: pb_base/pidfile.py:102
 #, python-format
-msgid "The pidfile '%(pidfile)s is currently in use by the "
+msgid ""
+"The pidfile '%(pidfile)s is currently in use by the application "
+"with the PID %(pid)d."
 msgstr ""
+"Die PID-Datei %(pidfile)r ist gegenwärtig durch die Anwendung mit der "
+"PID %(pid)d in Verwendung."
 
-#: pb_base/pidfile.py:171
+#: pb_base/pidfile.py:177
 msgid "No filename given on initializing PidFile object."
-msgstr ""
-
-#: pb_base/pidfile.py:265
-#, python-format
-msgid "Pidfile '%s' doesn't exists, not removing."
-msgstr ""
+msgstr "Kein Dateiname bei der Initialisierung des PidFile-Objektes angegeben."
 
 #: pb_base/pidfile.py:271
 #, python-format
+msgid "Pidfile '%s' doesn't exists, not removing."
+msgstr "Die PID-Datei %r existiert nicht und wird deshalb auch nicht gelöscht."
+
+#: pb_base/pidfile.py:277
+#, python-format
 msgid "Auto removing disabled, don't deleting '%s'."
 msgstr ""
+"Das automatische Löschen ist deaktiviert, "
+"deshalb wird '%s' auch nicht gelöscht."
 
-#: pb_base/pidfile.py:276
+#: pb_base/pidfile.py:282
 #, python-format
 msgid "Removing pidfile '%s' ..."
-msgstr ""
+msgstr "Lösche PID-Datei '%s' ..."
 
-#: pb_base/pidfile.py:279 pb_base/pidfile.py:314
+#: pb_base/pidfile.py:285 pb_base/pidfile.py:321
 msgid "Just kidding .."
-msgstr ""
+msgstr "Ich mach doch nur Spass ..."
 
-#: pb_base/pidfile.py:284
+#: pb_base/pidfile.py:290
 #, python-format
-msgid "Could not delete pidfile '%s': %s"
-msgstr ""
+msgid "Could not delete pidfile %(file)r: %(err)s"
+msgstr "Konnte PID-Datei %(file)r nicht löschen: %(err)s"
 
-#: pb_base/pidfile.py:303 pb_base/pidfile.py:369
+#: pb_base/pidfile.py:310 pb_base/pidfile.py:376
 #, python-format
-msgid "Invalid PID %(pid)d for creating pidfile "
-msgstr ""
+msgid "Invalid PID %(pid)d for creating pidfile %(pidfile)r given."
+msgstr "Ungültige PID %(pid)d zum Erstellen der PID-Datei %(pidfile)r übergeben."
 
-#: pb_base/pidfile.py:312
+#: pb_base/pidfile.py:319
 #, python-format
 msgid "Deleting pidfile '%s' ..."
-msgstr ""
+msgstr "Lösche PID-Datei '%s' ..."
 
-#: pb_base/pidfile.py:322
+#: pb_base/pidfile.py:329
 #, python-format
 msgid "Trying opening '%s' exclusive ..."
-msgstr ""
+msgstr "Versuche, '%s' exklusiv zu öffnen ..."
 
-#: pb_base/pidfile.py:325 pb_base/pidfile.py:380
+#: pb_base/pidfile.py:332 pb_base/pidfile.py:387
 #, python-format
 msgid "Simulation mode - don't real writing in '%s'."
-msgstr ""
+msgstr "Simulationsmodus - kein reales Schreiben nach  '%s'."
 
-#: pb_base/pidfile.py:335
+#: pb_base/pidfile.py:342
 #, python-format
 msgid "Error on creating pidfile '%(pidfile)s': %(err)s"
-msgstr ""
+msgstr "Fehler beim Erstellen der PID-Datei '%(pidfile)s': %(err)s"
 
-#: pb_base/pidfile.py:340 pb_base/pidfile.py:393
+#: pb_base/pidfile.py:347 pb_base/pidfile.py:400
 #, python-format
 msgid "Writing %(pid)d into '%(pidfile)s' ..."
-msgstr ""
+msgstr "Schreibe %(pid)d in '%(pidfile)s' hinein ..."
 
-#: pb_base/pidfile.py:363
-msgid "Calling recreate() on a note opened pidfile."
-msgstr ""
+#: pb_base/pidfile.py:370
+msgid "Calling recreate() on a not self created pidfile."
+msgstr "recreate() für eine nicht selbst erstellte PID-Datei aufgerufen."
 
-#: pb_base/pidfile.py:377
+#: pb_base/pidfile.py:384
 #, python-format
 msgid "Trying opening '%s' for recreate ..."
-msgstr ""
+msgstr "Versuche, '%s' zum Recreate zu öffnen ..."
 
-#: pb_base/pidfile.py:388
+#: pb_base/pidfile.py:395
 #, python-format
 msgid "Error on recreating pidfile '%(pidfile)s': %(err)s"
-msgstr ""
+msgstr "Fehler beim Wiedererstellen der PID-Datei '%(pidfile)s': %(err)s"
 
-#: pb_base/pidfile.py:424
+#: pb_base/pidfile.py:431
 #, python-format
 msgid "Pidfile parent directory '%s' doesn't exists."
-msgstr ""
+msgstr "Verzeichnis '%s' der PID-Datei existiert nicht."
 
-#: pb_base/pidfile.py:428
+#: pb_base/pidfile.py:435
 #, python-format
 msgid "Pidfile parent directory '%s' is not a directory."
-msgstr ""
-
-#: pb_base/pidfile.py:432
-#, python-format
-msgid "No write access to pidfile parent directory '%s'."
-msgstr ""
+msgstr "Verzeichnis '%s' der PID-Datei ist kein Verzeichnis."
 
 #: pb_base/pidfile.py:439
-msgid "It is not a regular file."
-msgstr ""
+#, python-format
+msgid "No write access to pidfile parent directory '%s'."
+msgstr "Kein Schreibzugriff zum verzeichnis '%s' der PID-Datei."
 
-#: pb_base/pidfile.py:456
+#: pb_base/pidfile.py:446
+msgid "It is not a regular file."
+msgstr "Es ist keine reguläre Datei."
+
+#: pb_base/pidfile.py:463
 #, python-format
 msgid "Reading content of pidfile %r ..."
-msgstr ""
+msgstr "Lese Inhalt der PID-Datei %r ..."
 
 #: pb_base/pidfile.py:481
-msgid "No useful information found in pidfile "
-msgstr ""
-
-#: pb_base/pidfile.py:487
 #, python-format
-msgid "Trying check for process with PID %d ..."
-msgstr ""
+msgid "No useful information found in pidfile %(file)r: %(line)r"
+msgstr "Keine auswertbare Information in PID-Datei %(file)r gefunden: %(line)r"
 
 #: pb_base/pidfile.py:494
 #, python-format
-msgid "Process with PID %d anonymous died."
-msgstr ""
+msgid "Trying check for process with PID %d ..."
+msgstr "Versuche, Prozess mit der PID %d zu überprüfen ..."
 
-#: pb_base/pidfile.py:497
+#: pb_base/pidfile.py:501
+#, python-format
+msgid "Process with PID %d anonymous died."
+msgstr "Der Prozess mit der PID %d ist anonym gestorben."
+
+#: pb_base/pidfile.py:504
 #, python-format
 msgid "No permission to signal the process %d ..."
-msgstr ""
+msgstr "Kein Recht, ein Signal zum Prozess mit der PID %d zu senden ..."
 
-#: pb_base/pidfile.py:500
+#: pb_base/pidfile.py:507
 #, python-format
-msgid "Unknown error: '%s'."
-msgstr ""
+msgid "Unknown error: %r."
+msgstr "Unbekannter Fehler: %r."
 
 #: pb_base/pidfile_app.py:297
 #, python-format

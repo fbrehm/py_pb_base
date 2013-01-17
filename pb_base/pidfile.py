@@ -17,8 +17,6 @@ import re
 import signal
 import errno
 
-from gettext import gettext as _
-
 # Own modules
 
 from pb_base.errors import PbError
@@ -29,9 +27,14 @@ from pb_base.errors import PbWriteTimeoutError
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
-__version__ = '0.4.1'
+from pb_base.translate import translator
+
+__version__ = '0.4.2'
 
 log = logging.getLogger(__name__)
+
+_ = translator.lgettext
+__ = translator.lngettext
 
 #==============================================================================
 class PidFileError(PbBaseObjectError):
@@ -67,7 +70,7 @@ class InvalidPidFileError(PidFileError):
             msg = _("Invalid pidfile '%(pidfile)s' given: %(reason)s") % {
                     'pidfile': self.pidfile, 'reason': self.reason}
         else:
-            msg = _("Invalid pidfile '%s' given.") % (self.pidfile)
+            msg = _("Invalid pidfile %r given.") % (self.pidfile)
 
         return msg
 
@@ -284,7 +287,8 @@ class PidFile(PbBaseObject):
         try:
             os.remove(self.filename)
         except OSError, e:
-            log.err(_("Could not delete pidfile '%s': %s"), self.filename, str(e))
+            log.err(_("Could not delete pidfile %(file)r: %(err)s"),
+                    self.filename, str(e))
         except Exception, e:
             self.handle_error(str(e), e.__class__.__name__, True)
 
@@ -304,7 +308,7 @@ class PidFile(PbBaseObject):
             pid = int(pid)
             if pid <= 0:
                 msg = _("Invalid PID %(pid)d for creating pidfile " +
-                        "'%(pidfile)s' given.") % {
+                        "%(pidfile)r given.") % {
                         'pid': pid, 'pidfile': self.filename}
                 raise PidFileError(msg)
         else:
@@ -363,14 +367,14 @@ class PidFile(PbBaseObject):
         """
 
         if not self.created:
-            msg = _("Calling recreate() on a note opened pidfile.")
+            msg = _("Calling recreate() on a not self created pidfile.")
             raise PidFileError(msg)
 
         if pid:
             pid = int(pid)
             if pid <= 0:
                 msg = _("Invalid PID %(pid)d for creating pidfile " +
-                        "'%(pidfile)s' given.") % {
+                        "%(pidfile)r given.") % {
                         'pid': pid, 'pidfile': self.filename}
                 raise PidFileError(msg)
         else:
@@ -482,7 +486,7 @@ class PidFile(PbBaseObject):
             pid = int(match.group(1))
         else:
             msg = _("No useful information found in pidfile " +
-                     "'%(file)s': '%(line)s'")
+                     "%(file)r: %(line)r")
             log.warn(msg % {'file': self.filename, 'line': line})
             return True
 
@@ -500,7 +504,7 @@ class PidFile(PbBaseObject):
                 msg = _("No permission to signal the process %d ...") % (pid)
                 raise PidFileError(msg)
             else:
-                msg = _("Unknown error: '%s'.") % (str(err))
+                msg = _("Unknown error: %r.") % (str(err))
                 raise PidFileError(msg)
         else:
             raise PidFileInUseError(self.filename, pid)
