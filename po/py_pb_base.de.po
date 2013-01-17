@@ -340,6 +340,92 @@ msgid_plural "Could not found OS commands"
 msgstr[0] "Konnte Betriebssystemkommando nicht finden"
 msgstr[1] "Konnte Betriebssystemkommandos nicht finden"
 
+#: pb_base/handler/__init__.py:304
+#, python-format
+msgid "Searching for command '%s' ..."
+msgstr "Suche nach Betriebssystemkommando '%s' ..."
+
+#: pb_base/handler/__init__.py:309
+#, python-format
+msgid "Command '%s' doesn't exists."
+msgstr "Das Betriebssystemkommando '%s' existiert nicht."
+
+#: pb_base/handler/__init__.py:312 pb_base/handler/__init__.py:328
+#, python-format
+msgid "Command '%s' is not executable."
+msgstr "Das Betriebssystemkommando '%s' ist nicht ausführbar."
+
+#: pb_base/handler/__init__.py:333 pb_base/handler/__init__.py:335
+#, python-format
+msgid "Command '%s' not found."
+msgstr "Das Betriebssystemkommando '%s' wurde nicht gefunden."
+
+#: pb_base/handler/__init__.py:417
+#, python-format
+msgid "Executing %r"
+msgstr "Führe %r aus"
+
+#: pb_base/handler/__init__.py:418
+msgid "Quiet execution"
+msgstr "Stillschweigende Ausführung"
+
+#: pb_base/handler/__init__.py:451 pb_base/handler/__init__.py:472
+#, python-format
+msgid "Output on %(where)s: %(what)r."
+msgstr "Ausgabe an %(where)s: %(what)r."
+
+#: pb_base/handler/__init__.py:477
+#, python-format
+msgid "Returncode: %s"
+msgstr "Rückgabewert %s"
+
+#: pb_base/handler/__init__.py:521 pb_base/handler/__init__.py:591
+msgid "File doesn't exists."
+msgstr "Die Datei existiert nicht."
+
+#: pb_base/handler/__init__.py:523
+msgid "Read permission denied."
+msgstr "Lesezugriff verweigert."
+
+#: pb_base/handler/__init__.py:526
+#, python-format
+msgid "Reading file content of %r ..."
+msgstr "Lese Dateiinhalt von %r ..."
+
+#: pb_base/handler/__init__.py:596 pb_base/handler/__init__.py:604
+#, python-format
+msgid "Write permission to %r denied."
+msgstr "Schreibzugriff nach %r verweigert."
+
+#: pb_base/handler/__init__.py:599 pb_base/handler/__init__.py:607
+msgid "Write permission denied."
+msgstr "Schreibzugriff verweigert."
+
+#: pb_base/handler/__init__.py:611
+#, python-format
+msgid "Write %(what)r into %(to)r."
+msgstr "Schreibe %(what)r nach  %(to)r."
+
+#: pb_base/handler/__init__.py:614
+#, python-format
+msgid "Writing %r ..."
+msgstr "Schreibe %r ..."
+
+#: pb_base/handler/__init__.py:618
+#, python-format
+msgid "Simulating write into %r."
+msgstr "Simuliere Schreiben nach %r."
+
+#: pb_base/handler/__init__.py:626
+#, python-format
+msgid "Opening '%s' for write unbuffered ..."
+msgstr "Öffne '%s' zum ungepufferten Schreiben ..."
+
+#: pb_base/handler/__init__.py:633
+#, python-format
+msgid "Closing '%s' ..."
+msgstr "Schließe '%s' ..."
+
 #: pb_base/handler/df.py:394
 #, python-format
 msgid "Checking existence of %r ..."

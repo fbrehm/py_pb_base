@@ -33,7 +33,7 @@ from pb_base.object import PbBaseObject
 
 from pb_base.translate import translator
 
-__version__ = '0.2.1'
+__version__ = '0.2.3'
 
 log = logging.getLogger(__name__)
 
@@ -301,15 +301,15 @@ class PbBaseHandler(PbBaseObject):
         """
 
         if self.verbose > 2:
-            log.debug("Searching for command '%s' ..." % (cmd))
+            log.debug(_("Searching for command '%s' ...") % (cmd))
 
         # Checking an absolute path
         if os.path.isabs(cmd):
             if not os.path.exists(cmd):
-                log.warning("Command '%s' doesn't exists." % (cmd))
+                log.warning(_("Command '%s' doesn't exists.") % (cmd))
                 return None
             if not os.access(cmd, os.X_OK):
-                msg = ("Command '%s' is not executable." % (cmd))
+                msg = (_("Command '%s' is not executable.") % (cmd))
                 log.warning(msg)
                 return None
             return os.path.normpath(cmd)
@@ -325,14 +325,14 @@ class PbBaseHandler(PbBaseObject):
                 if os.access(p, os.X_OK):
                     return os.path.normpath(p)
                 else:
-                    log.debug("Command '%s' is not executable.", p)
+                    log.debug(_("Command '%s' is not executable."), p)
 
         # command not found, sorry
         if quiet:
             if self.verbose > 2:
-                log.debug("Command '%s' not found.", cmd)
+                log.debug(_("Command '%s' not found."), cmd)
         else:
-            log.warning("Command '%s' not found.", cmd)
+            log.warning(_("Command '%s' not found."), cmd)
 
         return None
 
@@ -412,10 +412,10 @@ class PbBaseHandler(PbBaseObject):
         use_shell = bool(shell)
 
         cmd_list = [str(element) for element in cmd_list]
-        log.debug("Executing %r", cmd_list)
+        log.debug(_("Executing %r"), cmd_list)
 
         if quiet and self.verbose > 1:
-            log.debug("Quiet execution")
+            log.debug(_("Quiet execution"))
 
         used_stdout = subprocess.PIPE
         if stdout is not None:
@@ -448,7 +448,8 @@ class PbBaseHandler(PbBaseObject):
             if quiet and not self.verbose:
                 pass
             else:
-                msg = "Output on StdErr: '%s'." % (stderrdata.strip())
+                msg = _("Output on %(where)s: %(what)r.") % {
+                        'where': "StdErr", 'what': stderrdata.strip()}
                 if quiet:
                     log.debug(msg)
                 else:
@@ -468,10 +469,12 @@ class PbBaseHandler(PbBaseObject):
                 if not quiet:
                     do_out = True
             if do_out:
-                log.debug("Output on StdOut: %r", stdoutdata.strip())
+                msg = _("Output on %(where)s: %(what)r.") % {
+                        'where': "StdOut", 'what': stdoutdata.strip()}
+                log.debug(msg)
 
         ret = cmd_obj.wait()
-        log.debug("Returncode: %s" % (ret))
+        log.debug(_("Returncode: %s") % (ret))
 
         return (ret, stdoutdata, stderrdata)
 
@@ -515,12 +518,12 @@ class PbBaseHandler(PbBaseObject):
         timeout = abs(int(timeout))
 
         if not os.path.isfile(filename):
-            raise IOError(errno.ENOENT, "File dosn't exists", filename)
+            raise IOError(errno.ENOENT, _("File doesn't exists."), filename)
         if not os.access(filename, os.R_OK):
-            raise IOError(errno.EACCES, 'Read permission denied', filename)
+            raise IOError(errno.EACCES, _('Read permission denied.'), filename)
 
         if self.verbose > needed_verbose_level:
-            log.debug("Reading content of %r ...", filename)
+            log.debug(_("Reading file content of %r ..."), filename)
 
         signal.signal(signal.SIGALRM, read_alarm_caller)
         signal.alarm(timeout)
@@ -585,32 +588,34 @@ class PbBaseHandler(PbBaseObject):
 
         if must_exists:
             if not os.path.isfile(filename):
-                raise IOError(errno.ENOENT, "File dosn't exists", filename)
+                raise IOError(errno.ENOENT, _("File doesn't exists."), filename)
 
         if os.path.exists(filename):
             if not os.access(filename, os.W_OK):
                 if self.simulate:
-                    log.error("Write permission to %r denied", filename)
+                    log.error(_("Write permission to %r denied."), filename)
                 else:
                     raise IOError(errno.EACCES,
-                            'Write permission denied', filename)
+                            _('Write permission denied.'), filename)
         else:
             parent_dir = os.path.dirname(filename)
             if not os.access(parent_dir, os.W_OK):
                 if self.simulate:
-                    log.error("Write permission to %r denied", parent_dir)
+                    log.error(_("Write permission to %r denied."), parent_dir)
                 else:
                     raise IOError(errno.EACCES,
-                            'Write permission denied', parent_dir)
+                            _('Write permission denied.'), parent_dir)
 
         if self.verbose > verb_level1:
-            log.debug("Writing %r ...", filename)
-        if self.verbose > verb_level2:
-            log.debug("Write %r into %r.", content, filename)
+            if self.verbose > verb_level2:
+                log.debug(_("Write %(what)r into %(to)r.") % {
+                        'what': content, 'to': filename})
+            else:
+                log.debug(_("Writing %r ..."), filename)
 
         if self.simulate:
             if self.verbose > verb_level2:
-                log.debug("Simulating write into %r.", filename)
+                log.debug(_("Simulating write into %r."), filename)
             return
 
         signal.signal(signal.SIGALRM, write_alarm_caller)
@@ -618,14 +623,14 @@ class PbBaseHandler(PbBaseObject):
 
         # Open filename for writing unbuffered
         if self.verbose > verb_level3:
-            log.debug("Opening '%s' for write unbuffered ...", filename)
+            log.debug(_("Opening '%s' for write unbuffered ..."), filename)
         fh = open(filename, 'w', 0)
 
         try:
             fh.write(content)
         finally:
             if self.verbose > verb_level3:
-                log.debug("Closing '%s' ...", filename)
+                log.debug(_("Closing '%s' ..."), filename)
             fh.close()
 
         signal.alarm(0)
