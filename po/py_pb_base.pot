@@ -629,18 +629,37 @@ msgstr ""
 msgid "Unknown error: %r."
 msgstr ""
 
-#: pb_base/pidfile_app.py:297
+#: pb_base/pidfile_app.py:195
+#, python-format
+msgid "Using pidfile: %r."
+msgstr ""
+
+#: pb_base/pidfile_app.py:200
+msgid "Initialising PidFile object ..."
+msgstr ""
+
+#: pb_base/pidfile_app.py:288
+#, python-format
+msgid "Setting pidfile to %r by configuration."
+msgstr ""
+
+#: pb_base/pidfile_app.py:304
 #, python-format
 msgid "The name of the pidfile (Default: %s)."
 msgstr ""
 
-#: pb_base/pidfile_app.py:312
+#: pb_base/pidfile_app.py:319
 msgid "Simulation mode, nothing is really done."
 msgstr ""
 
-#: pb_base/pidfile_app.py:353
+#: pb_base/pidfile_app.py:337
 #, python-format
-msgid "Creating pidfile '%s' ..."
+msgid "Setting pidfile to %r by commandline parameter."
+msgstr ""
+
+#: pb_base/pidfile_app.py:360
+#, python-format
+msgid "Creating pidfile %r ..."
 msgstr ""
 
 #: pb_base/socket_obj/__init__.py:73

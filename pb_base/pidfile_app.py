@@ -17,8 +17,6 @@ import os
 import logging
 import datetime
 
-from gettext import gettext as _
-
 # Third party modules
 
 # Own modules
@@ -39,9 +37,14 @@ from pb_base.pidfile import InvalidPidFileError
 from pb_base.pidfile import PidFileInUseError
 from pb_base.pidfile import PidFile
 
-__version__ = '0.3.3'
+from pb_base.translate import translator
+
+__version__ = '0.3.4'
 
 log = logging.getLogger(__name__)
+
+_ = translator.lgettext
+__ = translator.lngettext
 
 #==============================================================================
 class PidfileAppError(PbCfgAppError):
@@ -189,12 +192,12 @@ class PidfileApp(PbCfgApp):
         if not os.path.isabs(self.pidfilename):
             self._pidfilename = os.path.join(self.base_dir, self.pidfilename)
         if self.verbose > 3:
-            log.debug("Using pidfile: '%s'.", self.pidfilename)
+            log.debug(_("Using pidfile: %r."), self.pidfilename)
 
         self._simulate = getattr(self.args, 'simulate', False)
 
         if self.verbose > 1:
-            log.debug("Initialising pidfile object ...")
+            log.debug(_("Initialising PidFile object ..."))
         self.pidfile = PidFile(
                 self.pidfilename,
                 appname = self.appname,
@@ -282,7 +285,8 @@ class PidfileApp(PbCfgApp):
             # Not set by commandline, but set in configuration
             pidfile = to_utf8_or_bust(self.cfg[u'general'][u'pidfile'])
             if pidfile and (pidfile != self._default_pidfilename):
-                log.debug("Setting pidfile to '%s' by configuration.", pidfile)
+                log.debug(_("Setting pidfile to %r by configuration."),
+                        pidfile)
                 self._pidfilename = pidfile
 
     #--------------------------------------------------------------------------
@@ -330,7 +334,7 @@ class PidfileApp(PbCfgApp):
 
         pidfile = getattr(self.args, 'pidfile', None)
         if pidfile and (pidfile != self._default_pidfilename):
-            log.debug("Setting pidfile to '%s' by commandline parameter.",
+            log.debug(_("Setting pidfile to %r by commandline parameter."),
                     pidfile)
             self._pidfilename = pidfile
 
@@ -353,7 +357,7 @@ class PidfileApp(PbCfgApp):
         super(PidfileApp, self).pre_run()
 
         if self.verbose > 1:
-            log.info(_("Creating pidfile '%s' ..."), self.pidfile.filename)
+            log.info(_("Creating pidfile %r ..."), self.pidfile.filename)
 
         try:
             self.pidfile.create()

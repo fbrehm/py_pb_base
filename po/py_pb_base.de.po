@@ -649,19 +649,38 @@ msgstr "Kein Recht, ein Signal zum Prozess mit der PID %d zu senden ..."
 msgid "Unknown error: %r."
 msgstr "Unbekannter Fehler: %r."
 
-#: pb_base/pidfile_app.py:297
+#: pb_base/pidfile_app.py:195
+#, python-format
+msgid "Using pidfile: %r."
+msgstr "Verwende PID-Datei: %r."
+
+#: pb_base/pidfile_app.py:200
+msgid "Initialising PidFile object ..."
+msgstr "Initialisiere PidFile-Objekt ..."
+
+#: pb_base/pidfile_app.py:288
+#, python-format
+msgid "Setting pidfile to %r by configuration."
+msgstr "Setze PID-Datei auf Grund der Konfiguration auf %r."
+
+#: pb_base/pidfile_app.py:304
 #, python-format
 msgid "The name of the pidfile (Default: %s)."
-msgstr ""
+msgstr "Der Name der PID-Datei (Default: %s)."
 
-#: pb_base/pidfile_app.py:312
+#: pb_base/pidfile_app.py:319
 msgid "Simulation mode, nothing is really done."
-msgstr ""
+msgstr "Simulationsmodus, nichts wird wirklich verändert."
 
-#: pb_base/pidfile_app.py:353
+#: pb_base/pidfile_app.py:337
 #, python-format
-msgid "Creating pidfile '%s' ..."
-msgstr ""
+msgid "Setting pidfile to %r by commandline parameter."
+msgstr "Setze PID-Datei auf Grund des Kommandozeilenparameters auf %r."
+
+#: pb_base/pidfile_app.py:360
+#, python-format
+msgid "Creating pidfile %r ..."
+msgstr "Erstelle PID-Datei %r ..."
 
 #: pb_base/socket_obj/__init__.py:73
 msgid "Timeout error on reading from socket"
