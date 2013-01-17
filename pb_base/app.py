@@ -266,6 +266,18 @@ class PbApplication(PbBaseObject):
         """A prefix for environment variables to detect them."""
         return self._env_prefix
 
+    #------------------------------------------------------------
+    @property
+    def usage_term(self):
+        """The localized version of 'usage: '"""
+        return _('usage: ')
+
+    #------------------------------------------------------------
+    @property
+    def usage_term_len(self):
+        """The length of the localized version of 'usage: '"""
+        return len(self.usage_term)
+
     #--------------------------------------------------------------------------
     def as_dict(self):
         """
