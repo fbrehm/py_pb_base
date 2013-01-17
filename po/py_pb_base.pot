@@ -829,3 +829,150 @@ msgstr ""
 msgid "Found .mo-file: %r"
 msgstr ""
 
+#: argparse.py:292
+msgid "usage: "
+msgstr ""
+
+#: argparse.py:800
+msgid ".__call__() not defined"
+msgstr ""
+
+#: argparse.py:1084
+#, python-format
+msgid "unknown parser %r (choices: %s)"
+msgstr ""
+
+#: argparse.py:1125
+#, python-format
+msgid "argument \"-\" with mode %r"
+msgstr ""
+
+#: argparse.py:1132
+#, python-format
+msgid "can't open '%s': %s"
+msgstr ""
+
+#: argparse.py:1336
+#, python-format
+msgid "cannot merge actions - two groups are named %r"
+msgstr ""
+
+#: argparse.py:1374
+msgid "'required' is an invalid argument for positionals"
+msgstr ""
+
+#: argparse.py:1395
+#, python-format
+msgid "invalid option string %r: must start with a character %r"
+msgstr ""
+
+#: argparse.py:1415
+#, python-format
+msgid "dest= is required for options like %r"
+msgstr ""
+
+#: argparse.py:1432
+#, python-format
+msgid "invalid conflict_resolution value: %r"
+msgstr ""
+
+#: argparse.py:1450
+#, python-format
+msgid "conflicting option string(s): %s"
+msgstr ""
+
+#: argparse.py:1514
+msgid "mutually exclusive arguments must be optional"
+msgstr ""
+
+#: argparse.py:1584
+msgid "positional arguments"
+msgstr ""
+
+#: argparse.py:1585
+msgid "optional arguments"
+msgstr ""
+
+#: argparse.py:1600
+msgid "show this help message and exit"
+msgstr ""
+
+#: argparse.py:1606
+msgid "show program's version number and exit"
+msgstr ""
+
+#: argparse.py:1638
+msgid "cannot have multiple subparser arguments"
+msgstr ""
+
+#: argparse.py:1690
+#, python-format
+msgid "unrecognized arguments: %s"
+msgstr ""
+
+#: argparse.py:1787
+#, python-format
+msgid "not allowed with argument %s"
+msgstr ""
+
+#: argparse.py:1833 argparse.py:1847
+#, python-format
+msgid "ignored explicit argument %r"
+msgstr ""
+
+#: argparse.py:1937
+msgid "too few arguments"
+msgstr ""
+
+#: argparse.py:1944
+#, python-format
+msgid "argument %s is required"
+msgstr ""
+
+#: argparse.py:1958
+#, python-format
+msgid "one of the arguments %s is required"
+msgstr ""
+
+#: argparse.py:2004
+msgid "expected one argument"
+msgstr ""
+
+#: argparse.py:2005
+msgid "expected at most one argument"
+msgstr ""
+
+#: argparse.py:2006
+msgid "expected at least one argument"
+msgstr ""
+
+#: argparse.py:2065
+#, python-format
+msgid "ambiguous option: %s could match %s"
+msgstr ""
+
+#: argparse.py:2127
+#, python-format
+msgid "unexpected option string: %s"
+msgstr ""
+
+#: argparse.py:2228
+#, python-format
+msgid "%r is not callable"
+msgstr ""
+
+#: argparse.py:2244
+#, python-format
+msgid "invalid %s value: %r"
+msgstr ""
+
+#: argparse.py:2254
+#, python-format
+msgid "invalid choice: %r (choose from %s)"
+msgstr ""
+
+#: argparse.py:2347
+#, python-format
+msgid "%s: error: %s\n"
+msgstr ""
+

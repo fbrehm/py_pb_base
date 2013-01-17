@@ -855,3 +855,150 @@ msgstr "Basis-Verzeichnis: %r"
 msgid "Found .mo-file: %r"
 msgstr "Gefundene .mo-Datei: %r"
 
+#: argparse.py:292
+msgid "usage: "
+msgstr "Verwendung: "
+
+#: argparse.py:800
+msgid ".__call__() not defined"
+msgstr ".__call__() wurde nicht definiert"
+
+#: argparse.py:1084
+#, python-format
+msgid "unknown parser %r (choices: %s)"
+msgstr "Unbekannter Parser %r (Auswahl: %s)"
+
+#: argparse.py:1125
+#, python-format
+msgid "argument \"-\" with mode %r"
+msgstr "Argument »-« mit dem Modus %r"
+
+#: argparse.py:1132
+#, python-format
+msgid "can't open '%s': %s"
+msgstr "Kann '%s' nicht öffnen: %s"
+
+#: argparse.py:1336
+#, python-format
+msgid "cannot merge actions - two groups are named %r"
+msgstr "Kann Aktionen nicht fusionieren - zwei Gruppen wurden %r benannt"
+
+#: argparse.py:1374
+msgid "'required' is an invalid argument for positionals"
+msgstr "'required' ist ein ungültiges Positionsargument"
+
+#: argparse.py:1395
+#, python-format
+msgid "invalid option string %r: must start with a character %r"
+msgstr "Ungültiger Optionsstring %r: er muss mit dem Zeichen %r beginnen"
+
+#: argparse.py:1415
+#, python-format
+msgid "dest= is required for options like %r"
+msgstr "dest= wird für Optionen wie %r benötigt"
+
+#: argparse.py:1432
+#, python-format
+msgid "invalid conflict_resolution value: %r"
+msgstr "Ungültiger Konfliktlösungswert: %r"
+
+#: argparse.py:1450
+#, python-format
+msgid "conflicting option string(s): %s"
+msgstr "Konkurrierende Optionsstring(s): %s"
+
+#: argparse.py:1514
+msgid "mutually exclusive arguments must be optional"
+msgstr "Sich gegenseitig ausschließende Argumente müssen optional sein"
+
+#: argparse.py:1584
+msgid "positional arguments"
+msgstr "Positionsargumente"
+
+#: argparse.py:1585
+msgid "optional arguments"
+msgstr "Optionale Argumente"
+
+#: argparse.py:1600
+msgid "show this help message and exit"
+msgstr "Zeigt diesen Hilfebildschirm an und beendet sich"
+
+#: argparse.py:1606
+msgid "show program's version number and exit"
+msgstr "Zeigt die Versionsnumer des Programms an und beendet sich"
+
+#: argparse.py:1638
+msgid "cannot have multiple subparser arguments"
+msgstr "Kann nicht mehrere Unterparser-Argumente haben"
+
+#: argparse.py:1690
+#, python-format
+msgid "unrecognized arguments: %s"
+msgstr "Unbekannte Argumente: %s"
+
+#: argparse.py:1787
+#, python-format
+msgid "not allowed with argument %s"
+msgstr "Nicht mit Argument %s erlaubt"
+
+#: argparse.py:1833 argparse.py:1847
+#, python-format
+msgid "ignored explicit argument %r"
+msgstr "Ignoriertes explizites Argument %r"
+
+#: argparse.py:1937
+msgid "too few arguments"
+msgstr "Zu wenig Argumente"
+
+#: argparse.py:1944
+#, python-format
+msgid "argument %s is required"
+msgstr "Das Argument %s wird benötigt"
+
+#: argparse.py:1958
+#, python-format
+msgid "one of the arguments %s is required"
+msgstr "Eines der Argumente %s wird benötigt"
+
+#: argparse.py:2004
+msgid "expected one argument"
+msgstr "Es wird genau ein Argument erwartet"
+
+#: argparse.py:2005
+msgid "expected at most one argument"
+msgstr "Es wird maximal ein Argument erwartet"
+
+#: argparse.py:2006
+msgid "expected at least one argument"
+msgstr "Es wird wenigstens ein Argument erwartet"
+
+#: argparse.py:2065
+#, python-format
+msgid "ambiguous option: %s could match %s"
+msgstr "Mehrdeutige Option: %s könnte auf %s passen"
+
+#: argparse.py:2127
+#, python-format
+msgid "unexpected option string: %s"
+msgstr "Unerwarteter Optionsstring: %s"
+
+#: argparse.py:2228
+#, python-format
+msgid "%r is not callable"
+msgstr "%r ist nicht aufrufbar"
+
+#: argparse.py:2244
+#, python-format
+msgid "invalid %s value: %r"
+msgstr "Ungültiger %s Wert: %r"
+
+#: argparse.py:2254
+#, python-format
+msgid "invalid choice: %r (choose from %s)"
+msgstr "Ungültige Auswahl: %r (aus %s auswählen)"
+
+#: argparse.py:2347
+#, python-format
+msgid "%s: error: %s\n"
+msgstr "%s: Fehler: %s\n"
+

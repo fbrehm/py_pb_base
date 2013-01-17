@@ -40,6 +40,8 @@ log = logging.getLogger(__name__)
 _ = translator.lgettext
 __ = translator.lngettext
 
+argparse._ = translator.lgettext
+
 #==============================================================================
 class PbApplicationError(PbBaseObjectError):
     """Base error class for all exceptions happened during
