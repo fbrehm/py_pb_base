@@ -426,58 +426,60 @@ msgstr "Öffne '%s' zum ungepufferten Schreiben ..."
 msgid "Closing '%s' ..."
 msgstr "Schließe '%s' ..."
 
-#: pb_base/handler/df.py:394
-#, python-format
-msgid "Checking existence of %r ..."
-msgstr ""
-
-#: pb_base/handler/df.py:396
-#, python-format
-msgid "Filesystem object %r doesn't exists."
-msgstr ""
+#: pb_base/handler/df.py:328
+msgid "Initialized."
+msgstr "Initialisiert."
 
 #: pb_base/handler/df.py:400
 #, python-format
+msgid "Checking existence of %r ..."
+msgstr "Überprüfe existenz von %r ..."
+
+#: pb_base/handler/df.py:402
+#, python-format
+msgid "Filesystem object %r doesn't exists."
+msgstr "Das Dateisystemobjekt %r existiert nicht."
+
+#: pb_base/handler/df.py:406
+#, python-format
 msgid "%r is not given as an absolute path."
-msgstr ""
+msgstr "%r wurde nicht mit einer absoluten Pfadangebe übergeben."
 
-#: pb_base/handler/df.py:405
-#, python-format
-msgid ""
-"Calling 'df' for the following objects:\n"
-"%r"
-msgstr ""
+#: pb_base/handler/df.py:411
+msgid "Calling 'df' for the following objects:"
+msgstr "Rufe 'df' für die folgenden Objekte auf:"
 
-#: pb_base/handler/df.py:408
+#: pb_base/handler/df.py:415
 msgid "Calling 'df' for real all filesystems."
-msgstr ""
+msgstr "Rufe 'df' für alle realen Dateisysteme auf."
 
-#: pb_base/handler/df.py:410
+#: pb_base/handler/df.py:417
 msgid "Calling 'df' for local filesystems."
-msgstr ""
+msgstr "Rufe 'df' für alle lokalen Dateisysteme auf."
 
-#: pb_base/handler/df.py:412
+#: pb_base/handler/df.py:419
 msgid "Calling 'df' for all filesystems."
-msgstr ""
+msgstr "Rufe 'df' für alle Dateisysteme auf."
 
-#: pb_base/handler/df.py:446 pb_base/handler/fuser.py:182
+#: pb_base/handler/df.py:453 pb_base/handler/fuser.py:182
 msgid "undefined error"
-msgstr ""
+msgstr "unbestimmter Fehler"
 
-#: pb_base/handler/df.py:451
+#: pb_base/handler/df.py:458
 #, python-format
-msgid "Error %d on getting free space of %r: %s"
-msgstr ""
+msgid "Error %(nr)d on getting free space of %(obj)r: %(err)s"
+msgstr "Fehler %(nr)d beim Ermitteln des freien Platzes von %(obj)r: %(err)s"
 
-#: pb_base/handler/df.py:457
+#: pb_base/handler/df.py:464
 #, python-format
-msgid "Didn't found any usable information in output of %r: %r"
-msgstr ""
+msgid "Didn't found any usable information in output of %r:"
+msgstr "Keine auswertbaren Informationen in der Ausgabe von %r gefunden:"
 
-#: pb_base/handler/df.py:469
+#: pb_base/handler/df.py:476
 #, python-format
 msgid "Could not evaluate line %(line)r in output of command %(cmd)r."
 msgstr ""
+"Konnte Zeile %(line)r in der Ausgabe des Kommandos %(cmd)r nicht auswerten."
 
 #: pb_base/handler/fuser.py:158
 #, python-format

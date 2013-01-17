@@ -13,8 +13,6 @@ import os
 import logging
 import re
 
-from gettext import gettext as _
-
 # Own modules
 from pb_base.common import pp
 
@@ -29,9 +27,14 @@ from pb_base.handler import PbBaseHandlerError
 from pb_base.handler import CommandNotFoundError
 from pb_base.handler import PbBaseHandler
 
-__version__ = '0.2.0'
+from pb_base.translate import translator
+
+__version__ = '0.2.1'
 
 log = logging.getLogger(__name__)
+
+_ = translator.lgettext
+__ = translator.lngettext
 
 # Some module varriables
 DF_CMD = os.sep + os.path.join('bin', 'df')
@@ -322,7 +325,7 @@ class DfHandler(PbBaseHandler):
 
         self.initialized = True
         if self.verbose > 3:
-            log.debug("Initialized.")
+            log.debug(_("Initialized."))
 
     #------------------------------------------------------------
     @property
@@ -405,7 +408,8 @@ class DfHandler(PbBaseHandler):
 
         if self.verbose > 1:
             if fs:
-                msg = _("Calling 'df' for the following objects:\n%r") % (fs)
+                msg = (_("Calling 'df' for the following objects:") +
+                        "\n%r") % (fs)
             else:
                 if all_fs:
                     msg = _("Calling 'df' for real all filesystems.")
@@ -451,14 +455,14 @@ class DfHandler(PbBaseHandler):
                 e = std_err.replace('\n', ' ').strip()
                 if e:
                     err = e
-            msg = _("Error %d on getting free space of %r: %s") % (
-                    ret_code, fs, err)
+            msg = _("Error %(nr)d on getting free space of %(obj)r: %(err)s") % {
+                    ret_code, fs, err}
             raise DfError(msg)
 
         lines = std_out.splitlines()
         if not lines or len(lines) < 2:
-            msg = _("Didn't found any usable information in output of %r: %r") % (
-                    cmdline, std_out)
+            msg = (_("Didn't found any usable information in output of %r:") +
+                    " %r") % ( cmdline, std_out)
             raise DfError(msg)
 
         del lines[0]

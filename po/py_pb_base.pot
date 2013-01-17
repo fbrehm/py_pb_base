@@ -413,55 +413,57 @@ msgstr ""
 msgid "Closing '%s' ..."
 msgstr ""
 
-#: pb_base/handler/df.py:394
-#, python-format
-msgid "Checking existence of %r ..."
-msgstr ""
-
-#: pb_base/handler/df.py:396
-#, python-format
-msgid "Filesystem object %r doesn't exists."
+#: pb_base/handler/df.py:328
+msgid "Initialized."
 msgstr ""
 
 #: pb_base/handler/df.py:400
 #, python-format
+msgid "Checking existence of %r ..."
+msgstr ""
+
+#: pb_base/handler/df.py:402
+#, python-format
+msgid "Filesystem object %r doesn't exists."
+msgstr ""
+
+#: pb_base/handler/df.py:406
+#, python-format
 msgid "%r is not given as an absolute path."
 msgstr ""
 
-#: pb_base/handler/df.py:405
+#: pb_base/handler/df.py:411
 #, python-format
-msgid ""
-"Calling 'df' for the following objects:\n"
-"%r"
+msgid "Calling 'df' for the following objects:"
 msgstr ""
 
-#: pb_base/handler/df.py:408
+#: pb_base/handler/df.py:415
 msgid "Calling 'df' for real all filesystems."
 msgstr ""
 
-#: pb_base/handler/df.py:410
+#: pb_base/handler/df.py:417
 msgid "Calling 'df' for local filesystems."
 msgstr ""
 
-#: pb_base/handler/df.py:412
+#: pb_base/handler/df.py:419
 msgid "Calling 'df' for all filesystems."
 msgstr ""
 
-#: pb_base/handler/df.py:446 pb_base/handler/fuser.py:182
+#: pb_base/handler/df.py:453 pb_base/handler/fuser.py:182
 msgid "undefined error"
 msgstr ""
 
-#: pb_base/handler/df.py:451
+#: pb_base/handler/df.py:458
 #, python-format
-msgid "Error %d on getting free space of %r: %s"
+msgid "Error %(nr)d on getting free space of %(obj)r: %(err)s"
 msgstr ""
 
-#: pb_base/handler/df.py:457
+#: pb_base/handler/df.py:464
 #, python-format
-msgid "Didn't found any usable information in output of %r: %r"
+msgid "Didn't found any usable information in output of %r:"
 msgstr ""
 
-#: pb_base/handler/df.py:469
+#: pb_base/handler/df.py:476
 #, python-format
 msgid "Could not evaluate line %(line)r in output of command %(cmd)r."
 msgstr ""
