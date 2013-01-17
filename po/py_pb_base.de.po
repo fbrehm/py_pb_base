@@ -776,74 +776,74 @@ msgstr "Erhaltene Zeile: %r"
 msgid "Current input buffer after read_line(): %r"
 msgstr "Aktueller Eingabe-Puffer nach read_line(): %r"
 
-#: pb_base/socket_obj/unix.py:59
+#: pb_base/socket_obj/unix.py:62
 #, python-format
-msgid "The Unix socket file '%s' was not found."
-msgstr ""
+msgid "The Unix socket file %r was not found."
+msgstr "Die Unix-Sockeldatei %r wurde nicht gefunden."
 
-#: pb_base/socket_obj/unix.py:70
+#: pb_base/socket_obj/unix.py:73
 #, python-format
-msgid "Invalid permissions to connect to Unix socket '%s'."
-msgstr ""
+msgid "Invalid permissions to connect to Unix socket %r."
+msgstr "Ungenügend Rechte, um sich mit dem Unix-Sockel %r zu verbinden."
 
-#: pb_base/socket_obj/unix.py:239
+#: pb_base/socket_obj/unix.py:242
 #, python-format
-msgid "Removing socket '%s' ..."
-msgstr ""
+msgid "Removing socket %r ..."
+msgstr "Lösche Unix-Sockel %r ..."
 
-#: pb_base/socket_obj/unix.py:247
+#: pb_base/socket_obj/unix.py:250
 #, python-format
 msgid "Connecting to Unix Domain Socket '%s' ..."
-msgstr ""
+msgstr "Verbinde mit Unix-Domain-Sockel '%s' ..."
 
-#: pb_base/socket_obj/unix.py:251 pb_base/socket_obj/unix.py:282
+#: pb_base/socket_obj/unix.py:254 pb_base/socket_obj/unix.py:285
 #, python-format
 msgid "The socket is even connected to '%s' ..."
-msgstr ""
+msgstr "Der Sockel ist bereits verbunden mit '%s' ..."
 
-#: pb_base/socket_obj/unix.py:255 pb_base/socket_obj/unix.py:286
+#: pb_base/socket_obj/unix.py:258 pb_base/socket_obj/unix.py:289
 #, python-format
 msgid "The application is allready bonded to '%s' ..."
-msgstr ""
+msgstr "Die Anwendung is bereits an '%s' gebunden ..."
 
-#: pb_base/socket_obj/unix.py:266
+#: pb_base/socket_obj/unix.py:269
 #, python-format
 msgid "Error connecting to Unix Socket '%(sock)s': %(err)s"
-msgstr ""
+msgstr "Fehler beim Verbinden mit dem Unix-Domain-Sockel '%(sock)s': %(err)s"
 
-#: pb_base/socket_obj/unix.py:278
+#: pb_base/socket_obj/unix.py:281
 #, python-format
 msgid "Creating and binding to Unix Domain Socket '%s' ..."
-msgstr ""
+msgstr "Erstelle und binde an Unix-Domain-Sockel '%s' ..."
 
-#: pb_base/socket_obj/unix.py:303
+#: pb_base/socket_obj/unix.py:306
 #, python-format
 msgid "Setting permissions of '%(sock)s' to 0%(perm)o."
-msgstr ""
+msgstr "Setze Zugriffrechte von '%(sock)s' auf 0%(perm)o."
 
-#: pb_base/socket_obj/unix.py:316
+#: pb_base/socket_obj/unix.py:319
 #, python-format
-msgid "Invalid owner name '%s' for socket creation "
-msgstr ""
+msgid "Invalid owner name '%s' for socket creation given."
+msgstr "Ungültiger Besitzername '%s' zur Erstellung des Sockels angegeben."
 
-#: pb_base/socket_obj/unix.py:328
+#: pb_base/socket_obj/unix.py:331
 #, python-format
-msgid "Invalid group name '%s' for socket creation "
-msgstr ""
-
-#: pb_base/socket_obj/unix.py:348
-msgid "Only root may change ownership of a socket."
-msgstr ""
+msgid "Invalid group name '%s' for socket creation given."
+msgstr "Ungültigen Gruppennamen '%s' zur Erstellung des Sockels angegeben."
 
 #: pb_base/socket_obj/unix.py:351
-#, python-format
-msgid "Setting ownership of '%(sock)s' to "
-msgstr ""
+msgid "Only root may change ownership of a socket."
+msgstr "Nur root darf die Besitzerschaft eines Sockels ändern."
 
-#: pb_base/socket_obj/unix.py:357
+#: pb_base/socket_obj/unix.py:354
+#, python-format
+msgid "Setting ownership of '%(sock)s' to %(uid)d:%(gid)d ..."
+msgstr "Setze die Besitzerschaft von '%(sock)s' auf %(uid)d:%(gid)d ..."
+
+#: pb_base/socket_obj/unix.py:360
 #, python-format
 msgid "Start listening on socket with a queue size of %d."
-msgstr ""
+msgstr "Beginne am Sockel mit einer Warteschlangengröße von %d zu lauschen."
 
 #: pb_base/translate.py:40
 #, python-format
