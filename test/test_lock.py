@@ -13,6 +13,7 @@ import unittest
 import os
 import sys
 import logging
+import tempfile
 
 libdir = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
 sys.path.insert(0, libdir)
@@ -40,6 +41,22 @@ class TestPbLockHandler(PbBaseTestcase):
         pass
 
     #--------------------------------------------------------------------------
+    def create_lockfile(self, content):
+
+        (fd, filename) = tempfile.mkstemp()
+
+        os.write(fd, "{!s}".format(content))
+        os.close(fd)
+
+        return filename
+
+    #--------------------------------------------------------------------------
+    def remove_lockfile(self, filename):
+
+        log.debug("Removing {!r} ...".format(filename))
+        os.remove(filename)
+
+    #--------------------------------------------------------------------------
     def test_object(self):
 
         log.info("Testing init of a simple object.")
@@ -64,6 +81,38 @@ class TestPbLockHandler(PbBaseTestcase):
         locker.create_lockfile('bla.lock')
         locker.remove_lockfile('bla.lock')
 
+    #--------------------------------------------------------------------------
+    def test_invalid_dir(self):
+
+        log.info("Testing creation lockfile in an invalid lock directory.")
+
+        ldir = '/etc/passwd'
+        locker = PbLockHandler(
+            appname = 'test_base_object',
+            verbose = 3,
+            lockdir = ldir,
+        )
+        with self.assertRaises(LockdirNotExistsError) as cm:
+            locker.create_lockfile('bla.lock')
+        e = cm.exception
+        log.debug("{!s} raised on lockdir = {!r}: {!s}".format(
+                'LockdirNotExistsError', ldir, e))
+        del locker
+
+        if os.getegid():
+            ldir = '/var'
+            os.chmod(ldir, 0)
+            locker = PbLockHandler(
+                appname = 'test_base_object',
+                verbose = 3,
+                lockdir = ldir,
+            )
+            with self.assertRaises(LockdirNotExistsError) as cm:
+                locker.create_lockfile('bla.lock')
+            e = cm.exception
+            log.debug("{!s} raised on lockdir = {!r}: {!s}".format(
+                    'LockdirNotExistsError', ldir, e))
+
 #==============================================================================
 
 
@@ -81,6 +130,8 @@ if __name__ == '__main__':
             'test_lock.TestPbLockHandler.test_object'))
     suite.addTests(loader.loadTestsFromName(
             'test_lock.TestPbLockHandler.test_simple_lockfile'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_lock.TestPbLockHandler.test_invalid_dir'))
 
     runner = unittest.TextTestRunner(verbosity = verbose)
 

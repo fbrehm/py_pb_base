@@ -79,7 +79,8 @@ class LockdirNotExistsError(LockHandlerError):
     def __str__(self):
         """Typecasting into a string for error output."""
 
-        return _("Locking directory {!r} doesn't exists.").format(self.lockdir)
+        return _("Locking directory {!r} doesn't exists or is not a directory.").format(
+                self.lockdir)
 
 #==============================================================================
 class LockdirNotWriteableError(LockHandlerError):
@@ -614,6 +615,11 @@ class PbLockHandler(PbBaseHandler):
         @rtype: bool
 
         """
+
+        if os.path.isabs(lockfile):
+            lockfile = os.path.normpath(lockfile)
+        else:
+            lockfile = os.path.normpath(os.path.join(self.lockdir, lockfile))
 
         if not os.path.exists(lockfile):
             log.debug(_("Lockfile {!r} to remove doesn't exists.").format(
