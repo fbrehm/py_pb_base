@@ -1,3 +1,10 @@
+py-provisioning-daemon (0.3.18-1) unstable; urgency=low
+
+  * Version bump
+  * Added pb_base/handler/lock.py for handling lockfiles
+
+ -- Developer <so@profitbricks.com>  Fri, 18 Jan 2013 16:42:37 +0000
+
 profitbricks-python-base (0.3.17-1) unstable; urgency=low
 
   * Version bump
