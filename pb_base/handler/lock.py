@@ -79,7 +79,7 @@ class LockdirNotExistsError(LockHandlerError):
     def __str__(self):
         """Typecasting into a string for error output."""
 
-        return _("Locking directory %r doesn't exists.") % (self.lockdir)
+        return _("Locking directory {!r} doesn't exists.").format(self.lockdir)
 
 #==============================================================================
 class LockdirNotWriteableError(LockHandlerError):
@@ -104,7 +104,7 @@ class LockdirNotWriteableError(LockHandlerError):
     def __str__(self):
         """Typecasting into a string for error output."""
 
-        return _("Locking directory %r isn't writeable.") % (self.lockdir)
+        return _("Locking directory {!r} isn't writeable.").format(self.lockdir)
 
 #==============================================================================
 class PbLockHandler(PbBaseHandler):
@@ -244,14 +244,14 @@ class PbLockHandler(PbBaseHandler):
     @lockretry_delay_start.setter
     def lockretry_delay_start(self, value):
         if not isinstance(value, Number):
-            msg = _("Value %(val)r for %(what)s is not a Number.") % {
-                    'val': value, 'what': 'lockretry_delay_start'}
+            msg = _("Value {val!r} for {what} is not a Number.").format(
+                    val = value, what = 'lockretry_delay_start')
             raise LockHandlerError(msg)
 
         if value <= 0:
-            msg = _("The value for %(what)s must be greater " +
-                    "than zero (is %(val)r).") % {
-                    'what': 'lockretry_delay_start', 'val': value}
+            msg = _("The value for {what} must be greater " +
+                    "than zero (is {val!r}).").format(
+                    val = value, what = 'lockretry_delay_start')
             raise LockHandlerError(msg)
 
         self._lockretry_delay_start = value
@@ -267,14 +267,14 @@ class PbLockHandler(PbBaseHandler):
     @lockretry_delay_increase.setter
     def lockretry_delay_increase(self, value):
         if not isinstance(value, Number):
-            msg = _("Value %(val)r for %(what)s is not a Number.") % {
-                    'val': value, 'what': 'lockretry_delay_increase'}
+            msg = _("Value {val!r} for {what} is not a Number.").format(
+                    val = value, what = 'lockretry_delay_increase')
             raise LockHandlerError(msg)
 
         if value < 0:
-            msg = _("The value for %(what)s must be greater than or " +
-                    "equal to zero (is %(val)r).") % {
-                    'what': 'lockretry_delay_increase', 'val': value}
+            msg = _("The value for {what} must be greater than or " +
+                    "equal to zero (is {val!r}).").format(
+                    val = value, what = 'lockretry_delay_increase')
             raise LockHandlerError(msg)
 
         self._lockretry_delay_increase = value
@@ -290,14 +290,14 @@ class PbLockHandler(PbBaseHandler):
     @lockretry_max_delay.setter
     def lockretry_max_delay(self, value):
         if not isinstance(value, Number):
-            msg = _("Value %(val)r for %(what)s is not a Number.") % {
-                    'val': value, 'what': 'lockretry_max_delay'}
+            msg = _("Value {val!r} for {what} is not a Number.").format(
+                    val = value, what = 'lockretry_max_delay')
             raise LockHandlerError(msg)
 
         if value <= 0:
-            msg = _("The value for %(what)s must be greater " +
-                    "than zero (is %(val)r).") % {
-                    'what': 'lockretry_max_delay', 'val': value}
+            msg = _("The value for {what} must be greater " +
+                    "than zero (is {val!r}).").format(
+                    val = value, what = 'lockretry_max_delay')
             raise LockHandlerError(msg)
 
         self._lockretry_max_delay = value
@@ -314,14 +314,14 @@ class PbLockHandler(PbBaseHandler):
     @max_lockfile_age.setter
     def max_lockfile_age(self, value):
         if not isinstance(value, Number):
-            msg = _("Value %(val)r for %(what)s is not a Number.") % {
-                    'val': value, 'what': 'max_lockfile_age'}
+            msg = _("Value {val!r} for {what} is not a Number.").format(
+                    val = value, what = 'max_lockfile_age')
             raise LockHandlerError(msg)
 
         if value <= 0:
-            msg = _("The value for %(what)s must be greater " +
-                    "than zero (is %(val)r).") % {
-                    'what': 'max_lockfile_age', 'val': value}
+            msg = _("The value for {what} must be greater " +
+                    "than zero (is {val!r}).").format(
+                    val = value, what = 'max_lockfile_age')
             raise LockHandlerError(msg)
 
         self._max_lockfile_age = value
@@ -424,8 +424,6 @@ class PbLockHandler(PbBaseHandler):
             delay_start = self.lockretry_delay_start
         else:
             if not isinstance(delay_start, Number):
-#                msg = _("Value %(val)r for %(what)s is not a Number.") % {
-#                        'val': delay_start, 'what': 'delay_start'}
                 msg = _("Value {val!r} for {what!s} is not a Number.").format(
                         val = delay_start, what = 'delay_start')
                 raise LockHandlerError(msg)
@@ -436,24 +434,24 @@ class PbLockHandler(PbBaseHandler):
                 raise LockHandlerError(msg)
 
         if delay_increase is None:
-            delay_increase = self.self.lockretry_delay_increase
+            delay_increase = self.lockretry_delay_increase
         else:
             if not isinstance(delay_increase, Number):
-                msg = _("Value %(val)r for %(what)s is not a Number.") % {
-                        'val': delay_increase, 'what': 'delay_increase'}
+                msg = _("Value {val!r} for {what!s} is not a Number.").format(
+                        val = delay_increase, what = 'delay_increase')
                 raise LockHandlerError(msg)
             if delay_start < 0:
-                msg = _("The value for %(what)s must be greater than or " +
-                        "equal to zero (is %(val)r).") % {
-                        'what': 'delay_increase', 'val': delay_increase}
+                msg = _("The value for {what} must be greater than or " +
+                        "equal to zero (is {val!r}).").format(
+                        val = delay_increase, what = 'delay_increase')
                 raise LockHandlerError(msg)
 
         if max_delay is None:
             max_delay = self.lockretry_max_delay
         else:
             if not isinstance(max_delay, Number):
-                msg = _("Value %(val)r for %(what)s is not a Number.") % {
-                        'val': max_delay, 'what': 'max_delay'}
+                msg = _("Value {val!r} for {what!s} is not a Number.").format(
+                        val = max_delay, what = 'max_delay')
                 raise LockHandlerError(msg)
             if max_delay <= 0:
                 msg = _("The value for %(what)s must be greater " +
@@ -471,8 +469,8 @@ class PbLockHandler(PbBaseHandler):
             max_age = self.max_lockfile_age
         else:
             if not isinstance(max_age, Number):
-                msg = _("Value %(val)r for %(what)s is not a Number.") % {
-                        'val': max_age, 'what': 'max_age'}
+                msg = _("Value {val!r} for {what!s} is not a Number.").format(
+                        val = max_age, what = 'max_age')
                 raise LockHandlerError(msg)
             if max_age <= 0:
                 msg = _("The value for %(what)s must be greater " +
@@ -485,7 +483,7 @@ class PbLockHandler(PbBaseHandler):
         else:
             pid = int(pid)
             if pid <= 0:
-                msg = _("Invalid PID %d given on calling create_lockfile().") % (
+                msg = _("Invalid PID {:d} given on calling create_lockfile().").format(
                         pid)
                 raise LockHandlerError(msg)
 
@@ -495,15 +493,15 @@ class PbLockHandler(PbBaseHandler):
             lockfile = os.path.normpath(os.path.join(self.lockdir, lockfile))
 
         lockdir = os.path.dirname(lockfile)
-        log.debug(_("Trying to lock lockfile %r ..."), lockfile)
+        log.debug(_("Trying to lock lockfile {!r} ...").format(lockfile))
         if self.verbose > 1:
-            log.debug(_("Using lock directory %r ..."), lockdir)
+            log.debug(_("Using lock directory {!r} ...").format(lockdir))
 
         if not os.path.isdir(lockdir):
             raise LockdirNotExistsError(lockdir)
 
         if not os.access(lockdir, os.W_OK):
-            msg = _("Locking directory %r isn't writeable.") % (lockdir)
+            msg = _("Locking directory {!r} isn't writeable.").format(lockdir)
             if self.simulate:
                 log.error(msg)
             else:
@@ -523,8 +521,6 @@ class PbLockHandler(PbBaseHandler):
             counter += 1
 
             # Try creating lockfile exclusive
-#            log.debug(_("Try %(try)d on creating lockfile %(file)r ...") % {
-#                    'try': counter, 'file': lockfile)
             log.debug(_("Try {try_nr:d} on creating lockfile {lfile!r} ...").format(
                     try_nr = counter, lfile = lockfile))
             fd = self._create_lockfile(lockfile)
@@ -533,16 +529,16 @@ class PbLockHandler(PbBaseHandler):
                 break
 
             # Check for other process, using this lockfile
-            if not self.check_lockfile(lockfile, max_age, check_pid):
+            if not self.check_lockfile(lockfile, max_age, use_pid):
                 # No other process is using this lockfile
                 if os.path.exists(lockfile):
-                    log.info(_("Removing lockfile %r ..."), lockfile)
+                    log.info(_("Removing lockfile {!r} ...").format(lockfile))
                 try:
                     if not self.simulate:
                         os.remove(lockfile)
                 except Exception, e:
-                    msg = _("Error on removing lockfile %(file)r: %(err)s") % {
-                            'file': lockfile, 'err': e.strerror}
+                    msg = _("Error on removing lockfile {lfile!r}: {err!s}").format(
+                            lfile = lockfile, err = e)
                     log.error(msg)
                     time.sleep(delay)
                     delay += delay_increase
@@ -554,7 +550,7 @@ class PbLockHandler(PbBaseHandler):
 
             # No success, then retry later
             if self.verbose > 2:
-                log.debug(_("Sleeping for %0.1f seconds."), float(delay))
+                log.debug(_("Sleeping for {:0.1f} seconds.").format(float(delay)))
             time.sleep(delay)
             delay += delay_increase
 
@@ -568,7 +564,7 @@ class PbLockHandler(PbBaseHandler):
 
         # or an int for success
         log.info(_("Got a lock for lockfile {!r}.").format(lockfile))
-        out = "{%d}\n".format(pid)
+        out = "{:d}\n".format(pid)
         log.debug(_("Write {what!r} in lockfile {lfile!r} ...").format(
                 what = out, lfile = lockfile))
         if not self.simulate:
@@ -588,7 +584,7 @@ class PbLockHandler(PbBaseHandler):
         """
 
         if self.verbose > 1:
-            log.debug(_("Trying opening '%s' exclusive ..."), lockfile)
+            log.debug(_("Trying to open {!r} exclusive ...").format(lockfile))
         if self.simulate:
             log.debug(_("Simulation mode, no real creation of a lockfile."))
             return -1
@@ -596,8 +592,8 @@ class PbLockHandler(PbBaseHandler):
         try:
             fd = os.open(lockfile, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0644)
         except OSError, e:
-            msg = _("Error on creating lockfile %(file)r: %(err)s") % {
-                    'file': lockfile, 'err': e.strerror}
+            msg = _("Error on creating lockfile {lfile!r}: {err!s}").format(
+                    lfile = lockfile, err = e)
             if e.errno == errno.EEXIST:
                 log.debug(msg)
                 return None
@@ -642,23 +638,23 @@ class PbLockHandler(PbBaseHandler):
         return True
 
     #--------------------------------------------------------------------------
-    def check_lockfile(self, lockfile, max_age = None, check_pid = None):
+    def check_lockfile(self, lockfile, max_age = None, use_pid = None):
         """
         Checks the validity of the given lockfile.
 
-        If check_pid is True, and there is a PID inside the lockfile, then
+        If use_pid is True, and there is a PID inside the lockfile, then
         this PID is checked for a running process.
-        If check_pid is not True, then the age of the lockfile is checked
+        If use_pid is not True, then the age of the lockfile is checked
         against the parameter max_age.
 
         @param lockfile: the lockfile to check
         @type lockfile: str
         @param max_age: the maximum age of the lockfile (in seconds), for
-                        this lockfile is valid (if check_pid id False).
+                        this lockfile is valid (if use_pid is False).
         @type max_age: int
-        @param check_pid: check the content of the lockfile for a PID
+        @param use_pid: check the content of the lockfile for a PID
                           of a running process
-        @type check_pid: bool
+        @type use_pid: bool
 
         @return: Validity of the lockfile (PID exists and shows to a
                  running process or the lockfile is not too old).
@@ -677,15 +673,10 @@ class PbLockHandler(PbBaseHandler):
             max_age = self.max_lockfile_age
         else:
             if not isinstance(max_age, Number):
-#                msg = _("Value %(val)r for %(what)s is not a Number.") % {
-#                        'val': max_age, 'what': 'max_age'}
                 msg = _("Value {val!r} for {what} is not a Number.").format(
                         val = max_age, what = 'max_age')
                 raise LockHandlerError(msg)
             if max_age <= 0:
-#                msg = _("The value for %(what)s must be greater " +
-#                        "than zero (is %(val)r).") % {
-#                        'what': 'max_age', 'val': max_age}
                 msg = _("The value for {what} must be greater " +
                         "than zero (is {val!r}).").format(
                         val = max_age, what = 'max_age')
@@ -706,7 +697,7 @@ class PbLockHandler(PbBaseHandler):
             log.warn(_("No write access for lockfile {!r}.").format(lockfile))
             return True
 
-        if check_pid:
+        if use_pid:
             pid = self.get_pid_from_file(lockfile, True)
             if pid is None:
                 log.warning(_("Unusable lockfile {!r}.").format(lockfile))

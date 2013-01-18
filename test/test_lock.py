@@ -58,10 +58,11 @@ class TestPbLockHandler(PbBaseTestcase):
 
         locker = PbLockHandler(
             appname = 'test_base_object',
-            verbose = 1,
+            verbose = 3,
             lockdir = '/tmp',
         )
-        log.debug("PbLockHandler %%s: %s", str(locker))
+        locker.create_lockfile('bla.lock')
+        locker.remove_lockfile('bla.lock')
 
 #==============================================================================
 
