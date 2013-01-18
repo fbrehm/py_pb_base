@@ -102,7 +102,7 @@ my_debchange() {
 
     TMP_FILE="debian/changelog.new"
 
-    echo "py-provisioning-daemon (${version}) ${stage}; urgency=low" >"${TMP_FILE}"
+    echo "profitbricks-python-base (${version}) ${stage}; urgency=low" >"${TMP_FILE}"
     echo >>"${TMP_FILE}"
     for entry in "$@"; do
         if [ "${entry}" != "" ] ; then
