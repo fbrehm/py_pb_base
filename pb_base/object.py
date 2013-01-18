@@ -218,6 +218,23 @@ class PbBaseObject(object):
         return pp(self.as_dict())
 
     #--------------------------------------------------------------------------
+    def __repr__(self):
+        """Typecasting into a string for reproduction."""
+
+        out = "<%s(" % (self.__class__.__name__)
+
+        fields = []
+        fields.append("appname=%r" % (self.appname))
+        fields.append("verbose=%r" % (self.verbose))
+        fields.append("version=%r" % (self.version))
+        fields.append("base_dir=%r" % (self.base_dir))
+        fields.append("use_stderr=%r" % (self.use_stderr))
+        fields.append("initialized=%r" % (self.initialized))
+
+        out += ", ".join(fields) + ")>"
+        return out
+
+    #--------------------------------------------------------------------------
     def as_dict(self):
         """
         Transforms the elements of the object into a dict
