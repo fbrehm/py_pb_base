@@ -14,6 +14,9 @@
 import sys 
 import os
 import logging
+import time
+import errno
+import traceback
 
 from numbers import Number
 
@@ -241,13 +244,14 @@ class PbLockHandler(PbBaseHandler):
     @lockretry_delay_start.setter
     def lockretry_delay_start(self, value):
         if not isinstance(value, Number):
-            msg = _("Value %r for lockretry_delay_start is not a Number.") % (
-                    value)
+            msg = _("Value %(val)r for %(what)s is not a Number.") % {
+                    'val': value, 'what': 'lockretry_delay_start'}
             raise LockHandlerError(msg)
 
         if value <= 0:
-            msg = _("The value for lockretry_delay_start must be greater " +
-                    "than zero (is %r).") % (value)
+            msg = _("The value for %(what)s must be greater " +
+                    "than zero (is %(val)r).") % {
+                    'what': 'lockretry_delay_start', 'val': value}
             raise LockHandlerError(msg)
 
         self._lockretry_delay_start = value
@@ -263,13 +267,14 @@ class PbLockHandler(PbBaseHandler):
     @lockretry_delay_increase.setter
     def lockretry_delay_increase(self, value):
         if not isinstance(value, Number):
-            msg = _("Value %r for lockretry_delay_increase is not a Number.") % (
-                    value)
+            msg = _("Value %(val)r for %(what)s is not a Number.") % {
+                    'val': value, 'what': 'lockretry_delay_increase'}
             raise LockHandlerError(msg)
 
         if value < 0:
-            msg = _("The value for lockretry_delay_increase must be greater " +
-                    "than or equal to zero (is %r).") % (value)
+            msg = _("The value for %(what)s must be greater than or " +
+                    "equal to zero (is %(val)r).") % {
+                    'what': 'lockretry_delay_increase', 'val': value}
             raise LockHandlerError(msg)
 
         self._lockretry_delay_increase = value
@@ -285,13 +290,14 @@ class PbLockHandler(PbBaseHandler):
     @lockretry_max_delay.setter
     def lockretry_max_delay(self, value):
         if not isinstance(value, Number):
-            msg = _("Value %r for lockretry_max_delay is not a Number.") % (
-                    value)
+            msg = _("Value %(val)r for %(what)s is not a Number.") % {
+                    'val': value, 'what': 'lockretry_max_delay'}
             raise LockHandlerError(msg)
 
-        if value < 0:
-            msg = _("The value for lockretry_max_delay must be greater " +
-                    "than zero (is %r).") % (value)
+        if value <= 0:
+            msg = _("The value for %(what)s must be greater " +
+                    "than zero (is %(val)r).") % {
+                    'what': 'lockretry_max_delay', 'val': value}
             raise LockHandlerError(msg)
 
         self._lockretry_max_delay = value
@@ -308,13 +314,14 @@ class PbLockHandler(PbBaseHandler):
     @max_lockfile_age.setter
     def max_lockfile_age(self, value):
         if not isinstance(value, Number):
-            msg = _("Value %r for max_lockfile_age is not a Number.") % (
-                    value)
+            msg = _("Value %(val)r for %(what)s is not a Number.") % {
+                    'val': value, 'what': 'max_lockfile_age'}
             raise LockHandlerError(msg)
 
-        if value < 0:
-            msg = _("The value for max_lockfile_age must be greater " +
-                    "than zero (is %r).") % (value)
+        if value <= 0:
+            msg = _("The value for %(what)s must be greater " +
+                    "than zero (is %(val)r).") % {
+                    'what': 'max_lockfile_age', 'val': value}
             raise LockHandlerError(msg)
 
         self._max_lockfile_age = value
@@ -369,6 +376,489 @@ class PbLockHandler(PbBaseHandler):
             out += ', ' + ", ".join(fields)
         out += ")>"
         return out
+
+    #--------------------------------------------------------------------------
+    def create_lockfile(self, lockfile,
+            delay_start = None, delay_increase = None, max_delay = None,
+            use_pid = None, max_age = None, pid = None):
+        """
+        Tries to create the given lockfile exclusive.
+
+        If the lockfile exists and is valid, it waits a total maximum
+        of max_delay seconds an increasing amount of seconds to get exclusive
+        access to the lockfile.
+
+        @param lockfile: the lockfile to use as a semaphore, if not given
+                         as an absolute path, it will be supposed to be
+                         relative to self.lockdir.
+        @type lockfile: str
+        @param delay_start: the first delay in seconds after an unsuccessful
+                            lockfile creation, if not given,
+                            self.lockretry_delay_start will used.
+        @type delay_start: Number (or None)
+        @param delay_increase: seconds to increase the delay in every wait
+                               cycle, if not given, self.lockretry_delay_increase
+                               will used.
+        @type delay_increase: Number
+        @param max_delay: the total maximum delay in seconds for trying
+                          to create a lockfile, if not given,
+                          self.lockretry_max_delay will used.
+        @type max_delay: Number
+        @param use_pid: write the PID of creating process into the fresh
+                        created lockfile, if not given, self.locking_use_pid
+                        will used.
+        @type use_pid: bool
+        @param max_age: the maximum age of the lockfile (in seconds), for the
+                        existing lockfile is valid (if locking_use_pid is False).
+        @type max_age: Number
+        @param pid: the pid to write into the lockfile, if use_pid is set
+                    to True, if not given, the PID of the current process is used.
+        @type pid: int
+
+        @return: success of getting the lock
+        @rtype: bool
+
+        """
+
+        if delay_start is None:
+            delay_start = self.lockretry_delay_start
+        else:
+            if not isinstance(delay_start, Number):
+#                msg = _("Value %(val)r for %(what)s is not a Number.") % {
+#                        'val': delay_start, 'what': 'delay_start'}
+                msg = _("Value {val!r} for {what!s} is not a Number.").format(
+                        val = delay_start, what = 'delay_start')
+                raise LockHandlerError(msg)
+            if delay_start <= 0:
+                msg = _("The value for %(what)s must be greater " +
+                        "than zero (is %(val)r).") % {
+                        'what': 'delay_start', 'val': delay_start}
+                raise LockHandlerError(msg)
+
+        if delay_increase is None:
+            delay_increase = self.self.lockretry_delay_increase
+        else:
+            if not isinstance(delay_increase, Number):
+                msg = _("Value %(val)r for %(what)s is not a Number.") % {
+                        'val': delay_increase, 'what': 'delay_increase'}
+                raise LockHandlerError(msg)
+            if delay_start < 0:
+                msg = _("The value for %(what)s must be greater than or " +
+                        "equal to zero (is %(val)r).") % {
+                        'what': 'delay_increase', 'val': delay_increase}
+                raise LockHandlerError(msg)
+
+        if max_delay is None:
+            max_delay = self.lockretry_max_delay
+        else:
+            if not isinstance(max_delay, Number):
+                msg = _("Value %(val)r for %(what)s is not a Number.") % {
+                        'val': max_delay, 'what': 'max_delay'}
+                raise LockHandlerError(msg)
+            if max_delay <= 0:
+                msg = _("The value for %(what)s must be greater " +
+                        "than zero (is %(val)r).") % {
+                        'what': 'max_delay', 'val': max_delay}
+                raise LockHandlerError(msg)
+            pass
+
+        if use_pid is None:
+            use_pid = self.locking_use_pid
+        else:
+            use_pid = bool(use_pid)
+
+        if max_age is None:
+            max_age = self.max_lockfile_age
+        else:
+            if not isinstance(max_age, Number):
+                msg = _("Value %(val)r for %(what)s is not a Number.") % {
+                        'val': max_age, 'what': 'max_age'}
+                raise LockHandlerError(msg)
+            if max_age <= 0:
+                msg = _("The value for %(what)s must be greater " +
+                        "than zero (is %(val)r).") % {
+                        'what': 'max_age', 'val': max_age}
+                raise LockHandlerError(msg)
+
+        if pid is None:
+            pid = os.getpid()
+        else:
+            pid = int(pid)
+            if pid <= 0:
+                msg = _("Invalid PID %d given on calling create_lockfile().") % (
+                        pid)
+                raise LockHandlerError(msg)
+
+        if os.path.isabs(lockfile):
+            lockfile = os.path.normpath(lockfile)
+        else:
+            lockfile = os.path.normpath(os.path.join(self.lockdir, lockfile))
+
+        lockdir = os.path.dirname(lockfile)
+        log.debug(_("Trying to lock lockfile %r ..."), lockfile)
+        if self.verbose > 1:
+            log.debug(_("Using lock directory %r ..."), lockdir)
+
+        if not os.path.isdir(lockdir):
+            raise LockdirNotExistsError(lockdir)
+
+        if not os.access(lockdir, os.W_OK):
+            msg = _("Locking directory %r isn't writeable.") % (lockdir)
+            if self.simulate:
+                log.error(msg)
+            else:
+                raise LockdirNotWriteableError(lockdir)
+
+        counter = 0
+        delay = delay_start
+
+        fd = None
+        time_diff = 0
+        start_time = time.time()
+
+        # Big loop on trying to create the lockfile
+        while fd is None and time_diff < max_delay:
+
+            time_diff = time.time() - start_time
+            counter += 1
+
+            # Try creating lockfile exclusive
+#            log.debug(_("Try %(try)d on creating lockfile %(file)r ...") % {
+#                    'try': counter, 'file': lockfile)
+            log.debug(_("Try {try_nr:d} on creating lockfile {lfile!r} ...").format(
+                    try_nr = counter, lfile = lockfile))
+            fd = self._create_lockfile(lockfile)
+            if fd is not None:
+                # success, then exit
+                break
+
+            # Check for other process, using this lockfile
+            if not self.check_lockfile(lockfile, max_age, check_pid):
+                # No other process is using this lockfile
+                if os.path.exists(lockfile):
+                    log.info(_("Removing lockfile %r ..."), lockfile)
+                try:
+                    if not self.simulate:
+                        os.remove(lockfile)
+                except Exception, e:
+                    msg = _("Error on removing lockfile %(file)r: %(err)s") % {
+                            'file': lockfile, 'err': e.strerror}
+                    log.error(msg)
+                    time.sleep(delay)
+                    delay += delay_increase
+                    continue
+
+                fd = self._create_lockfile(lockfile)
+                if fd:
+                    break
+
+            # No success, then retry later
+            if self.verbose > 2:
+                log.debug(_("Sleeping for %0.1f seconds."), float(delay))
+            time.sleep(delay)
+            delay += delay_increase
+
+        # fd is either None, for no success on locking
+        if fd is None:
+            time_diff = time.time() - start_time
+            msg = _("Could not occupy lockfile {lfile!r} after {secs:0.1f} seconds on {nr:d} tries.").format(
+                    lfile = lockfile, secs = time_diff, nr = counter)
+            log.error(msg)
+            return False
+
+        # or an int for success
+        log.info(_("Got a lock for lockfile {!r}.").format(lockfile))
+        out = "{%d}\n".format(pid)
+        log.debug(_("Write {what!r} in lockfile {lfile!r} ...").format(
+                what = out, lfile = lockfile))
+        if not self.simulate:
+            os.write(fd, out)
+            os.close(fd)
+        return True
+
+    #--------------------------------------------------------------------------
+    def _create_lockfile(self, lockfile):
+        """
+        Handles exclusive creation of a lockfile.
+
+        @return: a file decriptor of the opened lockfile (if possible),
+                 or None, if it isn't.
+        @rtype: int or None
+
+        """
+
+        if self.verbose > 1:
+            log.debug(_("Trying opening '%s' exclusive ..."), lockfile)
+        if self.simulate:
+            log.debug(_("Simulation mode, no real creation of a lockfile."))
+            return -1
+        fd = None
+        try:
+            fd = os.open(lockfile, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0644)
+        except OSError, e:
+            msg = _("Error on creating lockfile %(file)r: %(err)s") % {
+                    'file': lockfile, 'err': e.strerror}
+            if e.errno == errno.EEXIST:
+                log.debug(msg)
+                return None
+            else:
+                raise LockHandlerError(msg)
+
+        return fd
+
+    #--------------------------------------------------------------------------
+    def remove_lockfile(self, lockfile):
+        """
+        Removing lockfile.
+
+        @param lockfile: the lockfile to remove.
+        @type lockfile: str
+
+        @return: the lockfile was removed (or not)
+        @rtype: bool
+
+        """
+
+        if not os.path.exists(lockfile):
+            log.debug(_("Lockfile {!r} to remove doesn't exists.").format(
+                    lockfile))
+            return True
+
+        log.info(_("Removing lockfile {!r} ...").format(lockfile))
+        if self.simulate:
+            log.debug(_("Simulation mode - lockfile won't removed."))
+            return True
+
+        try:
+            os.remove(lockfile)
+        except Exception, e:
+            msg = _("Error on removing lockfile {lfile!r}: {err!s}")
+            log.error(msg.format(lfile = lockfile, err = e))
+            if self.verbose:
+                tb = traceback.format_exc()
+                log.debug(_("Stacktrace") + ":\n" + tb)
+            return False
+
+        return True
+
+    #--------------------------------------------------------------------------
+    def check_lockfile(self, lockfile, max_age = None, check_pid = None):
+        """
+        Checks the validity of the given lockfile.
+
+        If check_pid is True, and there is a PID inside the lockfile, then
+        this PID is checked for a running process.
+        If check_pid is not True, then the age of the lockfile is checked
+        against the parameter max_age.
+
+        @param lockfile: the lockfile to check
+        @type lockfile: str
+        @param max_age: the maximum age of the lockfile (in seconds), for
+                        this lockfile is valid (if check_pid id False).
+        @type max_age: int
+        @param check_pid: check the content of the lockfile for a PID
+                          of a running process
+        @type check_pid: bool
+
+        @return: Validity of the lockfile (PID exists and shows to a
+                 running process or the lockfile is not too old).
+                 Returns False, if the lockfile is not existing, contains an
+                 invalid PID or is too old.
+        @rtype: bool
+
+        """
+
+        if use_pid is None:
+            use_pid = self.locking_use_pid
+        else:
+            use_pid = bool(use_pid)
+
+        if max_age is None:
+            max_age = self.max_lockfile_age
+        else:
+            if not isinstance(max_age, Number):
+#                msg = _("Value %(val)r for %(what)s is not a Number.") % {
+#                        'val': max_age, 'what': 'max_age'}
+                msg = _("Value {val!r} for {what} is not a Number.").format(
+                        val = max_age, what = 'max_age')
+                raise LockHandlerError(msg)
+            if max_age <= 0:
+#                msg = _("The value for %(what)s must be greater " +
+#                        "than zero (is %(val)r).") % {
+#                        'what': 'max_age', 'val': max_age}
+                msg = _("The value for {what} must be greater " +
+                        "than zero (is {val!r}).").format(
+                        val = max_age, what = 'max_age')
+                raise LockHandlerError(msg)
+
+        log.debug(_("Checking lockfile {!r} ...").format(lockfile))
+
+        if not os.path.exists(lockfile):
+            if self.verbose > 2:
+                log.debug(_("Lockfile {!r} doesn't exists.").format(lockfile))
+            return False
+
+        if not os.access(lockfile, os.R_OK):
+            log.warn(_("No read access for lockfile {!r}.").format(lockfile))
+            return True
+
+        if not os.access(lockfile, os.W_OK):
+            log.warn(_("No write access for lockfile {!r}.").format(lockfile))
+            return True
+
+        if check_pid:
+            pid = self.get_pid_from_file(lockfile, True)
+            if pid is None:
+                log.warning(_("Unusable lockfile {!r}.").format(lockfile))
+            else:
+                if self.dead(pid):
+                    log.warn(_("Process with PID {:d} is unfortunately dead.").format(pid))
+                    return False
+                else:
+                    log.debug(_("Process with PID {:d} is even running.").format(pid))
+                    return True
+        fstat = os.stat(lockfile)
+        age = time.time() - fstat.st_mtime
+        if age >= max_age:
+            msg = _("Lockfile {lfile!r} is older than {max:d} seconds ({age:d} seconds).")
+            log.debug(msg.format(lfile = lockfile, max = max_age, age = age))
+            return False
+        sg = _("Lockfile {lfile!r} is {age:d} seconds, but not old enough ({max:d} seconds)")
+        log.debug(msg.format(lfile = lockfile, max = max_age, age = age))
+        return True
+
+    #--------------------------------------------------------------------------
+    def get_pid_from_file(self, pidfile, force = False):
+        """
+        Tries to read the PID of some process from the given file.
+
+        @raise LockHandlerError: if the pidfile could not be read
+
+        @param pidfile: The file, where the PID should be in.
+        @type pidfile: str
+        @param force: Don't raise an exception, if something is going wrong.
+                      Only return None.
+        @type force: bool
+
+        @return: PID from pidfile
+        @rtype: int (or None)
+
+        """
+
+        if self.verbose > 1:
+            log.debug(_("Trying to open pidfile {!r} ...").format(pidfile))
+        try:
+            fh = open(pidfile, "rb")
+        except Exception, e:
+            msg = _("Could not open pidfile {!r} for reading:").format(pidfile)
+            msg += " " + str(e)
+            if force:
+                log.warn(msg)
+                return None
+            else:
+                raise LockHandlerError(str(e))
+
+        content = fh.readline()
+        fh.close()
+
+        content = content.strip()
+        if content == "":
+            msg = _("First line of pidfile {!r} was empty.").format(pidfile)
+            if force:
+                log.warn(msg)
+                return None
+            else:
+                raise LockHandlerError(msg)
+
+        pid = None
+        try:
+            pid = int(content)
+        except Exception, e:
+            msg = ("Could not interprete '%s' as a PID from '%s': %s" %
+                    (content, pidfile, str(e)))
+            msg = _("Could not interprete {cont!r} as a PID from {file!r}:").format(
+                    cont = content, file = pidfile)
+            msg += " " + str(e)
+            if force:
+                log.warn(msg)
+                return None
+            else:
+                raise LockHandlerError(msg)
+
+        if pid <= 0:
+            msg = _("Invalid PID {pid:d} in {file!r} found.").format(
+                    pid = pid, file = pidfile)
+            if force:
+                log.warn(msg)
+                return None
+            else:
+                raise LockHandlerError(msg)
+
+        return pid
+
+    #--------------------------------------------------------------------------
+    def kill(self, pid, signal = 0):
+        """
+        Sends a signal to a process.
+
+        @raise OSError: on some unpredictable errors
+
+        @param pid: the PID of the process
+        @type pid: int
+        @param signal: the signal to send to the process, if the signal is 0
+                       (the default), no real signal is sent to the process,
+                       it will only checked, whether the process is dead or not
+        @type signal: int
+
+        @return: the process is dead or not
+        @rtype: bool
+
+        """
+
+        try:
+            return os.kill(pid, signal)
+        except OSError, e:
+            #process is dead
+            if e.errno == 3:
+                return True
+            #no permissions
+            elif e.errno == 1:
+                return False
+            else:
+                #reraise the error
+                raise
+
+    #--------------------------------------------------------------------------
+    def dead(self, pid):
+        """
+        Gives back, whether the process with the given pid is dead
+
+        @raise OSError: on some unpredictable errors
+
+        @param pid: the PID of the process to check
+        @type pid: int
+
+        @return: the process is dead or not
+        @rtype: bool
+
+        """
+
+        if self.kill(pid):
+            return True
+
+        #maybe the pid is a zombie that needs us to wait4 it
+        from os import waitpid, WNOHANG
+
+        try:
+            dead = waitpid(pid, WNOHANG)[0]
+        except OSError, e:
+            #pid is not a child
+            if e.errno == 10:
+                return False
+            else:
+                raise
+
+        return dead
 
 #==============================================================================
 if __name__ == "__main__":
