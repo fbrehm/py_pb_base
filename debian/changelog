@@ -1,3 +1,10 @@
+py-provisioning-daemon (0.3.19-1) unstable; urgency=low
+
+  * Version bump
+  * Bugfixing and additional unittests for pb_base.handler.lock
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Fri, 18 Jan 2013 18:21:48 +0100
+
 py-provisioning-daemon (0.3.18-1) unstable; urgency=low
 
   * Version bump
