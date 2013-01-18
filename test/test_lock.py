@@ -53,8 +53,11 @@ class TestPbLockHandler(PbBaseTestcase):
     #--------------------------------------------------------------------------
     def remove_lockfile(self, filename):
 
-        log.debug("Removing {!r} ...".format(filename))
-        os.remove(filename)
+        if os.path.exists(filename):
+            log.debug("Removing {!r} ...".format(filename))
+            os.remove(filename)
+        else:
+            log.debug("Lockfile {!r} doesn't exists.".format(filename))
 
     #--------------------------------------------------------------------------
     def test_object(self):
@@ -101,17 +104,117 @@ class TestPbLockHandler(PbBaseTestcase):
 
         if os.getegid():
             ldir = '/var'
-            os.chmod(ldir, 0)
             locker = PbLockHandler(
                 appname = 'test_base_object',
                 verbose = 3,
                 lockdir = ldir,
             )
-            with self.assertRaises(LockdirNotExistsError) as cm:
+            with self.assertRaises(LockdirNotWriteableError) as cm:
                 locker.create_lockfile('bla.lock')
             e = cm.exception
             log.debug("{!s} raised on lockdir = {!r}: {!s}".format(
-                    'LockdirNotExistsError', ldir, e))
+                    'LockdirNotWriteableError', ldir, e))
+
+    #--------------------------------------------------------------------------
+    def test_valid_lockfile(self):
+
+        log.info("Testing fail on creation lockfile with a valid PID.")
+
+        content = "{:d}\n".format(os.getpid())
+
+        locker = PbLockHandler(
+            appname = 'test_base_object',
+            verbose = 3,
+            lockdir = '/tmp',
+        )
+
+        lockfile = self.create_lockfile(content)
+        try:
+            result = locker.create_lockfile(
+                lockfile,
+                delay_start = 0.2,
+                delay_increase = 0.4,
+                max_delay = 5
+            )
+            if result:
+                self.fail("PbLockHandler shouldn't be able to create the lockfile.")
+        finally:
+            self.remove_lockfile(lockfile)
+
+    #--------------------------------------------------------------------------
+    def test_invalid_lockfile1(self):
+
+        log.info("Testing creation lockfile with an invalid previous lockfile #1.")
+
+        locker = PbLockHandler(
+            appname = 'test_base_object',
+            verbose = 3,
+        )
+
+        content = "\n\n"
+        lockfile = self.create_lockfile(content)
+        try:
+            result = locker.create_lockfile(
+                lockfile,
+                delay_start = 0.2,
+                delay_increase = 0.4,
+                max_delay = 5
+            )
+            locker.remove_lockfile(lockfile)
+            if result:
+                self.fail("PbLockHandler should not be able to create the lockfile.")
+        finally:
+            self.remove_lockfile(lockfile)
+
+    #--------------------------------------------------------------------------
+    def test_invalid_lockfile2(self):
+
+        log.info("Testing creation lockfile with an invalid previous lockfile #2.")
+
+        locker = PbLockHandler(
+            appname = 'test_base_object',
+            verbose = 3,
+        )
+
+        content = "Bli bla blub\n\n"
+        lockfile = self.create_lockfile(content)
+        try:
+            result = locker.create_lockfile(
+                lockfile,
+                delay_start = 0.2,
+                delay_increase = 0.4,
+                max_delay = 5
+            )
+            locker.remove_lockfile(lockfile)
+            if result:
+                self.fail("PbLockHandler should not be able to create the lockfile.")
+        finally:
+            self.remove_lockfile(lockfile)
+
+    #--------------------------------------------------------------------------
+    def test_invalid_lockfile3(self):
+
+        log.info("Testing creation lockfile with an invalid previous lockfile #3.")
+
+        locker = PbLockHandler(
+            appname = 'test_base_object',
+            verbose = 3,
+        )
+
+        content = "123456\n\n"
+        lockfile = self.create_lockfile(content)
+        try:
+            result = locker.create_lockfile(
+                lockfile,
+                delay_start = 0.2,
+                delay_increase = 0.4,
+                max_delay = 5
+            )
+            locker.remove_lockfile(lockfile)
+            if not result:
+                self.fail("PbLockHandler should be able to create the lockfile.")
+        finally:
+            self.remove_lockfile(lockfile)
 
 #==============================================================================
 
@@ -132,6 +235,14 @@ if __name__ == '__main__':
             'test_lock.TestPbLockHandler.test_simple_lockfile'))
     suite.addTests(loader.loadTestsFromName(
             'test_lock.TestPbLockHandler.test_invalid_dir'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_lock.TestPbLockHandler.test_valid_lockfile'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_lock.TestPbLockHandler.test_invalid_lockfile1'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_lock.TestPbLockHandler.test_invalid_lockfile2'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_lock.TestPbLockHandler.test_invalid_lockfile3'))
 
     runner = unittest.TextTestRunner(verbosity = verbose)
 

@@ -521,6 +521,11 @@ class PbLockHandler(PbBaseHandler):
             time_diff = time.time() - start_time
             counter += 1
 
+            if self.verbose > 3:
+                log.debug(_("Current time difference: {:0.3f} seconds.").format(time_diff))
+            if time_diff >= max_delay:
+                break
+
             # Try creating lockfile exclusive
             log.debug(_("Try {try_nr:d} on creating lockfile {lfile!r} ...").format(
                     try_nr = counter, lfile = lockfile))
@@ -720,8 +725,8 @@ class PbLockHandler(PbBaseHandler):
             msg = _("Lockfile {lfile!r} is older than {max:d} seconds ({age:d} seconds).")
             log.debug(msg.format(lfile = lockfile, max = max_age, age = age))
             return False
-        sg = _("Lockfile {lfile!r} is {age:d} seconds, but not old enough ({max:d} seconds)")
-        log.debug(msg.format(lfile = lockfile, max = max_age, age = age))
+        msg = _("Lockfile {lfile!r} is {age:d} seconds old, but not old enough ({maxage:d} seconds)")
+        log.debug(msg.format(lfile = lockfile, maxage = int(max_age), age = int(age)))
         return True
 
     #--------------------------------------------------------------------------
