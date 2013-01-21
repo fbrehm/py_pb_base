@@ -35,7 +35,7 @@ from pb_base.handler import PbBaseHandler
 
 from pb_base.translate import translator
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 log = logging.getLogger(__name__)
 
@@ -303,6 +303,49 @@ class PbLock(PbBaseObject):
             out += ', ' + ", ".join(fields)
         out += ")>"
         return out
+
+    #--------------------------------------------------------------------------
+    def __del__(self):
+        """Destructor.
+
+        Removes the lockfile, if self.autoremove is True
+
+        """
+
+        if not getattr(self, '_initialized', False):
+            return
+
+        if self.autoremove and self.exists:
+
+            msg = _("Automatic removing of {!r} ...").format(self.lockfile)
+            log.info(msg)
+
+            if not self.simulate:
+                os.remove(self.lockfile)
+
+    #--------------------------------------------------------------------------
+    def exists(self):
+        """Returns, whether the lockfile exists or not."""
+
+        if self.simulate:
+            return True
+
+        return os.path.exists(self.lockfile)
+
+    #--------------------------------------------------------------------------
+    def refresh(self):
+        """
+        Refreshes the atime and mtime of the lockfile to the current time.
+        """
+
+        msg = _("Refreshing atime and mtime of {!r} to the current timestamp.")
+        msg = msg.format(self.lockfile)
+        log.debug(msg)
+
+        if not self.simulate:
+            os.utime(self.lockfile, None)
+
+        self._mtime = datetime.datetime.utcnow()
 
 #==============================================================================
 class PbLockHandler(PbBaseHandler):

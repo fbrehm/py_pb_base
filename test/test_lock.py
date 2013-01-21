@@ -14,6 +14,7 @@ import os
 import sys
 import logging
 import tempfile
+import time
 
 libdir = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
 sys.path.insert(0, libdir)
@@ -93,10 +94,39 @@ class TestPbLockHandler(PbBaseTestcase):
             appname = 'test_base_object',
             verbose = 3,
         )
-        lock = locker.create_lockfile('bla.lock')
-        log.debug("PbLock object %%r: %r", lock)
-        log.debug("PbLock object %%s: %s", str(lock))
-        locker.remove_lockfile('bla.lock')
+        try:
+            lock = locker.create_lockfile('bla.lock')
+            log.debug("PbLock object %%r: %r", lock)
+            log.debug("PbLock object %%s: %s", str(lock))
+        finally:
+            locker.remove_lockfile('bla.lock')
+
+    #--------------------------------------------------------------------------
+    def test_refresh_lockobject(self):
+
+        log.info("Testing refreshing of a lock object.")
+
+        locker = PbLockHandler(
+            appname = 'test_base_object',
+            verbose = 3,
+        )
+        try:
+            lock = locker.create_lockfile('bla.lock')
+            log.debug("Current ctime: %s" % (lock.ctime.isoformat(' ')))
+            log.debug("Current mtime: %s" % (lock.mtime.isoformat(' ')))
+            fstat1 = os.stat(lock.lockfile)
+            mtime1 = fstat1.st_mtime
+            log.debug("Sleeping two secends ...")
+            time.sleep(2)
+            lock.refresh()
+            log.debug("New mtime: %s" % (lock.mtime.isoformat(' ')))
+            fstat2 = os.stat(lock.lockfile)
+            mtime2 = fstat2.st_mtime
+            tdiff = mtime2 - mtime1
+            log.debug("Got a time difference between mtimes of %0.3f seconds." % (tdiff))
+            self.assertGreater(mtime2, mtime1)
+        finally:
+            locker.remove_lockfile('bla.lock')
 
     #--------------------------------------------------------------------------
     def test_invalid_dir(self):
@@ -253,6 +283,8 @@ if __name__ == '__main__':
             'test_lock.TestPbLockHandler.test_valid_lockfile'))
     suite.addTests(loader.loadTestsFromName(
             'test_lock.TestPbLockHandler.test_lockobject'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_lock.TestPbLockHandler.test_refresh_lockobject'))
     suite.addTests(loader.loadTestsFromName(
             'test_lock.TestPbLockHandler.test_invalid_lockfile1'))
     suite.addTests(loader.loadTestsFromName(
