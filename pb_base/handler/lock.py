@@ -11,12 +11,13 @@
 """
 
 # Standard modules
-import sys 
+import sys
 import os
 import logging
 import time
 import errno
 import traceback
+import datetime
 
 from numbers import Number
 
@@ -26,6 +27,7 @@ from numbers import Number
 from pb_base.common import pp, to_unicode_or_bust, to_utf8_or_bust
 
 from pb_base.object import PbBaseObjectError
+from pb_base.object import PbBaseObject
 
 from pb_base.handler import PbBaseHandlerError
 from pb_base.handler import CommandNotFoundError
@@ -33,7 +35,7 @@ from pb_base.handler import PbBaseHandler
 
 from pb_base.translate import translator
 
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 
 log = logging.getLogger(__name__)
 
@@ -52,6 +54,15 @@ class LockHandlerError(PbBaseHandlerError):
     """
     Base exception class for all exceptions belonging to locking issues
     in this module
+    """
+
+    pass
+
+#==============================================================================
+class LockObjectError(LockHandlerError):
+    """
+    Special exception class for exceptions raising inside methods of
+    the PbLock.
     """
 
     pass
@@ -106,6 +117,192 @@ class LockdirNotWriteableError(LockHandlerError):
         """Typecasting into a string for error output."""
 
         return _("Locking directory {!r} isn't writeable.").format(self.lockdir)
+
+#==============================================================================
+class PbLock(PbBaseObject):
+    """
+    Capsulation class as a result of a successful lock action. It contains all
+    important informations about the lock.
+
+    It can be used for holding these informations and, if desired, to remove
+    the lock automatically, if the current instance of PbLock is removed.
+
+    """
+
+    #--------------------------------------------------------------------------
+    def __init__(self,
+            lockfile,
+            ctime = None,
+            mtime = None,
+            fcontent = None,
+            simulate = False,
+            autoremove = False,
+            appname = None,
+            verbose = 0,
+            version = __version__,
+            base_dir = None,
+            use_stderr = False,
+    ):
+        """
+        Initialisation of the PbLock object.
+
+        @raise LockObjectError: on a uncoverable error.
+
+        @param lockfile: the file, which represents the lock, must exists
+        @type lockfile: str
+        @param ctime: the creation time of the lockfile
+        @type ctime: datetime
+        @param mtime: the modification time of the lockfile
+        @type mtime: datetime
+        @param fcontent: the content of the lockfile
+        @type fcontent: str
+        @param simulate: don't execute actions, only display them
+        @type simulate: bool
+        @param autoremove: removing the lockfile on deleting the current object
+        @type autoremove: bool
+        @param appname: name of the current running application
+        @type appname: str
+        @param verbose: verbose level
+        @type verbose: int
+        @param version: the version string of the current object or application
+        @type version: str
+        @param base_dir: the base directory of all operations
+        @type base_dir: str
+        @param use_stderr: a flag indicating, that on handle_error() the output
+                           should go to STDERR, even if logging has
+                           initialized logging handlers.
+        @type use_stderr: bool
+
+        @return: None
+        """
+
+        super(PbLock, self).__init__(
+                appname = appname,
+                verbose = verbose,
+                version = version,
+                base_dir = base_dir,
+                use_stderr = use_stderr,
+                initialized = False,
+        )
+
+        if not lockfile:
+            msg = _("No lockfile given on init of a PbLock object.")
+            raise LockObjectError(msg)
+
+        if not os.path.exists(lockfile):
+            msg = _("Lockfile {!r} doesn't exists.")
+            msg = msg.format(lockfile)
+            raise LockObjectError(msg)
+
+        if not os.path.isfile(lockfile):
+            msg = _("Lockfile {!r} is not a regular file.")
+            msg = msg.format(lockfile)
+            raise LockObjectError(msg)
+
+        self._lockfile = os.path.realpath(lockfile)
+
+        self._fcontent = None
+        if fcontent is not None:
+            self._fcontent = str(fcontent)
+        self._simulate = bool(simulate)
+        self._autoremove = bool(autoremove)
+
+        self._ctime = ctime
+        self._mtime = mtime
+
+        # Detecting self._ctime and self._mtime from filestat of the lockfile
+        if not self._ctime or not self._mtime:
+            fstat = os.stat(lockfile)
+            if not self._ctime:
+                self._ctime = datetime.datetime.utcfromtimestamp(fstat.st_ctime)
+            if not self._mtime:
+                self._mtime = datetime.datetime.utcfromtimestamp(fstat.st_mtime)
+
+        self.initialized = True
+
+    #------------------------------------------------------------
+    @property
+    def lockfile(self):
+        """The file, which represents the lock."""
+        return self._lockfile
+
+    #------------------------------------------------------------
+    @property
+    def ctime(self):
+        """The creation time of the lockfile."""
+        return self._ctime
+
+    #------------------------------------------------------------
+    @property
+    def mtime(self):
+        """The last modification time of the lockfile."""
+        return self._mtime
+
+    #------------------------------------------------------------
+    @property
+    def fcontent(self):
+        """The content of the lockfile."""
+        return self._fcontent
+
+    #------------------------------------------------------------
+    @property
+    def simulate(self):
+        """Don't execute actions, only display them."""
+        return self._simulate
+
+    @simulate.setter
+    def simulate(self, value):
+        self._simulate = bool(value)
+
+    #------------------------------------------------------------
+    @property
+    def autoremove(self):
+        """Removing the lockfile on deleting the current object."""
+        return self._autoremove
+
+    @autoremove.setter
+    def autoremove(self, value):
+        self._autoremove = bool(value)
+
+    #--------------------------------------------------------------------------
+    def as_dict(self):
+        """
+        Transforms the elements of the object into a dict
+
+        @return: structure as dict
+        @rtype:  dict
+        """
+
+        res = super(PbLock, self).as_dict()
+        res['lockfile'] = self.lockfile
+        res['ctime'] = self.ctime
+        res['mtime'] = self.mtime
+        res['fcontent'] = self.fcontent
+        res['simulate'] = self.simulate
+        res['autoremove'] = self.autoremove
+
+        return res
+
+    #--------------------------------------------------------------------------
+    def __repr__(self):
+        """Typecasting into a string for reproduction."""
+
+        out = super(PbLock, self).__repr__()[:-2]
+
+        fields = []
+        fields.append("lockfile={!r}".format(self.lockfile))
+        if self.fcontent:
+            fields.append("fcontent={!r}".format(self.fcontent))
+        fields.append("ctime={!r}".format(self.ctime))
+        fields.append("mtime={!r}".format(self.mtime))
+        fields.append("fcontent={!r}".format(self.fcontent))
+        fields.append("simulate={!r}".format(self.simulate))
+        fields.append("autoremove={!r}".format(self.autoremove))
+
+        if fields:
+            out += ', ' + ", ".join(fields)
+        out += ")>"
+        return out
 
 #==============================================================================
 class PbLockHandler(PbBaseHandler):
@@ -416,8 +613,8 @@ class PbLockHandler(PbBaseHandler):
                     to True, if not given, the PID of the current process is used.
         @type pid: int
 
-        @return: success of getting the lock
-        @rtype: bool
+        @return: a lock object on success, else None
+        @rtype: PbLock or None
 
         """
 
@@ -515,6 +712,9 @@ class PbLockHandler(PbBaseHandler):
         time_diff = 0
         start_time = time.time()
 
+        ctime = None
+        mtime = None
+
         # Big loop on trying to create the lockfile
         while fd is None and time_diff < max_delay:
 
@@ -529,6 +729,7 @@ class PbLockHandler(PbBaseHandler):
             # Try creating lockfile exclusive
             log.debug(_("Try {try_nr:d} on creating lockfile {lfile!r} ...").format(
                     try_nr = counter, lfile = lockfile))
+            ctime = datetime.datetime.utcnow()
             fd = self._create_lockfile(lockfile)
             if fd is not None:
                 # success, then exit
@@ -566,7 +767,7 @@ class PbLockHandler(PbBaseHandler):
             msg = _("Could not occupy lockfile {lfile!r} after {secs:0.1f} seconds on {nr:d} tries.").format(
                     lfile = lockfile, secs = time_diff, nr = counter)
             log.error(msg)
-            return False
+            return None
 
         # or an int for success
         log.info(_("Got a lock for lockfile {!r}.").format(lockfile))
@@ -576,7 +777,22 @@ class PbLockHandler(PbBaseHandler):
         if not self.simulate:
             os.write(fd, out)
             os.close(fd)
-        return True
+
+        mtime = datetime.datetime.utcnow()
+
+        lock_object = PbLock(
+                lockfile,
+                ctime = ctime,
+                mtime = mtime,
+                fcontent = out,
+                simulate = self.simulate,
+                appname = self.appname,
+                verbose = self.verbose,
+                base_dir = self.base_dir,
+                use_stderr = self.use_stderr,
+        )
+
+        return lock_object
 
     #--------------------------------------------------------------------------
     def _create_lockfile(self, lockfile):

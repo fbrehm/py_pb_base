@@ -85,6 +85,20 @@ class TestPbLockHandler(PbBaseTestcase):
         locker.remove_lockfile('bla.lock')
 
     #--------------------------------------------------------------------------
+    def test_lockobject(self):
+
+        log.info("Testing lock object on creation of a simple lockfile.")
+
+        locker = PbLockHandler(
+            appname = 'test_base_object',
+            verbose = 3,
+        )
+        lock = locker.create_lockfile('bla.lock')
+        log.debug("PbLock object %%r: %r", lock)
+        log.debug("PbLock object %%s: %s", str(lock))
+        locker.remove_lockfile('bla.lock')
+
+    #--------------------------------------------------------------------------
     def test_invalid_dir(self):
 
         log.info("Testing creation lockfile in an invalid lock directory.")
@@ -237,6 +251,8 @@ if __name__ == '__main__':
             'test_lock.TestPbLockHandler.test_invalid_dir'))
     suite.addTests(loader.loadTestsFromName(
             'test_lock.TestPbLockHandler.test_valid_lockfile'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_lock.TestPbLockHandler.test_lockobject'))
     suite.addTests(loader.loadTestsFromName(
             'test_lock.TestPbLockHandler.test_invalid_lockfile1'))
     suite.addTests(loader.loadTestsFromName(
