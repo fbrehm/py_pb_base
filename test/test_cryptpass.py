@@ -13,6 +13,7 @@ import unittest
 import os
 import sys
 import logging
+import re
 
 libdir = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
 sys.path.insert(0, libdir)
@@ -20,7 +21,7 @@ sys.path.insert(0, libdir)
 import general
 from general import PbBaseTestcase, get_arg_verbose, init_root_logger
 
-from pb_base.cryptpass import gensalt, shadowcrypt
+from pb_base.cryptpass import gensalt, shadowcrypt, valid_hash_algos
 
 log = logging.getLogger(__name__)
 
@@ -56,6 +57,51 @@ class TestCryptPass(PbBaseTestcase):
             e = cm.exception
             log.debug("'ValueError' raised on invalid length %r: %s", length, e)
 
+    #--------------------------------------------------------------------------
+    def test_shadowcrypt_valid(self):
+
+        pwd = "TestTest"
+
+        log.info("Encrypting password %r with a random generated salt.", pwd)
+        for algo in ('crypt', 'md5', 'sha256', 'sha512'):
+            log.debug("Encrypting with algorithm %r ...", algo)
+            crypted = shadowcrypt(pwd, algo)
+            log.debug("Encrypted password: %r", crypted)
+            self.assertIsInstance(crypted, basestring,
+                    "Encrypted password must be from class 'basetring'.")
+
+        log.info("Encrypting password %r with a given salt.", pwd)
+        for algo in ('crypt', 'md5', 'sha256', 'sha512'):
+            algo_nr = valid_hash_algos[algo]
+            log.debug("Encrypting with algorithm %r (%r)...", algo, algo_nr)
+            length = 8
+            if algo == 'crypt':
+                length = 2
+            salt = gensalt(length)
+            salt2use = salt
+            if algo != 'crypt':
+                salt2use = '$%d$%s$' % (algo_nr, salt)
+
+            log.debug("Encrypting with simple salt %r ...", salt)
+            crypted = shadowcrypt(pwd, algo, salt = salt)
+            log.debug("Encrypted password: %r", crypted)
+            self.assertIsInstance(crypted, basestring,
+                    "Encrypted password must be from class 'basetring'.")
+            self.assertGreater(len(crypted), length, (("The encrypted " +
+                    "password must be longer than the length of salt %d.") % (
+                        length)))
+            salt_pattern = r'^%s' % (re.escape(salt2use))
+            self.assertRegexpMatches(crypted, salt_pattern, (("The salt %r " +
+                    "must be embedded at the beginning of the ecrypted " +
+                    "password %r.") % (salt2use, crypted)))
+
+            log.debug("Encrypting with complete salt %r ...", salt2use)
+            crypted2 = shadowcrypt(pwd, algo, salt = salt2use)
+            self.assertEqual(crypted, crypted2, (("Encrypted password with " +
+                    "simple salt %r (-> %r) must be identic with the " +
+                    " encrypted password with the complete salt %r (-> %r).") %
+                    (salt, crypted, salt2use, crypted2)))
+
 #==============================================================================
 
 if __name__ == '__main__':
@@ -70,6 +116,8 @@ if __name__ == '__main__':
 
     suite.addTests(loader.loadTestsFromName(
             'test_cryptpass.TestCryptPass.test_gensalt'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_cryptpass.TestCryptPass.test_shadowcrypt_valid'))
 
     runner = unittest.TextTestRunner(verbosity = verbose)
 

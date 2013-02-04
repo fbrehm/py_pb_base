@@ -12,6 +12,7 @@
 import re
 import crypt
 import random
+import logging
 
 valid_hash_algos = {
     None:       None,
@@ -26,6 +27,15 @@ valid_hash_algos = {
     'sha256':   5,
     'sha512':   6,
 }
+
+hash_algo_names = {
+    None:   'crypt',
+    1:      'md5',
+    5:      'sha256',
+    6:      'sha512',
+}
+
+log = logging.getLogger(__name__)
 
 #==============================================================================
 def gensalt(length = 8):
@@ -89,6 +99,7 @@ def shadowcrypt(password, hashalgo = 'sha512', saltlen = None, salt = None):
         raise ValueError(msg)
 
     algo = valid_hash_algos[hashalgo]
+    log.debug("Used hashing algorithm: %r (%s)", algo, hash_algo_names[algo])
 
     if not salt:
         if not saltlen:
@@ -102,6 +113,7 @@ def shadowcrypt(password, hashalgo = 'sha512', saltlen = None, salt = None):
     if algo:
         if not re.search(r'^\$[156]\$[0-9a-z\.\/]+\$', salt, re.IGNORECASE):
             salt2use = '$%d$%s$' % (algo, salt)
+    log.debug("Used salt: %r", salt2use)
 
     return crypt.crypt(password, salt2use)
 
