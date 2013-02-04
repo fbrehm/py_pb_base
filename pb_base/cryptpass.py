@@ -91,6 +91,11 @@ def shadowcrypt(password, hashalgo = 'sha512', saltlen = None, salt = None):
     algo = valid_hash_algos[hashalgo]
 
     if not salt:
+        if not saltlen:
+            if not algo:
+                saltlen = 2
+            else:
+                saltlen = 8
         salt = gensalt(saltlen)
 
     salt2use = salt
