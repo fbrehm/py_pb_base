@@ -361,7 +361,7 @@ class DfHandler(PbBaseHandler):
 
         Through the special name __call__() it's possible, the instance variable
         of this class to use as a funktion. So there can be executet simple
-        df requests:
+        df requests::
 
             df = DfHandler()
 
