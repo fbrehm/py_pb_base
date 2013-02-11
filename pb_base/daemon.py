@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+@author: Frank Brehm
+@contact: frank.brehm@profitbricks.com
+@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: The module for a base daemon application object.
           It provides all from the pidfile application object with
           additional methods and properties to daemonize itself.
@@ -11,8 +14,6 @@ import sys
 import os
 import logging
 import signal
-
-from gettext import gettext as _
 
 # Third party modules
 
@@ -39,9 +40,14 @@ from pb_base.pidfile import PidFileInUseError
 from pb_base.pidfile_app import PidfileAppError
 from pb_base.pidfile_app import PidfileApp
 
+from pb_base.translate import translator
+
 __version__ = '0.3.8'
 
 log = logging.getLogger(__name__)
+
+_ = translator.lgettext
+__ = translator.lngettext
 
 #--------------------------------------------------------------------------
 
@@ -285,6 +291,28 @@ class PbDaemon(PidfileApp):
         return self._error_log
 
     #--------------------------------------------------------------------------
+    def as_dict(self, short = False):
+        """
+        Transforms the elements of the object into a dict
+
+        @param short: don't include local properties in resulting dict.
+        @type short: bool
+
+        @return: structure as dict
+        @rtype:  dict
+        """
+
+        res = super(PbDaemon, self).as_dict(short = short)
+        res['facility_name'] = self.facility_name
+        res['facility'] = self.facility
+        res['do_daemonize'] = self.do_daemonize
+        res['is_daemon'] = self.is_daemon
+        res['forced_shutdown'] = self.forced_shutdown
+        res['error_log'] = self.error_log
+
+        return res
+
+    #--------------------------------------------------------------------------
     def init_cfg_spec(self):
         """
         Method to complete the initialisation of the config
@@ -381,7 +409,7 @@ class PbDaemon(PidfileApp):
         super(PbDaemon, self).init_arg_parser()
 
         help_txt = _("The syslog facility to use when logging as a daemon " +
-                "(default: %s)") % (self._default_facility_name)
+                "(default: %s).") % (self._default_facility_name)
 
         self.arg_parser.add_argument(
                 "-F", "--syslog-facility",
@@ -501,12 +529,12 @@ class PbDaemon(PidfileApp):
             signame = signal_names[signum]
         log.info(_("Got a signal %s.") % (signame))
 
-        msg = _("process with PID %(pid)d got signal %(signal)s.") % {
+        msg = _("Process with PID %(pid)d got signal %(signal)s.") % {
                 'pid': os.getpid(), 'signal': signame}
         self.handle_info(msg, self.appname)
 
         if (signum == signal.SIGUSR1) or (signum == signal.SIGUSR2):
-            log.info("Nothing to do on signal USR1 or USR2.")
+            log.info(_("Nothing to do on signal USR1 or USR2."))
             return
 
         # set forced shutdown, except SIGHUP
@@ -514,7 +542,7 @@ class PbDaemon(PidfileApp):
         if ( (signum == signal.SIGINT) or
                 (signum == signal.SIGABRT) or
                 (signum == signal.SIGTERM) ):
-            log.info("Got a signal for forced shutdown.")
+            log.info(_("Got a signal for forced shutdown."))
             forced = True
 
         self._forced_shutdown = forced

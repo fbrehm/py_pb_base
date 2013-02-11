@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+@author: Frank Brehm
+@contact: frank.brehm@profitbricks.com
+@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: The module for the base object.
           It provides properties and methods used
           by all objects.
@@ -21,7 +24,7 @@ from pb_base.common import pp
 from pb_base.errors import PbError
 from pb_base.errors import FunctionNotImplementedError
 
-__version__ = '0.3.1'
+__version__ = '0.3.2'
 
 log = logging.getLogger(__name__)
 
@@ -156,7 +159,7 @@ class PbBaseObject(object):
     @property
     def verbose(self):
         """The verbosity level."""
-        return self._verbose
+        return getattr(self, '_verbose', 0)
 
     @verbose.setter
     def verbose(self, value):
@@ -170,7 +173,7 @@ class PbBaseObject(object):
     @property
     def use_stderr(self):
         """A flag indicating, that on handle_error() the output should go to STDERR."""
-        return self._use_stderr
+        return getattr(self, '_use_stderr', False)
 
     @use_stderr.setter
     def use_stderr(self, value):
@@ -180,7 +183,7 @@ class PbBaseObject(object):
     @property
     def initialized(self):
         """The initialisation of this object is complete."""
-        return self._initialized
+        return getattr(self, '_initialized', False)
 
     @initialized.setter
     def initialized(self, value):
@@ -212,12 +215,32 @@ class PbBaseObject(object):
         @rtype:  str
         """
 
-        return pp(self.as_dict())
+        return pp(self.as_dict(short = True))
 
     #--------------------------------------------------------------------------
-    def as_dict(self):
+    def __repr__(self):
+        """Typecasting into a string for reproduction."""
+
+        out = "<%s(" % (self.__class__.__name__)
+
+        fields = []
+        fields.append("appname=%r" % (self.appname))
+        fields.append("verbose=%r" % (self.verbose))
+        fields.append("version=%r" % (self.version))
+        fields.append("base_dir=%r" % (self.base_dir))
+        fields.append("use_stderr=%r" % (self.use_stderr))
+        fields.append("initialized=%r" % (self.initialized))
+
+        out += ", ".join(fields) + ")>"
+        return out
+
+    #--------------------------------------------------------------------------
+    def as_dict(self, short = False):
         """
         Transforms the elements of the object into a dict
+
+        @param short: don't include local properties in resulting dict.
+        @type short: bool
 
         @return: structure as dict
         @rtype:  dict
@@ -226,12 +249,20 @@ class PbBaseObject(object):
         res = self.__dict__
         res = {}
         for key in self.__dict__:
+            if short and key.startswith('_') and not key.startswith('__'):
+                continue
             val = self.__dict__[key]
             if isinstance(val, PbBaseObject):
-                res[key] = val.as_dict()
+                res[key] = val.as_dict(short = short)
             else:
                 res[key] = val
         res['__class_name__'] = self.__class__.__name__
+        res['appname'] = self.appname
+        res['version'] = self.version
+        res['verbose'] = self.verbose
+        res['use_stderr'] = self.use_stderr
+        res['initialized'] = self.initialized
+        res['base_dir'] = self.base_dir
 
         return res
 

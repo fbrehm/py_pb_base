@@ -4,7 +4,7 @@
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
 @organization: Profitbricks GmbH
-@copyright: (c) 2010-2012 by Profitbricks GmbH
+@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
 @license: GPL3
 @summary: module for a UNIX socket object class
 """
@@ -19,8 +19,6 @@ import pwd
 import grp
 import re
 
-from gettext import gettext as _
-
 # Third party modules
 
 # Own modules
@@ -34,13 +32,18 @@ from pb_base.errors import FunctionNotImplementedError
 from pb_base.socket_obj import GenericSocketError
 from pb_base.socket_obj import GenericSocket
 
+from pb_base.translate import translator
+
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
-__copyright__ = '(C) 2010-2012 by profitbricks.com'
+__copyright__ = '(C) 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.2.4'
+__version__ = '0.2.5'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)
+
+_ = translator.lgettext
+__ = translator.lngettext
 
 #==============================================================================
 class UnixSocketError(GenericSocketError):
@@ -56,7 +59,7 @@ class NoSocketFileError(UnixSocketError):
     """
 
     def __init__(self, filename):
-        msg = _("The Unix socket file '%s' was not found.") % (filename)
+        msg = _("The Unix socket file %r was not found.") % (filename)
         super(NoSocketFileError, self).__init__(msg)
 
 #==============================================================================
@@ -67,7 +70,7 @@ class NoPermissionsToSocketError(UnixSocketError):
     """
 
     def __init__(self, filename):
-        msg = _("Invalid permissions to connect to Unix socket '%s'.") % (filename)
+        msg = _("Invalid permissions to connect to Unix socket %r.") % (filename)
         super(NoPermissionsToSocketError, self).__init__(msg)
 
 #==============================================================================
@@ -212,13 +215,31 @@ class UnixSocket(GenericSocket):
         self._auto_remove = bool(value)
 
     #--------------------------------------------------------------------------
+    def as_dict(self, short = False):
+        """
+        Transforms the elements of the object into a dict
+
+        @return: structure as dict
+        @rtype:  dict
+        """
+
+        res = super(UnixSocket, self).as_dict(short = short)
+        res['filename'] = self.filename
+        res['mode'] = "%04o" % (self.mode)
+        res['owner'] = self.owner
+        res['group'] = self.group
+        res['auto_remove'] = self.auto_remove
+
+        return res
+
+    #--------------------------------------------------------------------------
     def __del__(self):
         """Destructor, closes current socket, if necessary."""
 
         if (self.sock and self.bonded and os.path.exists(self.filename)
                 and self.auto_remove):
             if self.verbose > 1:
-                log.debug(_("Removing socket '%s' ..."), self.filename)
+                log.debug(_("Removing socket %r ..."), self.filename)
             os.remove(self.filename)
 
     #--------------------------------------------------------------------------

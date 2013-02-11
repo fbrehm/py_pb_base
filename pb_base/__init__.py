@@ -3,14 +3,14 @@
 """
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
-@copyright: (c) 2010 - 2012 by Frank Brehm, Berlin
+@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: All modules for Python base object and error classes
 """
 
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
-__copyright__ = '(C) 2010-2012 by profitbricks.com'
+__copyright__ = '(C) 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.3.10-6'
+__version__ = '0.3.21'
 __license__ = 'LGPLv3+'
 
 # vim: fileencoding=utf-8 filetype=python ts=4

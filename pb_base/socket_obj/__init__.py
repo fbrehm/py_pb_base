@@ -4,7 +4,7 @@
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
 @organization: Profitbricks GmbH
-@copyright: (c) 2010-2012 by Profitbricks GmbH
+@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
 @license: GPL3
 @summary: modules for socket object classes
 """
@@ -16,8 +16,6 @@ import logging
 import re
 import select
 import time
-
-from gettext import gettext as _
 
 from abc import ABCMeta
 from abc import abstractmethod
@@ -34,13 +32,18 @@ from pb_base.errors import PbError
 from pb_base.errors import FunctionNotImplementedError
 from pb_base.errors import PbIoTimeoutError
 
+from pb_base.translate import translator
+
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
-__copyright__ = '(C) 2010-2012 by profitbricks.com'
+__copyright__ = '(C) 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.2.2'
+__version__ = '0.2.3'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)
+
+_ = translator.lgettext
+__ = translator.lngettext
 
 default_buffer_size = 8192
 min_buffer_size = 512
@@ -301,6 +304,30 @@ class GenericSocket(PbBaseObject):
         raise FunctionNotImplementedError('bind', self.__class__.__name__)
 
     #--------------------------------------------------------------------------
+    def as_dict(self, short = False):
+        """
+        Transforms the elements of the object into a dict
+
+        @param short: don't include local properties in resulting dict.
+        @type short: bool
+
+        @return: structure as dict
+        @rtype:  dict
+        """
+
+        res = super(GenericSocket, self).as_dict(short = short)
+        res['timeout'] = self.timeout
+        res['fileno'] = self.fileno
+        res['connected'] = self.connected
+        res['bonded'] = self.bonded
+        res['interrupted'] = self.interrupted
+        res['request_queue_size'] = self.request_queue_size
+        res['buffer_size'] = self.buffer_size
+        res['group'] = self.group
+
+        return res
+
+    #--------------------------------------------------------------------------
     def __del__(self):
         """Destructor, closes current socket, if necessary."""
 
@@ -316,7 +343,7 @@ class GenericSocket(PbBaseObject):
         """
 
         if self.verbose > 2:
-            log.debug(_("Resetting connection ..."))
+            log.debug(_("Resetting socket connection ..."))
 
         if self.connection:
             self.connection.close()

@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+@author: Frank Brehm
+@contact: frank.brehm@profitbricks.com
+@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: The module for a daemon application object, which is forking
           to execute the underlaying action.
           It provides all from the daemon application object with
@@ -13,8 +16,6 @@ import os
 import logging
 import time
 import signal
-
-from gettext import gettext as _
 
 # Third party modules
 
@@ -43,9 +44,14 @@ from pb_base.pidfile_app import PidfileAppError
 from pb_base.daemon import PbDaemonError
 from pb_base.daemon import PbDaemon
 
+from pb_base.translate import translator
+
 __version__ = '0.2.0'
 
 log = logging.getLogger(__name__)
+
+_ = translator.lgettext
+__ = translator.lngettext
 
 #--------------------------------------------------------------------------
 
@@ -272,6 +278,26 @@ class ForkingDaemon(PbDaemon):
         self._timeout_collect_children = v
 
     #--------------------------------------------------------------------------
+    def as_dict(self, short = False):
+        """
+        Transforms the elements of the object into a dict
+
+        @param short: don't include local properties in resulting dict.
+        @type short: bool
+
+        @return: structure as dict
+        @rtype:  dict
+        """
+
+        res = super(ForkingDaemon, self).as_dict(short = short)
+        res['is_child'] = self.is_child
+        res['max_children'] = self.max_children
+        res['child_id'] = self.child_id
+        res['timeout_collect_children'] = self.timeout_collect_children
+
+        return res
+
+    #--------------------------------------------------------------------------
     def init_cfg_spec(self):
         """
         Method to complete the initialisation of the config
@@ -328,7 +354,7 @@ class ForkingDaemon(PbDaemon):
         """Code executing after executing the main routine."""
 
         if self.verbose > 1:
-            log.info("Cleaning up ...")
+            log.info(_("Cleaning up ..."))
 
         # Collect all children processes
         self.collect_children(collect_all = True)
@@ -419,10 +445,10 @@ class ForkingDaemon(PbDaemon):
                     log.error(msg, (timeout * 3))
                     raise ForkingDaemonError(msg)
                 begin = time.time()
-                log.debug("New stage %d in waiting for child processes.", stage)
+                log.debug(_("New stage %d in waiting for child processes."), stage)
 
             if self.verbose > 1:
-                log.debug("Waiting for finished children, stage %d.", stage)
+                log.debug(_("Waiting for finished children, stage %d."), stage)
 
             # XXX: This will wait for any child process, not just ones
             # spawned by this library. This could confuse other

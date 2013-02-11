@@ -1,3 +1,123 @@
+profitbricks-python-base (0.3.21-1) unstable; urgency=low
+
+  * Version bump
+  * Added parameter short to all as_dict() methods
+  * Bugfixing
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Mon, 11 Feb 2013 15:00:03 +0100
+
+profitbricks-python-base (0.3.20-1) unstable; urgency=low
+
+  * Version bump
+  * Created PbLock object in pb_base/handler/lock.py
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Mon, 21 Jan 2013 19:25:24 +0100
+
+profitbricks-python-base (0.3.19-2) unstable; urgency=low
+
+  * Version bump
+  * Bugfix in increase-version.sh
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Fri, 18 Jan 2013 18:28:13 +0100
+
+profitbricks-python-base (0.3.19-1) unstable; urgency=low
+
+  * Version bump
+  * Bugfixing and additional unittests for pb_base.handler.lock
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Fri, 18 Jan 2013 18:21:48 +0100
+
+profitbricks-python-base (0.3.18-1) unstable; urgency=low
+
+  * Version bump
+  * Added pb_base/handler/lock.py for handling lockfiles
+
+ -- Developer <so@profitbricks.com>  Fri, 18 Jan 2013 16:42:37 +0000
+
+profitbricks-python-base (0.3.17-1) unstable; urgency=low
+
+  * Version bump
+  * two new properties forthe application object
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Thu, 17 Jan 2013 16:42:49 +0100
+
+profitbricks-python-base (0.3.16-2) unstable; urgency=low
+
+  * Version bump
+  * Added translations for the argparse module
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Thu, 17 Jan 2013 16:07:26 +0100
+
+profitbricks-python-base (0.3.16-1) unstable; urgency=low
+
+  * Version bump
+  * Completed translation into german
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Thu, 17 Jan 2013 13:18:46 +0100
+
+profitbricks-python-base (0.3.15-1) unstable; urgency=low
+
+  * Version bump
+  * Translated some more modules
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Wed, 16 Jan 2013 19:37:15 +0100
+
+profitbricks-python-base (0.3.14-1) unstable; urgency=low
+
+  * Version bump
+  * Bugfixing
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Tue, 15 Jan 2013 14:28:25 +0100
+
+profitbricks-python-base (0.3.13-1) unstable; urgency=low
+
+  * Version bump
+  * Moved translation object into a seperate module
+  * Translation of messages in pb_base/app.py and pb_base/cfg_app.py
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Tue, 15 Jan 2013 12:57:05 +0100
+
+profitbricks-python-base (0.3.12-2) unstable; urgency=low
+
+  * Version bump
+  * Added i18n to debian/rules
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Mon, 14 Jan 2013 18:58:05 +0100
+
+profitbricks-python-base (0.3.12-1) unstable; urgency=low
+
+  * Version bump
+  * Started with internationalisation
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Mon, 14 Jan 2013 18:22:15 +0100
+
+profitbricks-python-base (0.3.11-1) unstable; urgency=low
+
+  * Version bump
+  * Added some as_dict() methods
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Tue, 20 Nov 2012 12:21:57 +0100
+
+profitbricks-python-base (0.3.10-9) unstable; urgency=low
+
+  * Version bump
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Mon, 19 Nov 2012 17:02:26 +0100
+
+profitbricks-python-base (0.3.10-8) unstable; urgency=low
+
+  * Version bump
+  * Minor changes in pb_base/object.py
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Thu, 15 Nov 2012 15:50:39 +0100
+
+profitbricks-python-base (0.3.10-7) unstable; urgency=low
+
+  * Version bump
+  * Declared for unstable
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Wed, 14 Nov 2012 09:53:19 +0100
+
 profitbricks-python-base (0.3.10-6) stable; urgency=low
 
   * Version bump

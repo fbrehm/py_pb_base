@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+@author: Frank Brehm
+@contact: frank.brehm@profitbricks.com
+@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: The module for a base application object.
           It provides methods for commandline parsing, initialising
           the logging mechanism, read in all application spcific
@@ -13,8 +16,6 @@ import os
 import logging
 import re
 import platform
-
-from gettext import gettext as _
 
 # Third party modules
 import argparse
@@ -30,9 +31,16 @@ from pb_base.errors import FunctionNotImplementedError
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
-__version__ = '0.5.1'
+from pb_base.translate import translator
+
+__version__ = '0.5.2'
 
 log = logging.getLogger(__name__)
+
+_ = translator.lgettext
+__ = translator.lngettext
+
+argparse._ = translator.lgettext
 
 #==============================================================================
 class PbApplicationError(PbBaseObjectError):
@@ -258,6 +266,41 @@ class PbApplication(PbBaseObject):
         """A prefix for environment variables to detect them."""
         return self._env_prefix
 
+    #------------------------------------------------------------
+    @property
+    def usage_term(self):
+        """The localized version of 'usage: '"""
+        return _('usage: ')
+
+    #------------------------------------------------------------
+    @property
+    def usage_term_len(self):
+        """The length of the localized version of 'usage: '"""
+        return len(self.usage_term)
+
+    #--------------------------------------------------------------------------
+    def as_dict(self, short = False):
+        """
+        Transforms the elements of the object into a dict
+
+        @param short: don't include local properties in resulting dict.
+        @type short: bool
+
+        @return: structure as dict
+        @rtype:  dict
+        """
+
+        res = super(PbApplication, self).as_dict(short = short)
+        res['exit_value'] = self.exit_value
+        res['usage'] = self.usage
+        res['description'] = self.description
+        res['argparse_epilog'] = self.argparse_epilog
+        res['argparse_prefix_chars'] = self.argparse_prefix_chars
+        res['terminal_has_colors'] = self.terminal_has_colors
+        res['env_prefix'] = self.env_prefix
+
+        return res
+
     #--------------------------------------------------------------------------
     def init_logging(self):
         """
@@ -393,7 +436,7 @@ class PbApplication(PbBaseObject):
             sys.exit(98)
 
         if not self.initialized:
-            raise PbApplicationError(("Object '%s' seems not to be completely " +
+            raise PbApplicationError(_("Object '%s' seems not to be completely " +
                                     "initialized.") %
                     (self.__class__.__name__))
 
@@ -404,7 +447,7 @@ class PbApplication(PbBaseObject):
             self.exit_value = 99
 
         if self.verbose > 1:
-            log.info("Ending.")
+            log.info(_("Ending."))
 
         try:
             self.post_run()
@@ -423,7 +466,7 @@ class PbApplication(PbBaseObject):
         """
 
         if self.verbose > 1:
-            log.info("executing post_run() ...")
+            log.info(_("executing post_run() ..."))
 
     #--------------------------------------------------------------------------
     def _init_arg_parser(self):
@@ -445,7 +488,7 @@ class PbApplication(PbBaseObject):
 
         self.init_arg_parser()
 
-        general_group = self.arg_parser.add_argument_group('General options')
+        general_group = self.arg_parser.add_argument_group(_('General options'))
         general_group.add_argument(
                 '--color',
                 action = "store",

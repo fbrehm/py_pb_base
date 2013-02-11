@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+@author: Frank Brehm
+@contact: frank.brehm@profitbricks.com
+@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: module for some common used error classes
 """
 
@@ -8,7 +11,13 @@
 import errno
 from gettext import gettext as _
 
+# Own modules
+from pb_base.translate import translator
+
 __version__ = '0.1.1'
+
+_ = translator.lgettext
+__ = translator.lngettext
 
 
 #==============================================================================

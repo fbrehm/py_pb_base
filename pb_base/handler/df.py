@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+@author: Frank Brehm
+@contact: frank.brehm@profitbricks.com
+@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: A special handler module for a handling the df-command and his results.
 """
 
@@ -9,8 +12,6 @@ import sys
 import os
 import logging
 import re
-
-from gettext import gettext as _
 
 # Own modules
 from pb_base.common import pp
@@ -26,9 +27,14 @@ from pb_base.handler import PbBaseHandlerError
 from pb_base.handler import CommandNotFoundError
 from pb_base.handler import PbBaseHandler
 
-__version__ = '0.2.0'
+from pb_base.translate import translator
+
+__version__ = '0.2.1'
 
 log = logging.getLogger(__name__)
+
+_ = translator.lgettext
+__ = translator.lngettext
 
 # Some module varriables
 DF_CMD = os.sep + os.path.join('bin', 'df')
@@ -208,19 +214,31 @@ class DfResult(PbBaseObject):
         return float(self.free) / float(self.total) * 100.0
 
     #--------------------------------------------------------------------------
-    def as_dict(self):
+    def as_dict(self, short = False):
         """
         Transforms the elements of the object into a dict
+
+        @param short: don't include local properties in resulting dict.
+        @type short: bool
 
         @return: structure as dict
         @rtype:  dict
         """
 
-        res = super(DfResult, self).as_dict()
+        res = super(DfResult, self).as_dict(short = short)
+        res['dev'] = self.dev
+        res['fs'] = self.fs
+        res['fs_type'] = self.fs_type
+        res['total'] = self.total
+        res['total_kb'] = self.total_kb
         res['total_mb'] = self.total_mb
+        res['used'] = self.used
+        res['used_kb'] = self.used_kb
         res['used_mb'] = self.used_mb
-        res['free_mb'] = self.free_mb
         res['used_percent'] = self.used_percent
+        res['free'] = self.free
+        res['free_kb'] = self.free_kb
+        res['free_mb'] = self.free_mb
         res['free_percent'] = self.free_percent
 
         return res
@@ -310,13 +328,30 @@ class DfHandler(PbBaseHandler):
 
         self.initialized = True
         if self.verbose > 3:
-            log.debug("Initialized.")
+            log.debug(_("Initialized."))
 
     #------------------------------------------------------------
     @property
     def df_cmd(self):
         """The absolute path to the OS command 'df'."""
         return self._df_cmd
+
+    #--------------------------------------------------------------------------
+    def as_dict(self, short = False):
+        """
+        Transforms the elements of the object into a dict
+
+        @param short: don't include local properties in resulting dict.
+        @type short: bool
+
+        @return: structure as dict
+        @rtype:  dict
+        """
+
+        res = super(DfHandler, self).as_dict(short = short)
+        res['df_cmd'] = self.df_cmd
+
+        return res
 
     #--------------------------------------------------------------------------
     def __call__(self, fs = None, all_fs = False, local = False, sync = False,
@@ -379,7 +414,8 @@ class DfHandler(PbBaseHandler):
 
         if self.verbose > 1:
             if fs:
-                msg = _("Calling 'df' for the following objects:\n%r") % (fs)
+                msg = (_("Calling 'df' for the following objects:") +
+                        "\n%r") % (fs)
             else:
                 if all_fs:
                     msg = _("Calling 'df' for real all filesystems.")
@@ -420,19 +456,19 @@ class DfHandler(PbBaseHandler):
         (ret_code, std_out, std_err) = self.call(cmd)
 
         if ret_code:
-            err = _('undefined error')
+            err = _('Undefined error')
             if std_err:
                 e = std_err.replace('\n', ' ').strip()
                 if e:
                     err = e
-            msg = _("Error %d on getting free space of %r: %s") % (
-                    ret_code, fs, err)
+            msg = _("Error %(nr)d on getting free space of %(obj)r: %(err)s") % {
+                    'nr': ret_code, 'obj': fs, 'err': err}
             raise DfError(msg)
 
         lines = std_out.splitlines()
         if not lines or len(lines) < 2:
-            msg = _("Didn't found any usable information in output of %r: %r") % (
-                    cmdline, std_out)
+            msg = (_("Didn't found any usable information in output of %r:") +
+                    " %r") % ( cmdline, std_out)
             raise DfError(msg)
 
         del lines[0]
