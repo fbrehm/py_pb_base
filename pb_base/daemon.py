@@ -291,15 +291,18 @@ class PbDaemon(PidfileApp):
         return self._error_log
 
     #--------------------------------------------------------------------------
-    def as_dict(self):
+    def as_dict(self, short = False):
         """
         Transforms the elements of the object into a dict
+
+        @param short: don't include local properties in resulting dict.
+        @type short: bool
 
         @return: structure as dict
         @rtype:  dict
         """
 
-        res = super(PbDaemon, self).as_dict()
+        res = super(PbDaemon, self).as_dict(short = short)
         res['facility_name'] = self.facility_name
         res['facility'] = self.facility
         res['do_daemonize'] = self.do_daemonize

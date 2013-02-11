@@ -215,7 +215,7 @@ class PbBaseObject(object):
         @rtype:  str
         """
 
-        return pp(self.as_dict())
+        return pp(self.as_dict(short = True))
 
     #--------------------------------------------------------------------------
     def __repr__(self):
@@ -235,9 +235,12 @@ class PbBaseObject(object):
         return out
 
     #--------------------------------------------------------------------------
-    def as_dict(self):
+    def as_dict(self, short = False):
         """
         Transforms the elements of the object into a dict
+
+        @param short: don't include local properties in resulting dict.
+        @type short: bool
 
         @return: structure as dict
         @rtype:  dict
@@ -246,9 +249,11 @@ class PbBaseObject(object):
         res = self.__dict__
         res = {}
         for key in self.__dict__:
+            if short and key.startswith('_') and not key.startswith('__'):
+                continue
             val = self.__dict__[key]
             if isinstance(val, PbBaseObject):
-                res[key] = val.as_dict()
+                res[key] = val.as_dict(short = short)
             else:
                 res[key] = val
         res['__class_name__'] = self.__class__.__name__

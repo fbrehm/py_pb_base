@@ -304,15 +304,18 @@ class GenericSocket(PbBaseObject):
         raise FunctionNotImplementedError('bind', self.__class__.__name__)
 
     #--------------------------------------------------------------------------
-    def as_dict(self):
+    def as_dict(self, short = False):
         """
         Transforms the elements of the object into a dict
+
+        @param short: don't include local properties in resulting dict.
+        @type short: bool
 
         @return: structure as dict
         @rtype:  dict
         """
 
-        res = super(GenericSocket, self).as_dict()
+        res = super(GenericSocket, self).as_dict(short = short)
         res['timeout'] = self.timeout
         res['fileno'] = self.fileno
         res['connected'] = self.connected

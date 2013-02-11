@@ -214,15 +214,18 @@ class DfResult(PbBaseObject):
         return float(self.free) / float(self.total) * 100.0
 
     #--------------------------------------------------------------------------
-    def as_dict(self):
+    def as_dict(self, short = False):
         """
         Transforms the elements of the object into a dict
+
+        @param short: don't include local properties in resulting dict.
+        @type short: bool
 
         @return: structure as dict
         @rtype:  dict
         """
 
-        res = super(DfResult, self).as_dict()
+        res = super(DfResult, self).as_dict(short = short)
         res['dev'] = self.dev
         res['fs'] = self.fs
         res['fs_type'] = self.fs_type
@@ -334,15 +337,18 @@ class DfHandler(PbBaseHandler):
         return self._df_cmd
 
     #--------------------------------------------------------------------------
-    def as_dict(self):
+    def as_dict(self, short = False):
         """
         Transforms the elements of the object into a dict
+
+        @param short: don't include local properties in resulting dict.
+        @type short: bool
 
         @return: structure as dict
         @rtype:  dict
         """
 
-        res = super(DfHandler, self).as_dict()
+        res = super(DfHandler, self).as_dict(short = short)
         res['df_cmd'] = self.df_cmd
 
         return res

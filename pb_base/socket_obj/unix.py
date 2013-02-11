@@ -215,7 +215,7 @@ class UnixSocket(GenericSocket):
         self._auto_remove = bool(value)
 
     #--------------------------------------------------------------------------
-    def as_dict(self):
+    def as_dict(self, short = False):
         """
         Transforms the elements of the object into a dict
 
@@ -223,7 +223,7 @@ class UnixSocket(GenericSocket):
         @rtype:  dict
         """
 
-        res = super(UnixSocket, self).as_dict()
+        res = super(UnixSocket, self).as_dict(short = short)
         res['filename'] = self.filename
         res['mode'] = "%04o" % (self.mode)
         res['owner'] = self.owner

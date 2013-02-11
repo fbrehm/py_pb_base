@@ -265,15 +265,18 @@ class PbLock(PbBaseObject):
         self._autoremove = bool(value)
 
     #--------------------------------------------------------------------------
-    def as_dict(self):
+    def as_dict(self, short = False):
         """
         Transforms the elements of the object into a dict
+
+        @param short: don't include local properties in resulting dict.
+        @type short: bool
 
         @return: structure as dict
         @rtype:  dict
         """
 
-        res = super(PbLock, self).as_dict()
+        res = super(PbLock, self).as_dict(short = short)
         res['lockfile'] = self.lockfile
         res['ctime'] = self.ctime
         res['mtime'] = self.mtime
@@ -580,15 +583,18 @@ class PbLockHandler(PbBaseHandler):
         self._locking_use_pid = bool(value)
 
     #--------------------------------------------------------------------------
-    def as_dict(self):
+    def as_dict(self, short = False):
         """
         Transforms the elements of the object into a dict
+
+        @param short: don't include local properties in resulting dict.
+        @type short: bool
 
         @return: structure as dict
         @rtype:  dict
         """
 
-        res = super(PbLockHandler, self).as_dict()
+        res = super(PbLockHandler, self).as_dict(short = short)
         res['lockdir'] = self.lockdir
         res['lockretry_delay_start'] = self.lockretry_delay_start
         res['lockretry_delay_increase'] = self.lockretry_delay_increase

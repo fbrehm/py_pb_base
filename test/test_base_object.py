@@ -122,6 +122,19 @@ class TestPbBaseObject(PbBaseTestcase):
         self.assertIsInstance(out, basestring)
         log.debug("Got str(PbBaseObject): %s", out)
 
+    #--------------------------------------------------------------------------
+    def test_as_dict_short(self):
+
+        log.info("Testing obj.as_dict() #4 - stacked and short")
+
+        obj = PbBaseObject(appname = 'test_base_object', verbose = 1)
+        obj.obj2 = PbBaseObject(appname = 'test_base_object2', verbose = 1)
+
+        di = obj.as_dict(short = True)
+        log.debug("Got PbBaseObject.as_dict(): %r", di)
+        self.assertIsInstance(di, dict)
+        self.assertIsInstance(obj.obj2.as_dict(), dict)
+
 #==============================================================================
 
 if __name__ == '__main__':
@@ -150,6 +163,8 @@ if __name__ == '__main__':
             'test_base_object.TestPbBaseObject.test_as_dict2'))
     suite.addTests(loader.loadTestsFromName(
             'test_base_object.TestPbBaseObject.test_as_dict3'))
+    suite.addTests(loader.loadTestsFromName(
+            'test_base_object.TestPbBaseObject.test_as_dict_short'))
 
     runner = unittest.TextTestRunner(verbosity = verbose)
 
