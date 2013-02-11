@@ -462,7 +462,7 @@ class DfHandler(PbBaseHandler):
                 if e:
                     err = e
             msg = _("Error %(nr)d on getting free space of %(obj)r: %(err)s") % {
-                    ret_code, fs, err}
+                    'nr': ret_code, 'obj': fs, 'err': err}
             raise DfError(msg)
 
         lines = std_out.splitlines()
