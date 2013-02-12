@@ -16,6 +16,7 @@ import os
 import logging
 import re
 import platform
+import traceback
 
 # Third party modules
 import argparse
@@ -33,7 +34,7 @@ from pb_base.object import PbBaseObject
 
 from pb_base.translate import translator
 
-__version__ = '0.6.0'
+__version__ = '0.6.1'
 
 log = logging.getLogger(__name__)
 
@@ -322,6 +323,56 @@ class PbApplication(PbBaseObject):
         return len(self.usage_term)
 
     #--------------------------------------------------------------------------
+    def exit(self, retval = -1, msg = None, trace = False):
+        """
+        Universal method to call sys.exit(). If fake_exit is set, a
+        FakeExitError exception is raised instead (useful for unittests.)
+
+        @param retval: the return value to give back to theoperating system
+        @type retval: int
+        @param msg: a last message, which should be emitted before exit.
+        @type msg: str
+        @param trace: flag to output a stack trace before exiting
+        @type trace: bool
+
+        @return: None
+
+        """
+
+        retval = int(retval)
+        trace = bool(trace)
+
+        ssys.stderr.write("Blub\n")
+
+        root_log = logging.getLogger()
+        has_handlers = False
+        if root_log.handlers:
+            has_handlers = True
+
+        if msg:
+            if has_handlers:
+                if retval:
+                    log.error(msg)
+                else:
+                    log.info(msg)
+            if self.use_stderr or not has_handlers:
+                sys.stderr.write(str(msg) + "\n")
+
+        if trace:
+            if has_handlers:
+                if retval:
+                    log.error(traceback.format_exc())
+                else:
+                    log.info(traceback.format_exc())
+            if self.use_stderr or not has_handlers:
+                traceback.print_exc()
+
+        if fake_exit:
+            raise FakeExitError(retval, msg)
+        else:
+            sys.exit(retval)
+
+    #--------------------------------------------------------------------------
     def as_dict(self, short = False):
         """
         Transforms the elements of the object into a dict
@@ -487,13 +538,13 @@ class PbApplication(PbBaseObject):
         if not self.initialized:
             self.handle_error(_("The application is not complete initialized."),
                     '', True)
-            sys.exit(9)
+            self.exit(9)
 
         try:
             self.pre_run()
         except Exception, e:
             self.handle_error(str(e), e.__class__.__name__, True)
-            sys.exit(98)
+            self.exit(98)
 
         if not self.initialized:
             raise PbApplicationError(_("Object '%s' seems not to be completely " +
@@ -515,7 +566,7 @@ class PbApplication(PbBaseObject):
             self.handle_error(str(e), e.__class__.__name__, True)
             self.exit_value = 97
 
-        sys.exit(self.exit_value)
+        self.exit(self.exit_value)
 
     #--------------------------------------------------------------------------
     def post_run(self):
@@ -620,7 +671,7 @@ class PbApplication(PbBaseObject):
 
         if self.args.usage:
             self.arg_parser.print_usage(sys.stdout)
-            sys.exit(0)
+            self.exit(0)
 
         if self.args.verbose > self.verbose:
             self.verbose = self.args.verbose

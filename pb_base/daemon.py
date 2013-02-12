@@ -42,7 +42,7 @@ from pb_base.pidfile_app import PidfileApp
 
 from pb_base.translate import translator
 
-__version__ = '0.3.8'
+__version__ = '0.3.9'
 
 log = logging.getLogger(__name__)
 
@@ -566,7 +566,7 @@ class PbDaemon(PidfileApp):
         if self.verbose > 2:
             log.debug(_("Exit from %s, so sad ..."), self.appname)
 
-        sys.exit(0)
+        self.exit(0)
 
     #--------------------------------------------------------------------------
     def _daemonize(self):
@@ -590,11 +590,11 @@ class PbDaemon(PidfileApp):
         if not os.path.exists(log_dir):
             self.handle_error(_("Log directory '%s' doesn't exists.") %
                     (log_dir), self.appname, False)
-            sys.exit(6)
+            self.exit(6)
         if not os.path.isdir(log_dir):
             self.handle_error(_("Log directory '%s' exists, but is not " +
                     "a directory.") % (log_dir), self.appname, False)
-            sys.exit(6)
+            self.exit(6)
 
         se = None
         try:
@@ -602,12 +602,12 @@ class PbDaemon(PidfileApp):
         except IOError, e:
             msg = _("Could not open error logfile: %s") % (str(e))
             self.handle_error(msg, self.appname, False)
-            sys.exit(7)
+            self.exit(7)
         except Exception, e:
             msg = _("Could not open error logfile %(log)s: %(err)s") % {
                     'log': self.error_log, 'err': str(e)}
             self.handle_error(msg, e.__class__.__name__, True)
-            sys.exit(8)
+            self.exit(8)
 
         # do the first fork
         log.debug(_("First fork ..."))
@@ -615,10 +615,10 @@ class PbDaemon(PidfileApp):
             pid = os.fork()
             if pid > 0:
                 # exit first parent
-                sys.exit(0)
+                self.exit(0)
         except OSError, e:
             log.error((_("Fork #1 failed: ") + "%d (%s)"), e.errno, e.strerror)
-            sys.exit(1)
+            self.exit(1)
 
         # decouple from parent environment
         os.chdir(self.base_dir)
@@ -631,10 +631,10 @@ class PbDaemon(PidfileApp):
             pid = os.fork()
             if pid > 0:
                 # exit from second parent
-                sys.exit(0)
+                self.exit(0)
         except OSError, e:
             log.error((_("Fork #2 failed: ") + "%d (%s)"), e.errno, e.strerror)
-            sys.exit(1)
+            self.exit(1)
 
         start_msg = _("%(app)s (v%(ver)s) started as daemon with PID %(pid)d.") % {
                 'app': self.appname, 'ver': self.version, 'pid': os.getpid()}

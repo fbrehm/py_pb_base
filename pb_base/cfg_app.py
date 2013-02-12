@@ -39,7 +39,7 @@ from pb_base.app import PbApplication
 
 from pb_base.translate import translator
 
-__version__ = '0.5.5'
+__version__ = '0.5.6'
 
 log = logging.getLogger(__name__)
 
@@ -455,7 +455,7 @@ class PbCfgApp(PbApplication):
             msg = "Could not find any configuration file at these locations:"
             for file in self.cfg_files:
                 msg += '\n' + file
-            sys.exit(msg)
+            self.exit(1, msg)
 
         for cfg_file in existing_cfg_files:
 
@@ -488,7 +488,7 @@ class PbCfgApp(PbApplication):
             self.cfg.rec_update(cfg)
 
         if not cfgfiles_ok:
-            sys.exit(2)
+            self.exit(2)
 
         if self.verbose > 2:
             if len(existing_cfg_files) > 1:
@@ -617,7 +617,7 @@ class PbCfgApp(PbApplication):
         cfg.validate(vdt, copy = True)
         cfg.write(sys.stdout)
 
-        sys.exit(0)
+        self.exit(0)
 
 #==============================================================================
 
