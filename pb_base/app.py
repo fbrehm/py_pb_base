@@ -419,9 +419,26 @@ class PbApplication(PbBaseObject):
         raise FunctionNotImplementedError('_run()', self.__class__.__name__)
 
     #--------------------------------------------------------------------------
+    def __call__(self):
+        """
+        Helper method to make the resulting object callable, e.g.::
+
+            app = PbApplication(...)
+            app()
+
+        @return: None
+
+        """
+
+        self.run()
+
+    #--------------------------------------------------------------------------
     def run(self):
         """
         The visible start point of this object.
+
+        @return: None
+
         """
 
         if not self.initialized:
