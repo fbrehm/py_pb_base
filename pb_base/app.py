@@ -47,14 +47,6 @@ argparse._ = translator.lgettext
 # _fake_exit flag, for testing
 _fake_exit = False
 
-@property
-def fake_exit():
-    return _fake_exit
-
-@fake_exit.setter
-def fake_exit(value):
-    _fake_exit = bool(value)
-
 #==============================================================================
 class PbApplicationError(PbBaseObjectError):
     """Base error class for all exceptions happened during
@@ -342,8 +334,6 @@ class PbApplication(PbBaseObject):
         retval = int(retval)
         trace = bool(trace)
 
-        ssys.stderr.write("Blub\n")
-
         root_log = logging.getLogger()
         has_handlers = False
         if root_log.handlers:
@@ -367,7 +357,7 @@ class PbApplication(PbBaseObject):
             if self.use_stderr or not has_handlers:
                 traceback.print_exc()
 
-        if fake_exit:
+        if _fake_exit:
             raise FakeExitError(retval, msg)
         else:
             sys.exit(retval)
