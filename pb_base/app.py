@@ -33,7 +33,7 @@ from pb_base.object import PbBaseObject
 
 from pb_base.translate import translator
 
-__version__ = '0.5.2'
+__version__ = '0.6.0'
 
 log = logging.getLogger(__name__)
 
@@ -42,12 +42,55 @@ __ = translator.lngettext
 
 argparse._ = translator.lgettext
 
+#----------------------------------------------------------
+# _fake_exit flag, for testing
+_fake_exit = False
+
+@property
+def fake_exit():
+    return _fake_exit
+
+@fake_exit.setter
+def fake_exit(value):
+    _fake_exit = bool(value)
+
 #==============================================================================
 class PbApplicationError(PbBaseObjectError):
     """Base error class for all exceptions happened during
     execution this application"""
 
     pass
+
+#==============================================================================
+class FakeExitError(PbApplicationError):
+    """
+    Special exception class indicating a faked app.exit().
+
+    It can be used in unit tests.
+
+    """
+
+    #--------------------------------------------------------------------------
+    def __init__(self, exit_value, msg = None):
+        """
+        Constructor.
+
+        @param exit_value: the exit value, which should be given back to OS.
+        @type exit_value: int
+        @param msg: the error message, which should be displayed on exit.
+        @type msg: object
+
+        """
+
+        self.exit_value = int(exit_value)
+        self.msg = msg
+
+    #--------------------------------------------------------------------------
+    def __str__(self):
+        """Typecasting into a string for error output."""
+
+        return _("Faked exit to OS. Exit value: %(rv)d, message: %(msg)r") % {
+                'rv': self.exit_value, 'msg': self.msg}
 
 #==============================================================================
 class PbApplication(PbBaseObject):
@@ -668,4 +711,4 @@ if __name__ == "__main__":
 
 #==============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

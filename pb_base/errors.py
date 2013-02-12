@@ -14,7 +14,7 @@ from gettext import gettext as _
 # Own modules
 from pb_base.translate import translator
 
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 
 _ = translator.lgettext
 __ = translator.lngettext
@@ -25,6 +25,8 @@ class PbError(Exception):
     """
     Base error class for all other self defined exceptions.
     """
+
+    pass
 
 #==============================================================================
 class FunctionNotImplementedError(PbError, NotImplementedError):
@@ -146,4 +148,4 @@ if __name__ == "__main__":
 
 #==============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
