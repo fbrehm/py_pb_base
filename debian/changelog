@@ -1,3 +1,11 @@
+profitbricks-python-base (0.4.1-1) unstable; urgency=low
+
+  * Version bump
+  * Replaced sys.exit() by a self written method exit() of the
+    PbApplication object to make unittests possible
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Tue, 12 Feb 2013 11:15:58 +0100
+
 profitbricks-python-base (0.4.0-1) unstable; urgency=low
 
   * Version bump
