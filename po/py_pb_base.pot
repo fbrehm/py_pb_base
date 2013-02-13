@@ -553,7 +553,9 @@ msgstr ""
 
 #: pb_base/handler/lock.py:519 pb_base/handler/lock.py:691
 #, python-format
-msgid "The value for %s must be greater than or equal to zero (is %r)."
+msgid ""
+"The value for %(what)s must be greater than or equal to zero "
+"(is %(val)r)."
 msgstr ""
 
 #: pb_base/handler/lock.py:733
@@ -1043,10 +1045,6 @@ msgstr ""
 #: pb_base/translate.py:41
 #, python-format
 msgid "Found .mo-file: %r"
-msgstr ""
-
-#: argparse.py:292
-msgid "usage: "
 msgstr ""
 
 #: argparse.py:800

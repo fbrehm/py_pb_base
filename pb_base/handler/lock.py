@@ -516,8 +516,8 @@ class PbLockHandler(PbBaseHandler):
             raise LockHandlerError(msg)
 
         if value < 0:
-            msg = _("The value for %s must be greater than or " +
-                    "equal to zero (is %r).") % {
+            msg = _("The value for %(what)s must be greater than or " +
+                    "equal to zero (is %(val)r).") % {
                     'val': value, 'what': 'lockretry_delay_increase'}
             raise LockHandlerError(msg)
 
@@ -688,8 +688,8 @@ class PbLockHandler(PbBaseHandler):
                         'val': delay_increase, 'what': 'delay_increase'}
                 raise LockHandlerError(msg)
             if delay_increase < 0:
-                msg = _("The value for %s must be greater than or " +
-                        "equal to zero (is %r).") % {
+                msg = _("The value for %(what)s must be greater than or " +
+                        "equal to zero (is %(val)r).") % {
                         'val': delay_increase, 'what': 'delay_increase'}
                 raise LockHandlerError(msg)
 
