@@ -18,6 +18,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: pb_base/app.py:85
+#, python-format
+msgid "Faked exit to OS. Exit value: %(rv)d, message: %(msg)r"
+msgstr ""
+"Vorgetäuschter Exit zm Betriebssystem. Exitwert: %(rv)d, Meldung: %(msg)r"
+
+#: pb_base/app.py:309 argparse.py:292
+msgid "usage: "
+msgstr "Verwendung: "
+
 #: pb_base/app.py:411
 msgid "The application is not complete initialized."
 msgstr "Die Anwendung wurde noch nicht vollständig initialisiert."
@@ -854,10 +864,6 @@ msgstr "Basis-Verzeichnis: %r"
 #, python-format
 msgid "Found .mo-file: %r"
 msgstr "Gefundene .mo-Datei: %r"
-
-#: argparse.py:292
-msgid "usage: "
-msgstr "Verwendung: "
 
 #: argparse.py:800
 msgid ".__call__() not defined"
