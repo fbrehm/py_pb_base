@@ -39,7 +39,7 @@ from pb_base.pidfile import PidFile
 
 from pb_base.translate import translator
 
-__version__ = '0.3.4'
+__version__ = '0.3.5'
 
 log = logging.getLogger(__name__)
 
@@ -366,13 +366,13 @@ class PidfileApp(PbCfgApp):
             self.pidfile.create()
         except PidFileInUseError, e:
             self.handle_error(str(e), '', False)
-            sys.exit(2)
+            self.exit(2)
         except PidFileError, e:
             self.handle_error(str(e), '', False)
-            sys.exit(3)
+            self.exit(3)
         except Exception, e:
             self.handle_error(str(e), e.__class__.__name__, True)
-            sys.exit(5)
+            self.exit(5)
 
 
 #==============================================================================

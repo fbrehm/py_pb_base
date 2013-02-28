@@ -18,6 +18,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: pb_base/app.py:85
+#, python-format
+msgid "Faked exit to OS. Exit value: %(rv)d, message: %(msg)r"
+msgstr ""
+"Vorgetäuschter Exit zm Betriebssystem. Exitwert: %(rv)d, Meldung: %(msg)r"
+
+#: pb_base/app.py:309 argparse.py:292
+msgid "usage: "
+msgstr "Verwendung: "
+
 #: pb_base/app.py:411
 msgid "The application is not complete initialized."
 msgstr "Die Anwendung wurde noch nicht vollständig initialisiert."
@@ -55,9 +65,9 @@ msgstr "Zeigt die Hilfe-Meldung an und beendet sich."
 msgid "Display brief usage message and exit"
 msgstr "Stellt eine kurze Meldung zur Verwendung dar und beendet sich."
 
-#: pb_base/app.py:506
+#: pb_base/app.py:624
 #, python-format
-msgid "Version of %(prog)s: %s"
+msgid "Version of %%(prog)s: %s"
 msgstr "Programmversion von %%(prog)s: %s"
 
 #: pb_base/app.py:507
@@ -507,6 +517,224 @@ msgstr ""
 msgid "%r is not an integer value usable as PID."
 msgstr "%r ist kein Integerwert, der als PID verwendet werden kann."
 
+#: pb_base/handler/lock.py:93
+#, python-format
+msgid "Locking directory %r doesn't exists or is not a directory."
+msgstr "Das Lockverzeichnis %r existiert nicht oder ist kein Verzeichnis."
+
+#: pb_base/handler/lock.py:119 pb_base/handler/lock.py:751
+#, python-format
+msgid "Locking directory %r isn't writeable."
+msgstr "Das Lockverzeichnis %r ist nicht beschreibbar."
+
+#: pb_base/handler/lock.py:189
+msgid "No lockfile given on init of a PbLock object."
+msgstr "Keine Lockdatei bei der Initialisierung des PbLock-Objecktes angegeben."
+
+#: pb_base/handler/lock.py:193 pb_base/handler/lock.py:965
+#, python-format
+msgid "Lockfile %r doesn't exists."
+msgstr "Die Lockdatei %r existiert nicht."
+
+#: pb_base/handler/lock.py:198
+#, python-format
+msgid "Lockfile %r is not a regular file."
+msgstr "Die Lockdatei %r ist keine reguläre Datei."
+
+#: pb_base/handler/lock.py:323
+#, python-format
+msgid "Automatic removing of %r ..."
+msgstr "Automatisches Löschen von %r ..."
+
+#: pb_base/handler/lock.py:344
+#, python-format
+msgid "Refreshing atime and mtime of %r to the current timestamp."
+msgstr "Erneuern der atime und der mtime von %r auf den gegenwärtigen Zeitpunkt."
+
+#: pb_base/handler/lock.py:491 pb_base/handler/lock.py:514
+#: pb_base/handler/lock.py:537 pb_base/handler/lock.py:561
+#: pb_base/handler/lock.py:674 pb_base/handler/lock.py:687
+#: pb_base/handler/lock.py:700 pb_base/handler/lock.py:719
+#: pb_base/handler/lock.py:952
+#, python-format
+msgid "Value %(val)r for %(what)s is not a Number."
+msgstr "Der Wert %(val)r für %(what)s is keine Zahl."
+
+#: pb_base/handler/lock.py:496 pb_base/handler/lock.py:542
+#: pb_base/handler/lock.py:566 pb_base/handler/lock.py:678
+#: pb_base/handler/lock.py:704 pb_base/handler/lock.py:723
+#: pb_base/handler/lock.py:956
+#, python-format
+msgid "The value for %(what)s must be greater than zero (is %(val)r)."
+msgstr "Der Wert für %(what)s muss größer als Null sein "
+"(ist aber %(val)r)."
+
+#: pb_base/handler/lock.py:519 pb_base/handler/lock.py:691
+#, python-format
+msgid ""
+"The value for %(what)s must be greater than or equal to zero "
+"(is %(val)r)."
+msgstr ""
+"Der Wert für %(what)s muss größer oder gleich Null sein "
+"(ist aber %(val)r)."
+
+#: pb_base/handler/lock.py:733
+#, python-format
+msgid "Invalid PID %d given on calling create_lockfile()."
+msgstr "Ungültige PID %d beim Aufruf von create_lockfile() angegeben."
+
+#: pb_base/handler/lock.py:743
+#, python-format
+msgid "Trying to lock lockfile %r ..."
+msgstr "Versuche, Lockdatei %r zu locken ..."
+
+#: pb_base/handler/lock.py:745
+#, python-format
+msgid "Using lock directory %r ..."
+msgstr "Verwende Lockverzeichnis %r ..."
+
+#: pb_base/handler/lock.py:774
+#, python-format
+msgid "Current time difference: %0.3f seconds."
+msgstr "Aktuelle Zeitdifferenz: %0.3f Sekunden."
+
+#. Try creating lockfile exclusive
+#: pb_base/handler/lock.py:779
+#, python-format
+msgid "Try %(try_nr)d on creating lockfile %(lfile)r ..."
+msgstr "Versuch Nr. %(try_nr)d, Lockdatei %(lfile)r anzulegen ..."
+
+#: pb_base/handler/lock.py:791 pb_base/handler/lock.py:899
+#, python-format
+msgid "Removing lockfile %r ..."
+msgstr "Lösche Lockdatei %r ..."
+
+#: pb_base/handler/lock.py:796 pb_base/handler/lock.py:907
+#, python-format
+msgid "Error on removing lockfile %(lfile)r: %(err)s"
+msgstr "Fehler beim Löschen der Lockdatei %(lfile)r: %(err)s"
+
+#: pb_base/handler/lock.py:809
+#, python-format
+msgid "Sleeping for %0.1f seconds."
+msgstr "Schlafe mal für %0.1f Sekunden."
+
+#: pb_base/handler/lock.py:816
+#, python-format
+msgid ""
+"Could not occupy lockfile %(lfile)r after %(secs)0.1f seconds on %(nr)d tries."
+msgstr ""
+"Konnte Lockdatei %(lfile)r nicht nach %(secs)0.1f Sekunden und %(nr)d "
+"Versuchen vereinnahmen."
+
+#. or an int for success
+#: pb_base/handler/lock.py:823
+#, python-format
+msgid "Got a lock for lockfile %r."
+msgstr "Habe Lock frür Lockdatei %r erhalten."
+
+#: pb_base/handler/lock.py:825
+#, python-format
+msgid "Write %(what)r in lockfile %(lfile)r ..."
+msgstr "Schreibe %(what)r in die Lockdatei %(lfile)r ..."
+
+#: pb_base/handler/lock.py:859
+#, python-format
+msgid "Trying to open %r exclusive ..."
+msgstr "Versuche, %r exklusiv zu öffnen ..."
+
+#: pb_base/handler/lock.py:861
+msgid "Simulation mode, no real creation of a lockfile."
+msgstr "Simulationsbetrieb, kein reales Schreiben einer Lockdatei."
+
+#: pb_base/handler/lock.py:867
+#, python-format
+msgid "Error on creating lockfile %(lfile)r: %(err)s"
+msgstr "Fehler beim Erstellen der Lockdatei %(lfile)r: %(err)s"
+
+#: pb_base/handler/lock.py:896
+#, python-format
+msgid "Lockfile %r to remove doesn't exists."
+msgstr "Die zu löschende Lockdatei %r existiert nicht."
+
+#: pb_base/handler/lock.py:901
+msgid "Simulation mode - lockfile won't removed."
+msgstr "Simulationsbetrieb - die Lockdatei wird nicht gelöscht."
+
+#: pb_base/handler/lock.py:911
+msgid "Stacktrace"
+msgstr "Stacktrace"
+
+#: pb_base/handler/lock.py:961
+#, python-format
+msgid "Checking lockfile %r ..."
+msgstr "Überprüfe Lockdatei %r ..."
+
+#: pb_base/handler/lock.py:969
+#, python-format
+msgid "No read access for lockfile %r."
+msgstr "Kein Lesezugriff auf Lockdatei %r."
+
+#: pb_base/handler/lock.py:973
+#, python-format
+msgid "No write access for lockfile %r."
+msgstr "Kein Schreibzugriff auf Lockdatei %r."
+
+#: pb_base/handler/lock.py:979
+#, python-format
+msgid "Unusable lockfile %r."
+msgstr "Lockdatei %r ist nicht verwendbar."
+
+#: pb_base/handler/lock.py:982
+#, python-format
+msgid "Process with PID %d is unfortunately dead."
+msgstr "Der Prozess mit der PID %d ist unglücklicherweise verschieden."
+
+#: pb_base/handler/lock.py:985
+#, python-format
+msgid "Process with PID %d is even running."
+msgstr "Der Prozess mit der PID %d läuft noch."
+
+#: pb_base/handler/lock.py:990
+#, python-format
+msgid "Lockfile %(lfile)r is older than %(max)d seconds (%(age)d seconds)."
+msgstr ""
+"Die Lockdatei %(lfile)r ist älter als %(max)d Sekunden (%(age)d Sekunden)."
+
+#: pb_base/handler/lock.py:993
+#, python-format
+msgid ""
+"Lockfile %(lfile)r is %(age)d seconds old, but not old enough (%(max)d seconds)."
+msgstr ""
+"Die Lockdatei %(lfile)r ist %(age)d Sekunden alt, aber noch nicht alt genug "
+"(%(max)d Sekunden)."
+
+#: pb_base/handler/lock.py:1016
+#, python-format
+msgid "Trying to open pidfile %r ..."
+msgstr "Versuche, PID-Datei %r zu öffnen ..."
+
+#: pb_base/handler/lock.py:1020
+#, python-format
+msgid "Could not open pidfile %r for reading:"
+msgstr "Konnte PID-Datei %r nicht zum Lesen öffnen:"
+
+#: pb_base/handler/lock.py:1033
+#, python-format
+msgid "First line of pidfile %r was empty."
+msgstr "Die erste Zeile der PID-Datei %r war leer."
+
+#: pb_base/handler/lock.py:1044
+#, python-format
+msgid "Could not interprete %(cont)r as a PID from %(file)r:"
+msgstr "Konnte %(cont)r (Inhalt von %(file)r) nicht als PID "
+"interpretieren:"
+
+#: pb_base/handler/lock.py:1054
+#, python-format
+msgid "Invalid PID %(pid)d in %(file)r found."
+msgstr "Ungültige PID %(pid)d in %(file)r gefunden."
+
 #: pb_base/pidfile.py:70
 #, python-format
 msgid "Invalid pidfile '%(pidfile)s' given: %(reason)s"
@@ -854,10 +1082,6 @@ msgstr "Basis-Verzeichnis: %r"
 #, python-format
 msgid "Found .mo-file: %r"
 msgstr "Gefundene .mo-Datei: %r"
-
-#: argparse.py:292
-msgid "usage: "
-msgstr "Verwendung: "
 
 #: argparse.py:800
 msgid ".__call__() not defined"

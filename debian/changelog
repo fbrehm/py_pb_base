@@ -1,3 +1,37 @@
+profitbricks-python-base (0.4.3-1) unstable; urgency=low
+
+  * Version bump
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Wed, 13 Feb 2013 15:58:29 +0100
+
+profitbricks-python-base (0.4.2-2) unstable; urgency=low
+
+  * Senseless version bump
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Tue, 12 Feb 2013 12:01:23 +0100
+
+profitbricks-python-base (0.4.2-1) unstable; urgency=low
+
+  * Version bump
+  * Bugfixing
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Tue, 12 Feb 2013 10:33:13 +0000
+
+profitbricks-python-base (0.4.1-1) unstable; urgency=low
+
+  * Version bump
+  * Replaced sys.exit() by a self written method exit() of the
+    PbApplication object to make unittests possible
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Tue, 12 Feb 2013 11:15:58 +0100
+
+profitbricks-python-base (0.4.0-1) unstable; urgency=low
+
+  * Version bump
+  * Declared for unstable
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Mon, 11 Feb 2013 16:14:58 +0100
+
 profitbricks-python-base (0.3.22-1) stable; urgency=low
 
   * Version bump
