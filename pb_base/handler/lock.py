@@ -984,7 +984,16 @@ class PbLockHandler(PbBaseHandler):
                 else:
                     log.debug(_("Process with PID %d is even running."), pid)
                     return True
-        fstat = os.stat(lockfile)
+
+        fstat = None
+        try:
+            fstat = os.stat(lockfile)
+        except OSError, e:
+            if e.errno == errno.ENOENT:
+                log.info("Could not stat for file %r: %s", lockfile, e.strerror)
+                return False
+            raise
+
         age = time.time() - fstat.st_mtime
         if age >= max_age:
             msg = _("Lockfile %(lfile)r is older than %(max)d seconds (%(age)d seconds).")
@@ -1084,10 +1093,10 @@ class PbLockHandler(PbBaseHandler):
             return os.kill(pid, signal)
         except OSError, e:
             #process is dead
-            if e.errno == 3:
+            if e.errno == errno.ESRCH:
                 return True
             #no permissions
-            elif e.errno == 1:
+            elif e.errno == errno.EPERM:
                 return False
             else:
                 #reraise the error
@@ -1118,7 +1127,7 @@ class PbLockHandler(PbBaseHandler):
             dead = waitpid(pid, WNOHANG)[0]
         except OSError, e:
             #pid is not a child
-            if e.errno == 10:
+            if e.errno == errno.ECHILD:
                 return False
             else:
                 raise
