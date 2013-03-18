@@ -639,7 +639,7 @@ msgstr ""
 #: pb_base/handler/lock.py:823
 #, python-format
 msgid "Got a lock for lockfile %r."
-msgstr "Habe Lock frür Lockdatei %r erhalten."
+msgstr "Habe Lock für Lockdatei %r erhalten."
 
 #: pb_base/handler/lock.py:825
 #, python-format
