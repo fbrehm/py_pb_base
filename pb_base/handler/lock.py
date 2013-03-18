@@ -26,6 +26,8 @@ from numbers import Number
 # Own modules
 from pb_base.common import pp, to_unicode_or_bust, to_utf8_or_bust
 
+from  pb_base.errors import CouldntOccupyLockfileError
+
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
@@ -35,7 +37,7 @@ from pb_base.handler import PbBaseHandler
 
 from pb_base.translate import translator
 
-__version__ = '0.2.1'
+__version__ = '0.2.2'
 
 log = logging.getLogger(__name__)
 
@@ -627,13 +629,16 @@ class PbLockHandler(PbBaseHandler):
     #--------------------------------------------------------------------------
     def create_lockfile(self, lockfile,
             delay_start = None, delay_increase = None, max_delay = None,
-            use_pid = None, max_age = None, pid = None):
+            use_pid = None, max_age = None, pid = None, raise_on_fail = True):
         """
         Tries to create the given lockfile exclusive.
 
         If the lockfile exists and is valid, it waits a total maximum
         of max_delay seconds an increasing amount of seconds to get exclusive
         access to the lockfile.
+
+        @raise CouldntOccupyLockfileError: if the lockfile couldn't occupied
+                                           and raise_on_fail is set to True
 
         @param lockfile: the lockfile to use as a semaphore, if not given
                          as an absolute path, it will be supposed to be
@@ -661,6 +666,9 @@ class PbLockHandler(PbBaseHandler):
         @param pid: the pid to write into the lockfile, if use_pid is set
                     to True, if not given, the PID of the current process is used.
         @type pid: int
+        @param raise_on_fail: raise an exception instead of returning False, if
+                              the lockfile couldn't occupied.
+        @type raise_on_fail: bool
 
         @return: a lock object on success, else None
         @rtype: PbLock or None
@@ -813,10 +821,11 @@ class PbLockHandler(PbBaseHandler):
         # fd is either None, for no success on locking
         if fd is None:
             time_diff = time.time() - start_time
-            msg = _("Could not occupy lockfile %(lfile)r after %(secs)0.1f " +
-                    "seconds on %(nr)d tries.") % {
-                    'lfile': lockfile, 'secs': time_diff, 'nr': counter}
-            log.error(msg)
+            e = CouldntOccupyLockfileError(lockfile, time_diff, counter)
+            if raise_on_fail:
+                raise e
+            else:
+                log.error(msg)
             return None
 
         # or an int for success
