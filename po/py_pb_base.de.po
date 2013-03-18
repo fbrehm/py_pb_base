@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: profitbricks-python-base 0.3.11\n"
 "Report-Msgid-Bugs-To: frank.brehm@profitbricks.com\n"
 "POT-Creation-Date: 2013-01-14 17:31+0100\n"
-"PO-Revision-Date: 2013-01-14 17:49+0100\n"
+"PO-Revision-Date: 2013-03-18 17:10+0100\n"
 "Last-Translator: Frank Brehm <frank.brehm@profitbricks.com>\n"
 "Language-Team: German\n"
 "Language: de\n"
@@ -262,6 +262,14 @@ msgstr "Timeout beim Lesen"
 #: pb_base/errors.py:139
 msgid "Timeout error on writing"
 msgstr "Timeout beim Schreiben"
+
+#: pb_base/errors.py:172
+#, python-format
+msgid ""
+"Couldn't occupy lockfile %(file)r in %(secs)0.1f seconds with %(tries)d tries."
+msgstr ""
+"Konnte Lockdatei %(file)r nicht nach %(secs)0.1f Sekunden und %(tries)d "
+"Versuchen vereinnahmen."
 
 #: pb_base/fork_daemon.py:254
 #, python-format

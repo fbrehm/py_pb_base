@@ -141,6 +141,37 @@ class PbWriteTimeoutError(PbIoTimeoutError):
         strerror = _("Timeout error on writing")
         super(PbWriteTimeoutError, self).__init__(strerror, timeout, filename)
 
+#-------------------------------------------------------------------------------
+class CouldntOccupyLockfileError(PbError):
+    """
+    Special error class indicating, that a lockfile couldn't coccupied
+    after a defined time.
+    """
+
+    #------------------------------------------------------
+    def __init__(self, lockfile, duration, tries):
+        """
+        Constructor.
+
+        @param lockfile: the lockfile, which could't be occupied.
+        @type lockfile: str
+        @param duration: The duration in seconds, which has lead to this situation
+        @type duration: float
+        @param tries: the number of tries creating the lockfile
+        @type tries: int
+
+        """
+
+        self.lockfile = str(lockfile)
+        self.duration = float(duration)
+        self.tries = int(tries)
+
+    #------------------------------------------------------
+    def __str__(self):
+
+        return _("Couldn't occupy lockfile %(file)r in %(secs)0.1f seconds with %(tries)d tries.") % {
+                'file': self.lockfile, 'secs': self.duration, 'tries': self.tries}
+
 #==============================================================================
 
 if __name__ == "__main__":
