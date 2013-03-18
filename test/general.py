@@ -69,6 +69,19 @@ def init_root_logger(verbose = 0):
 class PbBaseTestcase(unittest.TestCase):
 
     #--------------------------------------------------------------------------
+    def __init__(self, methodName = 'runTest', verbose = 0):
+
+        self._verbose = int(verbose)
+
+        super(PbBaseTestcase, self).__init__(methodName)
+
+    #--------------------------------------------------------------------------
+    @property
+    def verbose(self):
+        """The verbosity level."""
+        return getattr(self, '_verbose', 0)
+
+    #--------------------------------------------------------------------------
     def setUp(self):
 
         pass

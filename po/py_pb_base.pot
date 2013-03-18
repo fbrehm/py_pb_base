@@ -234,22 +234,28 @@ msgstr ""
 msgid "I'm a daemon now - Boooaaaahhh!!!"
 msgstr ""
 
-#: pb_base/errors.py:61
+#: pb_base/errors.py:63
 #, python-format
 msgid "Function %(func)s() has to be overridden in class '%(cls)s'."
 msgstr ""
 
-#: pb_base/errors.py:92
+#: pb_base/errors.py:94
 #, python-format
 msgid " (timeout after %0.1f secs)"
 msgstr ""
 
-#: pb_base/errors.py:118
+#: pb_base/errors.py:120
 msgid "Timeout error on reading"
 msgstr ""
 
-#: pb_base/errors.py:139
+#: pb_base/errors.py:141
 msgid "Timeout error on writing"
+msgstr ""
+
+#: pb_base/errors.py:172
+#, python-format
+msgid ""
+"Couldn't occupy lockfile %(file)r in %(secs)0.1f seconds with %(tries)d tries."
 msgstr ""
 
 #: pb_base/fork_daemon.py:254
