@@ -1,3 +1,12 @@
+profitbricks-python-base (0.4.5-1) stable; urgency=low
+
+  * Added CouldntOccupyLockfileError class (including necessary
+    translations) into pb_base/errors.py and integrated it in
+    pb_base/handler/lock.py
+  * Redesigned test/test_lock.py
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Mon, 18 Mar 2013 18:15:23 +0100
+
 profitbricks-python-base (0.4.4-1) stable; urgency=low
 
   * Declared for stable
