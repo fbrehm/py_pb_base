@@ -1,3 +1,11 @@
+profitbricks-python-base (0.4.6-1) unstable; urgency=low
+
+  * Declared for unstable
+  * Separated display of default configuration in a seperated method
+    show_default_config() in pb_base/cfg_app.py
+
+ -- Frank Brehm <frank@brehm-online.com>  Sun, 07 Apr 2013 18:25:11 +0200
+
 profitbricks-python-base (0.4.5-1) stable; urgency=low
 
   * Added CouldntOccupyLockfileError class (including necessary
