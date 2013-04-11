@@ -33,7 +33,7 @@ from pb_base.object import PbBaseObject
 
 from pb_base.translate import translator
 
-__version__ = '0.2.3'
+__version__ = '0.2.4'
 
 log = logging.getLogger(__name__)
 
@@ -435,7 +435,8 @@ class PbBaseHandler(PbBaseObject):
         use_shell = bool(shell)
 
         cmd_list = [str(element) for element in cmd_list]
-        log.debug(_("Executing %r"), cmd_list)
+        if not quiet or self.verbose > 1:
+            log.debug(_("Executing %r"), cmd_list)
 
         if quiet and self.verbose > 1:
             log.debug(_("Quiet execution"))
@@ -497,7 +498,8 @@ class PbBaseHandler(PbBaseObject):
                 log.debug(msg)
 
         ret = cmd_obj.wait()
-        log.debug(_("Returncode: %s") % (ret))
+        if not quiet or self.verbose > 1:
+            log.debug(_("Returncode: %s") % (ret))
 
         return (ret, stdoutdata, stderrdata)
 
