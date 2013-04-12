@@ -768,7 +768,7 @@ class PbBaseHandler(PbBaseObject):
 
     #--------------------------------------------------------------------------
     def dump_zeroes(self, target, blocksize = (1024 * 1024),
-            seek = 0, count = None):
+            seek = 0, count = None, force = False):
         """
         Dumping blocks of binary zeroes into the target.
 
@@ -783,6 +783,9 @@ class PbBaseHandler(PbBaseObject):
         @param count: the number of blocks to write, if not given, the zeroes
                       are written, until the device is full
         @type count: int or None
+        @param force: don't raise an exception on a full device, even if
+                      count is set
+        @type force: bool
 
         @return: success of dumping
         @rtype: bool
@@ -828,7 +831,7 @@ class PbBaseHandler(PbBaseObject):
                     break
         except IOError, e:
             if e.errno == 28:
-                if count:
+                if count and not force:
                     raise
                 else:
                     log.debug(_("No space left on output device %r."), target)
