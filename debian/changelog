@@ -1,3 +1,9 @@
+profitbricks-python-base (0.4.8-1) unstable; urgency=low
+
+  * Added xtract-xlate-msgs.sh
+
+ -- Developer <so@profitbricks.com>  Sun, 14 Apr 2013 22:27:18 +0200
+
 profitbricks-python-base (0.4.7-1) unstable; urgency=low
 
   * New methods dump_data() and dump_zeroes() for BaseHandler in
