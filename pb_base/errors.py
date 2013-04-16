@@ -64,6 +64,33 @@ class FunctionNotImplementedError(PbError, NotImplementedError):
         return msg % {'func': self.function_name, 'cls': self.class_name}
 
 #==============================================================================
+class CallAbstractMethodError(PbError, NotImplementedError):
+    """
+    Error class indicating, that a uncallable method was called.
+    """
+
+    #--------------------------------------------------------------------------
+    def __init__(self, classname, method, *args, **kwargs):
+        """Constructor."""
+
+        self.classname = classname
+        self.method = method
+        self.args = args
+        self.kwargs = kwargs
+
+    #--------------------------------------------------------------------------
+    def __str__(self):
+        """Typecasting into a string for error output."""
+
+        msg = _("Invalid call to method %(method)s() in a object of class %(class)r (maybe not overridden?).") % {
+                'method': self.method, 'class': self.classname}
+
+        msg += " " + _("Given positional arguments: %r.") % (self.args)
+        msg += " " + _("Given keyword arguments: %r.") % (self.kwargs)
+
+        return msg
+
+#==============================================================================
 class PbIoTimeoutError(PbError, IOError):
     """
     Special error class indicating a timout error on a read/write operation
