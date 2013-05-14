@@ -1,3 +1,25 @@
+profitbricks-python-base (0.4.8-1) unstable; urgency=low
+
+  * Added xtract-xlate-msgs.sh
+
+ -- Developer <so@profitbricks.com>  Sun, 14 Apr 2013 22:27:18 +0200
+
+profitbricks-python-base (0.4.7-1) unstable; urgency=low
+
+  * New methods dump_data() and dump_zeroes() for BaseHandler in
+    pb_base/handler/__init__.py
+  * Updated po/py_pb_base.pot and po/py_pb_base.de.po
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Thu, 11 Apr 2013 23:59:28 +0200
+
+profitbricks-python-base (0.4.6-1) unstable; urgency=low
+
+  * Declared for unstable
+  * Separated display of default configuration in a seperated method
+    show_default_config() in pb_base/cfg_app.py
+
+ -- Frank Brehm <frank@brehm-online.com>  Sun, 07 Apr 2013 18:25:11 +0200
+
 profitbricks-python-base (0.4.5-1) stable; urgency=low
 
   * Added CouldntOccupyLockfileError class (including necessary

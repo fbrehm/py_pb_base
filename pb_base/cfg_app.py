@@ -599,6 +599,15 @@ class PbCfgApp(PbApplication):
         if not self.args.show_default_config:
             return
 
+        self.show_default_config()
+        self.exit(0)
+
+    #--------------------------------------------------------------------------
+    def show_default_config(self):
+        """
+        Print out the default configuration is printed out to stdout.
+        """
+
         curdate = datetime.datetime.utcnow()
 
         self.cfg_spec.initial_comment.append('')
@@ -616,8 +625,6 @@ class PbCfgApp(PbApplication):
         vdt = Validator(pbvalidator_checks)
         cfg.validate(vdt, copy = True)
         cfg.write(sys.stdout)
-
-        self.exit(0)
 
 #==============================================================================
 

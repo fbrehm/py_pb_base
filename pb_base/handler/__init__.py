@@ -33,7 +33,7 @@ from pb_base.object import PbBaseObject
 
 from pb_base.translate import translator
 
-__version__ = '0.2.3'
+__version__ = '0.3.0'
 
 log = logging.getLogger(__name__)
 
@@ -435,7 +435,8 @@ class PbBaseHandler(PbBaseObject):
         use_shell = bool(shell)
 
         cmd_list = [str(element) for element in cmd_list]
-        log.debug(_("Executing %r"), cmd_list)
+        if not quiet or self.verbose > 1:
+            log.debug(_("Executing %r"), cmd_list)
 
         if quiet and self.verbose > 1:
             log.debug(_("Quiet execution"))
@@ -497,7 +498,8 @@ class PbBaseHandler(PbBaseObject):
                 log.debug(msg)
 
         ret = cmd_obj.wait()
-        log.debug(_("Returncode: %s") % (ret))
+        if not quiet or self.verbose > 1:
+            log.debug(_("Returncode: %s") % (ret))
 
         return (ret, stdoutdata, stderrdata)
 
@@ -660,6 +662,193 @@ class PbBaseHandler(PbBaseObject):
 
         return
 
+    #--------------------------------------------------------------------------
+    def dump_data(self, source, target, blocksize = (1024*1024),
+            iseek = 0, oseek = 0, raise_on_full = True):
+        """
+        Dumping the content of source into the target.
+
+        @raise PbBaseHandlerError: on some error.
+
+        @param source: the file or device name of the source
+        @type source: str
+        @param target: the file or device name of the target
+        @type target: str
+        @param blocksize: the blocksize for the copying action
+        @type blocksize: int
+        @param iseek: skip N blocksize-sized blocks at start of input
+        @type iseek: int
+        @param oseek: skip N blocksize-sized blocks at start of output
+        @type oseek: int
+        @param raise_on_full: raise an IOError, if the output device is full,
+                              else through only a debug message.
+        @type raise_on_full: bool
+
+        @return: success of copying
+        @rtype: bool
+        """
+
+        msg = _("Dumping data from %(src)r to %(tgt)r ...")  % {
+                'src': source, 'tgt': target}
+        log.debug(msg)
+
+        if self.simulate:
+            return True
+
+        input_seek = 0l
+        if iseek:
+            input_seek = long(iseek) * long(blocksize)
+        output_seek = 0l
+        if oseek:
+            output_seek = long(oseek) * long(blocksize)
+
+        src_fh = None
+        target_fh = None
+        if self.verbose > 1:
+            log.debug(_("Opening %r for read."), source)
+        try:
+            src_fh = open(source, 'rb', -1)
+        except Exception, e:
+            msg = _("Error opening source %(src)r: %(msg)s") % {
+                    'src': source, 'msg': e}
+            raise PbBaseHandlerError(msg)
+
+        if self.verbose > 1:
+            log.debug(_("Opening %r for write"), target)
+        try:
+            target_fh = open(target, 'wb', -1)
+        except Exception, e:
+            src_fh.close()
+            msg = _("Error opening target %(tgt)r: %(msg)s") % {
+                    'tgt': target, 'msg': e}
+            raise PbBaseHandlerError(msg)
+
+        if self.verbose > 1:
+            log.debug(_("Copying (buffer size %d Bytes)..."), blocksize)
+
+        blocks_written = 0
+
+        try:
+            if input_seek:
+                log.debug(_("Seeking %(bytes)d Bytes (%(human)s) in input to %(src)r.") % {
+                        'bytes': input_seek, 'human': bytes2human(input_seek),
+                        'src': source})
+                src_fh.seek(input_seek)
+            if output_seek:
+                log.debug(_("Seeking %(bytes)d Bytes (%(human)s) in output to %(tgt)r.") % {
+                        'bytes': output_seek, 'human': bytes2human(output_seek),
+                        'tgt': target})
+                target_fh.seek(output_seek)
+            cache = src_fh.read(blocksize)
+            while cache != '':
+                target_fh.write(cache)
+                blocks_written += 1
+                cache = src_fh.read(blocksize)
+        except IOError, e:
+            if e.errno == 28:
+                if raise_on_full:
+                    raise
+                else:
+                    log.debug(_("No space left on output device %r."), target)
+            else:
+                raise
+        except Exception, e:
+            msg = _("Error copying source %(src)r to target %(tgt)r: %(msg)s") % {
+                    'src': source, 'tgt': target, 'msg': e}
+            raise PbBaseHandlerError(msg)
+        finally:
+            src_fh.close()
+            target_fh.close()
+            bytes_written = long(blocks_written) * long(blocksize)
+            written_human = bytes2human(bytes_written)
+            log.debug(_("%(bytes)d Bytes (%(human)s) written to output device %(tgt)r.",) % {
+                    'bytes': bytes_written, 'human': written_human, 'tgt': target})
+
+        return True
+
+    #--------------------------------------------------------------------------
+    def dump_zeroes(self, target, blocksize = (1024 * 1024),
+            seek = 0, count = None, force = False):
+        """
+        Dumping blocks of binary zeroes into the target.
+
+        @raise PbBaseHandlerError: on some error.
+
+        @param target: the file or device name of the target
+        @type target: str
+        @param blocksize: the blocksize for the dumping action
+        @type blocksize: int
+        @param seek: skip N blocksize-sized blocks at start of output
+        @type seek: int
+        @param count: the number of blocks to write, if not given, the zeroes
+                      are written, until the device is full
+        @type count: int or None
+        @param force: don't raise an exception on a full device, even if
+                      count is set
+        @type force: bool
+
+        @return: success of dumping
+        @rtype: bool
+        """
+
+        log.debug(_("Dumping binary zeroes to %r ..."), target)
+
+        if self.simulate:
+            return True
+
+        output_seek = 0l
+        if seek:
+            output_seek = long(seek) * long(blocksize)
+
+        block = chr(0) * blocksize
+
+        target_fh = None
+
+        if self.verbose > 1:
+            log.debug(_("Opening %r for write"), target)
+        try:
+            target_fh = open(target, 'wb', -1)
+        except Exception, e:
+            msg = _("%(errname)s opening target %(tgt)r: %(msg)s") % {
+                    'errname': e.__class__.__name__, 'tgt': target, 'msg': e}
+            raise PbBaseHandlerError(msg)
+
+        if self.verbose > 1:
+            log.debug(_("Copying (buffer size %d Bytes)..."), blocksize)
+
+        blocks_written = 0
+
+        try:
+            if output_seek:
+                log.debug(_("Seeking %(bytes)d Bytes (%(human)s) in output to %(tgt)r.") % {
+                        'bytes': output_seek, 'human': bytes2human(output_seek),
+                        'tgt': target})
+                target_fh.seek(output_seek)
+            while True:
+                target_fh.write(block)
+                blocks_written += 1
+                if count and blocks_written >= count:
+                    break
+        except IOError, e:
+            if e.errno == 28:
+                if count and not force:
+                    raise
+                else:
+                    log.debug(_("No space left on output device %r."), target)
+            else:
+                raise
+        except Exception, e:
+            msg = _("Error dumping binary zeroes to target %(tgt)r: %(msg)s") % {
+                    'tgt': target, 'msg': e}
+            raise PbBaseHandlerError(msg)
+        finally:
+            target_fh.close()
+            bytes_written = long(blocks_written) * long(blocksize)
+            written_human = bytes2human(bytes_written)
+            log.debug(_("%(bytes)d Bytes (%(human)s) written to output device %(tgt)r.",) % {
+                    'bytes': bytes_written, 'human': written_human, 'tgt': target})
+
+        return True
 
 #==============================================================================
 
@@ -669,4 +858,4 @@ if __name__ == "__main__":
 
 #==============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
