@@ -1,0 +1,38 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+'''
+@author: Frank Brehm
+@contact: frank.brehm@profitbricks.com
+@organization: Profitbricks GmbH
+@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
+@license: GPL3
+@summary: a script to detect, whther the current terminal can colors
+'''
+
+import sys
+import os 
+import logging
+
+# own modules:
+cur_dir = os.getcwd()
+if sys.argv[0] != '' and sys.argv[0] != '-c':
+    cur_dir = os.path.dirname(sys.argv[0])
+if os.path.exists(os.path.join(cur_dir, '..', 'pb_base')):
+    sys.path.insert(0, os.path.abspath(os.path.join(cur_dir, '..')))
+del cur_dir
+
+import pb_base
+from pb_base import terminal_can_colors
+
+#==============================================================================
+
+if __name__ == "__main__":
+
+    if terminal_can_colors(debug = False):
+        print "yes"
+    else:
+        print "no"
+
+#==============================================================================
+
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
