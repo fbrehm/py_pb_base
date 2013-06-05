@@ -49,6 +49,9 @@ setup(
     provides = [
         'pb_base',
     ],
+    scripts = [
+        'bin/term-can-colors',
+    ],
     requires = [
         'pb_logging',
         'argparse',
