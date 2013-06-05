@@ -22,7 +22,7 @@ import traceback
 import argparse
 
 # Own modules
-from pb_base.common import pp
+from pb_base.common import pp, terminal_can_colors
 
 from pb_logging.colored import ColoredFormatter
 
@@ -34,7 +34,7 @@ from pb_base.object import PbBaseObject
 
 from pb_base.translate import translator
 
-__version__ = '0.6.1'
+__version__ = '0.6.2'
 
 log = logging.getLogger(__name__)
 
@@ -440,27 +440,10 @@ class PbApplication(PbBaseObject):
 
         """
 
-        cur_term = ''
-        if 'TERM' in os.environ:
-            cur_term = os.environ['TERM'].lower().strip()
-
-        ansi_term = False
-        #env_term_has_colors = False
-        #re_term = re.compile(r'^(?:ansi|linux.*|screen|[xeak]term.*|gnome.*|rxvt.*|interix)$')
-        #if cur_term and re_term.search(cur_term):
-        #    env_term_has_colors = True
-        if cur_term and cur_term == 'ansi':
-            ansi_term = True
-
-        has_colors = True
-        for handle in [sys.stdout, sys.stderr]:
-            if (hasattr(handle, "isatty") and handle.isatty()) or ansi_term:
-                if (platform.system() == 'Windows' and not ansi_term):
-                    has_colors = False
-            else:
-                has_colors = False
-
-        return has_colors
+        term_debug = False
+        if self.verbose > 3:
+            term_debug = True
+        return terminal_can_colors(debug = term_debug)
 
     #--------------------------------------------------------------------------
     def post_init(self):
