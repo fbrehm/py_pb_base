@@ -21,8 +21,7 @@ if os.path.exists(os.path.join(cur_dir, '..', 'pb_base')):
     sys.path.insert(0, os.path.abspath(os.path.join(cur_dir, '..')))
 del cur_dir
 
-import pb_base
-from pb_base import terminal_can_colors
+from pb_base.common import terminal_can_colors
 
 #==============================================================================
 
