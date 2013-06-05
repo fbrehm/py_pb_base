@@ -107,6 +107,8 @@ class TestCryptPass(PbBaseTestcase):
 if __name__ == '__main__':
 
     verbose = get_arg_verbose()
+    if verbose is None:
+        verbose = 0
     init_root_logger(verbose)
 
     log.info("Starting tests ...")
