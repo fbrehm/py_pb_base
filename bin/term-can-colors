@@ -29,8 +29,10 @@ if __name__ == "__main__":
 
     if terminal_can_colors(debug = False):
         print "yes"
+        sys.exit(0)
     else:
         print "no"
+        sys.exit(1)
 
 #==============================================================================
 
