@@ -43,7 +43,7 @@ msgstr "Beenden."
 
 #: pb_base/app.py:452
 msgid "executing post_run() ..."
-msgstr "führe post_run(() aus ..."
+msgstr "führe post_run() aus ..."
 
 #: pb_base/app.py:474
 msgid "General options"
