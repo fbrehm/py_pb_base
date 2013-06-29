@@ -31,6 +31,22 @@ CUR_RADIX = locale.nl_langinfo(locale.RADIXCHAR)
 H2MB_PAT = r'^\s*\+?(\d+(?:' + re.escape(CUR_RADIX) + r'\d*)?)\s*(\S+)?'
 H2MB_RE = re.compile(H2MB_PAT)
 
+RE_UNIT_BYTES = re.compile(r'^\s*(?:b(?:yte)?)?\s*$', re.IGNORECASE)
+RE_UNIT_KBYTES = re.compile(r'^\s*k(?:[bB](?:[Yy][Tt][Ee])?)?\s*$')
+RE_UNIT_KIBYTES = re.compile(r'^\s*K[Ii]?(?:[bB](?:[Yy][Tt][Ee])?)?\s*$')
+RE_UNIT_MBYTES = re.compile(r'^\s*M(?:B(?:yte)?)?\s*$', re.IGNORECASE)
+RE_UNIT_MIBYTES = re.compile(r'^\s*Mi(?:B(?:yte)?)?\s*$', re.IGNORECASE)
+RE_UNIT_GBYTES = re.compile(r'^\s*G(?:B(?:yte)?)?\s*$', re.IGNORECASE)
+RE_UNIT_GIBYTES = re.compile(r'^\s*Gi(?:B(?:yte)?)?\s*$', re.IGNORECASE)
+RE_UNIT_TBYTES = re.compile(r'^\s*T(?:B(?:yte)?)?\s*$', re.IGNORECASE)
+RE_UNIT_TIBYTES = re.compile(r'^\s*Ti(?:B(?:yte)?)?\s*$', re.IGNORECASE)
+RE_UNIT_PBYTES = re.compile(r'^\s*P(?:B(?:yte)?)?\s*$', re.IGNORECASE)
+RE_UNIT_PIBYTES = re.compile(r'^\s*Pi(?:B(?:yte)?)?\s*$', re.IGNORECASE)
+RE_UNIT_EBYTES = re.compile(r'^\s*E(?:B(?:yte)?)?\s*$', re.IGNORECASE)
+RE_UNIT_EIBYTES = re.compile(r'^\s*Ei(?:B(?:yte)?)?\s*$', re.IGNORECASE)
+RE_UNIT_ZBYTES = re.compile(r'^\s*Z(?:B(?:yte)?)?\s*$', re.IGNORECASE)
+RE_UNIT_ZIBYTES = re.compile(r'^\s*Zi(?:B(?:yte)?)?\s*$', re.IGNORECASE)
+
 #==============================================================================
 def human2mbytes(value, si_conform = False, as_float = False,
         no_mibibytes = False):
@@ -109,35 +125,35 @@ def human2mbytes(value, si_conform = False, as_float = False,
     if no_mibibytes:
         final_factor = 1000.0 * 1000.0
 
-    if re.search(r'^\s*(?:b(?:yte)?)?\s*$', prefix, re.IGNORECASE):
+    if RE_UNIT_BYTES.search(prefix):
         factor = long(1)
-    elif re.search(r'^\s*k(?:[bB](?:[Yy][Tt][Ee])?)?\s*$', prefix):
+    elif RE_UNIT_KBYTES.search(prefix):
         factor = factor_si
-    elif re.search(r'^\s*Ki?(?:[bB](?:[Yy][Tt][Ee])?)?\s*$', prefix):
+    elif RE_UNIT_KIBYTES.search(prefix):
         factor = factor_bin
-    elif re.search(r'^\s*M(?:B(?:yte)?)?\s*$', prefix, re.IGNORECASE):
+    elif RE_UNIT_MBYTES.search(prefix):
         factor = (factor_si * factor_si)
-    elif re.search(r'^\s*MiB(?:yte)?\s*$', prefix, re.IGNORECASE):
+    elif RE_UNIT_MIBYTES.search(prefix):
         factor = (factor_bin * factor_bin)
-    elif re.search(r'^\s*G(?:B(?:yte)?)?\s*$', prefix, re.IGNORECASE):
+    elif RE_UNIT_GBYTES.search(prefix):
         factor = (factor_si ** 3)
-    elif re.search(r'^\s*GiB(?:yte)?\s*$', prefix, re.IGNORECASE):
+    elif RE_UNIT_GIBYTES.search(prefix):
         factor = (factor_bin ** 3)
-    elif re.search(r'^\s*T(?:B(?:yte)?)?\s*$', prefix, re.IGNORECASE):
+    elif RE_UNIT_TBYTES.search(prefix):
         factor = (factor_si ** 4)
-    elif re.search(r'^\s*TiB(?:yte)?\s*$', prefix, re.IGNORECASE):
+    elif RE_UNIT_TIBYTES.search(prefix):
         factor = (factor_bin ** 4)
-    elif re.search(r'^\s*P(?:B(?:yte)?)?\s*$', prefix, re.IGNORECASE):
+    elif RE_UNIT_PBYTES.search(prefix):
         factor = (factor_si ** 5)
-    elif re.search(r'^\s*PiB(?:yte)?\s*$', prefix, re.IGNORECASE):
+    elif RE_UNIT_PIBYTES.search(prefix):
         factor = (factor_bin ** 5)
-    elif re.search(r'^\s*E(?:B(?:yte)?)?\s*$', prefix, re.IGNORECASE):
+    elif RE_UNIT_EBYTES.search(prefix):
         factor = (factor_si ** 6)
-    elif re.search(r'^\s*EiB(?:yte)?\s*$', prefix, re.IGNORECASE):
+    elif RE_UNIT_EIBYTES.search(prefix):
         factor = (factor_bin ** 6)
-    elif re.search(r'^\s*Z(?:B(?:yte)?)?\s*$', prefix, re.IGNORECASE):
+    elif RE_UNIT_ZBYTES.search(prefix):
         factor = (factor_si ** 7)
-    elif re.search(r'^\s*ZiB(?:yte)?\s*$', prefix, re.IGNORECASE):
+    elif RE_UNIT_ZIBYTES.search(prefix):
         factor = (factor_bin ** 7)
     else:
         msg = ("Couldn't detect prefix '%s'.") % (prefix)
