@@ -15,17 +15,25 @@ import logging
 import logging.handlers
 import pprint
 import platform
+import locale
 
 # Third party modules
 
 # Own modules
 
-__version__ = '0.3.3'
+__version__ = '0.3.4'
 
 log = logging.getLogger(__name__)
 
 #==============================================================================
-def human2mbytes(value, si_conform = False, as_float = False):
+
+CUR_RADIX = locale.nl_langinfo(locale.RADIXCHAR)
+H2MB_PAT = r'^\s*\+?(\d+(?:' + re.escape(CUR_RADIX) + r'\d*)?)\s*(\S+)?'
+H2MB_RE = re.compile(H2MB_PAT)
+
+#==============================================================================
+def human2mbytes(value, si_conform = False, as_float = False,
+        no_mibibytes = False):
     """
     Converts the given human readable byte value (e.g. 5MB, 8.4GiB etc.)
     with a prefix into an integer/float value (without a prefix) of MiBiBytes.
@@ -40,6 +48,8 @@ def human2mbytes(value, si_conform = False, as_float = False):
         - EB (1000^6), EiB (1024^6)
         - ZB (1000^7), ZiB (1024^7)
 
+    @raise ValueError: on an invalid value
+
     @param value: the value to convert
     @type value: str
     @param si_conform: use factor 1000 instead of 1024 for kB a.s.o.
@@ -47,23 +57,34 @@ def human2mbytes(value, si_conform = False, as_float = False):
     @param as_float: flag to gives back the value as a float value
                      instead of an integer value
     @type as_float: bool
+    @param no_mibibytes: final convert bytes to mbytes with factor
+                         1000*1000 instead of 1024*1024
 
     @return: amount of MibiBytes
     @rtype:  int or float
+
     """
 
     if value is None:
         msg = ("Given value is 'None'.")
         raise ValueError(msg)
-    print "Value: '%s'" % (value)
 
     radix = '.'
     radix = re.escape(radix)
 
+    c_radix = locale.nl_langinfo(locale.RADIXCHAR)
+    global CUR_RADIX
+    global H2MB_PAT
+    global H2MB_RE
+
+    if c_radix != CUR_RADIX:
+        CUR_RADIX = c_radix
+        H2MB_PAT = r'^\s*\+?(\d+(?:' + re.escape(CUR_RADIX) + r'\d*)?)\s*(\S+)?'
+        H2MB_RE = re.compile(H2MB_PAT)
+
     value_raw = ''
     prefix = None
-    pattern = r'^\s*\+?(\d+(?:' + radix + r'\d*)?)\s*(\S+)?'
-    match = re.search(pattern, value)
+    match = H2MB_RE.search(value)
     if match is not None:
         value_raw = match.group(1)
         prefix = match.group(2)
@@ -80,7 +101,13 @@ def human2mbytes(value, si_conform = False, as_float = False):
     if not si_conform:
         factor_si = factor_bin
 
+    #log.debug("factor_bin: %r, factor_si: %r", factor_bin, factor_si)
+
     factor = long(1)
+
+    final_factor = 1024.0 * 1024.0
+    if no_mibibytes:
+        final_factor = 1000.0 * 1000.0
 
     if re.search(r'^\s*(?:b(?:yte)?)?\s*$', prefix, re.IGNORECASE):
         factor = long(1)
@@ -116,8 +143,10 @@ def human2mbytes(value, si_conform = False, as_float = False):
         msg = ("Couldn't detect prefix '%s'.") % (prefix)
         raise ValueError(msg)
 
+    #log.debug("Using factor %r.", factor)
+
     lbytes = long(factor * value_float)
-    mbytes = float(lbytes) / 1024.0 / 1024.0
+    mbytes = float(lbytes) / final_factor
     if as_float:
         return mbytes
     mbytes = int(mbytes)
