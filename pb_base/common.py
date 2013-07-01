@@ -164,11 +164,11 @@ def human2mbytes(value, si_conform = False, as_float = False,
         msg = ("Couldn't detect prefix '%s'.") % (prefix)
         raise ValueError(msg)
 
-    log.debug("Using factor %r, final factor: %r.", factor, final_factor)
-    log.debug("Cur value_long = %r.", value_long)
+    #log.debug("Using factor %r, final factor: %r.", factor, final_factor)
+    #log.debug("Cur value_long = %r.", value_long)
 
     lbytes = factor * value_long
-    log.debug("Cur long bytes: %r.", lbytes)
+    #log.debug("Cur long bytes: %r.", lbytes)
     mbytes = lbytes / final_factor
     if as_float:
         return float(mbytes)
