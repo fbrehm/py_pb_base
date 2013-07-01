@@ -21,16 +21,21 @@ import locale
 
 # Own modules
 
-__version__ = '0.3.4'
+__version__ = '0.3.5'
 
 log = logging.getLogger(__name__)
 
 #==============================================================================
 
 CUR_RADIX = locale.nl_langinfo(locale.RADIXCHAR)
+CUR_THOUSEP = locale.nl_langinfo(locale.THOUSEP)
 H2MB_PAT = r'^\s*\+?(\d+(?:' + re.escape(CUR_RADIX) + r'\d*)?)\s*(\S+)?'
+if CUR_THOUSEP:
+    H2MB_PAT = (r'^\s*\+?(\d+(?:' + re.escape(CUR_THOUSEP) + r'\d+)*(?:' +
+            re.escape(CUR_RADIX) + r'\d*)?)\s*(\S+)?')
 H2MB_RE = re.compile(H2MB_PAT)
 RADIX_RE = re.compile(re.escape(CUR_RADIX))
+THOUSEP_RE = re.compile(re.escape(CUR_THOUSEP))
 
 RE_UNIT_BYTES = re.compile(r'^\s*(?:b(?:yte)?)?\s*$', re.IGNORECASE)
 RE_UNIT_KBYTES = re.compile(r'^\s*k(?:[bB](?:[Yy][Tt][Ee])?)?\s*$')
@@ -94,29 +99,46 @@ def human2mbytes(value, si_conform = False, as_float = False,
     global H2MB_PAT
     global H2MB_RE
     global RADIX_RE
+    global CUR_THOUSEP
+    global THOUSEP_RE
+
+    c_thousep = locale.nl_langinfo(locale.THOUSEP)
+    if c_thousep != CUR_THOUSEP:
+        CUR_THOUSEP = c_thousep
+        log.debug("Current separator character for thousands is now %r.",
+                CUR_THOUSEP)
+        THOUSEP_RE = re.compile(re.escape(CUR_THOUSEP))
 
     if c_radix != CUR_RADIX:
         CUR_RADIX = c_radix
         log.debug("Current decimal radix is now %r.", CUR_RADIX)
         H2MB_PAT = r'^\s*\+?(\d+(?:' + re.escape(CUR_RADIX) + r'\d*)?)\s*(\S+)?'
+        if CUR_THOUSEP:
+            H2MB_PAT = (r'^\s*\+?(\d+(?:' + re.escape(CUR_THOUSEP) + r'\d+)*(?:' +
+                    re.escape(CUR_RADIX) + r'\d*)?)\s*(\S+)?')
         H2MB_RE = re.compile(H2MB_PAT)
         RADIX_RE = re.compile(re.escape(CUR_RADIX))
+    #log.debug("Current pattern: %r", H2MB_PAT)
 
     value_raw = ''
-    prefix = None
+    unit = None
     match = H2MB_RE.search(value)
     if match is not None:
         value_raw = match.group(1)
-        prefix = match.group(2)
+        unit = match.group(2)
     else:
         msg = ("Could not determine bytes in '%s'.") % (value)
         raise ValueError(msg)
+    #log.debug("Raw value: %r, unit: %r.", value_raw, unit)
 
+    if CUR_THOUSEP:
+        value_raw = THOUSEP_RE.sub('', value_raw)
     if CUR_RADIX != '.':
         value_raw = RADIX_RE.sub('.', value_raw)
+    #log.debug("Raw value after l10n: %r.", value_raw)
     value_float = float(value_raw)
-    if prefix is None:
-        prefix = ''
+    if unit is None:
+        unit = ''
 
     factor_bin = long(1024)
     factor_si = long(1000)
@@ -136,38 +158,38 @@ def human2mbytes(value, si_conform = False, as_float = False,
         final_factor *= 10l
     value_long = long(value_float)
 
-    if RE_UNIT_BYTES.search(prefix):
+    if RE_UNIT_BYTES.search(unit):
         factor = long(1)
-    elif RE_UNIT_KBYTES.search(prefix):
+    elif RE_UNIT_KBYTES.search(unit):
         factor = factor_si
-    elif RE_UNIT_KIBYTES.search(prefix):
+    elif RE_UNIT_KIBYTES.search(unit):
         factor = factor_bin
-    elif RE_UNIT_MBYTES.search(prefix):
+    elif RE_UNIT_MBYTES.search(unit):
         factor = (factor_si * factor_si)
-    elif RE_UNIT_MIBYTES.search(prefix):
+    elif RE_UNIT_MIBYTES.search(unit):
         factor = (factor_bin * factor_bin)
-    elif RE_UNIT_GBYTES.search(prefix):
+    elif RE_UNIT_GBYTES.search(unit):
         factor = (factor_si ** 3)
-    elif RE_UNIT_GIBYTES.search(prefix):
+    elif RE_UNIT_GIBYTES.search(unit):
         factor = (factor_bin ** 3)
-    elif RE_UNIT_TBYTES.search(prefix):
+    elif RE_UNIT_TBYTES.search(unit):
         factor = (factor_si ** 4)
-    elif RE_UNIT_TIBYTES.search(prefix):
+    elif RE_UNIT_TIBYTES.search(unit):
         factor = (factor_bin ** 4)
-    elif RE_UNIT_PBYTES.search(prefix):
+    elif RE_UNIT_PBYTES.search(unit):
         factor = (factor_si ** 5)
-    elif RE_UNIT_PIBYTES.search(prefix):
+    elif RE_UNIT_PIBYTES.search(unit):
         factor = (factor_bin ** 5)
-    elif RE_UNIT_EBYTES.search(prefix):
+    elif RE_UNIT_EBYTES.search(unit):
         factor = (factor_si ** 6)
-    elif RE_UNIT_EIBYTES.search(prefix):
+    elif RE_UNIT_EIBYTES.search(unit):
         factor = (factor_bin ** 6)
-    elif RE_UNIT_ZBYTES.search(prefix):
+    elif RE_UNIT_ZBYTES.search(unit):
         factor = (factor_si ** 7)
-    elif RE_UNIT_ZIBYTES.search(prefix):
+    elif RE_UNIT_ZIBYTES.search(unit):
         factor = (factor_bin ** 7)
     else:
-        msg = ("Couldn't detect prefix '%s'.") % (prefix)
+        msg = ("Couldn't detect unit '%s'.") % (unit)
         raise ValueError(msg)
 
     #log.debug("Using factor %r, final factor: %r.", factor, final_factor)

@@ -111,6 +111,8 @@ class TestPbCommon(PbBaseTestcase):
         pairs_de = (
             ('1,2 GiB', int(1.2 * 1024)),
             ('1,2 TiB', int(1.2 * 1024 * 1024)),
+            ('1.024 MiB', 1024),
+            ('1.055,4 GiB', 10554 * 1024 / 10),
         )
 
         log.debug("Testing english decimal radix character %r.", '.')
