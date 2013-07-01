@@ -162,7 +162,7 @@ class TestPbCommon(PbBaseTestcase):
     #--------------------------------------------------------------------------
     def test_bytes2human(self):
 
-        log.info("Testing bytes2human()  from pb_base.common ...")
+        log.info("Testing bytes2human() from pb_base.common ...")
 
         import pb_base.common
         from pb_base.common import bytes2human
@@ -191,7 +191,7 @@ class TestPbCommon(PbBaseTestcase):
     #--------------------------------------------------------------------------
     def test_to_bool(self):
 
-        log.info("Testing to_bool()  from pb_base.common ...")
+        log.info("Testing to_bool() from pb_base.common ...")
 
         import pb_base.common
         from pb_base.common import to_bool
@@ -271,6 +271,26 @@ class TestPbCommon(PbBaseTestcase):
                 log.debug("Got result: %r", result)
             self.assertIsInstance(result, bool)
             self.assertEqual(expected, result)
+
+        # Switch to german locales
+        loc = locale.getlocale() # get current locale
+        # use German locale; name might vary with platform
+        locale.setlocale(locale.LC_ALL, 'de_DE')
+
+        log.debug("Testing german Yes/No expressions for to_bool().")
+        for pair in test_pairs_de:
+            src = pair[0]
+            expected = pair[1]
+            if self.verbose > 1:
+                log.debug("Testing localisation of to_bool(%r) => %r", src, expected)
+            result = to_bool(src)
+            if self.verbose > 1:
+                log.debug("Got result: %r", result)
+            self.assertIsInstance(result, bool)
+            self.assertEqual(expected, result)
+
+        # Switch back to english locales
+        locale.setlocale(locale.LC_ALL, loc) # restore saved locale
 
 #==============================================================================
 
