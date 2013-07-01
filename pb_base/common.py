@@ -211,7 +211,8 @@ def human2mbytes(value, si_conform = False, as_float = False,
     return mbytes
 
 #==============================================================================
-def bytes2human(value, si_conform = False, precision = 0):
+def bytes2human(value, si_conform = False, precision = None,
+        format_str = '%(value)s%(unit)s'):
     """
     Converts the given value in bytes into a human readable format.
     The limit for electing the next higher prefix is at 1500.
@@ -226,6 +227,8 @@ def bytes2human(value, si_conform = False, precision = 0):
     @param precision: how many digits after the decimal point have to stay
                       in the result
     @type precision: int
+    @param format_str: a format string to format the result.
+    @type format_str: str
 
     @return: the value in a human readable format together with the unit
     @rtype: str
@@ -261,15 +264,26 @@ def bytes2human(value, si_conform = False, precision = 0):
     exponent = 0
 
     float_val = float(val)
-    while float_val >= 1500 and exponent < 8:
+    while float_val >= (2 * base) and exponent < 8:
         float_val /= base
         exponent += 1
 
     unit = ''
     if exponent:
-        unit = ' ' + prefixes[exponent]
+        unit = prefixes[exponent]
 
-    return "%.*f%s" % (precision, float_val, unit)
+    value_str = ''
+    if precision is None:
+        value_str = locale.format_string('%f', float_val)
+        value_str = re.sub(r'0+$', '', value_str)
+        value_str = re.sub(r'\D+$', '', value_str)
+    else:
+        value_str = locale.format_string('%.*f', (precision, float_val))
+
+    if not exponent:
+        return value_str
+
+    return format_str % {'value': value_str, 'unit': unit,}
 
 #==============================================================================
 def pp(value):
