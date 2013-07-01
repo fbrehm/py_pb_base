@@ -53,6 +53,16 @@ RE_UNIT_EIBYTES = re.compile(r'^\s*Ei(?:B(?:yte)?)?\s*$', re.IGNORECASE)
 RE_UNIT_ZBYTES = re.compile(r'^\s*Z(?:B(?:yte)?)?\s*$', re.IGNORECASE)
 RE_UNIT_ZIBYTES = re.compile(r'^\s*Zi(?:B(?:yte)?)?\s*$', re.IGNORECASE)
 
+RE_B2H_FINAL_ZEROES = re.compile(r'0+$')
+RE_B2H_FINAL_SIGNS = re.compile(r'\D+$')
+
+RE_YES = re.compile(r'^\s*(?:y(?:es)?|true)\s*$', re.IGNORECASE)
+RE_NO = re.compile(r'^\s*(?:no?|false|off)\s*$', re.IGNORECASE)
+PAT_TO_BOOL_TRUE = locale.nl_langinfo(locale.YESEXPR)
+RE_TO_BOOL_TRUE = re.compile(PAT_TO_BOOL_TRUE)
+PAT_TO_BOOL_FALSE = locale.nl_langinfo(locale.NOEXPR)
+RE_TO_BOOL_FALSE = re.compile(PAT_TO_BOOL_FALSE)
+
 #==============================================================================
 def human2mbytes(value, si_conform = False, as_float = False,
         no_mibibytes = False):
@@ -275,8 +285,8 @@ def bytes2human(value, si_conform = False, precision = None,
     value_str = ''
     if precision is None:
         value_str = locale.format_string('%f', float_val)
-        value_str = re.sub(r'0+$', '', value_str)
-        value_str = re.sub(r'\D+$', '', value_str)
+        value_str = RE_B2H_FINAL_ZEROES.sub('', value_str)
+        value_str = RE_B2H_FINAL_SIGNS.sub('', value_str)
     else:
         value_str = locale.format_string('%.*f', (precision, float_val))
 
@@ -310,11 +320,28 @@ def to_bool(value):
         v_int = int(value)
     except ValueError:
         pass
+    except TypeError:
+        pass
     else:
         if v_int == 0:
             return False
         else:
             return True
+
+    global PAT_TO_BOOL_TRUE
+    global RE_TO_BOOL_TRUE
+    global PAT_TO_BOOL_FALSE
+    global RE_TO_BOOL_FALSE
+
+    c_yes_expr = locale.nl_langinfo(locale.YESEXPR)
+    if c_yes_expr != PAT_TO_BOOL_TRUE:
+        PAT_TO_BOOL_TRUE = c_yes_expr
+        RE_TO_BOOL_TRUE = re.compile(PAT_TO_BOOL_TRUE)
+
+    c_no_expr = locale.nl_langinfo(locale.NOEXPR)
+    if c_no_expr != PAT_TO_BOOL_FALSE:
+        PAT_TO_BOOL_FALSE = c_no_expr
+        RE_TO_BOOL_FALSE = re.compile(PAT_TO_BOOL_FALSE)
 
     v_str = ''
     if isinstance(value, basestring):
@@ -325,11 +352,17 @@ def to_bool(value):
     else:
         v_str = str(value)
 
-    match = re.search(r'^\s*(?:y(?:es)?|true)\s*$', v_str, re.IGNORECASE)
+    match = RE_YES.search(v_str)
+    if match:
+        return True
+    match = RE_TO_BOOL_TRUE.search(v_str)
     if match:
         return True
 
-    match = re.search(r'^\s*(?:no?|false|off)\s*$', v_str, re.IGNORECASE)
+    match = RE_NO.search(v_str)
+    if match:
+        return False
+    match = RE_TO_BOOL_FALSE.search(v_str)
     if match:
         return False
 
