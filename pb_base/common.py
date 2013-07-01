@@ -30,6 +30,7 @@ log = logging.getLogger(__name__)
 CUR_RADIX = locale.nl_langinfo(locale.RADIXCHAR)
 H2MB_PAT = r'^\s*\+?(\d+(?:' + re.escape(CUR_RADIX) + r'\d*)?)\s*(\S+)?'
 H2MB_RE = re.compile(H2MB_PAT)
+RADIX_RE = re.compile(re.escape(CUR_RADIX))
 
 RE_UNIT_BYTES = re.compile(r'^\s*(?:b(?:yte)?)?\s*$', re.IGNORECASE)
 RE_UNIT_KBYTES = re.compile(r'^\s*k(?:[bB](?:[Yy][Tt][Ee])?)?\s*$')
@@ -92,11 +93,14 @@ def human2mbytes(value, si_conform = False, as_float = False,
     global CUR_RADIX
     global H2MB_PAT
     global H2MB_RE
+    global RADIX_RE
 
     if c_radix != CUR_RADIX:
         CUR_RADIX = c_radix
+        log.debug("Current decimal radix is now %r.", CUR_RADIX)
         H2MB_PAT = r'^\s*\+?(\d+(?:' + re.escape(CUR_RADIX) + r'\d*)?)\s*(\S+)?'
         H2MB_RE = re.compile(H2MB_PAT)
+        RADIX_RE = re.compile(re.escape(CUR_RADIX))
 
     value_raw = ''
     prefix = None
@@ -108,6 +112,8 @@ def human2mbytes(value, si_conform = False, as_float = False,
         msg = ("Could not determine bytes in '%s'.") % (value)
         raise ValueError(msg)
 
+    if CUR_RADIX != '.':
+        value_raw = RADIX_RE.sub('.', value_raw)
     value_float = float(value_raw)
     if prefix is None:
         prefix = ''

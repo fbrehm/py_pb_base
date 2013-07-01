@@ -13,6 +13,7 @@ import unittest
 import os
 import sys
 import logging
+import locale
 
 libdir = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
 sys.path.insert(0, libdir)
@@ -94,6 +95,68 @@ class TestPbCommon(PbBaseTestcase):
             self.assertIsInstance(result, int)
             self.assertEqual(expected, result)
 
+    #--------------------------------------------------------------------------
+    def test_human2mbytes_l10n(self):
+
+        log.info("Testing localisation of human2mbytes() from pb_base.common ...")
+
+        import pb_base.common
+        from pb_base.common import human2mbytes
+
+        pairs_en = (
+            ('1.2 GiB', int(1.2 * 1024)),
+            ('1.2 TiB', int(1.2 * 1024 * 1024)),
+        )
+
+        pairs_de = (
+            ('1,2 GiB', int(1.2 * 1024)),
+            ('1,2 TiB', int(1.2 * 1024 * 1024)),
+        )
+
+        log.debug("Testing english decimal radix character %r.", '.')
+        for pair in pairs_en:
+            src = pair[0]
+            expected = pair[1]
+            if self.verbose > 1:
+                log.debug("Testing localisation of human2mbytes(%r) => %d", src, expected)
+            result = human2mbytes(src, si_conform = True)
+            if self.verbose > 1:
+                log.debug("Got result: %r", result)
+            self.assertIsInstance(result, int)
+            self.assertEqual(expected, result)
+
+        # Switch to german locales
+        loc = locale.getlocale() # get current locale
+        # use German locale; name might vary with platform
+        locale.setlocale(locale.LC_ALL, 'de_DE')
+
+        log.debug("Testing german decimal radix character %r.", ',')
+        for pair in pairs_de:
+            src = pair[0]
+            expected = pair[1]
+            if self.verbose > 1:
+                log.debug("Testing localisation of human2mbytes(%r) => %d", src, expected)
+            result = human2mbytes(src, si_conform = True)
+            if self.verbose > 1:
+                log.debug("Got result: %r", result)
+            self.assertIsInstance(result, int)
+            self.assertEqual(expected, result)
+
+        # Switch back to english locales
+        locale.setlocale(locale.LC_ALL, loc) # restore saved locale
+
+        log.debug("Testing english decimal radix character %r again.", '.')
+        for pair in pairs_en:
+            src = pair[0]
+            expected = pair[1]
+            if self.verbose > 1:
+                log.debug("Testing localisation of human2mbytes(%r) => %d", src, expected)
+            result = human2mbytes(src, si_conform = True)
+            if self.verbose > 1:
+                log.debug("Got result: %r", result)
+            self.assertIsInstance(result, int)
+            self.assertEqual(expected, result)
+
 #==============================================================================
 
 if __name__ == '__main__':
@@ -109,6 +172,7 @@ if __name__ == '__main__':
 
     suite.addTest(TestPbCommon('test_import', verbose))
     suite.addTest(TestPbCommon('test_human2mbytes', verbose))
+    suite.addTest(TestPbCommon('test_human2mbytes_l10n', verbose))
 
     runner = unittest.TextTestRunner(verbosity = verbose)
 
