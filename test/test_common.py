@@ -159,6 +159,35 @@ class TestPbCommon(PbBaseTestcase):
             self.assertIsInstance(result, int)
             self.assertEqual(expected, result)
 
+    #--------------------------------------------------------------------------
+    def test_bytes2human(self):
+
+        log.info("Testing bytes2human()  from pb_base.common ...")
+
+        import pb_base.common
+        from pb_base.common import bytes2human
+
+        test_pairs_no_si = (
+            (5, '5'),
+            (5 * 1024, '5KiB'),
+            (1999 * 1024 * 1024, '1999MiB'),
+            (2047 * 1024 * 1024, '2047MiB'),
+            (2048 * 1024 * 1024, '2GiB'),
+            (2304 * 1024 * 1024, '2.25GiB'),
+        )
+
+        for pair in test_pairs_no_si:
+
+            src = pair[0]
+            expected = pair[1]
+            if self.verbose > 1:
+                log.debug("Testing bytes2human(%r) => %r", src, expected)
+            result = bytes2human(src)
+            if self.verbose > 1:
+                log.debug("Got result: %r", result)
+            self.assertIsInstance(result, str)
+            self.assertEqual(expected, result)
+
 #==============================================================================
 
 if __name__ == '__main__':
@@ -175,6 +204,7 @@ if __name__ == '__main__':
     suite.addTest(TestPbCommon('test_import', verbose))
     suite.addTest(TestPbCommon('test_human2mbytes', verbose))
     suite.addTest(TestPbCommon('test_human2mbytes_l10n', verbose))
+    suite.addTest(TestPbCommon('test_bytes2human', verbose))
 
     runner = unittest.TextTestRunner(verbosity = verbose)
 
