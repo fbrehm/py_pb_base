@@ -121,9 +121,14 @@ def human2mbytes(value, si_conform = False, as_float = False,
 
     factor = long(1)
 
-    final_factor = 1024.0 * 1024.0
+    final_factor = 1024l * 1024l
     if no_mibibytes:
-        final_factor = 1000.0 * 1000.0
+        final_factor = 1000l * 1000l
+
+    while int(value_float) != value_float:
+        value_float *= 10l
+        final_factor *= 10l
+    value_long = long(value_float)
 
     if RE_UNIT_BYTES.search(prefix):
         factor = long(1)
@@ -159,12 +164,20 @@ def human2mbytes(value, si_conform = False, as_float = False,
         msg = ("Couldn't detect prefix '%s'.") % (prefix)
         raise ValueError(msg)
 
-    #log.debug("Using factor %r.", factor)
+    log.debug("Using factor %r, final factor: %r.", factor, final_factor)
+    log.debug("Cur value_long = %r.", value_long)
 
-    lbytes = long(factor * value_float)
-    mbytes = float(lbytes) / final_factor
+    lbytes = factor * value_long
+    log.debug("Cur long bytes: %r.", lbytes)
+    mbytes = lbytes / final_factor
     if as_float:
-        return mbytes
+        return float(mbytes)
+    if mbytes <= sys.maxint:
+        return int(mbytes)
+    return mbytes
+    if mbytes != int(mbytes):
+        raise ValueError("int %r != long %r.", int(mbytes), mbytes)
+
     mbytes = int(mbytes)
 
     return mbytes
