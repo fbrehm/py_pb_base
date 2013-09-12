@@ -408,8 +408,8 @@ class PbDaemon(PidfileApp):
 
         super(PbDaemon, self).init_arg_parser()
 
-        help_txt = _("The syslog facility to use when logging as a daemon " +
-                "(default: %s).") % (self._default_facility_name)
+        help_txt = _("The syslog facility to use when logging as a daemon (default: %s).") % (
+                self._default_facility_name)
 
         self.arg_parser.add_argument(
                 "-F", "--syslog-facility",
@@ -418,8 +418,7 @@ class PbDaemon(PidfileApp):
                 help = help_txt,
         )
 
-        help_txt = _("Log to console instead to syslog. Don't daemonize " +
-                "the application, running in foreground.")
+        help_txt = _("Log to console instead to syslog. Don't daemonize the application, running in foreground.")
 
         self.arg_parser.add_argument(
                 "-N", "--no-syslog", "--no-daemon",
@@ -592,8 +591,8 @@ class PbDaemon(PidfileApp):
                     (log_dir), self.appname, False)
             self.exit(6)
         if not os.path.isdir(log_dir):
-            self.handle_error(_("Log directory '%s' exists, but is not " +
-                    "a directory.") % (log_dir), self.appname, False)
+            self.handle_error(_("Log directory '%s' exists, but is not a directory.") % (
+                    log_dir), self.appname, False)
             self.exit(6)
 
         se = None

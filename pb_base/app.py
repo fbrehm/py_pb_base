@@ -472,7 +472,7 @@ class PbApplication(PbBaseObject):
         """
 
         if self.verbose > 1:
-            log.info("executing pre_run() ...")
+            log.info(_("executing pre_run() ..."))
 
     #--------------------------------------------------------------------------
     def _run(self):
@@ -520,8 +520,7 @@ class PbApplication(PbBaseObject):
             self.exit(98)
 
         if not self.initialized:
-            raise PbApplicationError(_("Object '%s' seems not to be completely " +
-                                    "initialized.") %
+            raise PbApplicationError(_("Object '%s' seems not to be completely initialized.") %
                     (self.__class__.__name__))
 
         try:

@@ -495,8 +495,7 @@ class PbLockHandler(PbBaseHandler):
             raise LockHandlerError(msg)
 
         if value <= 0:
-            msg = _("The value for %(what)s must be greater " +
-                    "than zero (is %(val)r).") % {
+            msg = _("The value for %(what)s must be greater than zero (is %(val)r).") % {
                     'val': value, 'what': 'lockretry_delay_start'}
             raise LockHandlerError(msg)
 
@@ -518,8 +517,7 @@ class PbLockHandler(PbBaseHandler):
             raise LockHandlerError(msg)
 
         if value < 0:
-            msg = _("The value for %(what)s must be greater than or " +
-                    "equal to zero (is %(val)r).") % {
+            msg = _("The value for %(what)s must be greater than or equal to zero (is %(val)r).") % {
                     'val': value, 'what': 'lockretry_delay_increase'}
             raise LockHandlerError(msg)
 
@@ -541,8 +539,7 @@ class PbLockHandler(PbBaseHandler):
             raise LockHandlerError(msg)
 
         if value <= 0:
-            msg = _("The value for %(what)s must be greater " +
-                    "than zero (is %(val)r).") % {
+            msg = _("The value for %(what)s must be greater than zero (is %(val)r).") % {
                     'val': value, 'what': 'lockretry_max_delay'}
             raise LockHandlerError(msg)
 
@@ -565,8 +562,7 @@ class PbLockHandler(PbBaseHandler):
             raise LockHandlerError(msg)
 
         if value <= 0:
-            msg = _("The value for %(what)s must be greater " +
-                    "than zero (is %(val)r).") % {
+            msg = _("The value for %(what)s must be greater than zero (is %(val)r).") % {
                     'val': value, 'what': 'max_lockfile_age'}
             raise LockHandlerError(msg)
 
@@ -683,8 +679,7 @@ class PbLockHandler(PbBaseHandler):
                         'val': delay_start, 'what': 'delay_start'}
                 raise LockHandlerError(msg)
             if delay_start <= 0:
-                msg = _("The value for %(what)s must be greater " +
-                        "than zero (is %(val)r).") % {
+                msg = _("The value for %(what)s must be greater than zero (is %(val)r).") % {
                         'val': delay_start, 'what': 'delay_start'}
                 raise LockHandlerError(msg)
 
@@ -696,8 +691,7 @@ class PbLockHandler(PbBaseHandler):
                         'val': delay_increase, 'what': 'delay_increase'}
                 raise LockHandlerError(msg)
             if delay_increase < 0:
-                msg = _("The value for %(what)s must be greater than or " +
-                        "equal to zero (is %(val)r).") % {
+                msg = _("The value for %(what)s must be greater than or equal to zero (is %(val)r).") % {
                         'val': delay_increase, 'what': 'delay_increase'}
                 raise LockHandlerError(msg)
 
@@ -709,8 +703,7 @@ class PbLockHandler(PbBaseHandler):
                         'val': max_delay, 'what': 'max_delay'}
                 raise LockHandlerError(msg)
             if max_delay <= 0:
-                msg = _("The value for %(what)s must be greater " +
-                        "than zero (is %(val)r).") % {
+                msg = _("The value for %(what)s must be greater than zero (is %(val)r).") % {
                         'val': max_delay, 'what': 'max_delay'}
                 raise LockHandlerError(msg)
             pass
@@ -728,8 +721,7 @@ class PbLockHandler(PbBaseHandler):
                         'val': max_age, 'what': 'max_age'}
                 raise LockHandlerError(msg)
             if max_age <= 0:
-                msg = _("The value for %(what)s must be greater " +
-                        "than zero (is %(val)r).") % {
+                msg = _("The value for %(what)s must be greater than zero (is %(val)r).") % {
                         'val': max_age, 'what': 'max_age'}
                 raise LockHandlerError(msg)
 
@@ -962,8 +954,7 @@ class PbLockHandler(PbBaseHandler):
                         'val': max_age, 'what': 'max_age'}
                 raise LockHandlerError(msg)
             if max_age <= 0:
-                msg = _("The value for %(what)s must be greater " +
-                        "than zero (is %(val)r).") % {
+                msg = _("The value for %(what)s must be greater than zero (is %(val)r).") % {
                         'val': max_age, 'what': 'max_age'}
                 raise LockHandlerError(msg)
 

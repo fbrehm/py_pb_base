@@ -18,6 +18,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: bin/crc64:45
+msgid "Crc64-Application object:"
+msgstr "Das Crc64-Anwendungsobjekt:"
+
 #: pb_base/app.py:85
 #, python-format
 msgid "Faked exit to OS. Exit value: %(rv)d, message: %(msg)r"
@@ -28,7 +32,11 @@ msgstr ""
 msgid "usage: "
 msgstr "Verwendung: "
 
-#: pb_base/app.py:411
+#: pb_base/app.py:475
+msgid "executing pre_run() ..."
+msgstr "führe pre_run() aus ..."
+
+#: pb_base/app.py:512 pb_base/app.py:529
 msgid "The application is not complete initialized."
 msgstr "Die Anwendung wurde noch nicht vollständig initialisiert."
 
@@ -74,6 +82,10 @@ msgstr "Programmversion von %%(prog)s: %s"
 msgid "Show program's version number and exit"
 msgstr "Stellt die Programmversion dar und beendet sich."
 
+#: pb_base/crc64_app.py:100
+msgid "The token to generate a CRC64 digest from."
+msgstr "Die Zeichenkette, von der das CRC64-Digest generiert werden soll."
+
 #: pb_base/cfg_app.py:313
 msgid ""
 "Configuration file to use additional to the standard configuration files."
@@ -81,13 +93,13 @@ msgstr ""
 "Konfigurationsdatei, die zusätzlich zu den Standard-Konfigurations-Dateien "
 "verwendet werden soll"
 
-#: pb_base/cfg_app.py:322
-msgid "The encoding character set of the configuration files"
-msgstr "Der Encoding-Zeichensatz der Konfigurations-Dateien"
+#: pb_base/cfg_app.py:325
+msgid "The encoding character set of the configuration files."
+msgstr "Der Encoding-Zeichensatz der Konfigurations-Dateien."
 
-#: pb_base/cfg_app.py:330
+#: pb_base/cfg_app.py:332
 msgid ""
-"Generates a default configuration, prints it out to STDOUT and exit"
+"Generates a default configuration, prints it out to STDOUT and exit."
 msgstr ""
 "Generiert eine Standard-Konfiguration, schreibt diese nach STDOUT "
 "und beendet sich."
@@ -245,10 +257,27 @@ msgstr "Leite Standard-Dateideskriptoren um ..."
 msgid "I'm a daemon now - Boooaaaahhh!!!"
 msgstr "Ich bin dämonisiert worden, wau - ·▷▶◊◀◁·"
 
-#: pb_base/errors.py:61
+#: pb_base/errors.py:65
 #, python-format
 msgid "Function %(func)s() has to be overridden in class '%(cls)s'."
 msgstr "Die Funktion %(func)s() muss in der Klasse '%(cls)s' überschrieben werden."
+
+#: pb_base/errors.py:85
+#, python-format
+msgid "Invalid call to method %(method)s() in a object of class %(class)r (maybe "
+      "not overridden?)."
+msgstr "Ungültiger Aufruf der Methode %(method)s() in einem Objekt der Klasse %(class)r "
+       "(möglicherweise nicht überschrieben?)."
+
+#: pb_base/errors.py:88
+#, python-format
+msgid "Given positional arguments: %r."
+msgstr "Gegebene Positionsargumente: %r."
+
+#: pb_base/errors.py:89
+#, python-format
+msgid "Given keyword arguments: %r."
+msgstr "Gegebene Schlüsselargumente: %r."
 
 #: pb_base/errors.py:92
 #, python-format

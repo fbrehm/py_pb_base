@@ -313,8 +313,7 @@ class PbCfgApp(PbApplication):
                 "-C", "--cfgfile", "--cfg-file", "--config",
                 metavar = "FILE",
                 dest = "cfg_file",
-                help = _("Configuration file to use additional to the " +
-                        "standard configuration files."),
+                help = _("Configuration file to use additional to the standard configuration files."),
         )
 
         self.arg_parser.add_argument(
@@ -322,7 +321,7 @@ class PbCfgApp(PbApplication):
                 metavar = "ENCODING",
                 dest = "cfg_encoding",
                 default = self.cfg_encoding,
-                help = _("The encoding character set of the configuration files")
+                help = _("The encoding character set of the configuration files.")
         )
 
         if not self.hide_default_config:
@@ -330,8 +329,7 @@ class PbCfgApp(PbApplication):
                     "--default-config",
                     action = 'store_true',
                     dest = "show_default_config",
-                    help = _('Generates a default configuration, prints ' +
-                            'it out to STDOUT and exit'),
+                    help = _('Generates a default configuration, prints it out to STDOUT and exit.'),
             )
 
     #--------------------------------------------------------------------------

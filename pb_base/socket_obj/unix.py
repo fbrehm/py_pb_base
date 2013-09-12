@@ -316,8 +316,8 @@ class UnixSocket(GenericSocket):
                 try:
                     uid = pwd.getpwnam(self.owner).pw_uid
                 except KeyError, e:
-                    msg = _("Invalid owner name '%s' for socket creation " +
-                            "given.") % (self.owner)
+                    msg = _("Invalid owner name '%s' for socket creation given.") % (
+                            self.owner)
                     raise UnixSocketError(msg)
 
         gid = -1
@@ -328,8 +328,8 @@ class UnixSocket(GenericSocket):
                 try:
                     gid = grp.getgrnam(self.group).gr_gid
                 except KeyError, e:
-                    msg = _("Invalid group name '%s' for socket creation " +
-                            "given.") % (self.group)
+                    msg = _("Invalid group name '%s' for socket creation given.") % (
+                            self.group)
                     raise UnixSocketError(msg)
 
         uid_changed = False
@@ -351,9 +351,8 @@ class UnixSocket(GenericSocket):
                 log.warn(_("Only root may change ownership of a socket."))
             else:
                 if self.verbose > 2:
-                    log.debug(_("Setting ownership of '%(sock)s' to " +
-                            "%(uid)d:%(gid)d ...") % {'sock': self.filename,
-                            'uid': uid, 'gid': gid})
+                    log.debug(_("Setting ownership of '%(sock)s' to %(uid)d:%(gid)d ...") % {
+                            'sock': self.filename, 'uid': uid, 'gid': gid})
                 os.chown(self.filename, uid, gid)
 
         if self.verbose > 2:

@@ -161,8 +161,7 @@ class FuserHandler(PbBaseHandler):
 
         if not os.path.exists(fs_object):
             if force:
-                log.warn(_("Filesystem object %r doesn't seems to exist. " +
-                        "Continue because of the 'force' flag."). fs_object)
+                log.warn(_("Filesystem object %r doesn't seems to exist. Continue because of the 'force' flag."), fs_object)
             else:
                 msg = _("Filesystem object %r doesn't seems to exist.") % (
                         fs_object)
