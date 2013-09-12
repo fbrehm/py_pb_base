@@ -11,13 +11,12 @@
 import sys
 import os
 import logging
-import re
-import time
 
 # Third party modules
 import argparse
 
 # Own modules
+import pb_base
 from pb_base.common import pp, to_unicode_or_bust, to_utf8_or_bust
 
 from pb_base.errors import PbError
@@ -31,7 +30,7 @@ from pb_base.crc import crc64, crc64_digest
 
 from pb_base.translate import translator
 
-__version__ = '0.1.0'
+__version__ = '0.2.1'
 
 log = logging.getLogger(__name__)
 
@@ -54,7 +53,7 @@ class Crc64App(PbApplication):
     #--------------------------------------------------------------------------
     def __init__(self,
             verbose = 0,
-            version = __version__,
+            version = pb_base.__version__,
             *arg, **kwargs):
         """
         Initialisation of the crc64 application object.
@@ -81,10 +80,9 @@ class Crc64App(PbApplication):
     def _run(self):
         """The underlaying startpoint of the application."""
 
-        log.debug("Starting ...")
-        log.info("Doing some strange things ...")
-        time.sleep(1)
-        log.debug("Ending ...")
+        for token in self.args.tokens:
+            digest = crc64_digest(token)
+            print digest
 
     #--------------------------------------------------------------------------
     def init_arg_parser(self):
@@ -99,11 +97,8 @@ class Crc64App(PbApplication):
                 metavar = 'TOKEN',
                 type = str,
                 nargs = '+',
-                help = _('The tokens to generate CRC64 digests from.'),
+                help = _('The token to generate a CRC64 digest from.'),
         )
-
-
-
 
 #==============================================================================
 
