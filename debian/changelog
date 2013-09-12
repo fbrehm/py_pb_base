@@ -1,3 +1,9 @@
+profitbricks-python-base (0.5.0-2) stable; urgency=low
+
+  * Declared for stable
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Thu, 12 Sep 2013 13:36:15 +0200
+
 profitbricks-python-base (0.5.0-1) unstable; urgency=low
 
   * Declared for unstable
