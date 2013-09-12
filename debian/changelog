@@ -1,3 +1,11 @@
+profitbricks-python-base (0.5.0-1) unstable; urgency=low
+
+  * Declared for unstable
+  * Added bin/crc64 and pb_base/crc64_app.py for a crc64 application
+  * Updated i18n stuff
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Thu, 12 Sep 2013 13:32:10 +0200
+
 profitbricks-python-base (0.4.11-1) stable; urgency=low
 
   * Refactored human2mbytes(), bytes2human() and to_bool() in

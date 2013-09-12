@@ -50,6 +50,7 @@ setup(
         'pb_base',
     ],
     scripts = [
+        'bin/crc64',
         'bin/term-can-colors',
     ],
     requires = [
