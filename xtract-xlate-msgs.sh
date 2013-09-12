@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pot_file="py_pb_base1.pot"
+pot_file="py_pb_base.pot"
 output_dir="po"
 pkg_version="0.4.11"
 src_dir="pb_base"
@@ -22,7 +22,12 @@ xgettext --output="${pot_file}" \
         --package-name="profitbricks-python-base" \
         --package-version="${pkg_version}" \
         --msgid-bugs-address=frank.brehm@profitbricks.com \
-        $(find "${src_dir}" -type f -name '*.py' | sort)
+        $(find bin "${src_dir}" -type f \( -name '*.py' -o -name 'crc64' \) | sort)
+
+sed -i -e 's/msgid[ 	][ 	]*"/msgid "/' \
+       -e 's/msgstr[ 	][ 	]*"/msgstr "/' \
+       -e 's/^        /      /' \
+       "${output_dir}/${pot_file}"
 
 
 

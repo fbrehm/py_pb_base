@@ -61,7 +61,7 @@ class Crc64App(PbApplication):
 
         indent = ' ' * self.usage_term_len
 
-        usage = "%%(prog)s [%s] TOKEN [TOKEN ...]" % (_('general options'))
+        usage = "%%(prog)s [%s] TOKEN [TOKEN ...]" % (_('General options'))
         usage += '\n'
         usage += indent + "%(prog)s -h|--help\n"
         usage += indent + "%(prog)s -V|--version"
