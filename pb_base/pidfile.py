@@ -99,9 +99,8 @@ class PidFileInUseError(PidFileError):
     def __str__(self):
         """Typecasting into a string for error output."""
 
-        msg = _("The pidfile '%(pidfile)s is currently in use by the " +
-                "application with the PID %(pid)d.") % {'pidfile': self.pidfile,
-                'pid': self.pid}
+        msg = _("The pidfile '%(pidfile)s is currently in use by the application with the PID %(pid)d.") % {
+                'pidfile': self.pidfile, 'pid': self.pid}
 
         return msg
 
@@ -310,8 +309,7 @@ class PidFile(PbBaseObject):
         if pid:
             pid = int(pid)
             if pid <= 0:
-                msg = _("Invalid PID %(pid)d for creating pidfile " +
-                        "%(pidfile)r given.") % {
+                msg = _("Invalid PID %(pid)d for creating pidfile %(pidfile)r given.") % {
                         'pid': pid, 'pidfile': self.filename}
                 raise PidFileError(msg)
         else:
@@ -376,8 +374,7 @@ class PidFile(PbBaseObject):
         if pid:
             pid = int(pid)
             if pid <= 0:
-                msg = _("Invalid PID %(pid)d for creating pidfile " +
-                        "%(pidfile)r given.") % {
+                msg = _("Invalid PID %(pid)d for creating pidfile %(pidfile)r given.") % {
                         'pid': pid, 'pidfile': self.filename}
                 raise PidFileError(msg)
         else:
@@ -488,8 +485,7 @@ class PidFile(PbBaseObject):
         if match:
             pid = int(match.group(1))
         else:
-            msg = _("No useful information found in pidfile " +
-                     "%(file)r: %(line)r")
+            msg = _("No useful information found in pidfile %(file)r: %(line)r")
             log.warn(msg % {'file': self.filename, 'line': line})
             return True
 

@@ -251,8 +251,8 @@ class ForkingDaemon(PbDaemon):
     def max_children(self, value):
         v = int(value)
         if v < 1 or v > maximum_max_children:
-            msg = _("Wrong value for max_children %(val)d, must be between " +
-                    "1 and %(max)d.") % {'val': v, 'max': maximum_max_children}
+            msg = _("Wrong value for max_children %(val)d, must be between 1 and %(max)d.") % {
+                    'val': v, 'max': maximum_max_children}
             raise ValueError(msg)
         self._max_children = v
 
@@ -272,8 +272,7 @@ class ForkingDaemon(PbDaemon):
     def timeout_collect_children(self, value):
         v = int(value)
         if v < 1:
-            msg = _("Wrong value for timeout_collect_children %d, " +
-                    "must be greater than zero.") % (v)
+            msg = _("Wrong value for timeout_collect_children %d, must be greater than zero.") % (v)
             raise ValueError(msg)
         self._timeout_collect_children = v
 
@@ -440,8 +439,7 @@ class ForkingDaemon(PbDaemon):
 
                 stage += 1
                 if stage > 3:
-                    msg = _("Maximum timeout of %d seconds for waiting " +
-                            "on finished child processes reached.")
+                    msg = _("Maximum timeout of %d seconds for waiting on finished child processes reached.")
                     log.error(msg, (timeout * 3))
                     raise ForkingDaemonError(msg)
                 begin = time.time()

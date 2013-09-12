@@ -161,8 +161,8 @@ class GenericSocket(PbBaseObject):
         @type: int
         """
         if self._request_queue_size < 0 or self._request_queue_size > 5:
-            raise ValueError(_("Invalid request_queue_size %r, must be " +
-                    "between 0 and 5.") % (request_queue_size))
+            raise ValueError(_("Invalid request_queue_size %r, must be between 0 and 5.") % (
+                    request_queue_size))
 
         self._buffer_size = buffer_size
         """
@@ -171,9 +171,8 @@ class GenericSocket(PbBaseObject):
         """
         if (self._buffer_size < min_buffer_size or
                 self._buffer_size > max_buffer_size):
-            raise ValueError(_("Invalid buffer size %(bs)r, must be " +
-                    "between %(min)d and %(max)d.") % {'bs': buffer_size,
-                    'min': min_buffer_size, 'max': max_buffer_size})
+            raise ValueError(_("Invalid buffer size %(bs)r, must be between %(min)d and %(max)d.") % {
+                    'bs': buffer_size, 'min': min_buffer_size, 'max': max_buffer_size})
 
         self._bonded = False
         """
@@ -362,8 +361,7 @@ class GenericSocket(PbBaseObject):
         """
 
         if self.interrupted:
-            msg = _("Cannot send message to the receipient, because " +
-                    "the socket connection is interrupted.")
+            msg = _("Cannot send message to the receipient, because the socket connection is interrupted.")
             raise GenericSocketError(msg)
 
         ok = False
@@ -373,8 +371,7 @@ class GenericSocket(PbBaseObject):
             ok = True
 
         if not ok:
-            msg = _("Cannot send message to the receipient, because " +
-                    "the socket connection is closed.")
+            msg = _("Cannot send message to the receipient, because the socket connection is closed.")
             raise GenericSocketError(msg)
 
         if self.verbose > 2:
