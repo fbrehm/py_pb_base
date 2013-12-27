@@ -35,6 +35,9 @@ log = logging.getLogger(__name__)
 
 _ = translator.lgettext
 __ = translator.lngettext
+if sys.version_info[0] > 2:
+    _ = translator.gettext
+    __ = translator.ngettext
 
 # Some module varriables
 DF_CMD = os.sep + os.path.join('bin', 'df')
@@ -54,9 +57,9 @@ class DfResult(PbBaseObject):
     def __init__(self,
             dev = None,
             fs_type = None,
-            total = 0l,
-            used = 0l,
-            free = 0l,
+            total = 0,
+            used = 0,
+            free = 0,
             fs = None,
             appname = None,
             verbose = 0,
@@ -99,19 +102,19 @@ class DfResult(PbBaseObject):
         @type: str
         """
 
-        self._total = long(total)
+        self._total = int(total)
         """
         @ivar: the total size of the filesystem in Bytes
         @type: long
         """
 
-        self._used = long(used)
+        self._used = int(used)
         """
         @ivar: the used area of the filesystem in Bytes
         @type: long
         """
 
-        self._free = long(free)
+        self._free = int(free)
         """
         @ivar: the free space of the filesystem in Bytes
         @type: long
@@ -147,13 +150,13 @@ class DfResult(PbBaseObject):
     @property
     def total_kb(self):
         """The total size of the filesystem in KiBytes."""
-        return self._total / 1024l
+        return self._total / 1024
 
     #------------------------------------------------------------
     @property
     def total_mb(self):
         """The total size of the filesystem in MiBytes."""
-        return int(self._total / 1024l / 1024l)
+        return int(self._total / 1024 / 1024)
 
     #------------------------------------------------------------
     @property
@@ -165,13 +168,13 @@ class DfResult(PbBaseObject):
     @property
     def used_kb(self):
         """The used area of the filesystem in KiBytes."""
-        return self._used / 1024l
+        return self._used / 1024
 
     #------------------------------------------------------------
     @property
     def used_mb(self):
         """The used area of the filesystem in MiBytes."""
-        return int(self._used / 1024l / 1024l)
+        return int(self._used / 1024 / 1024)
 
     #------------------------------------------------------------
     @property
@@ -183,13 +186,13 @@ class DfResult(PbBaseObject):
     @property
     def free_kb(self):
         """The free space of the filesystem in KiBytes."""
-        return self._free / 1024l
+        return self._free / 1024
 
     #------------------------------------------------------------
     @property
     def free_mb(self):
         """The free space of the filesystem in MiBytes."""
-        return int(self._free / 1024l / 1024l)
+        return int(self._free / 1024 / 1024)
 
     #------------------------------------------------------------
     @property
@@ -396,7 +399,7 @@ class DfHandler(PbBaseHandler):
         """
 
         if fs:
-            if isinstance(fs, basestring):
+            if isinstance(fs, str):
                 fs = [fs]
         else:
             fs = []
@@ -435,7 +438,7 @@ class DfHandler(PbBaseHandler):
 
         if fs_type:
             param = '--type=%s'
-            if isinstance(fs_type, basestring):
+            if isinstance(fs_type, str):
                 cmd.append(param % (fs_type))
             else:
                 for fstype in fs_type:
@@ -443,7 +446,7 @@ class DfHandler(PbBaseHandler):
 
         if exclude_type:
             param = '--exclude-type=%s'
-            if isinstance(exclude_type, basestring):
+            if isinstance(exclude_type, str):
                 cmd.append(param % (exclude_type))
             else:
                 for ex_type in exclude_type:
@@ -486,9 +489,9 @@ class DfHandler(PbBaseHandler):
             df_result = DfResult(
                     dev = match.group(1),
                     fs_type = match.group(2),
-                    total = long(match.group(3)) * 1024l,
-                    used = long(match.group(4)) * 1024l,
-                    free = long(match.group(5)) * 1024l,
+                    total = int(match.group(3)) * 1024,
+                    used = int(match.group(4)) * 1024,
+                    free = int(match.group(5)) * 1024,
                     fs =  match.group(6),
                     appname = self.appname,
                     verbose = self.verbose,
@@ -506,4 +509,4 @@ if __name__ == "__main__":
 
 #==============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

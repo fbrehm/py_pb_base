@@ -12,16 +12,22 @@
 import unittest
 import os
 import sys
+import logging
 
 libdir = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
 sys.path.insert(0, libdir)
 
+import general
+from general import PbBaseTestcase, get_arg_verbose, init_root_logger
+
 import pb_base.errors
+
+log = logging.getLogger(__name__)
 
 
 #==============================================================================
 
-class TestPbErrors(unittest.TestCase):
+class TestPbErrors(PbBaseTestcase):
 
     #--------------------------------------------------------------------------
     def setUp(self):
@@ -32,7 +38,7 @@ class TestPbErrors(unittest.TestCase):
 
         try:
             raise pb_base.errors.PbError("Bla blub")
-        except Exception, e:
+        except Exception as e:
             if not isinstance(e, pb_base.errors.PbError):
                 self.fail("Could not raise a PbError exception by a %s: %s" % (
                         e.__class__.__name__, str(e)))
@@ -44,7 +50,7 @@ class TestPbErrors(unittest.TestCase):
             raise pb_base.errors.FunctionNotImplementedError(
                     'test_func_not_implemented', 'test_errors'
             )
-        except Exception, e:
+        except Exception as e:
             if not isinstance(e, pb_base.errors.FunctionNotImplementedError):
                 self.fail("Could not raise a %s exception by a %s: %s" % (
                         'FunctionNotImplementedError',
@@ -56,7 +62,7 @@ class TestPbErrors(unittest.TestCase):
         try:
             raise pb_base.errors.PbIoTimeoutError(
                     "Test IO error", 2.5, '/etc/shadow')
-        except Exception, e:
+        except Exception as e:
             if not isinstance(e, pb_base.errors.PbIoTimeoutError):
                 self.fail("Could not raise a %s exception by a %s: %s" % (
                         'PbIoTimeoutError',
@@ -67,7 +73,7 @@ class TestPbErrors(unittest.TestCase):
 
         try:
             raise pb_base.errors.PbReadTimeoutError( 2.55, '/etc/shadow')
-        except Exception, e:
+        except Exception as e:
             if not isinstance(e, pb_base.errors.PbReadTimeoutError):
                 self.fail("Could not raise a %s exception by a %s: %s" % (
                         'PbReadTimeoutError',
@@ -78,7 +84,7 @@ class TestPbErrors(unittest.TestCase):
 
         try:
             raise pb_base.errors.PbWriteTimeoutError( 2.45, '/etc/shadow')
-        except Exception, e:
+        except Exception as e:
             if not isinstance(e, pb_base.errors.PbWriteTimeoutError):
                 self.fail("Could not raise a %s exception by a %s: %s" % (
                         'PbWriteTimeoutError',
@@ -88,31 +94,25 @@ class TestPbErrors(unittest.TestCase):
 
 if __name__ == '__main__':
 
-    import argparse
+    verbose = get_arg_verbose()
+    if verbose is None:
+        verbose = 0
+    init_root_logger(verbose)
 
-    arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument("-v", "--verbose", action = "count",
-            dest = 'verbose', help = 'Increase the verbosity level')
-    args = arg_parser.parse_args()
+    log.info("Starting tests ...")
 
-    loader = unittest.TestLoader()
     suite = unittest.TestSuite()
 
-    suite.addTests(loader.loadTestsFromName(
-            'test_errors.TestPbErrors.test_pb_error'))
-    suite.addTests(loader.loadTestsFromName(
-            'test_errors.TestPbErrors.test_func_not_implemented'))
-    suite.addTests(loader.loadTestsFromName(
-            'test_errors.TestPbErrors.test_io_timeout_error'))
-    suite.addTests(loader.loadTestsFromName(
-            'test_errors.TestPbErrors.test_read_timeout_error'))
-    suite.addTests(loader.loadTestsFromName(
-            'test_errors.TestPbErrors.test_write_timeout_error'))
+    suite.addTest(TestPbErrors('test_pb_error', verbose))
+    suite.addTest(TestPbErrors('test_func_not_implemented', verbose))
+    suite.addTest(TestPbErrors('test_io_timeout_error', verbose))
+    suite.addTest(TestPbErrors('test_read_timeout_error', verbose))
+    suite.addTest(TestPbErrors('test_write_timeout_error', verbose))
 
-    runner = unittest.TextTestRunner(verbosity = args.verbose)
+    runner = unittest.TextTestRunner(verbosity = verbose)
 
     result = runner.run(suite)
 
 #==============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

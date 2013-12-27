@@ -15,6 +15,9 @@ import sys
 import logging
 import locale
 
+# Setting the user’s preferred locale settings
+locale.setlocale(locale.LC_ALL, '')
+
 libdir = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
 sys.path.insert(0, libdir)
 
@@ -45,6 +48,15 @@ class TestPbCommon(PbBaseTestcase):
         import pb_base.common
         from pb_base.common import human2mbytes
 
+        loc = locale.getlocale() # get current locale
+        encoding = loc[1]
+        log.debug("Current locale is %r.", loc)
+        german = ('de_DE', encoding)
+
+        log.debug("Setting to locale 'C' to be secure.")
+        locale.setlocale(locale.LC_ALL, 'C')
+        log.debug("Current locale is now %r.", locale.getlocale())
+
         test_pairs_int_si = (
             ('1048576', 1),
             ('1MiB', 1),
@@ -57,28 +69,28 @@ class TestPbCommon(PbBaseTestcase):
             ('1.2 GiB', int(1.2 * 1024)),
             ('102400 KB', 100),
             ('100000 KB', 97),
-            ('102400 MB', 1024 * 1000 * 1000 * 100 / 1024 / 1024),
-            ('100000 MB', 1000 * 1000 * 1000 * 100 / 1024 / 1024),
+            ('102400 MB', int(1024 * 1000 * 1000 * 100 / 1024 / 1024)),
+            ('100000 MB', int(1000 * 1000 * 1000 * 100 / 1024 / 1024)),
             ('102400 MiB', 1024 * 100),
             ('100000 MiB', 1000 * 100),
-            ('102400 GB', 1024 * 1000 * 1000 * 1000 * 100 / 1024 / 1024),
-            ('100000 GB', 1000 * 1000 * 1000 * 1000 * 100 / 1024 / 1024),
+            ('102400 GB', int(1024 * 1000 * 1000 * 1000 * 100 / 1024 / 1024)),
+            ('100000 GB', int(1000 * 1000 * 1000 * 1000 * 100 / 1024 / 1024)),
             ('102400 GiB', 1024 * 1024 * 100),
             ('100000 GiB', 1024 * 1000 * 100),
-            ('1024 TB', 1024 * 1000 * 1000 * 1000 * 1000 / 1024 / 1024),
-            ('1000 TB', 1000 * 1000 * 1000 * 1000 * 1000 / 1024 / 1024),
+            ('1024 TB', int(1024 * 1000 * 1000 * 1000 * 1000 / 1024 / 1024)),
+            ('1000 TB', int(1000 * 1000 * 1000 * 1000 * 1000 / 1024 / 1024)),
             ('1024 TiB', 1024 * 1024 * 1024),
             ('1000 TiB', 1024 * 1024 * 1000),
-            ('1024 PB', 1024 * 1000 * 1000 * 1000 * 1000 * 1000 / 1024 / 1024),
-            ('1000 PB', 1000 * 1000 * 1000 * 1000 * 1000 * 1000 / 1024 / 1024),
+            ('1024 PB', int(1024 * 1000 * 1000 * 1000 * 1000 * 1000 / 1024 / 1024)),
+            ('1000 PB', int(1000 * 1000 * 1000 * 1000 * 1000 * 1000 / 1024 / 1024)),
             ('1024 PiB', 1024 * 1024 * 1024 * 1024),
             ('1000 PiB', 1024 * 1024 * 1024 * 1000),
-            ('1024 EB', 1024 * 1000 * 1000 * 1000 * 1000 * 1000 * 1000 / 1024 / 1024),
-            ('1000 EB', 1000 * 1000 * 1000 * 1000 * 1000 * 1000 * 1000 / 1024 / 1024),
+            ('1024 EB', int(1024 * 1000 * 1000 * 1000 * 1000 * 1000 * 1000 / 1024 / 1024)),
+            ('1000 EB', int(1000 * 1000 * 1000 * 1000 * 1000 * 1000 * 1000 / 1024 / 1024)),
             ('1024 EiB', 1024 * 1024 * 1024 * 1024 * 1024),
             ('1000 EiB', 1024 * 1024 * 1024 * 1024 * 1000),
-            ('1024 ZB', 1024 * 1000 * 1000 * 1000 * 1000 * 1000 * 1000 * 1000 / 1024 / 1024),
-            ('1000 ZB', 1000 * 1000 * 1000 * 1000 * 1000 * 1000 * 1000 * 1000 / 1024 / 1024),
+            ('1024 ZB', int(1024 * 1000 * 1000 * 1000 * 1000 * 1000 * 1000 * 1000 / 1024 / 1024)),
+            ('1000 ZB', int(1000 * 1000 * 1000 * 1000 * 1000 * 1000 * 1000 * 1000 / 1024 / 1024)),
             ('1024 ZiB', 1024 * 1024 * 1024 * 1024 * 1024 * 1024),
             ('1000 ZiB', 1024 * 1024 * 1024 * 1024 * 1024 * 1000),
         )
@@ -95,10 +107,23 @@ class TestPbCommon(PbBaseTestcase):
             self.assertIsInstance(result, int)
             self.assertEqual(expected, result)
 
+        # Switch back to saved locales
+        log.debug("Switching back to saved locales %r.", loc)
+        locale.setlocale(locale.LC_ALL, loc) # restore saved locale
+
     #--------------------------------------------------------------------------
     def test_human2mbytes_l10n(self):
 
         log.info("Testing localisation of human2mbytes() from pb_base.common ...")
+
+        loc = locale.getlocale() # get current locale
+        encoding = loc[1]
+        log.debug("Current locale is %r.", loc)
+        german = ('de_DE', encoding)
+
+        log.debug("Setting to locale 'C' to be secure.")
+        locale.setlocale(locale.LC_ALL, 'C')
+        log.debug("Current locale is now %r.", locale.getlocale())
 
         import pb_base.common
         from pb_base.common import human2mbytes
@@ -112,7 +137,7 @@ class TestPbCommon(PbBaseTestcase):
             ('1,2 GiB', int(1.2 * 1024)),
             ('1,2 TiB', int(1.2 * 1024 * 1024)),
             ('1.024 MiB', 1024),
-            ('1.055,4 GiB', 10554 * 1024 / 10),
+            ('1.055,4 GiB', int(10554 * 1024 / 10)),
         )
 
         log.debug("Testing english decimal radix character %r.", '.')
@@ -128,9 +153,10 @@ class TestPbCommon(PbBaseTestcase):
             self.assertEqual(expected, result)
 
         # Switch to german locales
-        loc = locale.getlocale() # get current locale
+        log.debug("Switching to german locale %r.", german)
         # use German locale; name might vary with platform
-        locale.setlocale(locale.LC_ALL, 'de_DE')
+        locale.setlocale(locale.LC_ALL, german)
+        log.debug("Current locale is now %r.", locale.getlocale())
 
         log.debug("Testing german decimal radix character %r.", ',')
         for pair in pairs_de:
@@ -145,7 +171,7 @@ class TestPbCommon(PbBaseTestcase):
             self.assertEqual(expected, result)
 
         # Switch back to english locales
-        locale.setlocale(locale.LC_ALL, loc) # restore saved locale
+        locale.setlocale(locale.LC_ALL, 'C') # restore saved locale
 
         log.debug("Testing english decimal radix character %r again.", '.')
         for pair in pairs_en:
@@ -159,6 +185,10 @@ class TestPbCommon(PbBaseTestcase):
             self.assertIsInstance(result, int)
             self.assertEqual(expected, result)
 
+        # Switch back to saved locales
+        log.debug("Switching back to saved locales %r.", loc)
+        locale.setlocale(locale.LC_ALL, loc) # restore saved locale
+
     #--------------------------------------------------------------------------
     def test_bytes2human(self):
 
@@ -166,6 +196,15 @@ class TestPbCommon(PbBaseTestcase):
 
         import pb_base.common
         from pb_base.common import bytes2human
+
+        loc = locale.getlocale() # get current locale
+        encoding = loc[1]
+        log.debug("Current locale is %r.", loc)
+        german = ('de_DE', encoding)
+
+        log.debug("Setting to locale 'C' to be secure.")
+        locale.setlocale(locale.LC_ALL, 'C')
+        log.debug("Current locale is now %r.", locale.getlocale())
 
         test_pairs_no_si = (
             (5, '5'),
@@ -188,6 +227,10 @@ class TestPbCommon(PbBaseTestcase):
             self.assertIsInstance(result, str)
             self.assertEqual(expected, result)
 
+        # Switch back to saved locales
+        log.debug("Switching back to saved locales %r.", loc)
+        locale.setlocale(locale.LC_ALL, loc) # restore saved locale
+
     #--------------------------------------------------------------------------
     def test_to_bool(self):
 
@@ -201,13 +244,21 @@ class TestPbCommon(PbBaseTestcase):
         test_object = TestClass()
 
         class TestClassTrue(object):
-            def __nonzero__(self):
-                return True
+            if sys.version_info[0] > 2:
+                def __bool__(self):
+                    return True
+            else:
+                def __nonzero__(self):
+                    return True
         test_object_true = TestClassTrue()
 
         class TestClassFalse(object):
-            def __nonzero__(self):
-                return False
+            if sys.version_info[0] > 2:
+                def __bool__(self):
+                    return False
+            else:
+                def __nonzero__(self):
+                    return False
         test_object_false = TestClassFalse()
 
         class TestClassFilled(object):
@@ -274,8 +325,12 @@ class TestPbCommon(PbBaseTestcase):
 
         # Switch to german locales
         loc = locale.getlocale() # get current locale
+        encoding = loc[1]
+        log.debug("Current locale is %r.", loc)
+        german = ('de_DE', encoding)
         # use German locale; name might vary with platform
-        locale.setlocale(locale.LC_ALL, 'de_DE')
+        log.debug("Switching to german locale %r.", german)
+        locale.setlocale(locale.LC_ALL, german)
 
         log.debug("Testing german Yes/No expressions for to_bool().")
         for pair in test_pairs_de:
@@ -289,7 +344,8 @@ class TestPbCommon(PbBaseTestcase):
             self.assertIsInstance(result, bool)
             self.assertEqual(expected, result)
 
-        # Switch back to english locales
+        # Switch back to saved locales
+        log.debug("Switching back to saved locales %r.", loc)
         locale.setlocale(locale.LC_ALL, loc) # restore saved locale
 
 #==============================================================================

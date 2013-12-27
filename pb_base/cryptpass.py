@@ -61,7 +61,8 @@ def gensalt(length = 8):
                 length)
         raise ValueError(msg)
 
-    chars = map(lambda x: chr(x), range(46, 57) + range(65, 90) + range(97, 122))
+    chars = [chr(x) for x in list(range(46, 57)) +
+            list(range(65, 90)) + list(range(97, 122))]
     salt=[]
     for i in range(length):
         salt.append(random.choice(chars))

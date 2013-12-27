@@ -9,7 +9,7 @@
 
 # Standard modules
 import errno
-from gettext import gettext as _
+import sys
 
 # Own modules
 from pb_base.translate import translator
@@ -19,6 +19,9 @@ __version__ = '0.2.1'
 _ = translator.lgettext
 __ = translator.lngettext
 
+if sys.version_info[0] > 2:
+    _ = translator.gettext
+    __ = translator.ngettext
 
 #==============================================================================
 class PbError(Exception):

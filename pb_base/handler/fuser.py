@@ -38,6 +38,9 @@ FUSER_CMD = os.sep + os.path.join('bin', 'fuser')
 
 _ = translator.lgettext
 __ = translator.lngettext
+if sys.version_info[0] > 2:
+    _ = translator.gettext
+    __ = translator.ngettext
 
 #==============================================================================
 class FuserError(PbBaseHandlerError):
@@ -202,7 +205,7 @@ class FuserHandler(PbBaseHandler):
                 pid_int = None
                 try:
                     pid_int = int(pid)
-                except ValueError, e:
+                except ValueError as e:
                     log.warn(_("%r is not an integer value usable as PID."), pid)
                     continue
                 pid_list.append(pid_int)
@@ -217,4 +220,4 @@ if __name__ == "__main__":
 
 #==============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

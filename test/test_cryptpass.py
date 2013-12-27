@@ -41,14 +41,17 @@ class TestCryptPass(PbBaseTestcase):
         log.debug("Generation of a valid 8-character salt ...")
         salt = gensalt(8)
         log.debug("Generated salt: %r", salt)
-        self.assertIsInstance(salt, basestring,
+        self.assertIsInstance(salt, str,
                 "Generated salt must be from class 'basetring'.")
         self.assertEqual(len(salt), 8,
                 "Generated salt must consists of eight characters.")
-        self.assertNotRegexpMatches(salt, r'[^0-9a-zA-Z\.\/]',
-                ("Generated salt may only consists of numbers, lowercase " +
-                 "uppercase letters, the dot ('.') character and the " +
-                 "slash character ('/')."))
+        msg = ("Generated salt may only consists of numbers, lowercase " +
+                "uppercase letters, the dot ('.') character and the " +
+                "slash character ('/').")
+        if sys.version_info[0] > 2:
+            self.assertNotRegex(salt, r'[^0-9a-zA-Z\.\/]', msg)
+        else:
+            self.assertNotRegexpMatches(salt, r'[^0-9a-zA-Z\.\/]', msg)
 
         for length in ('bla', 0, -10):
             log.debug("Generation of a salt with an invalid length %r.", length)
@@ -67,7 +70,7 @@ class TestCryptPass(PbBaseTestcase):
             log.debug("Encrypting with algorithm %r ...", algo)
             crypted = shadowcrypt(pwd, algo)
             log.debug("Encrypted password: %r", crypted)
-            self.assertIsInstance(crypted, basestring,
+            self.assertIsInstance(crypted, str,
                     "Encrypted password must be from class 'basetring'.")
 
         log.info("Encrypting password %r with a given salt.", pwd)
@@ -85,7 +88,7 @@ class TestCryptPass(PbBaseTestcase):
             log.debug("Encrypting with simple salt %r ...", salt)
             crypted = shadowcrypt(pwd, algo, salt = salt)
             log.debug("Encrypted password: %r", crypted)
-            self.assertIsInstance(crypted, basestring,
+            self.assertIsInstance(crypted, str,
                     "Encrypted password must be from class 'basetring'.")
             self.assertGreater(len(crypted), length, (("The encrypted " +
                     "password must be longer than the length of salt %d.") % (
@@ -113,13 +116,10 @@ if __name__ == '__main__':
 
     log.info("Starting tests ...")
 
-    loader = unittest.TestLoader()
     suite = unittest.TestSuite()
 
-    suite.addTests(loader.loadTestsFromName(
-            'test_cryptpass.TestCryptPass.test_gensalt'))
-    suite.addTests(loader.loadTestsFromName(
-            'test_cryptpass.TestCryptPass.test_shadowcrypt_valid'))
+    suite.addTest(TestCryptPass('test_gensalt', verbose))
+    suite.addTest(TestCryptPass('test_shadowcrypt_valid', verbose))
 
     runner = unittest.TextTestRunner(verbosity = verbose)
 

@@ -119,7 +119,7 @@ class TestPbBaseObject(PbBaseTestcase):
         obj.obj2 = PbBaseObject(appname = 'test_base_object2', verbose = 1)
 
         out = str(obj)
-        self.assertIsInstance(out, basestring)
+        self.assertIsInstance(out, str)
         log.debug("Got str(PbBaseObject): %s", out)
 
     #--------------------------------------------------------------------------

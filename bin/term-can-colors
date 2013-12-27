@@ -28,10 +28,10 @@ from pb_base.common import terminal_can_colors
 if __name__ == "__main__":
 
     if terminal_can_colors(debug = False):
-        print "yes"
+        print("yes")
         sys.exit(0)
     else:
-        print "no"
+        print("no")
         sys.exit(1)
 
 #==============================================================================

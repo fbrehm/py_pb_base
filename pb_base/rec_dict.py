@@ -41,12 +41,12 @@ class RecursiveDictionary(dict):
         """
 
         try:
-            iterator = other.iteritems()
+            iterator = iter(other.items())
         except AttributeError:
             iterator = other
 
         self.iter_rec_update(iterator)
-        self.iter_rec_update(third.iteritems())
+        self.iter_rec_update(iter(third.items()))
 
     #--------------------------------------------------------------------------
     def iter_rec_update(self, iterator):
@@ -70,4 +70,4 @@ if __name__ == "__main__":
 
 #==============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

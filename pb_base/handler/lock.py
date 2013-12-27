@@ -43,6 +43,9 @@ log = logging.getLogger(__name__)
 
 _ = translator.lgettext
 __ = translator.lngettext
+if sys.version_info[0] > 2:
+    _ = translator.gettext
+    __ = translator.ngettext
 
 # Module variables
 default_lockretry_delay_start = 0.1
@@ -792,7 +795,7 @@ class PbLockHandler(PbBaseHandler):
                 try:
                     if not self.simulate:
                         os.remove(lockfile)
-                except Exception, e:
+                except Exception as e:
                     msg = _("Error on removing lockfile %(lfile)r: %(err)s") % {
                             'lfile': lockfile, 'err': e}
                     log.error(msg)
@@ -863,8 +866,8 @@ class PbLockHandler(PbBaseHandler):
             return -1
         fd = None
         try:
-            fd = os.open(lockfile, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0644)
-        except OSError, e:
+            fd = os.open(lockfile, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+        except OSError as e:
             msg = _("Error on creating lockfile %(lfile)r: %(err)s") % {
                     'lfile': lockfile, 'err': e}
             if e.errno == errno.EEXIST:
@@ -904,7 +907,7 @@ class PbLockHandler(PbBaseHandler):
 
         try:
             os.remove(lockfile)
-        except Exception, e:
+        except Exception as e:
             msg = _("Error on removing lockfile %(lfile)r: %(err)s")
             log.error(msg % {'lfile': lockfile, 'err': e})
             if self.verbose:
@@ -988,7 +991,7 @@ class PbLockHandler(PbBaseHandler):
         fstat = None
         try:
             fstat = os.stat(lockfile)
-        except OSError, e:
+        except OSError as e:
             if e.errno == errno.ENOENT:
                 log.info("Could not stat for file %r: %s", lockfile, e.strerror)
                 return False
@@ -1025,7 +1028,7 @@ class PbLockHandler(PbBaseHandler):
             log.debug(_("Trying to open pidfile %r ..."), pidfile)
         try:
             fh = open(pidfile, "rb")
-        except Exception, e:
+        except Exception as e:
             msg = _("Could not open pidfile %r for reading:") % (pidfile)
             msg += " " + str(e)
             if force:
@@ -1049,7 +1052,7 @@ class PbLockHandler(PbBaseHandler):
         pid = None
         try:
             pid = int(content)
-        except Exception, e:
+        except Exception as e:
             msg = _("Could not interprete %(cont)r as a PID from %(file)r:") % {
                     'cont': content, 'file': pidfile}
             msg += " " + str(e)
@@ -1091,7 +1094,7 @@ class PbLockHandler(PbBaseHandler):
 
         try:
             return os.kill(pid, signal)
-        except OSError, e:
+        except OSError as e:
             #process is dead
             if e.errno == errno.ESRCH:
                 return True
@@ -1125,7 +1128,7 @@ class PbLockHandler(PbBaseHandler):
 
         try:
             dead = waitpid(pid, WNOHANG)[0]
-        except OSError, e:
+        except OSError as e:
             #pid is not a child
             if e.errno == errno.ECHILD:
                 return False
@@ -1141,4 +1144,4 @@ if __name__ == "__main__":
 
 #==============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

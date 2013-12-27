@@ -42,7 +42,7 @@ def file_content(filename):
     try:
         fh = open(filename)
         content = ''.join(fh.readlines())
-    except IOError, e:
+    except IOError as e:
         sys.stderr.write("Could not read file '%s': %s\n" % (filename, str(e)))
     finally:
         if fh:
@@ -67,9 +67,9 @@ class TestPidFile(unittest.TestCase):
                 appname = 'test_pidfile',
                 verbose = 1,
             )
-            print "\nPidFile object:\n%s" % (pid_file)
+            print("\nPidFile object:\n%s" % (pid_file))
 
-        except Exception, e:
+        except Exception as e:
             self.fail("Could not instatiate PidFile by a %s: %s" % (
                     e.__class__.__name__, str(e)))
 
@@ -83,9 +83,9 @@ class TestPidFile(unittest.TestCase):
                 verbose = 1,
             )
 
-        except ValueError, e:
+        except ValueError as e:
             sys.stderr.write("%s: %r " % (e.__class__.__name__, str(e)))
-        except Exception, e:
+        except Exception as e:
             self.fail("Could not instatiate PidFile by a %s: %s" % (
                     e.__class__.__name__, str(e)))
         else:
@@ -103,7 +103,7 @@ class TestPidFile(unittest.TestCase):
                 verbose = 3,
             )
 
-        except Exception, e:
+        except Exception as e:
             self.fail("Could not instatiate PidFile by a %s: %s" % (
                     e.__class__.__name__, str(e)))
 
@@ -147,13 +147,13 @@ class TestPidFile(unittest.TestCase):
                 verbose = 3,
             )
 
-        except Exception, e:
+        except Exception as e:
             self.fail("Could not instatiate PidFile by a %s: %s" % (
                     e.__class__.__name__, str(e)))
 
         try:
             pid_file.create()
-        except InvalidPidFileError, e:
+        except InvalidPidFileError as e:
             sys.stderr.write("%s: %r " % (e.__class__.__name__, str(e)))
         else:
             if os.geteuid():
@@ -161,9 +161,9 @@ class TestPidFile(unittest.TestCase):
                         "pidfile path '%s' (except for root).") % (
                         pidfile_forbidden))
             else:
-                print ("No InvalidPidFileError raised on a forbidden " +
+                print(("No InvalidPidFileError raised on a forbidden " +
                         "pidfile path '%s', because I'm root.") % (
-                        pidfile_forbidden)
+                        pidfile_forbidden))
         finally:
             del pid_file
 
@@ -179,13 +179,13 @@ class TestPidFile(unittest.TestCase):
                 verbose = 3,
             )
 
-        except Exception, e:
+        except Exception as e:
             self.fail("Could not instatiate PidFile by a %s: %s" % (
                     e.__class__.__name__, str(e)))
 
         try:
             pid_file.create()
-        except InvalidPidFileError, e:
+        except InvalidPidFileError as e:
             sys.stderr.write("%s: %r " % (e.__class__.__name__, str(e)))
         else:
             self.fail(("No InvalidPidFileError raised on a invalid " +
@@ -213,14 +213,14 @@ class TestPidFile(unittest.TestCase):
                 verbose = 3,
             )
 
-        except Exception, e:
+        except Exception as e:
             self.fail("Could not instatiate PidFile by a %s: %s" % (
                     e.__class__.__name__, str(e)))
             return
 
         try:
             pid_file1.create()
-        except Exception, e:
+        except Exception as e:
             del pid_file1
             del pid_file2
             self.fail("Could not create pidfile '%s' by a %s: %s" % (
@@ -229,9 +229,9 @@ class TestPidFile(unittest.TestCase):
 
         try:
             pid_file2.create()
-        except PidFileInUseError, e:
+        except PidFileInUseError as e:
             sys.stderr.write("%s: %r " % (e.__class__.__name__, str(e)))
-        except Exception, e:
+        except Exception as e:
             self.fail("Could not create pidfile '%s' by a %s: %s" % (
                     pidfile_normal, e.__class__.__name__, str(e)))
         finally:
@@ -271,4 +271,4 @@ if __name__ == '__main__':
 
 #==============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

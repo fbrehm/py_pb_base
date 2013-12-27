@@ -27,6 +27,8 @@ from pb_base.errors import PbWriteTimeoutError
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
+from pb_base.common import to_utf8_or_bust
+
 from pb_base.translate import translator
 
 __version__ = '0.4.2'
@@ -35,6 +37,9 @@ log = logging.getLogger(__name__)
 
 _ = translator.lgettext
 __ = translator.lngettext
+if sys.version_info[0] > 2:
+    _ = translator.gettext
+    __ = translator.ngettext
 
 #==============================================================================
 class PidFileError(PbBaseObjectError):
@@ -288,10 +293,10 @@ class PidFile(PbBaseObject):
             return
         try:
             os.remove(self.filename)
-        except OSError, e:
+        except OSError as e:
             log.err(_("Could not delete pidfile %(file)r: %(err)s"),
                     self.filename, str(e))
-        except Exception, e:
+        except Exception as e:
             self.handle_error(str(e), e.__class__.__name__, True)
 
     #--------------------------------------------------------------------------
@@ -323,7 +328,7 @@ class PidFile(PbBaseObject):
             else:
                 try:
                     os.remove(self.filename)
-                except OSError, e:
+                except OSError as e:
                     raise InvalidPidFileError(self.filename, str(e))
 
         if self.verbose > 1:
@@ -338,8 +343,8 @@ class PidFile(PbBaseObject):
         fd = None
         try:
             fd = os.open(self.filename,
-                    os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0644)
-        except OSError, e:
+                    os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+        except OSError as e:
             msg = _("Error on creating pidfile '%(pidfile)s': %(err)s") % {
                     'pidfile': self.filename, 'err': str(e)}
             raise PidFileError(msg)
@@ -349,6 +354,8 @@ class PidFile(PbBaseObject):
                     'pid': pid, 'pidfile': self.filename})
 
         out = "%d\n" %(pid)
+        if sys.version_info[0] > 2:
+            out = to_utf8_or_bust(out)
         try:
             os.write(fd, out)
         finally:
@@ -391,7 +398,7 @@ class PidFile(PbBaseObject):
         fh = None
         try:
             fh = open(self.filename, 'w')
-        except OSError, e:
+        except OSError as e:
             msg = _("Error on recreating pidfile '%(pidfile)s': %(err)s") % {
                     'pidfile': self.filename, 'err': str(e)}
             raise PidFileError(msg)
@@ -495,7 +502,7 @@ class PidFile(PbBaseObject):
 
         try:
             os.kill(pid, 0)
-        except OSError, err:
+        except OSError as err:
             if err.errno == errno.ESRCH:
                 log.info(_("Process with PID %d anonymous died."), pid)
                 return True
@@ -519,4 +526,4 @@ if __name__ == "__main__":
 
 #==============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

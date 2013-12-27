@@ -6,17 +6,18 @@
 @copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: module for some common used checksum functions
 """
+from functools import reduce
 
 # Standard modules
 
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 
 #------------------------------------------------------------------------------
 # Module variables
 
 # module variables for crc64
 # will initialised in first using of crc64()
-POLY64REVh = 0xd8000000L
+POLY64REVh = 0xd8000000
 CRCTableh = [0] * 256
 CRCTablel = [0] * 256
 crc64_initialised = False
@@ -43,16 +44,16 @@ def crc64(aString):
     # init module variables, if necessary
     if not crc64_initialised:
 
-        for i in xrange(256):
+        for i in range(256):
             partl = i
-            parth = 0L
+            parth = 0
 
-            for j in xrange(8):
-                rflag = partl & 1L
-                partl >>= 1L
+            for j in range(8):
+                rflag = partl & 1
+                partl >>= 1
                 if (parth & 1):
-                    partl |= (1L << 31L)
-                parth >>= 1L
+                    partl |= (1 << 31)
+                parth >>= 1
                 if rflag:
                     parth ^= POLY64REVh
             CRCTableh[i] = parth;
@@ -62,10 +63,10 @@ def crc64(aString):
 
     # compute the checksum
     for item in aString:
-        shr = 0L
+        shr = 0
         shr = (crch & 0xFF) << 24
-        temp1h = crch >> 8L
-        temp1l = (crcl >> 8L) | shr
+        temp1h = crch >> 8
+        temp1l = (crcl >> 8) | shr
         tableindex = (crcl ^ ord(item)) & 0xFF
 
         crch = temp1h ^ CRCTableh[tableindex]
@@ -104,7 +105,7 @@ def checksum(string):
     @rtype: int
     """
 
-    return reduce(lambda x, y: x + y, map(ord, string))
+    return reduce(lambda x, y: x + y, list(map(ord, string)))
 
 #==============================================================================
 def checksum256(string):
@@ -122,7 +123,7 @@ def checksum256(string):
     @rtype: int
     """
 
-    return reduce(lambda x, y: x + y, map(ord, string)) % 256
+    return reduce(lambda x, y: x + y, list(map(ord, string))) % 256
 
 #==============================================================================
 
