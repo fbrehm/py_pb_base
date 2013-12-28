@@ -37,7 +37,7 @@ from pb_base.handler import PbBaseHandler
 
 from pb_base.translate import translator
 
-__version__ = '0.2.2'
+__version__ = '0.2.3'
 
 log = logging.getLogger(__name__)
 
@@ -826,6 +826,8 @@ class PbLockHandler(PbBaseHandler):
         # or an int for success
         log.info(_("Got a lock for lockfile %r."), lockfile)
         out = "%d\n" % (pid)
+        if sys.version_info[0] > 2:
+            out = to_utf8_or_bust(out)
         log.debug(_("Write %(what)r in lockfile %(lfile)r ...") % {
                 'what': out, 'lfile': lockfile})
         if not self.simulate:
