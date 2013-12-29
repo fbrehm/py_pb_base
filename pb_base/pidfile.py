@@ -267,6 +267,26 @@ class PidFile(PbBaseObject):
         return res
 
     #--------------------------------------------------------------------------
+    def __repr__(self):
+        """Typecasting into a string for reproduction."""
+
+        out = "<%s(" % (self.__class__.__name__)
+
+        fields = []
+        fields.append("filename=%r" % (self.filename))
+        fields.append("auto_remove=%r" % (self.auto_remove))
+        fields.append("appname=%r" % (self.appname))
+        fields.append("verbose=%r" % (self.verbose))
+        fields.append("base_dir=%r" % (self.base_dir))
+        fields.append("use_stderr=%r" % (self.use_stderr))
+        fields.append("initialized=%r" % (self.initialized))
+        fields.append("simulate=%r" % (self.simulate))
+        fields.append("timeout=%r" % (self.timeout))
+
+        out += ", ".join(fields) + ")>"
+        return out
+
+    #--------------------------------------------------------------------------
     def __del__(self):
         """Destructor. Removes the pidfile, if it was created by ourselfes."""
 
