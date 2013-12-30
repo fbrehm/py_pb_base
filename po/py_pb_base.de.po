@@ -948,7 +948,7 @@ msgstr "Verzeichnis '%s' der PID-Datei ist kein Verzeichnis."
 #: pb_base/pidfile.py:439
 #, python-format
 msgid "No write access to pidfile parent directory '%s'."
-msgstr "Kein Schreibzugriff zum verzeichnis '%s' der PID-Datei."
+msgstr "Kein Schreibzugriff zum Verzeichnis '%s' der PID-Datei."
 
 #: pb_base/pidfile.py:446
 msgid "It is not a regular file."
