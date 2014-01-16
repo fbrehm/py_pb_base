@@ -34,7 +34,7 @@ from pb_base.object import PbBaseObject
 
 from pb_base.translate import translator
 
-__version__ = '0.6.3'
+__version__ = '0.6.4'
 
 log = logging.getLogger(__name__)
 
@@ -649,7 +649,7 @@ class PbApplication(PbBaseObject):
             self.arg_parser.print_usage(sys.stdout)
             self.exit(0)
 
-        if self.args.verbose > self.verbose:
+        if self.args.verbose is not None and self.args.verbose > self.verbose:
             self.verbose = self.args.verbose
 
     #--------------------------------------------------------------------------
