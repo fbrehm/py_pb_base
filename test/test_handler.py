@@ -16,14 +16,18 @@ import sys
 import logging
 import tempfile
 import time
+import locale
 
 libdir = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
 sys.path.insert(0, libdir)
 
 from pb_base.common import pp, to_unicode_or_bust, to_utf8_or_bust
+from pb_base.common import bytes2human
 
 import general
 from general import PbBaseTestcase, get_arg_verbose, init_root_logger
+
+locale.setlocale(locale.LC_ALL, '')
 
 log = logging.getLogger(__name__)
 
@@ -38,6 +42,73 @@ class TestPbBaseHandler(PbBaseTestcase):
     #--------------------------------------------------------------------------
     def tearDown(self):
         pass
+
+    #--------------------------------------------------------------------------
+    def format_df_results(self, result_list, human = False):
+
+        gr = locale.localeconv()['grouping']
+        res_list = []
+        for result in result_list:
+            df_entry = {}
+            df_entry['dev'] = result.dev
+            df_entry['fs'] = result.fs
+            df_entry['type'] = result.fs_type
+            df_entry['total'] = locale.format("%d", result.total_mb, gr)
+            df_entry['used'] = locale.format("%d", result.used_mb, gr)
+            df_entry['free'] = locale.format("%d", result.free_mb, gr)
+            if result.used_percent is None:
+                df_entry['used_pc'] = "-"
+            else:
+                df_entry['used_pc'] = locale.format("%.2f",
+                        result.used_percent) + " %"
+            if human:
+                df_entry['total'] = bytes2human(result.total_mb)
+                df_entry['used'] = bytes2human(result.used_mb)
+                df_entry['free'] = bytes2human(result.free_mb)
+
+            res_list.append(df_entry)
+
+        if self.verbose > 2:
+            log.debug("Formatted DF results: %s", pp(res_list))
+
+        keys = ('dev', 'type', 'total', 'used', 'free', 'used_pc')
+        length = {}
+        for key in keys:
+            length[key] = 1
+
+        cur_locale = locale.getlocale()
+        cur_encoding = cur_locale[1]
+        if (cur_locale[1] is None or cur_locale[1] == '' or
+                cur_locale[1].upper() == 'C' or
+                cur_locale[1].upper() == 'POSIX'):
+            cur_encoding = 'UTF-8'
+
+        for result in res_list:
+
+            for key in keys:
+                tt = result[key]
+                if sys.version_info[0] <= 2:
+                    tt = tt.decode(cur_encoding)
+                if len(tt) > length[key]:
+                    length[key] = len(tt)
+
+        out = ''
+        for result in res_list:
+            line = "%-*s  %-*s  %*s  %*s  %*s  %*s  %s\n" % (
+                    length['dev'], result['dev'],
+                    length['type'], result['type'],
+                    length['total'], result['total'],
+                    length['used'], result['used'],
+                    length['free'], result['free'],
+                    length['used_pc'], result['used_pc'],
+                    result['fs'],
+            )
+            out += line
+
+        if self.verbose > 2:
+            log.debug("Field lengths: %s", pp(length))
+
+        return out
 
     #--------------------------------------------------------------------------
     def test_import(self):
@@ -162,10 +233,36 @@ class TestPbBaseHandler(PbBaseTestcase):
         )
 
         result = df('/')
-        res = []
-        for r in result:
-            res.append(r.as_dict())
-        log.debug("Got a result from 'df /':\n%s", pp(res))
+        if self.verbose > 2:
+            res = []
+            for r in result:
+                res.append(r.as_dict())
+            log.debug("Got a result from 'df /':\n%s", pp(res))
+
+        out = self.format_df_results(result).strip()
+        log.debug("DF of root filesystem:\n%s", out)
+
+    #--------------------------------------------------------------------------
+    def test_exec_df_all(self):
+
+        log.info("Testing execution of df on all filesystems.")
+
+        from pb_base.handler.df import DfHandler
+
+        df = DfHandler(
+            appname = self.appname,
+            verbose = self.verbose,
+        )
+
+        result = df(all_fs = True)
+        if self.verbose > 2:
+            res = []
+            for r in result:
+                res.append(r.as_dict())
+            log.debug("Got a result for all 'df':\n%s", pp(res))
+
+        out = self.format_df_results(result).strip()
+        log.debug("DF of all filesystems:\n%s", out)
 
 #==============================================================================
 
@@ -188,6 +285,7 @@ if __name__ == '__main__':
     suite.addTest(TestPbBaseHandler('test_df_handler_object', verbose))
     suite.addTest(TestPbBaseHandler('test_fuser_handler_object', verbose))
     suite.addTest(TestPbBaseHandler('test_exec_df_root', verbose))
+    suite.addTest(TestPbBaseHandler('test_exec_df_all', verbose))
 
     runner = unittest.TextTestRunner(verbosity = verbose)
 
