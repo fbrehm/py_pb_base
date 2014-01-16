@@ -149,6 +149,24 @@ class TestPbBaseHandler(PbBaseTestcase):
         log.debug("FuserHandler %%r: %r", fuser)
         log.debug("FuserHandler %%s: %s", str(fuser))
 
+    #--------------------------------------------------------------------------
+    def test_exec_df_root(self):
+
+        log.info("Testing execution of df on the root filesystem.")
+
+        from pb_base.handler.df import DfHandler
+
+        df = DfHandler(
+            appname = self.appname,
+            verbose = self.verbose,
+        )
+
+        result = df('/')
+        res = []
+        for r in result:
+            res.append(r.as_dict())
+        log.debug("Got a result from 'df /':\n%s", pp(res))
+
 #==============================================================================
 
 
@@ -169,6 +187,7 @@ if __name__ == '__main__':
     suite.addTest(TestPbBaseHandler('test_generic_handler_object', verbose))
     suite.addTest(TestPbBaseHandler('test_df_handler_object', verbose))
     suite.addTest(TestPbBaseHandler('test_fuser_handler_object', verbose))
+    suite.addTest(TestPbBaseHandler('test_exec_df_root', verbose))
 
     runner = unittest.TextTestRunner(verbosity = verbose)
 

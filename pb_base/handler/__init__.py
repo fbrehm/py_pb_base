@@ -20,6 +20,7 @@ import grp
 import pipes
 import signal
 import errno
+import locale
 
 # Own modules
 from pb_base.common import pp, caller_search_path
@@ -33,7 +34,7 @@ from pb_base.object import PbBaseObject
 
 from pb_base.translate import translator
 
-__version__ = '0.3.0'
+__version__ = '0.3.1'
 
 log = logging.getLogger(__name__)
 
@@ -454,6 +455,10 @@ class PbBaseHandler(PbBaseObject):
         elif stderr is not None:
             used_stderr = stderr
 
+        cur_encoding = locale.getpreferredencoding()
+        if cur_encoding.upper() == 'C' or cur_encoding.upper() == 'POSIX':
+            cur_encoding = 'UTF-8'
+
         cmd_obj = subprocess.Popen(
             cmd_list,
             shell = use_shell,
@@ -472,6 +477,11 @@ class PbBaseHandler(PbBaseObject):
         (stdoutdata, stderrdata) = cmd_obj.communicate()
 
         if stderrdata:
+            if sys.version_info[0] > 2:
+                if self.verbose > 2:
+                    log.debug(_("Decoding %(what)s from %(enc)r.") % {
+                            'what': 'STDERR', 'enc': cur_encoding})
+                stderrdata = stderrdata.decode(cur_encoding)
             if quiet and not self.verbose:
                 pass
             else:
@@ -483,6 +493,11 @@ class PbBaseHandler(PbBaseObject):
                     self.handle_error(msg, self.appname)
 
         if stdoutdata:
+            if sys.version_info[0] > 2:
+                if self.verbose > 2:
+                    log.debug(_("Decoding %(what)s from %(enc)r.") % {
+                            'what': 'STDOUT', 'enc': cur_encoding})
+                stdoutdata = stdoutdata.decode(cur_encoding)
             do_out = False
             if self.verbose:
                 if quiet:
