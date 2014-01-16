@@ -29,7 +29,7 @@ from pb_base.handler import PbBaseHandler
 
 from pb_base.translate import translator
 
-__version__ = '0.2.1'
+__version__ = '0.2.2'
 
 log = logging.getLogger(__name__)
 
@@ -323,7 +323,7 @@ class DfHandler(PbBaseHandler):
             failed_commands.append('df')
 
         self.re_df_line = re.compile(
-                r'(\S+)\s+(\S+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\d+\s*%\s+(.*)')
+                r'(\S+)\s+(\S+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(?:\d+\s*%|-)\s+(.*)')
 
         # Some commands are missing
         if failed_commands:
