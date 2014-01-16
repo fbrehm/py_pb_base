@@ -33,7 +33,7 @@ class TestPbBaseHandler(PbBaseTestcase):
 
     #--------------------------------------------------------------------------
     def setUp(self):
-        pass
+        self.appname = 'test_handler'
 
     #--------------------------------------------------------------------------
     def tearDown(self):
@@ -50,6 +50,9 @@ class TestPbBaseHandler(PbBaseTestcase):
 
         log.info("Testing import of CommandNotFoundError from pb_base.handler ...")
         from pb_base.handler import CommandNotFoundError
+
+        log.info("Testing import of PbBaseHandler from pb_base.handler ...")
+        from pb_base.handler import PbBaseHandler
 
         log.info("Testing import of pb_base.handler.df ...")
         import pb_base.handler.df
@@ -104,6 +107,48 @@ class TestPbBaseHandler(PbBaseTestcase):
         e = cm.exception
         log.debug("%s raised: %s", e.__class__.__name__, e)
 
+    #--------------------------------------------------------------------------
+    def test_generic_handler_object(self):
+
+        log.info("Testing init of a generic handler object.")
+
+        from pb_base.handler import PbBaseHandler
+
+        hdlr = PbBaseHandler(
+            appname = self.appname,
+            verbose = self.verbose,
+        )
+        log.debug("PbBaseHandler %%r: %r", hdlr)
+        log.debug("PbBaseHandler %%s: %s", str(hdlr))
+
+    #--------------------------------------------------------------------------
+    def test_df_handler_object(self):
+
+        log.info("Testing init of a df handler object.")
+
+        from pb_base.handler.df import DfHandler
+
+        df = DfHandler(
+            appname = self.appname,
+            verbose = self.verbose,
+        )
+        log.debug("DfHandler %%r: %r", df)
+        log.debug("DfHandler %%s: %s", str(df))
+
+    #--------------------------------------------------------------------------
+    def test_fuser_handler_object(self):
+
+        log.info("Testing init of a fuser handler object.")
+
+        from pb_base.handler.fuser import FuserHandler
+
+        fuser = FuserHandler(
+            appname = self.appname,
+            verbose = self.verbose,
+        )
+        log.debug("FuserHandler %%r: %r", fuser)
+        log.debug("FuserHandler %%s: %s", str(fuser))
+
 #==============================================================================
 
 
@@ -121,6 +166,9 @@ if __name__ == '__main__':
 
     suite.addTest(TestPbBaseHandler('test_import', verbose))
     suite.addTest(TestPbBaseHandler('test_command_not_found_error', verbose))
+    suite.addTest(TestPbBaseHandler('test_generic_handler_object', verbose))
+    suite.addTest(TestPbBaseHandler('test_df_handler_object', verbose))
+    suite.addTest(TestPbBaseHandler('test_fuser_handler_object', verbose))
 
     runner = unittest.TextTestRunner(verbosity = verbose)
 

@@ -353,6 +353,7 @@ class DfHandler(PbBaseHandler):
 
         res = super(DfHandler, self).as_dict(short = short)
         res['df_cmd'] = self.df_cmd
+        res['re_df_line_pattern'] = self.re_df_line.pattern
 
         return res
 

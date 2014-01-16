@@ -142,6 +142,23 @@ class FuserHandler(PbBaseHandler):
         return self._fuser_cmd
 
     #--------------------------------------------------------------------------
+    def as_dict(self, short = False):
+        """
+        Transforms the elements of the object into a dict
+
+        @param short: don't include local properties in resulting dict.
+        @type short: bool
+
+        @return: structure as dict
+        @rtype:  dict
+        """
+
+        res = super(FuserHandler, self).as_dict(short = short)
+        res['fuser_cmd'] = self.fuser_cmd
+
+        return res
+
+    #--------------------------------------------------------------------------
     def __call__(self, fs_object, force = False):
         """
         Executes the fuser command and returns a list of all process IDs using
