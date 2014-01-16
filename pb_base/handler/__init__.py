@@ -455,8 +455,11 @@ class PbBaseHandler(PbBaseObject):
         elif stderr is not None:
             used_stderr = stderr
 
-        cur_encoding = locale.getpreferredencoding()
-        if cur_encoding.upper() == 'C' or cur_encoding.upper() == 'POSIX':
+        cur_locale = locale.getlocale()
+        cur_encoding = cur_locale[1]
+        if (cur_locale[1] is None or cur_locale[1] == '' or
+                cur_locale[1].upper() == 'C' or
+                cur_locale[1].upper() == 'POSIX'):
             cur_encoding = 'UTF-8'
 
         cmd_obj = subprocess.Popen(
