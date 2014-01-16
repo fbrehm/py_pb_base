@@ -72,6 +72,38 @@ class TestPbBaseHandler(PbBaseTestcase):
         log.info("Testing import of FuserHandler from pb_base.handler.fuser ...")
         from pb_base.handler.fuser import FuserHandler
 
+    #--------------------------------------------------------------------------
+    def test_command_not_found_error(self):
+
+        log.info("Test raising a CommandNotFoundError exception ...")
+
+        from pb_base.handler import CommandNotFoundError
+
+        with self.assertRaises(CommandNotFoundError) as cm:
+            raise CommandNotFoundError('uhu')
+        e = cm.exception
+        log.debug("%s raised: %s", e.__class__.__name__, e)
+
+        with self.assertRaises(CommandNotFoundError) as cm:
+            raise CommandNotFoundError(['uhu'])
+        e = cm.exception
+        log.debug("%s raised: %s", e.__class__.__name__, e)
+
+        with self.assertRaises(CommandNotFoundError) as cm:
+            raise CommandNotFoundError(['uhu', 'bla'])
+        e = cm.exception
+        log.debug("%s raised: %s", e.__class__.__name__, e)
+
+        with self.assertRaises(TypeError) as cm:
+            raise CommandNotFoundError()
+        e = cm.exception
+        log.debug("%s raised: %s", e.__class__.__name__, e)
+
+        with self.assertRaises(TypeError) as cm:
+            raise CommandNotFoundError('uhu', 'bla')
+        e = cm.exception
+        log.debug("%s raised: %s", e.__class__.__name__, e)
+
 #==============================================================================
 
 
@@ -88,6 +120,7 @@ if __name__ == '__main__':
     suite = unittest.TestSuite()
 
     suite.addTest(TestPbBaseHandler('test_import', verbose))
+    suite.addTest(TestPbBaseHandler('test_command_not_found_error', verbose))
 
     runner = unittest.TextTestRunner(verbosity = verbose)
 
