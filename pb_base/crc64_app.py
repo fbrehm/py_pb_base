@@ -30,12 +30,15 @@ from pb_base.crc import crc64, crc64_digest
 
 from pb_base.translate import translator
 
-__version__ = '0.2.1'
+__version__ = '0.2.2'
 
 log = logging.getLogger(__name__)
 
 _ = translator.lgettext
 __ = translator.lngettext
+if sys.version_info[0] > 2:
+    _ = translator.gettext
+    __ = translator.ngettext
 
 #==============================================================================
 class Crc64AppError(PbApplicationError):
@@ -82,7 +85,7 @@ class Crc64App(PbApplication):
 
         for token in self.args.tokens:
             digest = crc64_digest(token)
-            print digest
+            print(digest)
 
     #--------------------------------------------------------------------------
     def init_arg_parser(self):

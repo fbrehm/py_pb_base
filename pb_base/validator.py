@@ -34,9 +34,9 @@ def oct_check(value, min_val = None, max_val = None):
     minv = None
 
     if min_val is not None:
-        if not isinstance(min_val, (int, long, basestring)):
+        if not isinstance(min_val, (int, str)):
             raise VdtParamError('min_val', min_val)
-        if isinstance(min_val, basestring):
+        if isinstance(min_val, str):
             minv = min_val.strip()
             if minv.startswith('0x') or minv.startswith('0X'):
                 minv = minv[2:]
@@ -56,9 +56,9 @@ def oct_check(value, min_val = None, max_val = None):
                     raise VdtParamError('min_val', min_val)
 
     if max_val is not None:
-        if not isinstance(max_val, (int, long, basestring)):
+        if not isinstance(max_val, (int, str)):
             raise VdtParamError('max_val', max_val)
-        if isinstance(max_val, basestring):
+        if isinstance(max_val, str):
             maxv = max_val.strip()
             if maxv.startswith('0x') or maxv.startswith('0X'):
                 maxv = maxv[2:]
@@ -77,7 +77,7 @@ def oct_check(value, min_val = None, max_val = None):
                 except ValueError:
                     raise VdtParamError('max_val', max_val)
 
-    if not isinstance(value, basestring):
+    if not isinstance(value, str):
         raise VdtTypeError(value)
 
     try:
@@ -109,4 +109,4 @@ if __name__ == "__main__":
 
 #==============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

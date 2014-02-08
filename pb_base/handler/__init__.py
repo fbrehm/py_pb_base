@@ -20,6 +20,7 @@ import grp
 import pipes
 import signal
 import errno
+import locale
 
 # Own modules
 from pb_base.common import pp, caller_search_path
@@ -33,12 +34,15 @@ from pb_base.object import PbBaseObject
 
 from pb_base.translate import translator
 
-__version__ = '0.3.0'
+__version__ = '0.3.1'
 
 log = logging.getLogger(__name__)
 
 _ = translator.lgettext
 __ = translator.lngettext
+if sys.version_info[0] > 2:
+    _ = translator.gettext
+    __ = translator.ngettext
 
 # Some module varriables
 CHOWN_CMD = os.sep + os.path.join('bin', 'chown')
@@ -86,7 +90,7 @@ class CommandNotFoundError(PbBaseHandlerError):
         Typecasting into a string for error output.
         """
 
-        cmds = ', '.join(map(lambda x: ("'" + str(x) + "'"), self.cmd_list))
+        cmds = ', '.join([("'" + str(x) + "'") for x in self.cmd_list])
         msg = __("Could not found OS command", "Could not found OS commands",
                 len(self.cmd_list)) + ": " + cmds
         return msg
@@ -412,7 +416,7 @@ class PbBaseHandler(PbBaseObject):
         """
 
         cmd_list = cmd
-        if isinstance(cmd, basestring):
+        if isinstance(cmd, str):
             cmd_list = [cmd]
 
         pwd_info = pwd.getpwuid(os.geteuid())
@@ -451,6 +455,13 @@ class PbBaseHandler(PbBaseObject):
         elif stderr is not None:
             used_stderr = stderr
 
+        cur_locale = locale.getlocale()
+        cur_encoding = cur_locale[1]
+        if (cur_locale[1] is None or cur_locale[1] == '' or
+                cur_locale[1].upper() == 'C' or
+                cur_locale[1].upper() == 'POSIX'):
+            cur_encoding = 'UTF-8'
+
         cmd_obj = subprocess.Popen(
             cmd_list,
             shell = use_shell,
@@ -469,6 +480,11 @@ class PbBaseHandler(PbBaseObject):
         (stdoutdata, stderrdata) = cmd_obj.communicate()
 
         if stderrdata:
+            if sys.version_info[0] > 2:
+                if self.verbose > 2:
+                    log.debug(_("Decoding %(what)s from %(enc)r.") % {
+                            'what': 'STDERR', 'enc': cur_encoding})
+                stderrdata = stderrdata.decode(cur_encoding)
             if quiet and not self.verbose:
                 pass
             else:
@@ -480,6 +496,11 @@ class PbBaseHandler(PbBaseObject):
                     self.handle_error(msg, self.appname)
 
         if stdoutdata:
+            if sys.version_info[0] > 2:
+                if self.verbose > 2:
+                    log.debug(_("Decoding %(what)s from %(enc)r.") % {
+                            'what': 'STDOUT', 'enc': cur_encoding})
+                stdoutdata = stdoutdata.decode(cur_encoding)
             do_out = False
             if self.verbose:
                 if quiet:
@@ -695,12 +716,12 @@ class PbBaseHandler(PbBaseObject):
         if self.simulate:
             return True
 
-        input_seek = 0l
+        input_seek = 0
         if iseek:
-            input_seek = long(iseek) * long(blocksize)
-        output_seek = 0l
+            input_seek = int(iseek) * int(blocksize)
+        output_seek = 0
         if oseek:
-            output_seek = long(oseek) * long(blocksize)
+            output_seek = int(oseek) * int(blocksize)
 
         src_fh = None
         target_fh = None
@@ -708,7 +729,7 @@ class PbBaseHandler(PbBaseObject):
             log.debug(_("Opening %r for read."), source)
         try:
             src_fh = open(source, 'rb', -1)
-        except Exception, e:
+        except Exception as e:
             msg = _("Error opening source %(src)r: %(msg)s") % {
                     'src': source, 'msg': e}
             raise PbBaseHandlerError(msg)
@@ -717,7 +738,7 @@ class PbBaseHandler(PbBaseObject):
             log.debug(_("Opening %r for write"), target)
         try:
             target_fh = open(target, 'wb', -1)
-        except Exception, e:
+        except Exception as e:
             src_fh.close()
             msg = _("Error opening target %(tgt)r: %(msg)s") % {
                     'tgt': target, 'msg': e}
@@ -744,7 +765,7 @@ class PbBaseHandler(PbBaseObject):
                 target_fh.write(cache)
                 blocks_written += 1
                 cache = src_fh.read(blocksize)
-        except IOError, e:
+        except IOError as e:
             if e.errno == 28:
                 if raise_on_full:
                     raise
@@ -752,14 +773,14 @@ class PbBaseHandler(PbBaseObject):
                     log.debug(_("No space left on output device %r."), target)
             else:
                 raise
-        except Exception, e:
+        except Exception as e:
             msg = _("Error copying source %(src)r to target %(tgt)r: %(msg)s") % {
                     'src': source, 'tgt': target, 'msg': e}
             raise PbBaseHandlerError(msg)
         finally:
             src_fh.close()
             target_fh.close()
-            bytes_written = long(blocks_written) * long(blocksize)
+            bytes_written = int(blocks_written) * int(blocksize)
             written_human = bytes2human(bytes_written)
             log.debug(_("%(bytes)d Bytes (%(human)s) written to output device %(tgt)r.",) % {
                     'bytes': bytes_written, 'human': written_human, 'tgt': target})
@@ -796,9 +817,9 @@ class PbBaseHandler(PbBaseObject):
         if self.simulate:
             return True
 
-        output_seek = 0l
+        output_seek = 0
         if seek:
-            output_seek = long(seek) * long(blocksize)
+            output_seek = int(seek) * int(blocksize)
 
         block = chr(0) * blocksize
 
@@ -808,7 +829,7 @@ class PbBaseHandler(PbBaseObject):
             log.debug(_("Opening %r for write"), target)
         try:
             target_fh = open(target, 'wb', -1)
-        except Exception, e:
+        except Exception as e:
             msg = _("%(errname)s opening target %(tgt)r: %(msg)s") % {
                     'errname': e.__class__.__name__, 'tgt': target, 'msg': e}
             raise PbBaseHandlerError(msg)
@@ -829,7 +850,7 @@ class PbBaseHandler(PbBaseObject):
                 blocks_written += 1
                 if count and blocks_written >= count:
                     break
-        except IOError, e:
+        except IOError as e:
             if e.errno == 28:
                 if count and not force:
                     raise
@@ -837,13 +858,13 @@ class PbBaseHandler(PbBaseObject):
                     log.debug(_("No space left on output device %r."), target)
             else:
                 raise
-        except Exception, e:
+        except Exception as e:
             msg = _("Error dumping binary zeroes to target %(tgt)r: %(msg)s") % {
                     'tgt': target, 'msg': e}
             raise PbBaseHandlerError(msg)
         finally:
             target_fh.close()
-            bytes_written = long(blocks_written) * long(blocksize)
+            bytes_written = int(blocks_written) * int(blocksize)
             written_human = bytes2human(bytes_written)
             log.debug(_("%(bytes)d Bytes (%(human)s) written to output device %(tgt)r.",) % {
                     'bytes': bytes_written, 'human': written_human, 'tgt': target})

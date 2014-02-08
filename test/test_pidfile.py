@@ -14,16 +14,15 @@ import os
 import sys
 import time
 import re
+import logging
 
 libdir = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
 sys.path.insert(0, libdir)
 
-import pb_base.pidfile
+import general
+from general import PbBaseTestcase, get_arg_verbose, init_root_logger
 
-from pb_base.pidfile import PidFileError
-from pb_base.pidfile import InvalidPidFileError
-from pb_base.pidfile import PidFileInUseError
-from pb_base.pidfile import PidFile
+log = logging.getLogger(__name__)
 
 # Some predefined module variables / constants
 pidfile_normal = 'test_pidfile.pid'
@@ -42,7 +41,7 @@ def file_content(filename):
     try:
         fh = open(filename)
         content = ''.join(fh.readlines())
-    except IOError, e:
+    except IOError as e:
         sys.stderr.write("Could not read file '%s': %s\n" % (filename, str(e)))
     finally:
         if fh:
@@ -52,223 +51,223 @@ def file_content(filename):
 
 #==============================================================================
 
-class TestPidFile(unittest.TestCase):
+class TestPidFile(PbBaseTestcase):
 
     #--------------------------------------------------------------------------
     def setUp(self):
         pass
 
     #--------------------------------------------------------------------------
+    def test_import(self):
+
+        log.info("Testing import of pb_base.pidfile ...")
+
+        import pb_base.pidfile
+        log.debug("Module %r imported.", 'pb_base.pidfile')
+
+        from pb_base.pidfile import PidFileError
+        log.debug("Exception class %r from module %r imported.",
+                'PidFileError', 'pb_base.pidfile')
+
+        from pb_base.pidfile import InvalidPidFileError
+        log.debug("Exception class %r from module %r imported.",
+                'InvalidPidFileError', 'pb_base.pidfile')
+
+        from pb_base.pidfile import PidFileInUseError
+        log.debug("Exception class %r from module %r imported.",
+                'PidFileInUseError', 'pb_base.pidfile')
+
+        from pb_base.pidfile import PidFile
+        log.debug("Class %r from module %r imported.",
+                'PidFile', 'pb_base.pidfile')
+
+
+        import pb_base.object
+
+    #--------------------------------------------------------------------------
     def test_object(self):
 
-        try:
-            pid_file = PidFile(
-                filename = pidfile_normal,
-                appname = 'test_pidfile',
-                verbose = 1,
-            )
-            print "\nPidFile object:\n%s" % (pid_file)
+        log.info("Testing init of a simple object.")
 
-        except Exception, e:
-            self.fail("Could not instatiate PidFile by a %s: %s" % (
-                    e.__class__.__name__, str(e)))
+        import pb_base.pidfile
+        from pb_base.pidfile import PidFile
+
+        pid_file = PidFile(
+            filename = pidfile_normal,
+            appname = 'test_pidfile',
+            verbose = self.verbose,
+        )
+        log.debug("PidFile %%r: %r", pid_file)
+        log.debug("PidFile %%s: %s", str(pid_file))
 
     #--------------------------------------------------------------------------
     def test_no_filename(self):
 
-        try:
+        log.info("Testing fail init of a PidFile object without a filename.")
+
+        import pb_base.pidfile
+        from pb_base.pidfile import PidFile
+
+        with self.assertRaises(ValueError) as cm:
             pid_file = PidFile(
                 filename = '',
                 appname = 'test_pidfile',
-                verbose = 1,
+                verbose = self.verbose,
             )
-
-        except ValueError, e:
-            sys.stderr.write("%s: %r " % (e.__class__.__name__, str(e)))
-        except Exception, e:
-            self.fail("Could not instatiate PidFile by a %s: %s" % (
-                    e.__class__.__name__, str(e)))
-        else:
-            self.fail("No ValueError raised on a wrong filename ''.")
+            log.debug("PidFile %%s: %s", str(pid_file))
+        e = cm.exception
+        log.debug("%s raised: %s", e.__class__.__name__, e)
 
     #--------------------------------------------------------------------------
     def test_create_normal(self):
 
-        pid_file = None
+        log.info("Test creating of a normal PID file.")
 
-        try:
-            pid_file = PidFile(
-                filename = pidfile_normal,
-                appname = 'test_pidfile',
-                verbose = 3,
-            )
+        import pb_base.pidfile
+        from pb_base.pidfile import PidFile
 
-        except Exception, e:
-            self.fail("Could not instatiate PidFile by a %s: %s" % (
-                    e.__class__.__name__, str(e)))
+        pid_file = PidFile(
+            filename = pidfile_normal,
+            appname = 'test_pidfile',
+            verbose = self.verbose,
+        )
 
         try:
             pid_file.create()
             if not pid_file.created:
-                self.fail("Pidfile '%s' seems not to be created.",
+                self.fail("Pidfile %r seems not to be created.",
                         pidfile_normal)
             if not os.path.exists(pidfile_normal):
-                self.fail("Pidfile '%s' not created.", pidfile_normal)
+                self.fail("Pidfile %r not created.", pidfile_normal)
             fcontent = file_content(pidfile_normal)
             if fcontent is None:
-                self.fail("Could not read pidfile '%s'.", pidfile_normal)
+                self.fail("Could not read pidfile %r.", pidfile_normal)
             elif not fcontent:
-                self.fail("Pidfile '%s' seems to be empty.", pidfile_normal)
+                self.fail("Pidfile %r seems to be empty.", pidfile_normal)
             else:
                 match = re.search(r'^\s*(\d+)\s*$', fcontent)
                 if not match:
-                    self.fail("Pidfile '%s' with invalid content: %r",
+                    self.fail("Pidfile %r with invalid content: %r",
                             pidfile_normal, fcontent)
                 else:
                     pid = int(match.group(1))
                     if pid == os.getpid():
-                        sys.stderr.write("Found correct PID %d in '%s'. " % (
-                                pid, pidfile_normal))
+                        log.debug("Found correct PID %d in %r.",
+                                pid, pidfile_normal)
                     else:
-                        self.fail("Found invalid PID %d in '%s', but should be %d.",
+                        self.fail("Found invalid PID %d in %r, but should be %d.",
                                 pid, pidfile_normal, os.getpid())
         finally:
             del pid_file
 
     #--------------------------------------------------------------------------
+    @unittest.skipIf(os.geteuid() <= 0, "Test skipped as root")
     def test_create_forbidden(self):
 
-        pid_file = None
+        log.info("Test fail creating of a PID file on a forbidden place.")
+
+        import pb_base.pidfile
+        from pb_base.pidfile import PidFile
+        from pb_base.pidfile import InvalidPidFileError
+
+        pid_file = PidFile(
+            filename = pidfile_forbidden,
+            appname = 'test_pidfile',
+            verbose = self.verbose,
+        )
 
         try:
-            pid_file = PidFile(
-                filename = pidfile_forbidden,
-                appname = 'test_pidfile',
-                verbose = 3,
-            )
+            with self.assertRaises(InvalidPidFileError) as cm:
+                pid_file.create()
+            e = cm.exception
+            log.debug("%s raised: %s", e.__class__.__name__, e)
 
-        except Exception, e:
-            self.fail("Could not instatiate PidFile by a %s: %s" % (
-                    e.__class__.__name__, str(e)))
-
-        try:
-            pid_file.create()
-        except InvalidPidFileError, e:
-            sys.stderr.write("%s: %r " % (e.__class__.__name__, str(e)))
-        else:
-            if os.geteuid():
-                self.fail(("No InvalidPidFileError raised on a forbidden " +
-                        "pidfile path '%s' (except for root).") % (
-                        pidfile_forbidden))
-            else:
-                print ("No InvalidPidFileError raised on a forbidden " +
-                        "pidfile path '%s', because I'm root.") % (
-                        pidfile_forbidden)
         finally:
             del pid_file
 
     #--------------------------------------------------------------------------
     def test_create_invalid(self):
 
-        pid_file = None
+        log.info("Test fail creating of a PID file with an invalid path.")
+
+        import pb_base.pidfile
+        from pb_base.pidfile import PidFile
+        from pb_base.pidfile import InvalidPidFileError
+
+        pid_file = PidFile(
+            filename = pidfile_invalid,
+            appname = 'test_pidfile',
+            verbose = self.verbose,
+        )
 
         try:
-            pid_file = PidFile(
-                filename = pidfile_invalid,
-                appname = 'test_pidfile',
-                verbose = 3,
-            )
+            with self.assertRaises(InvalidPidFileError) as cm:
+                pid_file.create()
+            e = cm.exception
+            log.debug("%s raised: %s", e.__class__.__name__, e)
 
-        except Exception, e:
-            self.fail("Could not instatiate PidFile by a %s: %s" % (
-                    e.__class__.__name__, str(e)))
-
-        try:
-            pid_file.create()
-        except InvalidPidFileError, e:
-            sys.stderr.write("%s: %r " % (e.__class__.__name__, str(e)))
-        else:
-            self.fail(("No InvalidPidFileError raised on a invalid " +
-                    "pidfile path '%s'.") % (
-                    pidfile_invalid))
         finally:
             del pid_file
 
     #--------------------------------------------------------------------------
     def test_create_concurrent(self):
 
-        pid_file1 = None
-        pid_file2 = None
+        log.info("Test fail creating of concurrent  PID files.")
+
+        import pb_base.pidfile
+        from pb_base.pidfile import PidFile
+        from pb_base.pidfile import PidFileInUseError
+
         carry_on = True
 
-        try:
-            pid_file1 = PidFile(
-                filename = pidfile_normal,
-                appname = 'test_pidfile',
-                verbose = 3,
-            )
-            pid_file2 = PidFile(
-                filename = pidfile_normal,
-                appname = 'test_pidfile',
-                verbose = 3,
-            )
-
-        except Exception, e:
-            self.fail("Could not instatiate PidFile by a %s: %s" % (
-                    e.__class__.__name__, str(e)))
-            return
+        pid_file1 = PidFile(
+            filename = pidfile_normal,
+            appname = 'test_pidfile',
+            verbose = self.verbose,
+        )
+        pid_file2 = PidFile(
+            filename = pidfile_normal,
+            appname = 'test_pidfile',
+            verbose = self.verbose,
+        )
 
         try:
             pid_file1.create()
-        except Exception, e:
-            del pid_file1
-            del pid_file2
-            self.fail("Could not create pidfile '%s' by a %s: %s" % (
-                    pidfile_normal, e.__class__.__name__, str(e)))
-            return
 
-        try:
-            pid_file2.create()
-        except PidFileInUseError, e:
-            sys.stderr.write("%s: %r " % (e.__class__.__name__, str(e)))
-        except Exception, e:
-            self.fail("Could not create pidfile '%s' by a %s: %s" % (
-                    pidfile_normal, e.__class__.__name__, str(e)))
+            with self.assertRaises(PidFileInUseError) as cm:
+                pid_file2.create()
+            e = cm.exception
+            log.debug("%s raised: %s", e.__class__.__name__, e)
+
         finally:
-            del pid_file1
             del pid_file2
+            del pid_file1
 
 #==============================================================================
 
 if __name__ == '__main__':
 
-    import argparse
+    verbose = get_arg_verbose()
+    if verbose is None:
+        verbose = 0
+    init_root_logger(verbose)
 
-    arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument("-v", "--verbose", action = "count",
-            dest = 'verbose', help = 'Increase the verbosity level')
-    args = arg_parser.parse_args()
+    log.info("Starting tests ...")
 
-    loader = unittest.TestLoader()
     suite = unittest.TestSuite()
 
-    suite.addTests(loader.loadTestsFromName(
-            'test_pidfile.TestPidFile.test_object'))
-    suite.addTests(loader.loadTestsFromName(
-            'test_pidfile.TestPidFile.test_no_filename'))
-    suite.addTests(loader.loadTestsFromName(
-            'test_pidfile.TestPidFile.test_create_normal'))
-    suite.addTests(loader.loadTestsFromName(
-            'test_pidfile.TestPidFile.test_create_forbidden'))
-    suite.addTests(loader.loadTestsFromName(
-            'test_pidfile.TestPidFile.test_create_invalid'))
-    suite.addTests(loader.loadTestsFromName(
-            'test_pidfile.TestPidFile.test_create_concurrent'))
+    suite.addTest(TestPidFile('test_import', verbose))
+    suite.addTest(TestPidFile('test_object', verbose))
+    suite.addTest(TestPidFile('test_no_filename', verbose))
+    suite.addTest(TestPidFile('test_create_normal', verbose))
+    suite.addTest(TestPidFile('test_create_forbidden', verbose))
+    suite.addTest(TestPidFile('test_create_invalid', verbose))
+    suite.addTest(TestPidFile('test_create_concurrent', verbose))
 
-    runner = unittest.TextTestRunner(verbosity = args.verbose)
+    runner = unittest.TextTestRunner(verbosity = verbose)
 
     result = runner.run(suite)
 
 #==============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

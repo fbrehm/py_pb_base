@@ -52,6 +52,9 @@ log = logging.getLogger(__name__)
 
 _ = translator.lgettext
 __ = translator.lngettext
+if sys.version_info[0] > 2:
+    _ = translator.gettext
+    __ = translator.ngettext
 
 #--------------------------------------------------------------------------
 
@@ -309,26 +312,26 @@ class ForkingDaemon(PbDaemon):
 
         super(ForkingDaemon, self).init_cfg_spec()
 
-        if not u'general' in self.cfg_spec:
-            self.cfg_spec[u'general'] = {}
+        if not 'general' in self.cfg_spec:
+            self.cfg_spec['general'] = {}
 
-        max_spec = u'integer(min = 1, max = %d, default = %d)' % (
+        max_spec = 'integer(min = 1, max = %d, default = %d)' % (
                 maximum_max_children, self._max_children)
 
-        if not u'max_children' in self.cfg_spec[u'general']:
-            self.cfg_spec[u'general'][u'max_children'] = max_spec
-            self.cfg_spec[u'general'].comments[u'max_children'].append('')
-            self.cfg_spec[u'general'].comments[u'max_children'].append(
-                    u'The maximum number of child processes.')
+        if not 'max_children' in self.cfg_spec['general']:
+            self.cfg_spec['general']['max_children'] = max_spec
+            self.cfg_spec['general'].comments['max_children'].append('')
+            self.cfg_spec['general'].comments['max_children'].append(
+                    'The maximum number of child processes.')
 
-        to_spec = u'integer(min = 1, default = %d)' % (
+        to_spec = 'integer(min = 1, default = %d)' % (
                 default_timeout_collect_children)
 
-        if not u'timeout_collect_children' in self.cfg_spec[u'general']:
-            self.cfg_spec[u'general'][u'timeout_collect_children'] = to_spec
-            self.cfg_spec[u'general'].comments[u'timeout_collect_children'].append('')
-            self.cfg_spec[u'general'].comments[u'timeout_collect_children'].append(
-                    u'The maximum timeout on collecting finished children per stage.')
+        if not 'timeout_collect_children' in self.cfg_spec['general']:
+            self.cfg_spec['general']['timeout_collect_children'] = to_spec
+            self.cfg_spec['general'].comments['timeout_collect_children'].append('')
+            self.cfg_spec['general'].comments['timeout_collect_children'].append(
+                    'The maximum timeout on collecting finished children per stage.')
 
     #--------------------------------------------------------------------------
     def perform_config(self):
@@ -341,12 +344,12 @@ class ForkingDaemon(PbDaemon):
 
         super(ForkingDaemon, self).perform_config()
 
-        if u'general' in self.cfg and u'max_children' in self.cfg[u'general']:
-            self.max_children = self.cfg[u'general'][u'max_children']
+        if 'general' in self.cfg and 'max_children' in self.cfg['general']:
+            self.max_children = self.cfg['general']['max_children']
 
-        if (u'general' in self.cfg and
-                u'timeout_collect_children' in self.cfg[u'general']):
-            self.timeout_collect_children = self.cfg[u'general'][u'timeout_collect_children']
+        if ('general' in self.cfg and
+                'timeout_collect_children' in self.cfg['general']):
+            self.timeout_collect_children = self.cfg['general']['timeout_collect_children']
 
     #--------------------------------------------------------------------------
     def post_run(self):
@@ -431,7 +434,7 @@ class ForkingDaemon(PbDaemon):
 
                 log.info(_("Sending signal %d to all child processes."),
                         the_signal)
-                for pid in self.active_children.keys():
+                for pid in list(self.active_children.keys()):
                     try:
                         os.kill(pid, the_signal)
                     except:
@@ -467,7 +470,7 @@ class ForkingDaemon(PbDaemon):
             return
 
         # collecting all finished children
-        for pid in self.active_children.keys():
+        for pid in list(self.active_children.keys()):
             p = None
             try:
                 p, status = os.waitpid(pid, os.WNOHANG)
@@ -557,4 +560,4 @@ if __name__ == "__main__":
 
 #==============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

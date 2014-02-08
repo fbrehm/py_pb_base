@@ -21,7 +21,7 @@ import locale
 
 # Own modules
 
-__version__ = '0.3.5'
+__version__ = '0.3.6'
 
 log = logging.getLogger(__name__)
 
@@ -115,13 +115,13 @@ def human2mbytes(value, si_conform = False, as_float = False,
     c_thousep = locale.nl_langinfo(locale.THOUSEP)
     if c_thousep != CUR_THOUSEP:
         CUR_THOUSEP = c_thousep
-        log.debug("Current separator character for thousands is now %r.",
-                CUR_THOUSEP)
+        #log.debug("Current separator character for thousands is now %r.",
+        #        CUR_THOUSEP)
         THOUSEP_RE = re.compile(re.escape(CUR_THOUSEP))
 
     if c_radix != CUR_RADIX:
         CUR_RADIX = c_radix
-        log.debug("Current decimal radix is now %r.", CUR_RADIX)
+        #log.debug("Current decimal radix is now %r.", CUR_RADIX)
         H2MB_PAT = r'^\s*\+?(\d+(?:' + re.escape(CUR_RADIX) + r'\d*)?)\s*(\S+)?'
         if CUR_THOUSEP:
             H2MB_PAT = (r'^\s*\+?(\d+(?:' + re.escape(CUR_THOUSEP) + r'\d+)*(?:' +
@@ -150,26 +150,26 @@ def human2mbytes(value, si_conform = False, as_float = False,
     if unit is None:
         unit = ''
 
-    factor_bin = long(1024)
-    factor_si = long(1000)
+    factor_bin = 1024
+    factor_si = 1000
     if not si_conform:
         factor_si = factor_bin
 
     #log.debug("factor_bin: %r, factor_si: %r", factor_bin, factor_si)
 
-    factor = long(1)
+    factor = 1
 
-    final_factor = 1024l * 1024l
+    final_factor = 1024 * 1024
     if no_mibibytes:
-        final_factor = 1000l * 1000l
+        final_factor = 1000 * 1000
 
     while int(value_float) != value_float:
-        value_float *= 10l
-        final_factor *= 10l
-    value_long = long(value_float)
+        value_float *= 10
+        final_factor *= 10
+    value_long = int(value_float)
 
     if RE_UNIT_BYTES.search(unit):
-        factor = long(1)
+        factor = 1
     elif RE_UNIT_KBYTES.search(unit):
         factor = factor_si
     elif RE_UNIT_KIBYTES.search(unit):
@@ -210,7 +210,7 @@ def human2mbytes(value, si_conform = False, as_float = False,
     mbytes = lbytes / final_factor
     if as_float:
         return float(mbytes)
-    if mbytes <= sys.maxint:
+    if mbytes <= sys.maxsize:
         return int(mbytes)
     return mbytes
     if mbytes != int(mbytes):
@@ -245,7 +245,7 @@ def bytes2human(value, si_conform = False, precision = None,
 
     """
 
-    val = long(value)
+    val = int(value)
 
     base = 1024
     prefixes = {
@@ -337,18 +337,22 @@ def to_bool(value):
     if c_yes_expr != PAT_TO_BOOL_TRUE:
         PAT_TO_BOOL_TRUE = c_yes_expr
         RE_TO_BOOL_TRUE = re.compile(PAT_TO_BOOL_TRUE)
+    #log.debug("Current pattern for 'yes': %r.", c_yes_expr)
 
     c_no_expr = locale.nl_langinfo(locale.NOEXPR)
     if c_no_expr != PAT_TO_BOOL_FALSE:
         PAT_TO_BOOL_FALSE = c_no_expr
         RE_TO_BOOL_FALSE = re.compile(PAT_TO_BOOL_FALSE)
+    #log.debug("Current pattern for 'no': %r.", c_no_expr)
 
     v_str = ''
-    if isinstance(value, basestring):
-        if isinstance(value, unicode):
-            v_str = value.encode('utf-8')
-        else:
-            v_str = value
+    if isinstance(value, str):
+        v_str = value
+        if sys.version_info[0] <= 2:
+            if isinstance(value, unicode):
+                v_str = value.encode('utf-8')
+    elif sys.version_info[0] > 2 and isinstance(value, bytes):
+        v_str = value.decode('utf-8')
     else:
         v_str = str(value)
 
@@ -430,9 +434,13 @@ def to_unicode_or_bust(obj, encoding = 'utf-8'):
 
     """
 
-    if isinstance(obj, basestring):
-        if not isinstance(obj, unicode):
-            obj = unicode(obj, encoding)
+    if isinstance(obj, str):
+        if not sys.version_info[0] > 2:
+            if isinstance(obj, unicode):
+                obj = obj.encode('utf-8')
+    elif sys.version_info[0] > 2:
+        if isinstance(obj, bytes):
+            obj = str(obj, encoding)
 
     return obj
 
@@ -441,6 +449,7 @@ def to_utf8_or_bust(obj):
     """
     Transforms a string, what is a unicode string, into a utf-8 encoded string.
     All other objects are left untouched.
+    In Python 3 a bytes object is returend in this case.
 
     @param obj: the object to transform
     @type obj:  object
@@ -456,6 +465,7 @@ def to_utf8_or_bust(obj):
 def encode_or_bust(obj, encoding = 'utf-8'):
     """
     Encodes the given unicode object into the given encoding.
+    In Python 3 a bytes object is returend in this case.
 
     @param obj: the object to encode
     @type obj:  object
@@ -467,9 +477,16 @@ def encode_or_bust(obj, encoding = 'utf-8'):
 
     """
 
-    if isinstance(obj, basestring):
-        if isinstance(obj, unicode):
-            obj = obj.encode(encoding)
+    do_encode = False
+    if isinstance(obj, str):
+        if sys.version_info[0] <= 2:
+            if isinstance(obj, unicode):
+                do_encode = True
+        else:
+            do_encode = True
+
+    if do_encode:
+        obj = obj.encode(encoding)
 
     return obj
 
@@ -541,4 +558,4 @@ if __name__ == "__main__":
 
 #==============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

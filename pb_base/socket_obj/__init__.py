@@ -44,6 +44,9 @@ log = logging.getLogger(__name__)
 
 _ = translator.lgettext
 __ = translator.lngettext
+if sys.version_info[0] > 2:
+    _ = translator.gettext
+    __ = translator.ngettext
 
 default_buffer_size = 8192
 min_buffer_size = 512
@@ -96,10 +99,8 @@ class SocketWriteTimeoutError(PbIoTimeoutError):
         super(SocketWriteTimeoutError, self).__init__(strerror, timeout)
 
 #==============================================================================
-class GenericSocket(PbBaseObject):
+class GenericSocket(PbBaseObject, metaclass = ABCMeta):
     """Class for capsulation a generic socket somehow."""
-
-    __metaclass__ = ABCMeta
 
     #--------------------------------------------------------------------------
     def __init__(self,
@@ -527,7 +528,7 @@ class GenericSocket(PbBaseObject):
             )
             if self.fileno in rlist:
                 result = True
-        except select.error, e:
+        except select.error as e:
             if e[0] == 4:
                 pass
 
@@ -541,4 +542,4 @@ if __name__ == "__main__":
 
 #==============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

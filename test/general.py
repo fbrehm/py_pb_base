@@ -40,9 +40,11 @@ def get_arg_verbose():
 def init_root_logger(verbose = 0):
 
     root_log = logging.getLogger()
-    root_log.setLevel(logging.INFO)
-    if verbose:
+    root_log.setLevel(logging.WARNING)
+    if verbose > 1:
          root_log.setLevel(logging.DEBUG)
+    elif verbose:
+         root_log.setLevel(logging.INFO)
 
     appname = os.path.basename(sys.argv[0])
     format_str = appname + ': '

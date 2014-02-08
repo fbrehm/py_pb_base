@@ -48,6 +48,9 @@ log = logging.getLogger(__name__)
 
 _ = translator.lgettext
 __ = translator.lngettext
+if sys.version_info[0] > 2:
+    _ = translator.gettext
+    __ = translator.ngettext
 
 #--------------------------------------------------------------------------
 
@@ -325,44 +328,44 @@ class PbDaemon(PidfileApp):
 
         super(PbDaemon, self).init_cfg_spec()
 
-        if not u'general' in self.cfg_spec:
-            self.cfg_spec[u'general'] = {}
+        if not 'general' in self.cfg_spec:
+            self.cfg_spec['general'] = {}
 
-        daemon_spec = u'boolean(default = %r)' % (self.do_daemonize)
+        daemon_spec = 'boolean(default = %r)' % (self.do_daemonize)
 
-        if not u'do_daemon' in self.cfg_spec[u'general']:
-            self.cfg_spec[u'general'][u'do_daemon'] = daemon_spec
-            self.cfg_spec[u'general'].comments[u'do_daemon'].append('')
-            self.cfg_spec[u'general'].comments[u'do_daemon'].append(
-                    u'Execute scstadmd as a standalone daemon (default) or ' +
-                    u'under control')
-            self.cfg_spec[u'general'].comments[u'do_daemon'].append(
-                    u'of some kind of daemonisation tool, e.g. supervisor')
+        if not 'do_daemon' in self.cfg_spec['general']:
+            self.cfg_spec['general']['do_daemon'] = daemon_spec
+            self.cfg_spec['general'].comments['do_daemon'].append('')
+            self.cfg_spec['general'].comments['do_daemon'].append(
+                    'Execute scstadmd as a standalone daemon (default) or ' +
+                    'under control')
+            self.cfg_spec['general'].comments['do_daemon'].append(
+                    'of some kind of daemonisation tool, e.g. supervisor')
 
-        choices = u', '.join(map(lambda x: u"'" + to_unicode_or_bust(x) + u"'",
-                sorted(valid_syslog_facility.keys())))
-        facility_spec = u"option(%s, default = '%s')" % (choices,
+        choices = ', '.join(["'" + to_unicode_or_bust(x) + "'" for x in sorted(
+                valid_syslog_facility.keys())])
+        facility_spec = "option(%s, default = '%s')" % (choices,
                 to_unicode_or_bust(self._default_facility_name))
 
-        if not u'syslog_facility' in self.cfg_spec[u'general']:
-            self.cfg_spec[u'general'][u'syslog_facility'] = facility_spec
-            self.cfg_spec[u'general'].comments[u'syslog_facility'].append('')
-            self.cfg_spec[u'general'].comments[u'syslog_facility'].append(
-                    u'The syslog facility to use when logging as a daemon.')
+        if not 'syslog_facility' in self.cfg_spec['general']:
+            self.cfg_spec['general']['syslog_facility'] = facility_spec
+            self.cfg_spec['general'].comments['syslog_facility'].append('')
+            self.cfg_spec['general'].comments['syslog_facility'].append(
+                    'The syslog facility to use when logging as a daemon.')
 
         def_errlog = self._default_error_log
         if not def_errlog:
             def_errlog = 'error.log'
 
-        log_spec = u"string(default = '%s')" % (
+        log_spec = "string(default = '%s')" % (
                 to_unicode_or_bust(def_errlog))
 
-        if not u'error_log' in self.cfg_spec[u'general']:
-            self.cfg_spec[u'general'][u'error_log'] = log_spec
-            self.cfg_spec[u'general'].comments[u'error_log'].append('')
-            self.cfg_spec[u'general'].comments[u'error_log'].append(
-                    u'The logfile for stderr substitute in daemon mode (' +
-                    u'absolute or relative to base_dir).')
+        if not 'error_log' in self.cfg_spec['general']:
+            self.cfg_spec['general']['error_log'] = log_spec
+            self.cfg_spec['general'].comments['error_log'].append('')
+            self.cfg_spec['general'].comments['error_log'].append(
+                    'The logfile for stderr substitute in daemon mode (' +
+                    'absolute or relative to base_dir).')
 
     #--------------------------------------------------------------------------
     def perform_config(self):
@@ -375,24 +378,24 @@ class PbDaemon(PidfileApp):
 
         super(PbDaemon, self).perform_config()
 
-        if u'general' in self.cfg and u'do_daemon' in self.cfg[u'general']:
-            self.do_daemonize = self.cfg[u'general'][u'do_daemon']
+        if 'general' in self.cfg and 'do_daemon' in self.cfg['general']:
+            self.do_daemonize = self.cfg['general']['do_daemon']
 
-        if ((not self.facility_name) and u'general' in self.cfg and
-                u'syslog_facility' in self.cfg[u'general']):
+        if ((not self.facility_name) and 'general' in self.cfg and
+                'syslog_facility' in self.cfg['general']):
 
             # Not set by commandline, but set in configuration
-            fac_name  = to_utf8_or_bust(self.cfg[u'general'][u'syslog_facility'])
+            fac_name  = to_utf8_or_bust(self.cfg['general']['syslog_facility'])
 
             if fac_name and (fac_name != self._default_facility_name):
                 self._facility_name = fac_name
                 self._facility = valid_syslog_facility[fac_name]
 
-        if ((not self.error_log) and u'general' in self.cfg and
-                u'error_log' in self.cfg[u'general']):
+        if ((not self.error_log) and 'general' in self.cfg and
+                'error_log' in self.cfg['general']):
 
             # Not set by commandline, but set in configuration
-            error_log = to_utf8_or_bust(self.cfg[u'general'][u'error_log'])
+            error_log = to_utf8_or_bust(self.cfg['general']['error_log'])
 
             if error_log:
                 self._error_log = error_log
@@ -598,11 +601,11 @@ class PbDaemon(PidfileApp):
         se = None
         try:
             se = file(self.error_log, 'a', 0)
-        except IOError, e:
+        except IOError as e:
             msg = _("Could not open error logfile: %s") % (str(e))
             self.handle_error(msg, self.appname, False)
             self.exit(7)
-        except Exception, e:
+        except Exception as e:
             msg = _("Could not open error logfile %(log)s: %(err)s") % {
                     'log': self.error_log, 'err': str(e)}
             self.handle_error(msg, e.__class__.__name__, True)
@@ -615,7 +618,7 @@ class PbDaemon(PidfileApp):
             if pid > 0:
                 # exit first parent
                 self.exit(0)
-        except OSError, e:
+        except OSError as e:
             log.error((_("Fork #1 failed: ") + "%d (%s)"), e.errno, e.strerror)
             self.exit(1)
 
@@ -631,7 +634,7 @@ class PbDaemon(PidfileApp):
             if pid > 0:
                 # exit from second parent
                 self.exit(0)
-        except OSError, e:
+        except OSError as e:
             log.error((_("Fork #2 failed: ") + "%d (%s)"), e.errno, e.strerror)
             self.exit(1)
 
@@ -698,4 +701,4 @@ if __name__ == "__main__":
 
 #==============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

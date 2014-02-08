@@ -44,6 +44,9 @@ log = logging.getLogger(__name__)
 
 _ = translator.lgettext
 __ = translator.lngettext
+if sys.version_info[0] > 2:
+    _ = translator.gettext
+    __ = translator.ngettext
 
 #==============================================================================
 class UnixSocketError(GenericSocketError):
@@ -80,7 +83,7 @@ class UnixSocket(GenericSocket):
     #--------------------------------------------------------------------------
     def __init__(self,
             filename,
-            mode = 040660,
+            mode = 0o40660,
             owner = None,
             group = None,
             auto_remove = True,
@@ -261,7 +264,7 @@ class UnixSocket(GenericSocket):
 
         try:
             self.sock.connect(self.filename)
-        except socket.error, e:
+        except socket.error as e:
             if e.errno == errno.ENOENT:
                 raise NoSocketFileError(self.filename)
             if e.errno == errno.EACCES:
@@ -315,7 +318,7 @@ class UnixSocket(GenericSocket):
             else:
                 try:
                     uid = pwd.getpwnam(self.owner).pw_uid
-                except KeyError, e:
+                except KeyError as e:
                     msg = _("Invalid owner name '%s' for socket creation given.") % (
                             self.owner)
                     raise UnixSocketError(msg)
@@ -327,7 +330,7 @@ class UnixSocket(GenericSocket):
             else:
                 try:
                     gid = grp.getgrnam(self.group).gr_gid
-                except KeyError, e:
+                except KeyError as e:
                     msg = _("Invalid group name '%s' for socket creation given.") % (
                             self.group)
                     raise UnixSocketError(msg)
@@ -368,4 +371,4 @@ if __name__ == "__main__":
 
 #==============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

@@ -38,6 +38,9 @@ FUSER_CMD = os.sep + os.path.join('bin', 'fuser')
 
 _ = translator.lgettext
 __ = translator.lngettext
+if sys.version_info[0] > 2:
+    _ = translator.gettext
+    __ = translator.ngettext
 
 #==============================================================================
 class FuserError(PbBaseHandlerError):
@@ -139,6 +142,23 @@ class FuserHandler(PbBaseHandler):
         return self._fuser_cmd
 
     #--------------------------------------------------------------------------
+    def as_dict(self, short = False):
+        """
+        Transforms the elements of the object into a dict
+
+        @param short: don't include local properties in resulting dict.
+        @type short: bool
+
+        @return: structure as dict
+        @rtype:  dict
+        """
+
+        res = super(FuserHandler, self).as_dict(short = short)
+        res['fuser_cmd'] = self.fuser_cmd
+
+        return res
+
+    #--------------------------------------------------------------------------
     def __call__(self, fs_object, force = False):
         """
         Executes the fuser command and returns a list of all process IDs using
@@ -202,7 +222,7 @@ class FuserHandler(PbBaseHandler):
                 pid_int = None
                 try:
                     pid_int = int(pid)
-                except ValueError, e:
+                except ValueError as e:
                     log.warn(_("%r is not an integer value usable as PID."), pid)
                     continue
                 pid_list.append(pid_int)
@@ -217,4 +237,4 @@ if __name__ == "__main__":
 
 #==============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
