@@ -34,7 +34,7 @@ from pb_base.object import PbBaseObject
 
 from pb_base.translate import translator
 
-__version__ = '0.6.4'
+__version__ = '0.6.5'
 
 log = logging.getLogger(__name__)
 
@@ -633,13 +633,6 @@ class PbApplication(PbBaseObject):
         Underlaying method for parsing arguments.
         """
 
-        if self.args.color == 'yes':
-            self._terminal_has_colors = True
-        elif self.args.color == 'no':
-            self._terminal_has_colors = False
-        else:
-            self._terminal_has_colors = self.terminal_can_color()
-
         self.args = self.arg_parser.parse_args()
 
         if self.args.usage:
@@ -648,6 +641,13 @@ class PbApplication(PbBaseObject):
 
         if self.args.verbose is not None and self.args.verbose > self.verbose:
             self.verbose = self.args.verbose
+
+        if self.args.color == 'yes':
+            self._terminal_has_colors = True
+        elif self.args.color == 'no':
+            self._terminal_has_colors = False
+        else:
+            self._terminal_has_colors = self.terminal_can_color()
 
     #--------------------------------------------------------------------------
     def perform_arg_parser(self):
