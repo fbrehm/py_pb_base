@@ -633,12 +633,9 @@ class PbApplication(PbBaseObject):
         Underlaying method for parsing arguments.
         """
 
-        want_color = 'auto'
-        if want_color is None:
-            want_color = 'yes'
-        if want_color == 'yes':
+        if self.args.color == 'yes':
             self._terminal_has_colors = True
-        elif want_color == 'no':
+        elif self.args.color == 'no':
             self._terminal_has_colors = False
         else:
             self._terminal_has_colors = self.terminal_can_color()
@@ -729,6 +726,26 @@ class PbApplication(PbBaseObject):
         """
 
         pass
+
+    #--------------------------------------------------------------------------
+    def colored(self, msg, color):
+        """
+        Wrapper function to colorize the message. Depending, whether the current
+        terminal can display ANSI colors, the message is colorized or not.
+
+        @param message: The message to colorize
+        @type message: str
+        @param color: The color to use, must be one of the keys of COLOR_CODE
+        @type color: str
+
+        @return: the colorized message
+        @rtype: str
+
+        """
+
+        if not self.terminal_has_colors:
+            return msg
+        return colorstr(msg, color)
 
 #==============================================================================
 
