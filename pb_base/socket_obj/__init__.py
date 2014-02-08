@@ -99,8 +99,13 @@ class SocketWriteTimeoutError(PbIoTimeoutError):
         super(SocketWriteTimeoutError, self).__init__(strerror, timeout)
 
 #==============================================================================
-class GenericSocket(PbBaseObject, metaclass = ABCMeta):
+# Syntax fro Python3:
+#class GenericSocket(PbBaseObject, metaclass = ABCMeta):
+
+class GenericSocket(PbBaseObject):
     """Class for capsulation a generic socket somehow."""
+
+    __metaclass__ = ABCMeta
 
     #--------------------------------------------------------------------------
     def __init__(self,
