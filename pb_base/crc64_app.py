@@ -30,7 +30,12 @@ from pb_base.crc import crc64, crc64_digest
 
 from pb_base.translate import translator
 
-__version__ = '0.2.2'
+try:
+    import pb_base.local_version as my_version
+except ImportError:
+    import pb_base.global_version as my_version
+
+__version__ = '0.2.3'
 
 log = logging.getLogger(__name__)
 
@@ -56,7 +61,7 @@ class Crc64App(PbApplication):
     #--------------------------------------------------------------------------
     def __init__(self,
             verbose = 0,
-            version = pb_base.__version__,
+            version = my_version.__version__,
             *arg, **kwargs):
         """
         Initialisation of the crc64 application object.
