@@ -4,7 +4,7 @@
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
 @organization: Profitbricks GmbH
-@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
+@copyright: © 2010 - 2014 by Frank Brehm, ProfitBricks GmbH, Berlin
 @license: GPL3
 @summary: modules for socket object classes
 """
@@ -35,9 +35,9 @@ from pb_base.errors import PbIoTimeoutError
 from pb_base.translate import translator
 
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
-__copyright__ = '(C) 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin'
+__copyright__ = '(C) 2010 - 2014 by Frank Brehm, ProfitBricks GmbH, Berlin'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.2.3'
+__version__ = '0.3.1'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)
@@ -249,7 +249,10 @@ class GenericSocket(PbBaseObject):
 
     @fileno.setter
     def fileno(self, value):
-        self._fileno = int(value)
+        if value is None:
+            self._fileno = None
+        else:
+            self._fileno = int(value)
 
     #------------------------------------------------------------
     @property
@@ -288,12 +291,6 @@ class GenericSocket(PbBaseObject):
         """The size of the buffer for receiving data from sockets."""
         return self._buffer_size
 
-    #------------------------------------------------------------
-    @property
-    def group(self):
-        """The owning group of the scstadm communication socket."""
-        return self._group
-
     #--------------------------------------------------------------------------
     @abstractmethod
     def connect(self):
@@ -328,18 +325,27 @@ class GenericSocket(PbBaseObject):
         res['interrupted'] = self.interrupted
         res['request_queue_size'] = self.request_queue_size
         res['buffer_size'] = self.buffer_size
-        res['group'] = self.group
 
         return res
+
+    #--------------------------------------------------------------------------
+    def close(self):
+        """Closing the current socket."""
+
+        if self.sock:
+            if self.connected or self.bonded:
+                if self.verbose > 1:
+                    log.debug(_("Closing socket ..."))
+                self.sock.close()
+            self.sock = None
+        self._connected = False
+        self._bonded = False
 
     #--------------------------------------------------------------------------
     def __del__(self):
         """Destructor, closes current socket, if necessary."""
 
-        if self.sock and (self.connected or self.bonded):
-            if self.verbose > 1:
-                log.debug(_("Closing socket ..."))
-            self.sock.close()
+        self.close()
 
     #--------------------------------------------------------------------------
     def reset(self):
@@ -380,7 +386,7 @@ class GenericSocket(PbBaseObject):
             msg = _("Cannot send message to the receipient, because the socket connection is closed.")
             raise GenericSocketError(msg)
 
-        if self.verbose > 2:
+        if self.verbose > 3:
             log.debug(_("Sending %r to socket."), message)
 
         if self.bonded:
@@ -426,7 +432,7 @@ class GenericSocket(PbBaseObject):
 
         """
 
-        if self.verbose > 3:
+        if self.verbose > 4:
             log.debug(_("Trying to get data ..."))
         data = ''
         if self.bonded:
@@ -435,12 +441,12 @@ class GenericSocket(PbBaseObject):
             data = self.sock.recv(self.buffer_size)
 
         if data:
-            if self.verbose > 2:
+            if self.verbose > 3:
                 log.debug(_("Got data: %r.") % (data))
             self._input_buffer += data
             return
 
-        if self.verbose > 2:
+        if self.verbose > 3:
             log.debug(_("Got EOF, counterpart has interrupted ..."))
         self.interrupted = True
         return

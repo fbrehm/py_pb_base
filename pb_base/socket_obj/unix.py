@@ -4,7 +4,7 @@
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
 @organization: Profitbricks GmbH
-@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
+@copyright: © 2010 - 2014 by Frank Brehm, ProfitBricks GmbH, Berlin
 @license: GPL3
 @summary: module for a UNIX socket object class
 """
@@ -35,9 +35,9 @@ from pb_base.socket_obj import GenericSocket
 from pb_base.translate import translator
 
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
-__copyright__ = '(C) 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin'
+__copyright__ = '(C) 2010 - 2014 by Frank Brehm, ProfitBricks GmbH, Berlin'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.2.5'
+__version__ = '0.2.6'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)
@@ -177,6 +177,8 @@ class UnixSocket(GenericSocket):
         @type: bool
         """
 
+        self._was_bonded = False
+
         # Create an UDS socket
         self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 
@@ -217,6 +219,12 @@ class UnixSocket(GenericSocket):
     def auto_remove(self, value):
         self._auto_remove = bool(value)
 
+    #------------------------------------------------------------
+    @property
+    def was_bonded(self):
+        """Flag, that the socket was bonded by the current object."""
+        return self._was_bonded
+
     #--------------------------------------------------------------------------
     def as_dict(self, short = False):
         """
@@ -236,14 +244,19 @@ class UnixSocket(GenericSocket):
         return res
 
     #--------------------------------------------------------------------------
-    def __del__(self):
-        """Destructor, closes current socket, if necessary."""
+    def close(self):
+        """Closing the current socket."""
 
-        if (self.sock and self.bonded and os.path.exists(self.filename)
-                and self.auto_remove):
+        was_bonded = self.bonded
+
+        super(UnixSocket, self).close()
+
+        if self.was_bonded and os.path.exists(self.filename) and self.auto_remove:
             if self.verbose > 1:
-                log.debug(_("Removing socket %r ..."), self.filename)
+                log.debug(_("Removing socket file %r ..."), self.filename)
             os.remove(self.filename)
+
+        self.fileno = None
 
     #--------------------------------------------------------------------------
     def connect(self):
@@ -254,11 +267,11 @@ class UnixSocket(GenericSocket):
                     self.filename)
 
         if self.connected:
-            msg = _("The socket is even connected to '%s' ...") % (self.filename)
+            msg = _("The socket is already connected to '%s' ...") % (self.filename)
             raise UnixSocketError(msg)
 
         if self.bonded:
-            msg = _("The application is allready bonded to '%s' ...") % (
+            msg = _("The application is already bonded to '%s' ...") % (
                     self.filename)
             raise UnixSocketError(msg)
 
@@ -285,13 +298,15 @@ class UnixSocket(GenericSocket):
                     self.filename)
 
         if self.connected:
-            msg = _("The socket is even connected to '%s' ...") % (self.filename)
+            msg = _("The socket is already connected to '%s' ...") % (self.filename)
             raise UnixSocketError(msg)
 
         if self.bonded:
-            msg = _("The application is allready bonded to '%s' ...") % (
+            msg = _("The application is already bonded to '%s' ...") % (
                     self.filename)
             raise UnixSocketError(msg)
+
+        self._was_bonded = False
 
         self.sock.bind(self.filename)
 
@@ -299,6 +314,7 @@ class UnixSocket(GenericSocket):
             raise NoSocketFileError(self.filename)
 
         self._bonded = True
+        self._was_bonded = True
         self.fileno = self.sock.fileno()
 
         # Setting mode of socket
