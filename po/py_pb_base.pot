@@ -1,20 +1,3 @@
-#, python-format
-msgid "The application is allready bonded to '%s' ..."
-msgstr ""
-
-#, python-format
-msgid "The socket is even connected to '%s' ..."
-msgstr ""
-
-#, python-format
-msgid "Removing socket %r ..."
-msgstr ""
-
-#, python-format
-msgid "Could not occupy lockfile %(lfile)r after %(secs)0.1f seconds on %(nr)d "
-      "tries."
-msgstr ""
-
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
