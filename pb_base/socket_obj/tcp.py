@@ -357,13 +357,13 @@ class TcpSocket(GenericSocket):
 
             try:
                 self.sock = socket.socket(family, socktype, proto)
-            except socket.error, msg:
+            except socket.error as msg:
                 self.sock = None
                 continue
 
             try:
                 self.sock.connect(sockaddr)
-            except socket.error, msg:
+            except socket.error as msg:
                 self.sock.close()
                 self.sock = None
                 continue
@@ -437,7 +437,7 @@ class TcpSocket(GenericSocket):
 
             try:
                 self.sock = socket.socket(family, socktype, proto)
-            except socket.error, msg:
+            except socket.error as msg:
                 self.sock = None
                 continue
 
@@ -445,7 +445,7 @@ class TcpSocket(GenericSocket):
                 self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
                 self.sock.bind(sockaddr)
                 self.sock.listen(self.request_queue_size)
-            except socket.error, msg:
+            except socket.error as msg:
                 self.sock.close()
                 self.sock = None
                 continue
