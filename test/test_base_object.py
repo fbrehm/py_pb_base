@@ -20,11 +20,6 @@ sys.path.insert(0, libdir)
 import general
 from general import PbBaseTestcase, get_arg_verbose, init_root_logger
 
-import pb_base.object
-
-from pb_base.object import PbBaseObjectError
-from pb_base.object import PbBaseObject
-
 log = logging.getLogger(__name__)
 
 #==============================================================================
@@ -36,9 +31,19 @@ class TestPbBaseObject(PbBaseTestcase):
         pass
 
     #--------------------------------------------------------------------------
+    def test_import(self):
+
+        log.info("Testing import of pb_base.object ...")
+        import pb_base.object
+
+    #--------------------------------------------------------------------------
     def test_object(self):
 
         log.info("Testing init of a simple object.")
+
+        import pb_base.object
+        from pb_base.object import PbBaseObject
+
         obj = PbBaseObject(
             appname = 'test_base_object',
             verbose = 1,
@@ -50,6 +55,10 @@ class TestPbBaseObject(PbBaseTestcase):
     def test_verbose1(self):
 
         log.info("Testing wrong verbose values #1.")
+
+        import pb_base.object
+        from pb_base.object import PbBaseObject
+
         v = 'hh'
         obj = None
 
@@ -62,6 +71,10 @@ class TestPbBaseObject(PbBaseTestcase):
     def test_verbose2(self):
 
         log.info("Testing wrong verbose values #2.")
+
+        import pb_base.object
+        from pb_base.object import PbBaseObject
+
         v = -2
         obj = None
 
@@ -76,6 +89,9 @@ class TestPbBaseObject(PbBaseTestcase):
         bd = '/blablub'
         log.info("Testing #1 wrong basedir: %r", bd)
 
+        import pb_base.object
+        from pb_base.object import PbBaseObject
+
         obj = PbBaseObject(appname = 'test_base_object', base_dir = bd)
 
     #--------------------------------------------------------------------------
@@ -84,12 +100,19 @@ class TestPbBaseObject(PbBaseTestcase):
         bd = '/etc/passwd'
         log.info("Testing #2 wrong basedir: %r", bd)
 
+        import pb_base.object
+        from pb_base.object import PbBaseObject
+
         obj = PbBaseObject(appname = 'test_base_object', base_dir = bd)
 
     #--------------------------------------------------------------------------
     def test_as_dict1(self):
 
         log.info("Testing obj.as_dict() #1 - simple")
+
+        import pb_base.object
+        from pb_base.object import PbBaseObject
+
 
         obj = PbBaseObject(appname = 'test_base_object', verbose = 1)
 
@@ -101,6 +124,10 @@ class TestPbBaseObject(PbBaseTestcase):
     def test_as_dict2(self):
 
         log.info("Testing obj.as_dict() #2 - stacked")
+
+        import pb_base.object
+        from pb_base.object import PbBaseObject
+
 
         obj = PbBaseObject(appname = 'test_base_object', verbose = 1)
         obj.obj2 = PbBaseObject(appname = 'test_base_object2', verbose = 1)
@@ -115,17 +142,25 @@ class TestPbBaseObject(PbBaseTestcase):
 
         log.info("Testing obj.as_dict() #3 - typecasting to str")
 
+        import pb_base.object
+        from pb_base.object import PbBaseObject
+
+
         obj = PbBaseObject(appname = 'test_base_object', verbose = 1)
         obj.obj2 = PbBaseObject(appname = 'test_base_object2', verbose = 1)
 
         out = str(obj)
-        self.assertIsInstance(out, basestring)
+        self.assertIsInstance(out, str)
         log.debug("Got str(PbBaseObject): %s", out)
 
     #--------------------------------------------------------------------------
     def test_as_dict_short(self):
 
         log.info("Testing obj.as_dict() #4 - stacked and short")
+
+        import pb_base.object
+        from pb_base.object import PbBaseObject
+
 
         obj = PbBaseObject(appname = 'test_base_object', verbose = 1)
         obj.obj2 = PbBaseObject(appname = 'test_base_object2', verbose = 1)
@@ -146,27 +181,18 @@ if __name__ == '__main__':
 
     log.info("Starting tests ...")
 
-    loader = unittest.TestLoader()
     suite = unittest.TestSuite()
 
-    suite.addTests(loader.loadTestsFromName(
-            'test_base_object.TestPbBaseObject.test_object'))
-    suite.addTests(loader.loadTestsFromName(
-            'test_base_object.TestPbBaseObject.test_verbose1'))
-    suite.addTests(loader.loadTestsFromName(
-            'test_base_object.TestPbBaseObject.test_verbose2'))
-    suite.addTests(loader.loadTestsFromName(
-            'test_base_object.TestPbBaseObject.test_basedir1'))
-    suite.addTests(loader.loadTestsFromName(
-            'test_base_object.TestPbBaseObject.test_basedir2'))
-    suite.addTests(loader.loadTestsFromName(
-            'test_base_object.TestPbBaseObject.test_as_dict1'))
-    suite.addTests(loader.loadTestsFromName(
-            'test_base_object.TestPbBaseObject.test_as_dict2'))
-    suite.addTests(loader.loadTestsFromName(
-            'test_base_object.TestPbBaseObject.test_as_dict3'))
-    suite.addTests(loader.loadTestsFromName(
-            'test_base_object.TestPbBaseObject.test_as_dict_short'))
+    suite.addTest(TestPbBaseObject('test_import', verbose))
+    suite.addTest(TestPbBaseObject('test_object', verbose))
+    suite.addTest(TestPbBaseObject('test_verbose1', verbose))
+    suite.addTest(TestPbBaseObject('test_verbose2', verbose))
+    suite.addTest(TestPbBaseObject('test_basedir1', verbose))
+    suite.addTest(TestPbBaseObject('test_basedir2', verbose))
+    suite.addTest(TestPbBaseObject('test_as_dict1', verbose))
+    suite.addTest(TestPbBaseObject('test_as_dict2', verbose))
+    suite.addTest(TestPbBaseObject('test_as_dict3', verbose))
+    suite.addTest(TestPbBaseObject('test_as_dict_short', verbose))
 
     runner = unittest.TextTestRunner(verbosity = verbose)
 

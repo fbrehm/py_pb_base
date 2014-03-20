@@ -1,3 +1,13 @@
+profitbricks-python-base (0.5.1-1) unstable; urgency=low
+
+  * Version bump
+  * Declared for unstable
+  * Added pb_base/socket_obj/tcp.py
+  * Some modifications on socket objects
+  * Added pb-base.ebuild
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Thu, 20 Mar 2014 15:12:02 +0100
+
 profitbricks-python-base (0.5.0-2) stable; urgency=low
 
   * Declared for stable

@@ -34,14 +34,18 @@ from pb_base.object import PbBaseObject
 
 from pb_base.translate import translator
 
-__version__ = '0.6.2'
+__version__ = '0.6.5'
 
 log = logging.getLogger(__name__)
 
 _ = translator.lgettext
 __ = translator.lngettext
-
 argparse._ = translator.lgettext
+if sys.version_info[0] > 2:
+    _ = translator.gettext
+    __ = translator.ngettext
+    argparse._ = translator.gettext
+
 
 #----------------------------------------------------------
 # _fake_exit flag, for testing
@@ -515,7 +519,7 @@ class PbApplication(PbBaseObject):
 
         try:
             self.pre_run()
-        except Exception, e:
+        except Exception as e:
             self.handle_error(str(e), e.__class__.__name__, True)
             self.exit(98)
 
@@ -525,7 +529,7 @@ class PbApplication(PbBaseObject):
 
         try:
             self._run()
-        except Exception, e:
+        except Exception as e:
             self.handle_error(str(e), e.__class__.__name__, True)
             self.exit_value = 99
 
@@ -534,7 +538,7 @@ class PbApplication(PbBaseObject):
 
         try:
             self.post_run()
-        except Exception, e:
+        except Exception as e:
             self.handle_error(str(e), e.__class__.__name__, True)
             self.exit_value = 97
 
@@ -629,24 +633,21 @@ class PbApplication(PbBaseObject):
         Underlaying method for parsing arguments.
         """
 
-        want_color = 'auto'
-        if want_color is None:
-            want_color = 'yes'
-        if want_color == 'yes':
-            self._terminal_has_colors = True
-        elif want_color == 'no':
-            self._terminal_has_colors = False
-        else:
-            self._terminal_has_colors = self.terminal_can_color()
-
         self.args = self.arg_parser.parse_args()
 
         if self.args.usage:
             self.arg_parser.print_usage(sys.stdout)
             self.exit(0)
 
-        if self.args.verbose > self.verbose:
+        if self.args.verbose is not None and self.args.verbose > self.verbose:
             self.verbose = self.args.verbose
+
+        if self.args.color == 'yes':
+            self._terminal_has_colors = True
+        elif self.args.color == 'no':
+            self._terminal_has_colors = False
+        else:
+            self._terminal_has_colors = self.terminal_can_color()
 
     #--------------------------------------------------------------------------
     def perform_arg_parser(self):
@@ -669,7 +670,7 @@ class PbApplication(PbBaseObject):
 
         """
 
-        for (key, value) in os.environ.items():
+        for (key, value) in list(os.environ.items()):
 
             if not key.startswith(self.env_prefix):
                 continue
@@ -725,6 +726,26 @@ class PbApplication(PbBaseObject):
         """
 
         pass
+
+    #--------------------------------------------------------------------------
+    def colored(self, msg, color):
+        """
+        Wrapper function to colorize the message. Depending, whether the current
+        terminal can display ANSI colors, the message is colorized or not.
+
+        @param message: The message to colorize
+        @type message: str
+        @param color: The color to use, must be one of the keys of COLOR_CODE
+        @type color: str
+
+        @return: the colorized message
+        @rtype: str
+
+        """
+
+        if not self.terminal_has_colors:
+            return msg
+        return colorstr(msg, color)
 
 #==============================================================================
 

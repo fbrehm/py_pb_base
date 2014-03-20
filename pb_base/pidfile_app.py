@@ -45,6 +45,9 @@ log = logging.getLogger(__name__)
 
 _ = translator.lgettext
 __ = translator.lngettext
+if sys.version_info[0] > 2:
+    _ = translator.gettext
+    __ = translator.ngettext
 
 #==============================================================================
 class PidfileAppError(PbCfgAppError):
@@ -256,21 +259,21 @@ class PidfileApp(PbCfgApp):
 
         super(PidfileApp, self).init_cfg_spec()
 
-        if not u'general' in self.cfg_spec:
-            self.cfg_spec[u'general'] = {}
+        if not 'general' in self.cfg_spec:
+            self.cfg_spec['general'] = {}
 
         if not self._default_pidfilename:
             self._default_pidfilename = self.appname + '.pid'
 
-        pidfile_spec = u"string(default = '%s')" % (
+        pidfile_spec = "string(default = '%s')" % (
                 to_unicode_or_bust(self._default_pidfilename))
 
-        if not u'pidfile' in self.cfg_spec[u'general']:
-            self.cfg_spec[u'general'][u'pidfile'] = pidfile_spec
-            self.cfg_spec[u'general'].comments[u'pidfile'].append('')
-            self.cfg_spec[u'general'].comments[u'pidfile'].append(
-                    u'The filename of the pidfile (absolute or relative' +
-                    u' to base_dir).')
+        if not 'pidfile' in self.cfg_spec['general']:
+            self.cfg_spec['general']['pidfile'] = pidfile_spec
+            self.cfg_spec['general'].comments['pidfile'].append('')
+            self.cfg_spec['general'].comments['pidfile'].append(
+                    'The filename of the pidfile (absolute or relative' +
+                    ' to base_dir).')
 
     #--------------------------------------------------------------------------
     def perform_config(self):
@@ -283,10 +286,10 @@ class PidfileApp(PbCfgApp):
 
         super(PidfileApp, self).perform_config()
 
-        if ((not self.pidfilename) and u'general' in self.cfg and
-                u'pidfile' in self.cfg[u'general']):
+        if ((not self.pidfilename) and 'general' in self.cfg and
+                'pidfile' in self.cfg['general']):
             # Not set by commandline, but set in configuration
-            pidfile = to_utf8_or_bust(self.cfg[u'general'][u'pidfile'])
+            pidfile = to_utf8_or_bust(self.cfg['general']['pidfile'])
             if pidfile and (pidfile != self._default_pidfilename):
                 log.debug(_("Setting pidfile to %r by configuration."),
                         pidfile)
@@ -364,13 +367,13 @@ class PidfileApp(PbCfgApp):
 
         try:
             self.pidfile.create()
-        except PidFileInUseError, e:
+        except PidFileInUseError as e:
             self.handle_error(str(e), '', False)
             self.exit(2)
-        except PidFileError, e:
+        except PidFileError as e:
             self.handle_error(str(e), '', False)
             self.exit(3)
-        except Exception, e:
+        except Exception as e:
             self.handle_error(str(e), e.__class__.__name__, True)
             self.exit(5)
 
@@ -383,4 +386,4 @@ if __name__ == "__main__":
 
 #==============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

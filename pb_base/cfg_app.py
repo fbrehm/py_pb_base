@@ -15,7 +15,7 @@ import os
 import logging
 import datetime
 
-from cStringIO import StringIO
+from io import StringIO
 
 # Third party modules
 from configobj import ConfigObj
@@ -45,6 +45,9 @@ log = logging.getLogger(__name__)
 
 _ = translator.lgettext
 __ = translator.lngettext
+if sys.version_info[0] > 2:
+    _ = translator.gettext
+    __ = translator.ngettext
 
 #==============================================================================
 class PbCfgAppError(PbApplicationError):
@@ -340,7 +343,7 @@ class PbCfgApp(PbApplication):
 
         # add /etc/app/app.cfg or $VIRTUAL_ENV/etc/app/app.cfg
         etc_dir = os.sep + 'etc'
-        if os.environ.has_key('VIRTUAL_ENV'):
+        if 'VIRTUAL_ENV' in os.environ:
             etc_dir = os.path.join(os.environ['VIRTUAL_ENV'], 'etc')
         syscfg_fn = None
         if self.cfg_dir:
@@ -351,7 +354,7 @@ class PbCfgApp(PbApplication):
 
         # add $HOME/.app/app.cfg
         home_dir = None
-        if os.environ.has_key('HOME'):
+        if 'HOME' in os.environ:
             home_dir = os.environ['HOME']
             if self.verbose > 1:
                 log.debug("home_dir: %s", home_dir)
@@ -380,28 +383,28 @@ class PbCfgApp(PbApplication):
 
         """
 
-        self.cfg_spec.initial_comment.append(u'Configuration of %s' % (self.appname))
+        self.cfg_spec.initial_comment.append('Configuration of %s' % (self.appname))
         self.cfg_spec.initial_comment.append('')
 
         self.init_cfg_spec()
 
-        if not u'general' in self.cfg_spec:
-            self.cfg_spec[u'general'] = {}
+        if not 'general' in self.cfg_spec:
+            self.cfg_spec['general'] = {}
 
-        self.cfg_spec.comments[u'general'].append('')
-        self.cfg_spec.comments[u'general'].append(
-                u'General configuration parameters')
+        self.cfg_spec.comments['general'].append('')
+        self.cfg_spec.comments['general'].append(
+                'General configuration parameters')
 
-        if not u'verbose' in self.cfg_spec[u'general']:
-            self.cfg_spec[u'general'][u'verbose'] = 'integer(0, 10, default = 0)'
-            self.cfg_spec[u'general'].comments[u'verbose'].append('')
-            self.cfg_spec[u'general'].comments[u'verbose'].append(
-                    u'Defines a minimum verbosity of the application')
+        if not 'verbose' in self.cfg_spec['general']:
+            self.cfg_spec['general']['verbose'] = 'integer(0, 10, default = 0)'
+            self.cfg_spec['general'].comments['verbose'].append('')
+            self.cfg_spec['general'].comments['verbose'].append(
+                    'Defines a minimum verbosity of the application')
 
         self.cfg_spec.final_comment.append('')
         self.cfg_spec.final_comment.append('')
         self.cfg_spec.final_comment.append(
-                u'vim: filetype=cfg fileencoding=utf-8 ts=4 expandtab')
+                'vim: filetype=cfg fileencoding=utf-8 ts=4 expandtab')
 
     #--------------------------------------------------------------------------
     def init_cfg_spec(self):
@@ -533,8 +536,7 @@ class PbCfgApp(PbApplication):
                     val = "missing"
                 section = '-'
                 if div:
-                    section = ', '.join(map(
-                            lambda x: ('[' + x.encode('utf8') + ']'), div))
+                    section = ', '.join([('[' + x.encode('utf8') + ']') for x in div])
                 msg = (_("In section %(section)s key '%(key)s': %(value)s") +
                         "\n") % {'section': section, 'key': key.encode('utf8'),
                         'value': str(val).encode('utf8')}
@@ -551,10 +553,10 @@ class PbCfgApp(PbApplication):
         methods in descendant classes.
         """
 
-        if (u'general' in self.cfg and
-                u'verbose' in self.cfg[u'general']):
+        if ('general' in self.cfg and
+                'verbose' in self.cfg['general']):
 
-            new_verbose = self.cfg[u'general'][u'verbose']
+            new_verbose = self.cfg['general']['verbose']
             if new_verbose > self.verbose:
                 self.verbose = new_verbose
 
@@ -610,7 +612,7 @@ class PbCfgApp(PbApplication):
 
         self.cfg_spec.initial_comment.append('')
         self.cfg_spec.initial_comment.append(
-                (u'Generated at: %s UTC' % (curdate.isoformat(' '))))
+                ('Generated at: %s UTC' % (curdate.isoformat(' '))))
         self.cfg_spec.initial_comment.append('')
 
         cfg = ConfigObj(
@@ -632,4 +634,4 @@ if __name__ == "__main__":
 
 #==============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
