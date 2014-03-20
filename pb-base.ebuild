@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python{2_6,2_7,3_2,3_3,3_4} pypy2_0 )
 DESCRIPTION="Python modules for common used objects, error classes and functions."
 HOMEPAGE="http://git.pb.local/gitweb/?p=python/pb-base;a=summary"
 SRC_URI=""
-EGIT_REPO_URI="http://git.pb.local/python/pb-base.git"
+EGIT_REPO_URI="git://git/python/pb-base.git"
 
 PB_CATEGORY="dev-python"
 
