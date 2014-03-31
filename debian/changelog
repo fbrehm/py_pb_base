@@ -1,3 +1,9 @@
+profitbricks-python-base (0.5.4-1) stable; urgency=low
+
+  * Bugfix fir Python3 in setup.py
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Mon, 31 Mar 2014 11:33:12 +0200
+
 profitbricks-python-base (0.5.3-1) wheezy; urgency=low
 
   * Build for wheezy
