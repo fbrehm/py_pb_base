@@ -112,7 +112,10 @@ def write_local_version():
 
     fh = None
     try:
-        fh = open(local_version_file, 'wt')
+        if sys.version_info[0] > 2:
+            fh = open(local_version_file, 'wt', encoding = 'utf-8')
+        else:
+            fh = open(local_version_file, 'wt')
         fh.write(content)
     finally:
         if fh:
