@@ -416,6 +416,11 @@ msgstr "Führe %r aus"
 msgid "Quiet execution"
 msgstr "Stillschweigende Ausführung"
 
+#: pb_base/handler/__init__.py:485 pb_base/handler/__init__.py:501
+#, python-format
+msgid "Decoding %(what)s from %(enc)r."
+msgstr "Decodiere %(what)s von Codierung %(enc)r."
+
 #: pb_base/handler/__init__.py:475 pb_base/handler/__init__.py:496
 #, python-format
 msgid "Output on %(where)s: %(what)r."
@@ -725,14 +730,6 @@ msgstr "Fehler beim Löschen der Lockdatei %(lfile)r: %(err)s"
 #, python-format
 msgid "Sleeping for %0.1f seconds."
 msgstr "Schlafe mal für %0.1f Sekunden."
-
-#: pb_base/handler/lock.py:816
-#, python-format
-msgid ""
-"Could not occupy lockfile %(lfile)r after %(secs)0.1f seconds on %(nr)d tries."
-msgstr ""
-"Konnte Lockdatei %(lfile)r nicht nach %(secs)0.1f Sekunden und %(nr)d "
-"Versuchen vereinnahmen."
 
 #. or an int for success
 #: pb_base/handler/lock.py:823
@@ -1111,6 +1108,70 @@ msgstr "Erhaltene Zeile: %r"
 msgid "Current input buffer after read_line(): %r"
 msgstr "Aktueller Eingabe-Puffer nach read_line(): %r"
 
+#: pb_base/socket_obj/tcp.py:50
+#, python-format
+msgid "The TCP port number must be a positive integer value, not %d."
+msgstr "Die TCP Portnummer muss eine positve Integerzahl sein, nicht %d."
+
+#: pb_base/socket_obj/tcp.py:180
+#, python-format
+msgid "The IP address family must be one of %(a1)r, %(a2)r or %(a3)r."
+msgstr "Die TCP-Adressfamile muss eine von %(a1)r, %(a2)r oder %(a3)r sein."
+
+#: pb_base/socket_obj/tcp.py:312
+msgid "Cannot connect to an undefined IP address."
+msgstr "Kann mich nicht zu einer undefinierten Adresse verbinden."
+
+#: pb_base/socket_obj/tcp.py:316
+#, python-format
+msgid "Connecting to TCP address %(addr)r, port %(port)d ..."
+msgstr "Verbinde zu TCP Adresse %(addr)r, Port %(port)d ..."
+
+#: pb_base/socket_obj/tcp.py:320
+#, python-format
+msgid "The socket is already connected to %(addr)r, port %(port)d ..."
+msgstr "Der Socket ist bereits mit %(addr)r, Port %(port)d verbunden ..."
+
+#: pb_base/socket_obj/tcp.py:325
+#, python-format
+msgid "The application is allready bonded to %(addr)r, port %(port)d ..."
+msgstr "Die nwendung ist bereits auf %(addr)r, Port %(port)d gebunden ..."
+
+#: pb_base/socket_obj/tcp.py:351 pb_base/socket_obj/tcp.py:431
+#, python-format
+msgid "TCP %s results:"
+msgstr "TCP %s Resultate:"
+
+#: pb_base/socket_obj/tcp.py:375
+#, python-format
+msgid "Could not open socket to %(addr)r, port %(port)d."
+msgstr "Konnte keinen Sockel zu %(addr)r, Port %(port)d  öffnen."
+
+#: pb_base/socket_obj/tcp.py:398
+#, python-format
+msgid "Creating a listening TCP socket on address %(addr)r, port %(port)d ..."
+msgstr "Erstelle lauschenden TCP-Sockel auf Adresse %(addr)r, Port %(port)d ..."
+
+#: pb_base/socket_obj/tcp.py:402
+#, python-format
+msgid "The socket is already connected to address %(addr)r, port %(port)d..."
+msgstr "Der Sockel ist bereits mit Adresse %(addr)r, Port %(port)d verbunden ..."
+
+#: pb_base/socket_obj/tcp.py:406
+#, python-format
+msgid "The application is already bonded to address %(addr)r, port %(port)d..."
+msgstr "Die Anwendung ist bereits auf Adresse %(addr)r, Port %(port)d gebunden ..."
+
+#: pb_base/socket_obj/tcp.py:462
+#, python-format
+msgid "Could not open listening TCP socket on %(addr)r, port %(port)d."
+msgstr "Konnte keinen lauschenden TCP-Sockel auf Adresse %(addr)r, Port %(port)d erstellen."
+
+#: pb_base/socket_obj/tcp.py:475
+#, python-format
+msgid "Binding TCP socket to server address: %s"
+msgstr "Binde TCP-Sockel auf Serveradresse: %s"
+
 #: pb_base/socket_obj/unix.py:62
 #, python-format
 msgid "The Unix socket file %r was not found."
@@ -1121,10 +1182,10 @@ msgstr "Die Unix-Sockeldatei %r wurde nicht gefunden."
 msgid "Invalid permissions to connect to Unix socket %r."
 msgstr "Ungenügend Rechte, um sich mit dem Unix-Sockel %r zu verbinden."
 
-#: pb_base/socket_obj/unix.py:242
+#: pb_base/socket_obj/unix.py:256
 #, python-format
-msgid "Removing socket %r ..."
-msgstr "Lösche Unix-Sockel %r ..."
+msgid "Removing socket file %r ..."
+msgstr "Lösche Sockeldatei %r ..."
 
 #: pb_base/socket_obj/unix.py:250
 #, python-format
@@ -1133,12 +1194,12 @@ msgstr "Verbinde mit Unix-Domain-Sockel '%s' ..."
 
 #: pb_base/socket_obj/unix.py:254 pb_base/socket_obj/unix.py:285
 #, python-format
-msgid "The socket is even connected to '%s' ..."
+msgid "The socket is already connected to '%s' ..."
 msgstr "Der Sockel ist bereits verbunden mit '%s' ..."
 
 #: pb_base/socket_obj/unix.py:258 pb_base/socket_obj/unix.py:289
 #, python-format
-msgid "The application is allready bonded to '%s' ..."
+msgid "The application is already bonded to '%s' ..."
 msgstr "Die Anwendung is bereits an '%s' gebunden ..."
 
 #: pb_base/socket_obj/unix.py:269
