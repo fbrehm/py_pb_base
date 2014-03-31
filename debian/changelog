@@ -1,3 +1,9 @@
+profitbricks-python-base (0.5.3-1) wheezy; urgency=low
+
+  * Build for wheezy
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Mon, 31 Mar 2014 10:00:56 +0200
+
 profitbricks-python-base (0.5.3-1) stable; urgency=low
 
   * Completed german translation
