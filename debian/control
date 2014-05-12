@@ -5,7 +5,7 @@ Maintainer: Frank Brehm <frank.brehm@profitbricks.com>
 Build-Depends: debhelper (>= 7.0.50~),
                gettext,
                ghostscript,
-               profitbricks-python-logging (>= 0.4.1-1),
+               python-pb-logging (>= 0.4.1-1),
                python-argparse,
                python-configobj,
                python-docutils,
@@ -26,7 +26,7 @@ Package: profitbricks-python-base
 Architecture: all
 Depends: coreutils,
          profitbricks-python-base-nls (= ${binary:Version}),
-         profitbricks-python-logging (>= 0.4.1-1),
+         python-pb-logging (>= 0.4.1-1),
          psmisc,
          python-argparse,
          python-configobj,
@@ -40,7 +40,7 @@ Package: profitbricks-python3-base
 Architecture: all
 Depends: coreutils,
          profitbricks-python-base-nls (= ${binary:Version}),
-         profitbricks-python3-logging (>= 0.4.1-1),
+         python3-pb-logging (>= 0.4.1-1),
          psmisc,
          python-argparse,
          python-configobj (>= 4.7.3),
