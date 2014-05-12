@@ -21,78 +21,27 @@ PYTHON3S        := $(shell py3versions -vr || true)
 	dh $@ --with python2,python3
 
 override_dh_auto_build:
-	$(info )
-	$(info ########################)
-	$(info Building ...)
-	$(info )
-
-	dh_testdir
-	@echo ""
 	@echo "Building Python 2 stuff ..."
 	set -e && for pyvers in $(PYTHONS); do python$$pyvers setup.py build; done
-	@echo ""
 	@echo "Building Python 3 stuff ..."
 	set -e && for pyvers in $(PYTHON3S); do python$$pyvers setup.py build; done
-
-	@echo ""
 	@echo "Compiling language message files ..."
 	$(MAKE) -C po
 
 override_dh_auto_clean:
-	$(info )
-	$(info ########################)
-	$(info Cleaning ...)
-	$(info )
-
 	dh_auto_clean
-	rm -fv $(CURDIR)/debian/*debhelper.log
-	rm -rf $(CURDIR)/build
-	-find . -name '*.py[co]' | xargs rm -f
 	$(MAKE) -C po clean
-	rm -rf pb_base.egg-info
-	rm -rf build
 
 override_dh_auto_install:
-	$(info )
-	$(info ########################)
-	$(info Installing ...)
-	$(info )
-
-	dh_testdir
-	dh_testroot
-	dh_prep
-	dh_installdirs
-	dh_install
-
-	@echo ""
 	@echo "Installing Python 2 stuff ..."
 	set -e && for pyvers in $(PYTHONS); do python$$pyvers setup.py install --root=$(INSTALL2_DIR) --install-layout=deb; done
-
-	@echo ""
 	@echo "Installing Python 3 stuff ..."
 	set -e && for pyvers in $(PYTHON3S); do python$$pyvers setup.py install --root=$(INSTALL3_DIR) --install-layout=deb; done
 	rm -vfr $(INSTALL3_DIR)/usr/bin
-
-	@echo ""
 	@echo "Installing i18n stuff ..."
 	$(MAKE) -C po DESTDIR=$(INSTALL_NLS_DIR) install
-
-	@echo ""
 	@echo "Documentation ..."
 	mkdir -p $(DOC_DIR)/html
 	mkdir -p $(DOC_DIR)/pdf
-
 	epydoc --html -v -o $(DOC_DIR)/html $(CURDIR)/pb_base
 	epydoc --pdf -o $(DOC_DIR)/pdf $(CURDIR)/pb_base
-
-	dh_link
-
-binary: binary-indep
-binary-arch: build install
-	# nothing to do here.
-
-binary-indep: build install
-	dh $@ --with python2,python3
-
-.PHONY: install binary binary-arch binary-indep
-
