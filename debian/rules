@@ -2,7 +2,7 @@
 # -*- makefile -*-
 
 # Uncomment this to turn on verbose mode.
-export DH_VERBOSE=1
+#export DH_VERBOSE=1
 
 BIN2_PKGNAME    := profitbricks-python-base
 BIN3_PKGNAME    := profitbricks-python3-base
