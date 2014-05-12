@@ -1,4 +1,4 @@
-Source: profitbricks-python-base
+Source: pb-base
 Section: python
 Priority: extra
 Maintainer: Frank Brehm <frank.brehm@profitbricks.com>
