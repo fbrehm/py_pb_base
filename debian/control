@@ -24,8 +24,7 @@ X-Python3-Version: >=3.2
 
 Package: python-pb-base
 Architecture: all
-Depends: coreutils,
-         psmisc,
+Depends: psmisc,
          python-argparse,
          python-configobj,
          python-pb-base-nls (= ${binary:Version}),
@@ -39,8 +38,7 @@ Description: Python modules for common used objects, error classes and functions
 
 Package: python3-pb-base
 Architecture: all
-Depends: coreutils,
-         psmisc,
+Depends: psmisc,
          python-argparse,
          python-configobj (>= 4.7.3),
          python-pb-base-nls (= ${binary:Version}),
