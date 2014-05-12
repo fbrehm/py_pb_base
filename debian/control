@@ -16,7 +16,7 @@ Build-Depends: debhelper (>= 7.0.50~),
                sed,
                texlive-latex-base,
                texlive-latex-extra
-Standards-Version: 3.8.4
+Standards-Version: 3.9.5
 Vcs-Git: git+ssh://git.profitbricks.localdomain/srv/git/python/pb-base.git
 Vcs-Browser: http://git.profitbricks.localdomain/gitweb/?p=python/pb-base.git;a=summary
 X-Python-Version: >=2.6
