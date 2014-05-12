@@ -5,13 +5,13 @@ Maintainer: Frank Brehm <frank.brehm@profitbricks.com>
 Build-Depends: debhelper (>= 7.0.50~),
                gettext,
                ghostscript,
+               python-all,
                python-argparse,
                python-configobj,
                python-docutils,
                python-epydoc,
                python-pb-logging (>= 0.4.1-1),
                python-support,
-               python-all,
                python3-all,
                sed,
                texlive-latex-base,
@@ -22,44 +22,81 @@ Vcs-Browser: http://git.profitbricks.localdomain/gitweb/?p=python/pb-base.git;a=
 X-Python-Version: >=2.6
 X-Python3-Version: >=3.2
 
-Package: profitbricks-python-base
+Package: python-pb-base
 Architecture: all
 Depends: coreutils,
-         profitbricks-python-base-nls (= ${binary:Version}),
          psmisc,
          python-argparse,
          python-configobj,
+         python-pb-base-nls (= ${binary:Version}),
          python-pb-logging (>= 0.4.1-1),
          python-support,
          sudo,
          ${misc:Depends},
          ${python:Depends}
+Breaks: profitbricks-python-base (<< 0.5.4-5~)
+Replaces: profitbricks-python-base (<< 0.5.4-5~)
 Description: Python modules for common used objects, error classes and functions
 
-Package: profitbricks-python3-base
+Package: python3-pb-base
 Architecture: all
 Depends: coreutils,
-         profitbricks-python-base-nls (= ${binary:Version}),
          psmisc,
          python-argparse,
          python-configobj (>= 4.7.3),
+         python-pb-base-nls (= ${binary:Version}),
          python-support,
          python3-pb-logging (>= 0.4.1-1),
          sudo,
          ${misc:Depends},
-         ${python:Depends}
-Description: Python modules for common used objects, error classes and functions
+         ${python3:Depends}
+Breaks: profitbricks-python3-base (<< 0.5.4-5~)
+Replaces: profitbricks-python3-base (<< 0.5.4-5~)
+Description: Python3 modules for common used objects, error classes and functions
 
-Package: profitbricks-python-base-nls
+Package: python-pb-base-doc
 Architecture: all
-Depends: gettext, ${misc:Depends}
-Description: Python modules for common used objects, error classes and functions - i18n files
-
-Package: profitbricks-python-base-doc
-Architecture: all
+Section: doc
 Suggests: pdf-viewer,
           profitbricks-python-base (= ${binary:Version}),
           www-browser
+Breaks: profitbricks-python-base-doc (<< 0.5.4-5~)
+Replaces: profitbricks-python-base-doc (<< 0.5.4-5~)
 Description: Python modules for common used objects, error classes and functions - documentation
- .
  This package contains the module documentation in HTML and PDF format.
+
+Package: python-pb-base-nls
+Architecture: all
+Depends: gettext, ${misc:Depends}
+Breaks: profitbricks-python-base-nls (<< 0.5.4-5~)
+Replaces: profitbricks-python-base-nls (<< 0.5.4-5~)
+Description: Python modules for common used objects, error classes and functions - i18n files
+ This package contains the i18n files.
+
+Package: profitbricks-python-base
+Depends: python-pb-base, ${misc:Depends}
+Architecture: all
+Section: oldlibs
+Description: transitional dummy package
+ This is a transitional dummy package. It can safely be removed.
+
+Package: profitbricks-python3-base
+Depends: python3-pb-base, ${misc:Depends}
+Architecture: all
+Section: oldlibs
+Description: transitional dummy package
+ This is a transitional dummy package. It can safely be removed.
+
+Package: profitbricks-python-base-doc
+Depends: python-pb-base-doc, ${misc:Depends}
+Architecture: all
+Section: oldlibs
+Description: transitional dummy package
+ This is a transitional dummy package. It can safely be removed.
+
+Package: profitbricks-python-base-nls
+Depends: python-pb-base-nls, ${misc:Depends}
+Architecture: all
+Section: oldlibs
+Description: transitional dummy package
+ This is a transitional dummy package. It can safely be removed.
