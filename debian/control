@@ -51,6 +51,7 @@ Description: Python3 modules for common used objects, error classes and function
 Package: python-pb-base-doc
 Architecture: all
 Section: doc
+Depends: ${misc:Depends}
 Suggests: pdf-viewer,
           profitbricks-python-base (= ${binary:Version}),
           www-browser
