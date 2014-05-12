@@ -1,3 +1,20 @@
+pb-base (0.5.4-5) wheezy; urgency=medium
+
+  * Disable DH_VERBOSE.
+  * Simplify debian/rules.
+  * Rename source package to pb-base.
+  * Rename profitbricks-python-logging to python-pb-logging.
+  * Build depend on python-all.
+  * Fix debian-changelog-file-contains-invalid-email-address.
+  * Rename profitbricks-python-base to python-pb-base.
+  * Bump Standard-Version to 3.9.5 (no changes required).
+  * Add Homepage field pointing to gitweb.
+  * Drop unused python-support from dependencies.
+  * Remove essential coreutil and sed packages from dependencies.
+  * Fix dependencies of python3-pb-base.
+
+ -- Benjamin Drung <benjamin.drung@profitbricks.com>  Mon, 12 May 2014 14:45:04 +0200
+
 profitbricks-python-base (0.5.4-4) wheezy; urgency=low
 
   * Build for wheezy
