@@ -2,10 +2,20 @@ Source: profitbricks-python-base
 Section: python
 Priority: extra
 Maintainer: Frank Brehm <frank.brehm@profitbricks.com>
-Build-Depends: debhelper (>= 7.0.50~), python-epydoc, python-docutils,
- python-support, texlive-latex-base, texlive-latex-extra, python-argparse, ghostscript,
- profitbricks-python-logging (>=0.4.1-1), python-configobj, python3-all, python3,
- gettext, sed
+Build-Depends: debhelper (>= 7.0.50~),
+               gettext,
+               ghostscript,
+               profitbricks-python-logging (>= 0.4.1-1),
+               python-argparse,
+               python-configobj,
+               python-docutils,
+               python-epydoc,
+               python-support,
+               python3,
+               python3-all,
+               sed,
+               texlive-latex-base,
+               texlive-latex-extra
 Standards-Version: 3.8.4
 Vcs-Git: git+ssh://git.profitbricks.localdomain/srv/git/python/pb-base.git
 Vcs-Browser: http://git.profitbricks.localdomain/gitweb/?p=python/pb-base.git;a=summary
@@ -14,27 +24,42 @@ X-Python3-Version: >=3.2
 
 Package: profitbricks-python-base
 Architecture: all
-Depends: ${python:Depends}, ${misc:Depends}, python-support, python-argparse,
- profitbricks-python-logging (>=0.4.1-1), python-configobj, coreutils, sudo, psmisc,
- profitbricks-python-base-nls (= ${binary:Version})
+Depends: coreutils,
+         profitbricks-python-base-nls (= ${binary:Version}),
+         profitbricks-python-logging (>= 0.4.1-1),
+         psmisc,
+         python-argparse,
+         python-configobj,
+         python-support,
+         sudo,
+         ${misc:Depends},
+         ${python:Depends}
 Description: Python modules for common used objects, error classes and functions
 
 Package: profitbricks-python3-base
 Architecture: all
-Depends: ${python:Depends}, ${misc:Depends}, python-support, python-argparse,
- profitbricks-python3-logging (>=0.4.1-1), python-configobj (>=4.7.3), coreutils, sudo,
- psmisc, profitbricks-python-base-nls (= ${binary:Version})
+Depends: coreutils,
+         profitbricks-python-base-nls (= ${binary:Version}),
+         profitbricks-python3-logging (>= 0.4.1-1),
+         psmisc,
+         python-argparse,
+         python-configobj (>= 4.7.3),
+         python-support,
+         sudo,
+         ${misc:Depends},
+         ${python:Depends}
 Description: Python modules for common used objects, error classes and functions
 
 Package: profitbricks-python-base-nls
 Architecture: all
-Depends: ${misc:Depends}, gettext
+Depends: gettext, ${misc:Depends}
 Description: Python modules for common used objects, error classes and functions - i18n files
 
 Package: profitbricks-python-base-doc
 Architecture: all
-Suggests: profitbricks-python-base (= ${binary:Version}), pdf-viewer, www-browser
+Suggests: pdf-viewer,
+          profitbricks-python-base (= ${binary:Version}),
+          www-browser
 Description: Python modules for common used objects, error classes and functions - documentation
  .
  This package contains the module documentation in HTML and PDF format.
-
