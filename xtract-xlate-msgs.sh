@@ -2,7 +2,7 @@
 
 pot_file="py_pb_base.pot"
 output_dir="po"
-pkg_version="0.5.4"
+pkg_version="0.5.5"
 src_dir="pb_base"
 
 cd $(dirname $0)
