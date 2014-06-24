@@ -41,6 +41,126 @@ class TestPbCommon(PbBaseTestcase):
         import pb_base.common
 
     #--------------------------------------------------------------------------
+    def test_to_unicode(self):
+
+        log.info("Testing to_unicode_or_bust() ...")
+
+        import pb_base.common
+        from pb_base.common import to_unicode_or_bust
+
+        data = []
+        data.append((None, None))
+        data.append((1, 1))
+
+        if sys.version_info[0] <= 2:
+            data.append((u'a', u'a'))
+            data.append(('a', u'a'))
+        else:
+            data.append(('a', 'a'))
+            data.append((b'a', 'a'))
+
+        for pair in data:
+
+            src = pair[0]
+            tgt = pair[1]
+            result = to_unicode_or_bust(src)
+            log.debug("Testing to_unicode_or_bust(%r) => %r, result %r",
+                    src, tgt, result)
+
+            if sys.version_info[0] <= 2:
+                if isinstance(src, (str, unicode)):
+                    self.assertIsInstance(result, unicode)
+                else:
+                    self.assertNotIsInstance(result, (str, unicode))
+            else:
+                if isinstance(src, (str, bytes)):
+                    self.assertIsInstance(result, str)
+                else:
+                    self.assertNotIsInstance(result, (str, bytes))
+
+            self.assertEqual(tgt, result)
+
+    #--------------------------------------------------------------------------
+    def test_to_utf8(self):
+
+        log.info("Testing to_utf8_or_bust() ...")
+
+        import pb_base.common
+        from pb_base.common import to_utf8_or_bust
+
+        data = []
+        data.append((None, None))
+        data.append((1, 1))
+
+        if sys.version_info[0] <= 2:
+            data.append((u'a', 'a'))
+            data.append(('a', 'a'))
+        else:
+            data.append(('a', b'a'))
+            data.append((b'a', b'a'))
+
+        for pair in data:
+
+            src = pair[0]
+            tgt = pair[1]
+            result = to_utf8_or_bust(src)
+            log.debug("Testing to_utf8_or_bust(%r) => %r, result %r",
+                    src, tgt, result)
+
+            if sys.version_info[0] <= 2:
+                if isinstance(src, (str, unicode)):
+                    self.assertIsInstance(result, str)
+                else:
+                    self.assertNotIsInstance(result, (str, unicode))
+            else:
+                if isinstance(src, (str, bytes)):
+                    self.assertIsInstance(result, bytes)
+                else:
+                    self.assertNotIsInstance(result, (str, bytes))
+
+            self.assertEqual(tgt, result)
+
+    #--------------------------------------------------------------------------
+    def test_to_str(self):
+
+        log.info("Testing to_str_or_bust() ...")
+
+        import pb_base.common
+        from pb_base.common import to_str_or_bust
+
+        data = []
+        data.append((None, None))
+        data.append((1, 1))
+
+        if sys.version_info[0] <= 2:
+            data.append((u'a', 'a'))
+            data.append(('a', 'a'))
+        else:
+            data.append(('a', 'a'))
+            data.append((b'a', 'a'))
+
+        for pair in data:
+
+            src = pair[0]
+            tgt = pair[1]
+            result = to_str_or_bust(src)
+            log.debug("Testing to_str_or_bust(%r) => %r, result %r",
+                    src, tgt, result)
+
+            if sys.version_info[0] <= 2:
+                if isinstance(src, (str, unicode)):
+                    self.assertIsInstance(result, str)
+                else:
+                    self.assertNotIsInstance(result, (str, unicode))
+            else:
+                if isinstance(src, (str, bytes)):
+                    self.assertIsInstance(result, str)
+                else:
+                    self.assertNotIsInstance(result, (str, bytes))
+
+            self.assertEqual(tgt, result)
+
+    #--------------------------------------------------------------------------
     def test_human2mbytes(self):
 
         log.info("Testing human2mbytes() from pb_base.common ...")
@@ -362,6 +482,9 @@ if __name__ == '__main__':
     suite = unittest.TestSuite()
 
     suite.addTest(TestPbCommon('test_import', verbose))
+    suite.addTest(TestPbCommon('test_to_unicode', verbose))
+    suite.addTest(TestPbCommon('test_to_utf8', verbose))
+    suite.addTest(TestPbCommon('test_to_str', verbose))
     suite.addTest(TestPbCommon('test_human2mbytes', verbose))
     suite.addTest(TestPbCommon('test_human2mbytes_l10n', verbose))
     suite.addTest(TestPbCommon('test_bytes2human', verbose))
