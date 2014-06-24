@@ -421,7 +421,7 @@ def caller_search_path():
 #==============================================================================
 def to_unicode_or_bust(obj, encoding = 'utf-8'):
     """
-    Transforms a string, what is not a unicode string, into a unicode string.
+    Transforms a string, which is not a unicode string, into a unicode string.
     All other objects are left untouched.
 
     @param obj: the object to transform
@@ -434,13 +434,16 @@ def to_unicode_or_bust(obj, encoding = 'utf-8'):
 
     """
 
-    if isinstance(obj, str):
-        if not sys.version_info[0] > 2:
-            if isinstance(obj, unicode):
-                obj = obj.encode('utf-8')
-    elif sys.version_info[0] > 2:
+    do_decode = False
+    if sys.version_info[0] <= 2:
+        if isinstance(obj, str):
+            do_decode = True
+    else:
         if isinstance(obj, bytes):
-            obj = str(obj, encoding)
+            do_decode = True
+
+    if do_decode:
+        obj = obj.decode(encoding)
 
     return obj
 
@@ -478,17 +481,29 @@ def encode_or_bust(obj, encoding = 'utf-8'):
     """
 
     do_encode = False
-    if isinstance(obj, str):
-        if sys.version_info[0] <= 2:
-            if isinstance(obj, unicode):
-                do_encode = True
-        else:
+    if sys.version_info[0] <= 2:
+        if isinstance(obj, unicode):
+            do_encode = True
+    else:
+        if isinstance(obj, str):
             do_encode = True
 
     if do_encode:
         obj = obj.encode(encoding)
 
     return obj
+
+#==============================================================================
+def to_str_or_bust(obj, encoding = 'utf-8'):
+    """
+    Transformes the given string-like object into the str-type according
+    to the current Python version.
+    """
+
+    if sys.version_info[0] <= 2:
+        return encode_or_bust(obj, encoding)
+    else:
+        return to_unicode_or_bust(obj, encoding)
 
 #==============================================================================
 def terminal_can_colors(debug = False):

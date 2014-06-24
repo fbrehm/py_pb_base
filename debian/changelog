@@ -1,3 +1,14 @@
+pb-base (0.5.5-1) wheezy; urgency=low
+
+  * Rewritten functions to_unicode_or_bust() and to_utf8_or_bust() in
+    pb_base/common.py
+  * Added function to_str_or_bust() in pb_base/common.py
+  * Added unittests for these functions in test/test_common.py
+  * Used to_str_or_bust() in pb_base/daemon.py and
+    pb_base/pidfile_app.py
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Tue, 24 Jun 2014 19:17:52 +0200
+
 pb-base (0.5.4-5) wheezy; urgency=medium
 
   * Disable DH_VERBOSE.

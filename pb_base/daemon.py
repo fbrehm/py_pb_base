@@ -19,6 +19,7 @@ import signal
 
 # Own modules
 from pb_base.common import pp, to_unicode_or_bust, to_utf8_or_bust
+from pb_base.common import to_str_or_bust
 
 from pb_base.errors import PbError
 from pb_base.errors import FunctionNotImplementedError
@@ -385,7 +386,7 @@ class PbDaemon(PidfileApp):
                 'syslog_facility' in self.cfg['general']):
 
             # Not set by commandline, but set in configuration
-            fac_name  = to_utf8_or_bust(self.cfg['general']['syslog_facility'])
+            fac_name  = to_str_or_bust(self.cfg['general']['syslog_facility'])
 
             if fac_name and (fac_name != self._default_facility_name):
                 self._facility_name = fac_name
@@ -395,7 +396,7 @@ class PbDaemon(PidfileApp):
                 'error_log' in self.cfg['general']):
 
             # Not set by commandline, but set in configuration
-            error_log = to_utf8_or_bust(self.cfg['general']['error_log'])
+            error_log = to_str_or_bust(self.cfg['general']['error_log'])
 
             if error_log:
                 self._error_log = error_log
