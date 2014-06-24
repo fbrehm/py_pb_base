@@ -21,6 +21,7 @@ import datetime
 
 # Own modules
 from pb_base.common import pp, to_unicode_or_bust, to_utf8_or_bust
+from pb_base.common import to_str_or_bust
 
 from pb_base.errors import PbError
 from pb_base.errors import FunctionNotImplementedError
@@ -289,7 +290,7 @@ class PidfileApp(PbCfgApp):
         if ((not self.pidfilename) and 'general' in self.cfg and
                 'pidfile' in self.cfg['general']):
             # Not set by commandline, but set in configuration
-            pidfile = to_utf8_or_bust(self.cfg['general']['pidfile'])
+            pidfile = to_str_or_bust(self.cfg['general']['pidfile'])
             if pidfile and (pidfile != self._default_pidfilename):
                 log.debug(_("Setting pidfile to %r by configuration."),
                         pidfile)
