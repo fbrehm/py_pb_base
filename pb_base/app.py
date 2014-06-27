@@ -733,8 +733,8 @@ class PbApplication(PbBaseObject):
         Wrapper function to colorize the message. Depending, whether the current
         terminal can display ANSI colors, the message is colorized or not.
 
-        @param message: The message to colorize
-        @type message: str
+        @param msg: The message to colorize
+        @type msg: str
         @param color: The color to use, must be one of the keys of COLOR_CODE
         @type color: str
 
