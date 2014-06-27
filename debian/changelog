@@ -1,3 +1,15 @@
+pb-base (0.5.6-2) UNRELEASED; urgency=low
+
+  * Declared for unstable
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Fri, 27 Jun 2014 14:57:53 +0200
+
+pb-base (0.5.6-1) unstable; urgency=low
+
+  * Version bump
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Fri, 27 Jun 2014 14:57:53 +0200
+
 pb-base (0.5.5-1) wheezy; urgency=low
 
   * Rewritten functions to_unicode_or_bust() and to_utf8_or_bust() in
