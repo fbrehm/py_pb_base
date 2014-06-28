@@ -40,7 +40,7 @@ from pb_base.pidfile import PidFile
 
 from pb_base.translate import translator
 
-__version__ = '0.3.5'
+__version__ = '0.4.1'
 
 log = logging.getLogger(__name__)
 
@@ -275,8 +275,7 @@ class PidfileApp(PbCfgApp):
 
         super(PidfileApp, self).perform_config()
 
-        if ((not self.pidfilename) and 'general' in self.cfg and
-                'pidfile' in self.cfg['general']):
+        if ('general' in self.cfg and 'pidfile' in self.cfg['general']):
             # Not set by commandline, but set in configuration
             pidfile = to_str_or_bust(self.cfg['general']['pidfile'])
             if pidfile and (pidfile != self._default_pidfilename):
