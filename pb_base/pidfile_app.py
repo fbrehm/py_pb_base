@@ -40,7 +40,7 @@ from pb_base.pidfile import PidFile
 
 from pb_base.translate import translator
 
-__version__ = '0.3.5'
+__version__ = '0.4.1'
 
 log = logging.getLogger(__name__)
 
@@ -200,18 +200,6 @@ class PidfileApp(PbCfgApp):
 
         self._simulate = getattr(self.args, 'simulate', False)
 
-        if self.verbose > 1:
-            log.debug(_("Initialising PidFile object ..."))
-        self.pidfile = PidFile(
-                self.pidfilename,
-                appname = self.appname,
-                verbose = self.verbose,
-                base_dir = self.base_dir,
-                use_stderr = self.use_stderr,
-                simulate = self.simulate,
-        )
-        self.pidfile.initialized = True
-
     #------------------------------------------------------------
     @property
     def pidfilename(self):
@@ -287,8 +275,7 @@ class PidfileApp(PbCfgApp):
 
         super(PidfileApp, self).perform_config()
 
-        if ((not self.pidfilename) and 'general' in self.cfg and
-                'pidfile' in self.cfg['general']):
+        if ('general' in self.cfg and 'pidfile' in self.cfg['general']):
             # Not set by commandline, but set in configuration
             pidfile = to_str_or_bust(self.cfg['general']['pidfile'])
             if pidfile and (pidfile != self._default_pidfilename):
@@ -346,6 +333,35 @@ class PidfileApp(PbCfgApp):
             self._pidfilename = pidfile
 
         self._simulate = getattr(self.args, 'simulate', False)
+
+    #--------------------------------------------------------------------------
+    def post_init(self):
+        """
+        Method to execute before calling run(). Here could be done some
+        finishing actions after reading in commandline parameters,
+        configuration a.s.o.
+
+        This method could be overwritten by descendant classes, these
+        methhods should allways include a call to post_init() of the
+        parent class.
+
+        """
+
+        super(PidfileApp, self).post_init()
+        self.initialized = False
+
+        if self.verbose > 1:
+            log.debug(_("Initialising PidFile object ..."))
+        self.pidfile = PidFile(
+                self.pidfilename,
+                appname = self.appname,
+                verbose = self.verbose,
+                base_dir = self.base_dir,
+                use_stderr = self.use_stderr,
+                simulate = self.simulate,
+        )
+
+        self.initialized = True
 
     #--------------------------------------------------------------------------
     def pre_run(self):

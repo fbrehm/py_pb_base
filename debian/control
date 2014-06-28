@@ -34,6 +34,7 @@ Depends: psmisc,
 Breaks: profitbricks-python-base (<< 0.5.4-5~)
 Replaces: profitbricks-python-base (<< 0.5.4-5~)
 Description: Python modules for common used objects, error classes and functions
+ Base Python modules for common used objects, error classes and functions.
 
 Package: python3-pb-base
 Architecture: all
@@ -47,6 +48,7 @@ Depends: psmisc,
 Breaks: profitbricks-python3-base (<< 0.5.4-5~)
 Replaces: profitbricks-python3-base (<< 0.5.4-5~)
 Description: Python3 modules for common used objects, error classes and functions
+ Base Python modules for common used objects, error classes and functions.
 
 Package: python-pb-base-doc
 Architecture: all
@@ -57,7 +59,7 @@ Suggests: pdf-viewer,
           www-browser
 Breaks: profitbricks-python-base-doc (<< 0.5.4-5~)
 Replaces: profitbricks-python-base-doc (<< 0.5.4-5~)
-Description: Python modules for common used objects, error classes and functions - documentation
+Description: Python modules for common used objects e.t.c. - documentation
  This package contains the module documentation in HTML and PDF format.
 
 Package: python-pb-base-nls
@@ -65,8 +67,9 @@ Architecture: all
 Depends: gettext, ${misc:Depends}
 Breaks: profitbricks-python-base-nls (<< 0.5.4-5~)
 Replaces: profitbricks-python-base-nls (<< 0.5.4-5~)
-Description: Python modules for common used objects, error classes and functions - i18n files
- This package contains the i18n files.
+Description: Python modules for common used objects e.t.c. - i18n files
+ This package contains the i18n files for the base Python modules for
+ common used objects, error classes and functions.
 
 Package: profitbricks-python-base
 Depends: python-pb-base, ${misc:Depends}
