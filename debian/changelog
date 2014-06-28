@@ -1,8 +1,9 @@
 pb-base (0.5.6-1) wheezy; urgency=low
 
-  * Version bump
+  * Bugfing and updating in pb_base/pidfile_app.py because of
+    evaluating configuration
 
- -- Frank Brehm <frank.brehm@profitbricks.com>  Fri, 27 Jun 2014 14:57:53 +0200
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Sat, 28 Jun 2014 08:07:27 +0200
 
 pb-base (0.5.5-1) wheezy; urgency=low
 
