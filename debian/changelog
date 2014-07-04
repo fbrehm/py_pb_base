@@ -1,3 +1,9 @@
+pb-base (0.5.6-2) stable; urgency=low
+
+  * Build for squeeze
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Fri, 04 Jul 2014 12:58:44 +0200
+
 pb-base (0.5.6-1) wheezy; urgency=low
 
   * Bugfing and updating in pb_base/pidfile_app.py because of
