@@ -18,7 +18,7 @@ import datetime
 from io import StringIO
 
 # Third party modules
-from configobj import ConfigObj
+from configobj import ConfigObj, ConfigObjError
 from validate import Validator
 from validate import ValidateError
 
@@ -464,12 +464,18 @@ class PbCfgApp(PbApplication):
                 log.debug(_("Reading in configuration file '%s' ..."),
                           cfg_file)
 
-            cfg = ConfigObj(
-                    cfg_file,
-                    encoding = self.cfg_encoding,
-                    stringify = True,
-                    configspec = self.cfg_spec,
-            )
+            try:
+                cfg = ConfigObj(
+                        cfg_file,
+                        encoding = self.cfg_encoding,
+                        stringify = True,
+                        configspec = self.cfg_spec,
+                )
+            except ConfigObjError:
+                msg = _("Wrong configuration in %r found:") % (cfg_file)
+                msg += ' ' + str(e)
+                self.handle_error(msg, _("Configuration error"))
+                continue
 
             if self.verbose > 2:
                 log.debug((_("Found configuration:") + "\n%r"), pp(cfg))
@@ -481,7 +487,7 @@ class PbCfgApp(PbApplication):
 
             if not result is True:
                 cfgfiles_ok = False
-                msg = _("Wrong configuration in '%s' found:") % (cfg_file)
+                msg = _("Wrong configuration in %r found:") % (cfg_file)
                 msg += '\n' + self._transform_cfg_errors(result)
                 self.handle_error(msg, _("Configuration error"))
                 continue

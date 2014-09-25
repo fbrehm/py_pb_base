@@ -128,8 +128,8 @@ msgstr "Ergebnis der Validierung:"
 
 #: pb_base/cfg_app.py:480
 #, python-format
-msgid "Wrong configuration in '%s' found:"
-msgstr "Ungültige Konfigurationsanweisung in '%s' gefunden:"
+msgid "Wrong configuration in %r found:"
+msgstr "Ungültige Konfigurationsanweisung in %r gefunden:"
 
 #: pb_base/cfg_app.py:482
 msgid "Configuration error"

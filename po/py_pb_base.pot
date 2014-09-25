@@ -259,7 +259,7 @@ msgstr ""
 
 #: pb_base/cfg_app.py:484
 #, python-format
-msgid "Wrong configuration in '%s' found:"
+msgid "Wrong configuration in %r found:"
 msgstr ""
 
 #: pb_base/cfg_app.py:486
