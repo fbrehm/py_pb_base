@@ -25,14 +25,15 @@ __version__ = '0.3.6'
 
 log = logging.getLogger(__name__)
 
-#==============================================================================
+# =============================================================================
 
 CUR_RADIX = locale.nl_langinfo(locale.RADIXCHAR)
 CUR_THOUSEP = locale.nl_langinfo(locale.THOUSEP)
 H2MB_PAT = r'^\s*\+?(\d+(?:' + re.escape(CUR_RADIX) + r'\d*)?)\s*(\S+)?'
 if CUR_THOUSEP:
-    H2MB_PAT = (r'^\s*\+?(\d+(?:' + re.escape(CUR_THOUSEP) + r'\d+)*(?:' +
-            re.escape(CUR_RADIX) + r'\d*)?)\s*(\S+)?')
+    H2MB_PAT = (
+        r'^\s*\+?(\d+(?:' + re.escape(CUR_THOUSEP) + r'\d+)*(?:' +
+        re.escape(CUR_RADIX) + r'\d*)?)\s*(\S+)?')
 H2MB_RE = re.compile(H2MB_PAT)
 RADIX_RE = re.compile(re.escape(CUR_RADIX))
 THOUSEP_RE = re.compile(re.escape(CUR_THOUSEP))
@@ -63,9 +64,9 @@ RE_TO_BOOL_TRUE = re.compile(PAT_TO_BOOL_TRUE)
 PAT_TO_BOOL_FALSE = locale.nl_langinfo(locale.NOEXPR)
 RE_TO_BOOL_FALSE = re.compile(PAT_TO_BOOL_FALSE)
 
-#==============================================================================
-def human2mbytes(value, si_conform = False, as_float = False,
-        no_mibibytes = False):
+
+# =============================================================================
+def human2mbytes(value, si_conform=False, as_float=False, no_mibibytes=False):
     """
     Converts the given human readable byte value (e.g. 5MB, 8.4GiB etc.)
     with a prefix into an integer/float value (without a prefix) of MiBiBytes.
@@ -115,20 +116,21 @@ def human2mbytes(value, si_conform = False, as_float = False,
     c_thousep = locale.nl_langinfo(locale.THOUSEP)
     if c_thousep != CUR_THOUSEP:
         CUR_THOUSEP = c_thousep
-        #log.debug("Current separator character for thousands is now %r.",
-        #        CUR_THOUSEP)
+        # log.debug("Current separator character for thousands is now %r.",
+        #         CUR_THOUSEP)
         THOUSEP_RE = re.compile(re.escape(CUR_THOUSEP))
 
     if c_radix != CUR_RADIX:
         CUR_RADIX = c_radix
-        #log.debug("Current decimal radix is now %r.", CUR_RADIX)
+        # log.debug("Current decimal radix is now %r.", CUR_RADIX)
         H2MB_PAT = r'^\s*\+?(\d+(?:' + re.escape(CUR_RADIX) + r'\d*)?)\s*(\S+)?'
         if CUR_THOUSEP:
-            H2MB_PAT = (r'^\s*\+?(\d+(?:' + re.escape(CUR_THOUSEP) + r'\d+)*(?:' +
-                    re.escape(CUR_RADIX) + r'\d*)?)\s*(\S+)?')
+            H2MB_PAT = (
+                r'^\s*\+?(\d+(?:' + re.escape(CUR_THOUSEP) + r'\d+)*(?:' +
+                re.escape(CUR_RADIX) + r'\d*)?)\s*(\S+)?')
         H2MB_RE = re.compile(H2MB_PAT)
         RADIX_RE = re.compile(re.escape(CUR_RADIX))
-    #log.debug("Current pattern: %r", H2MB_PAT)
+    # log.debug("Current pattern: %r", H2MB_PAT)
 
     value_raw = ''
     unit = None
@@ -139,13 +141,13 @@ def human2mbytes(value, si_conform = False, as_float = False,
     else:
         msg = ("Could not determine bytes in '%s'.") % (value)
         raise ValueError(msg)
-    #log.debug("Raw value: %r, unit: %r.", value_raw, unit)
+    # log.debug("Raw value: %r, unit: %r.", value_raw, unit)
 
     if CUR_THOUSEP:
         value_raw = THOUSEP_RE.sub('', value_raw)
     if CUR_RADIX != '.':
         value_raw = RADIX_RE.sub('.', value_raw)
-    #log.debug("Raw value after l10n: %r.", value_raw)
+    # log.debug("Raw value after l10n: %r.", value_raw)
     value_float = float(value_raw)
     if unit is None:
         unit = ''
@@ -155,7 +157,7 @@ def human2mbytes(value, si_conform = False, as_float = False,
     if not si_conform:
         factor_si = factor_bin
 
-    #log.debug("factor_bin: %r, factor_si: %r", factor_bin, factor_si)
+    # log.debug("factor_bin: %r, factor_si: %r", factor_bin, factor_si)
 
     factor = 1
 
@@ -202,11 +204,11 @@ def human2mbytes(value, si_conform = False, as_float = False,
         msg = ("Couldn't detect unit '%s'.") % (unit)
         raise ValueError(msg)
 
-    #log.debug("Using factor %r, final factor: %r.", factor, final_factor)
-    #log.debug("Cur value_long = %r.", value_long)
+    # log.debug("Using factor %r, final factor: %r.", factor, final_factor)
+    # log.debug("Cur value_long = %r.", value_long)
 
     lbytes = factor * value_long
-    #log.debug("Cur long bytes: %r.", lbytes)
+    # log.debug("Cur long bytes: %r.", lbytes)
     mbytes = lbytes / final_factor
     if as_float:
         return float(mbytes)
@@ -220,9 +222,10 @@ def human2mbytes(value, si_conform = False, as_float = False,
 
     return mbytes
 
-#==============================================================================
-def bytes2human(value, si_conform = False, precision = None,
-        format_str = '%(value)s%(unit)s'):
+
+# =============================================================================
+def bytes2human(
+        value, si_conform=False, precision=None, format_str='%(value)s%(unit)s'):
     """
     Converts the given value in bytes into a human readable format.
     The limit for electing the next higher prefix is at 1500.
@@ -293,9 +296,10 @@ def bytes2human(value, si_conform = False, precision = None,
     if not exponent:
         return value_str
 
-    return format_str % {'value': value_str, 'unit': unit,}
+    return format_str % {'value': value_str, 'unit': unit, }
 
-#==============================================================================
+
+# =============================================================================
 def pp(value):
     """
     Returns a pretty print string of the given value.
@@ -304,10 +308,11 @@ def pp(value):
     @rtype: str
     """
 
-    pretty_printer = pprint.PrettyPrinter(indent = 4)
+    pretty_printer = pprint.PrettyPrinter(indent=4)
     return pretty_printer.pformat(value)
 
-#==============================================================================
+
+# =============================================================================
 def to_bool(value):
     """
     Converter from string to boolean values (e.g. from configurations)
@@ -337,13 +342,13 @@ def to_bool(value):
     if c_yes_expr != PAT_TO_BOOL_TRUE:
         PAT_TO_BOOL_TRUE = c_yes_expr
         RE_TO_BOOL_TRUE = re.compile(PAT_TO_BOOL_TRUE)
-    #log.debug("Current pattern for 'yes': %r.", c_yes_expr)
+    # log.debug("Current pattern for 'yes': %r.", c_yes_expr)
 
     c_no_expr = locale.nl_langinfo(locale.NOEXPR)
     if c_no_expr != PAT_TO_BOOL_FALSE:
         PAT_TO_BOOL_FALSE = c_no_expr
         RE_TO_BOOL_FALSE = re.compile(PAT_TO_BOOL_FALSE)
-    #log.debug("Current pattern for 'no': %r.", c_no_expr)
+    # log.debug("Current pattern for 'no': %r.", c_no_expr)
 
     v_str = ''
     if isinstance(value, str):
@@ -372,7 +377,8 @@ def to_bool(value):
 
     return bool(value)
 
-#==============================================================================
+
+# =============================================================================
 def caller_search_path():
     """
     Builds a search path for executables from environment $PATH
@@ -413,13 +419,14 @@ def caller_search_path():
         if not os.path.isdir(d):
             continue
         d_abs = os.path.realpath(d)
-        if not d_abs in path_list:
+        if d_abs not in path_list:
             path_list.append(d_abs)
 
     return path_list
 
-#==============================================================================
-def to_unicode_or_bust(obj, encoding = 'utf-8'):
+
+# =============================================================================
+def to_unicode_or_bust(obj, encoding='utf-8'):
     """
     Transforms a string, which is not a unicode string, into a unicode string.
     All other objects are left untouched.
@@ -447,7 +454,8 @@ def to_unicode_or_bust(obj, encoding = 'utf-8'):
 
     return obj
 
-#==============================================================================
+
+# =============================================================================
 def to_utf8_or_bust(obj):
     """
     Transforms a string, what is a unicode string, into a utf-8 encoded string.
@@ -464,8 +472,9 @@ def to_utf8_or_bust(obj):
 
     return encode_or_bust(obj, 'utf-8')
 
-#==============================================================================
-def encode_or_bust(obj, encoding = 'utf-8'):
+
+# =============================================================================
+def encode_or_bust(obj, encoding='utf-8'):
     """
     Encodes the given unicode object into the given encoding.
     In Python 3 a bytes object is returend in this case.
@@ -493,8 +502,9 @@ def encode_or_bust(obj, encoding = 'utf-8'):
 
     return obj
 
-#==============================================================================
-def to_str_or_bust(obj, encoding = 'utf-8'):
+
+# =============================================================================
+def to_str_or_bust(obj, encoding='utf-8'):
     """
     Transformes the given string-like object into the str-type according
     to the current Python version.
@@ -505,8 +515,9 @@ def to_str_or_bust(obj, encoding = 'utf-8'):
     else:
         return to_unicode_or_bust(obj, encoding)
 
-#==============================================================================
-def terminal_can_colors(debug = False):
+
+# =============================================================================
+def terminal_can_colors(debug=False):
     """
     Method to detect, whether the current terminal (stdout and stderr)
     is able to perform ANSI color sequences.
@@ -542,7 +553,8 @@ def terminal_can_colors(debug = False):
         elif re_term.search(cur_term):
             env_term_has_colors = True
     if debug:
-        sys.stderr.write("ansi_term: %r, env_term_has_colors: %r\n" % (
+        sys.stderr.write(
+            "ansi_term: %r, env_term_has_colors: %r\n" % (
                 ansi_term, env_term_has_colors))
 
     has_colors = False
@@ -566,11 +578,12 @@ def terminal_can_colors(debug = False):
 
     return has_colors
 
-#==============================================================================
+
+# =============================================================================
 
 if __name__ == "__main__":
     pass
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
