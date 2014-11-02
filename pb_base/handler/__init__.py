@@ -49,21 +49,23 @@ CHOWN_CMD = os.sep + os.path.join('bin', 'chown')
 ECHO_CMD = os.sep + os.path.join('bin', 'echo')
 SUDO_CMD = os.sep + os.path.join('usr', 'bin', 'sudo')
 
-#==============================================================================
+
+# =============================================================================
 class PbBaseHandlerError(PbBaseObjectError):
     """Base error class for all exceptions happened during
     execution this application"""
 
     pass
 
-#-------------------------------------------------------------------------------
+
+# =============================================================================
 class CommandNotFoundError(PbBaseHandlerError):
     """
     Special exception, if one ore more OS commands were not found.
 
     """
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __init__(self, cmd_list):
         """
         Constructor.
@@ -84,36 +86,30 @@ class CommandNotFoundError(PbBaseHandlerError):
         if len(self.cmd_list) < 1:
             raise ValueError(_("Empty command list given."))
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __str__(self):
         """
         Typecasting into a string for error output.
         """
 
         cmds = ', '.join([("'" + str(x) + "'") for x in self.cmd_list])
-        msg = __("Could not found OS command", "Could not found OS commands",
-                len(self.cmd_list)) + ": " + cmds
+        msg = __(
+            "Could not found OS command", "Could not found OS commands",
+            len(self.cmd_list)) + ": " + cmds
         return msg
 
 
-#==============================================================================
+# =============================================================================
 class PbBaseHandler(PbBaseObject):
     """
     Base class for handler objects.
     """
 
-    #--------------------------------------------------------------------------
-    def __init__(self,
-            appname = None,
-            verbose = 0,
-            version = __version__,
-            base_dir = None,
-            use_stderr = False,
-            initialized = False,
-            simulate = False,
-            sudo = False,
-            quiet = False,
-            ):
+    # -------------------------------------------------------------------------
+    def __init__(
+        self, appname=None, verbose=0, version=__version__, base_dir=None,
+            use_stderr=False, initialized=False, simulate=False, sudo=False,
+            quiet=False):
         """
         Initialisation of the base handler object.
 
@@ -147,12 +143,12 @@ class PbBaseHandler(PbBaseObject):
         """
 
         super(PbBaseHandler, self).__init__(
-                appname = appname,
-                verbose = verbose,
-                version = version,
-                base_dir = base_dir,
-                use_stderr = use_stderr,
-                initialized = False,
+            appname=appname,
+            verbose=verbose,
+            version=version,
+            base_dir=base_dir,
+            use_stderr=use_stderr,
+            initialized=False,
         )
 
         failed_commands = []
@@ -217,7 +213,7 @@ class PbBaseHandler(PbBaseObject):
         if self.verbose > 3:
             log.debug("Initialized.")
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def simulate(self):
         """Simulation mode."""
@@ -227,7 +223,7 @@ class PbBaseHandler(PbBaseObject):
     def simulate(self, value):
         self._simulate = bool(value)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def quiet(self):
         """Don't display ouput of action after calling."""
@@ -237,7 +233,7 @@ class PbBaseHandler(PbBaseObject):
     def quiet(self, value):
         self._quiet = bool(value)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def sudo(self):
         """Should the command executed by sudo by default."""
@@ -247,26 +243,26 @@ class PbBaseHandler(PbBaseObject):
     def sudo(self, value):
         self._sudo = bool(value)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def chown_cmd(self):
         """The absolute path to the OS command 'chown'."""
         return self._chown_cmd
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def echo_cmd(self):
         """The absolute path to the OS command 'echo'."""
         return self._echo_cmd
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def sudo_cmd(self):
         """The absolute path to the OS command 'sudo'."""
         return self._sudo_cmd
 
-    #--------------------------------------------------------------------------
-    def as_dict(self, short = False):
+    # -------------------------------------------------------------------------
+    def as_dict(self, short=False):
         """
         Transforms the elements of the object into a dict
 
@@ -277,7 +273,7 @@ class PbBaseHandler(PbBaseObject):
         @rtype:  dict
         """
 
-        res = super(PbBaseHandler, self).as_dict(short = short)
+        res = super(PbBaseHandler, self).as_dict(short=short)
         res['simulate'] = self.simulate
         res['quiet'] = self.quiet
         res['sudo'] = self.sudo
@@ -287,7 +283,7 @@ class PbBaseHandler(PbBaseObject):
 
         return res
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __repr__(self):
         """Typecasting into a string for reproduction."""
 
@@ -307,8 +303,8 @@ class PbBaseHandler(PbBaseObject):
         out += ", ".join(fields) + ")>"
         return out
 
-    #--------------------------------------------------------------------------
-    def get_command(self, cmd, quiet = False):
+    # -------------------------------------------------------------------------
+    def get_command(self, cmd, quiet=False):
         """
         Searches the OS search path for the given command and gives back the
         normalized position of this command.
@@ -363,19 +359,11 @@ class PbBaseHandler(PbBaseObject):
 
         return None
 
-    #--------------------------------------------------------------------------
-    def call(self,
-            cmd,
-            sudo = None,
-            simulate = None,
-            quiet = None,
-            shell = False,
-            stdout = None,
-            stderr = None,
-            bufsize = 0,
-            drop_stderr = False,
-            close_fds = False,
-            **kwargs ):
+    # -------------------------------------------------------------------------
+    def call(
+        self, cmd, sudo=None, simulate=None, quiet=None, shell=False,
+            stdout=None, stderr=None, bufsize=0, drop_stderr=False,
+            close_fds=False, **kwargs):
         """
         Executing a OS command.
 
@@ -464,13 +452,13 @@ class PbBaseHandler(PbBaseObject):
 
         cmd_obj = subprocess.Popen(
             cmd_list,
-            shell = use_shell,
-            cwd = self.base_dir,
-            close_fds = close_fds,
-            stderr = used_stderr,
-            stdout = used_stdout,
-            bufsize = bufsize,
-            env = {'USER': pwd_info.pw_name},
+            shell=use_shell,
+            cwd=self.base_dir,
+            close_fds=close_fds,
+            stderr=used_stderr,
+            stdout=used_stdout,
+            bufsize=bufsize,
+            env={'USER': pwd_info.pw_name},
             **kwargs
         )
 
@@ -482,14 +470,15 @@ class PbBaseHandler(PbBaseObject):
         if stderrdata:
             if sys.version_info[0] > 2:
                 if self.verbose > 2:
-                    log.debug(_("Decoding %(what)s from %(enc)r.") % {
+                    log.debug(
+                        _("Decoding %(what)s from %(enc)r.") % {
                             'what': 'STDERR', 'enc': cur_encoding})
                 stderrdata = stderrdata.decode(cur_encoding)
             if quiet and not self.verbose:
                 pass
             else:
                 msg = _("Output on %(where)s: %(what)r.") % {
-                        'where': "StdErr", 'what': stderrdata.strip()}
+                    'where': "StdErr", 'what': stderrdata.strip()}
                 if quiet:
                     log.debug(msg)
                 else:
@@ -499,7 +488,7 @@ class PbBaseHandler(PbBaseObject):
             if sys.version_info[0] > 2:
                 if self.verbose > 2:
                     log.debug(_("Decoding %(what)s from %(enc)r.") % {
-                            'what': 'STDOUT', 'enc': cur_encoding})
+                        'what': 'STDOUT', 'enc': cur_encoding})
                 stdoutdata = stdoutdata.decode(cur_encoding)
             do_out = False
             if self.verbose:
@@ -515,7 +504,7 @@ class PbBaseHandler(PbBaseObject):
                     do_out = True
             if do_out:
                 msg = _("Output on %(where)s: %(what)r.") % {
-                        'where': "StdOut", 'what': stdoutdata.strip()}
+                    'where': "StdOut", 'what': stdoutdata.strip()}
                 log.debug(msg)
 
         ret = cmd_obj.wait()
@@ -524,8 +513,8 @@ class PbBaseHandler(PbBaseObject):
 
         return (ret, stdoutdata, stderrdata)
 
-    #--------------------------------------------------------------------------
-    def read_file(self, filename, timeout = 2, quiet = False):
+    # -------------------------------------------------------------------------
+    def read_file(self, filename, timeout=2, quiet=False):
         """
         Reads the content of the given filename.
 
@@ -584,9 +573,9 @@ class PbBaseHandler(PbBaseObject):
 
         return content
 
-    #--------------------------------------------------------------------------
-    def write_file(self, filename, content,
-            timeout = 2, must_exists = True, quiet = False):
+    # -------------------------------------------------------------------------
+    def write_file(
+            self, filename, content, timeout=2, must_exists=True, quiet=False):
         """
         Writes the given content into the given filename.
         It should only be used for small things, because it writes unbuffered.
@@ -641,21 +630,21 @@ class PbBaseHandler(PbBaseObject):
                 if self.simulate:
                     log.error(_("Write permission to %r denied."), filename)
                 else:
-                    raise IOError(errno.EACCES,
-                            _('Write permission denied.'), filename)
+                    raise IOError(
+                        errno.EACCES, _('Write permission denied.'), filename)
         else:
             parent_dir = os.path.dirname(filename)
             if not os.access(parent_dir, os.W_OK):
                 if self.simulate:
                     log.error(_("Write permission to %r denied."), parent_dir)
                 else:
-                    raise IOError(errno.EACCES,
-                            _('Write permission denied.'), parent_dir)
+                    raise IOError(
+                        errno.EACCES, _('Write permission denied.'), parent_dir)
 
         if self.verbose > verb_level1:
             if self.verbose > verb_level2:
                 log.debug(_("Write %(what)r into %(to)r.") % {
-                        'what': content, 'to': filename})
+                    'what': content, 'to': filename})
             else:
                 log.debug(_("Writing %r ..."), filename)
 
@@ -683,9 +672,10 @@ class PbBaseHandler(PbBaseObject):
 
         return
 
-    #--------------------------------------------------------------------------
-    def dump_data(self, source, target, blocksize = (1024*1024),
-            iseek = 0, oseek = 0, raise_on_full = True):
+    # -------------------------------------------------------------------------
+    def dump_data(
+        self, source, target, blocksize=(1024*1024),
+            iseek=0, oseek=0, raise_on_full=True):
         """
         Dumping the content of source into the target.
 
@@ -709,8 +699,8 @@ class PbBaseHandler(PbBaseObject):
         @rtype: bool
         """
 
-        msg = _("Dumping data from %(src)r to %(tgt)r ...")  % {
-                'src': source, 'tgt': target}
+        msg = _("Dumping data from %(src)r to %(tgt)r ...") % {
+            'src': source, 'tgt': target}
         log.debug(msg)
 
         if self.simulate:
@@ -731,7 +721,7 @@ class PbBaseHandler(PbBaseObject):
             src_fh = open(source, 'rb', -1)
         except Exception as e:
             msg = _("Error opening source %(src)r: %(msg)s") % {
-                    'src': source, 'msg': e}
+                'src': source, 'msg': e}
             raise PbBaseHandlerError(msg)
 
         if self.verbose > 1:
@@ -741,7 +731,7 @@ class PbBaseHandler(PbBaseObject):
         except Exception as e:
             src_fh.close()
             msg = _("Error opening target %(tgt)r: %(msg)s") % {
-                    'tgt': target, 'msg': e}
+                'tgt': target, 'msg': e}
             raise PbBaseHandlerError(msg)
 
         if self.verbose > 1:
@@ -751,14 +741,14 @@ class PbBaseHandler(PbBaseObject):
 
         try:
             if input_seek:
-                log.debug(_("Seeking %(bytes)d Bytes (%(human)s) in input to %(src)r.") % {
-                        'bytes': input_seek, 'human': bytes2human(input_seek),
-                        'src': source})
+                log.debug(
+                    _("Seeking %(bytes)d Bytes (%(human)s) in input to %(src)r.") % {
+                        'bytes': input_seek, 'human': bytes2human(input_seek), 'src': source})
                 src_fh.seek(input_seek)
             if output_seek:
-                log.debug(_("Seeking %(bytes)d Bytes (%(human)s) in output to %(tgt)r.") % {
-                        'bytes': output_seek, 'human': bytes2human(output_seek),
-                        'tgt': target})
+                log.debug(
+                    _("Seeking %(bytes)d Bytes (%(human)s) in output to %(tgt)r.") % {
+                        'bytes': output_seek, 'human': bytes2human(output_seek), 'tgt': target})
                 target_fh.seek(output_seek)
             cache = src_fh.read(blocksize)
             while cache != '':
@@ -774,7 +764,8 @@ class PbBaseHandler(PbBaseObject):
             else:
                 raise
         except Exception as e:
-            msg = _("Error copying source %(src)r to target %(tgt)r: %(msg)s") % {
+            msg = _(
+                "Error copying source %(src)r to target %(tgt)r: %(msg)s") % {
                     'src': source, 'tgt': target, 'msg': e}
             raise PbBaseHandlerError(msg)
         finally:
@@ -782,14 +773,16 @@ class PbBaseHandler(PbBaseObject):
             target_fh.close()
             bytes_written = int(blocks_written) * int(blocksize)
             written_human = bytes2human(bytes_written)
-            log.debug(_("%(bytes)d Bytes (%(human)s) written to output device %(tgt)r.",) % {
+            log.debug(
+                _("%(bytes)d Bytes (%(human)s) written to output device %(tgt)r.",) % {
                     'bytes': bytes_written, 'human': written_human, 'tgt': target})
 
         return True
 
-    #--------------------------------------------------------------------------
-    def dump_zeroes(self, target, blocksize = (1024 * 1024),
-            seek = 0, count = None, force = False):
+    # -------------------------------------------------------------------------
+    def dump_zeroes(
+        self, target, blocksize=(1024 * 1024),
+            seek=0, count=None, force=False):
         """
         Dumping blocks of binary zeroes into the target.
 
@@ -830,7 +823,8 @@ class PbBaseHandler(PbBaseObject):
         try:
             target_fh = open(target, 'wb', -1)
         except Exception as e:
-            msg = _("%(errname)s opening target %(tgt)r: %(msg)s") % {
+            msg = _(
+                "%(errname)s opening target %(tgt)r: %(msg)s") % {
                     'errname': e.__class__.__name__, 'tgt': target, 'msg': e}
             raise PbBaseHandlerError(msg)
 
@@ -841,7 +835,8 @@ class PbBaseHandler(PbBaseObject):
 
         try:
             if output_seek:
-                log.debug(_("Seeking %(bytes)d Bytes (%(human)s) in output to %(tgt)r.") % {
+                log.debug(
+                    _("Seeking %(bytes)d Bytes (%(human)s) in output to %(tgt)r.") % {
                         'bytes': output_seek, 'human': bytes2human(output_seek),
                         'tgt': target})
                 target_fh.seek(output_seek)
@@ -859,24 +854,26 @@ class PbBaseHandler(PbBaseObject):
             else:
                 raise
         except Exception as e:
-            msg = _("Error dumping binary zeroes to target %(tgt)r: %(msg)s") % {
+            msg = _(
+                "Error dumping binary zeroes to target %(tgt)r: %(msg)s") % {
                     'tgt': target, 'msg': e}
             raise PbBaseHandlerError(msg)
         finally:
             target_fh.close()
             bytes_written = int(blocks_written) * int(blocksize)
             written_human = bytes2human(bytes_written)
-            log.debug(_("%(bytes)d Bytes (%(human)s) written to output device %(tgt)r.",) % {
+            log.debug(
+                _("%(bytes)d Bytes (%(human)s) written to output device %(tgt)r.",) % {
                     'bytes': bytes_written, 'human': written_human, 'tgt': target})
 
         return True
 
-#==============================================================================
+# =============================================================================
 
 if __name__ == "__main__":
 
     pass
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
