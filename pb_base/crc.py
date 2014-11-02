@@ -12,7 +12,7 @@ from functools import reduce
 
 __version__ = '0.1.2'
 
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Module variables
 
 # module variables for crc64
@@ -22,7 +22,8 @@ CRCTableh = [0] * 256
 CRCTablel = [0] * 256
 crc64_initialised = False
 
-#==============================================================================
+
+# =============================================================================
 def crc64(aString):
     """
     Generates a CRC64 checksum from the given string.
@@ -56,8 +57,8 @@ def crc64(aString):
                 parth >>= 1
                 if rflag:
                     parth ^= POLY64REVh
-            CRCTableh[i] = parth;
-            CRCTablel[i] = partl;
+            CRCTableh[i] = parth
+            CRCTablel[i] = partl
 
         crc64_initialised = True
 
@@ -74,7 +75,8 @@ def crc64(aString):
 
     return (crch, crcl)
 
-#==============================================================================
+
+# =============================================================================
 def crc64_digest(aString):
     """
     Returns a hexidecimal digest from the 64bit checksum
@@ -90,7 +92,8 @@ def crc64_digest(aString):
 
     return "%08x%08x" % (crc64(aString))
 
-#==============================================================================
+
+# =============================================================================
 def checksum(string):
     """
     A simple checksum algorithm of a given string.
@@ -107,7 +110,8 @@ def checksum(string):
 
     return reduce(lambda x, y: x + y, list(map(ord, string)))
 
-#==============================================================================
+
+# =============================================================================
 def checksum256(string):
     """
     A simple checksum algorithm of a given string. It's similar
@@ -125,11 +129,12 @@ def checksum256(string):
 
     return reduce(lambda x, y: x + y, list(map(ord, string))) % 256
 
-#==============================================================================
+
+# =============================================================================
 
 if __name__ == "__main__":
     pass
 
-#==============================================================================
+# =============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
