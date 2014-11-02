@@ -50,40 +50,28 @@ if sys.version_info[0] > 2:
     _ = translator.gettext
     __ = translator.ngettext
 
-#==============================================================================
+
+# =============================================================================
 class PidfileAppError(PbCfgAppError):
     """Base error class for all exceptions happened during
     execution this application"""
 
     pass
 
-#==============================================================================
+
+# =============================================================================
 class PidfileApp(PbCfgApp):
     """
     Base class for all pidfile application objects.
     """
 
-    #--------------------------------------------------------------------------
-    def __init__(self,
-                appname = None,
-                pidfile = None,
-                verbose = 0,
-                version = __version__,
-                base_dir = None,
-                use_stderr = False,
-                initialized = False,
-                usage = None,
-                description = None,
-                argparse_epilog = None,
-                argparse_prefix_chars = '-',
-                env_prefix = None,
-                cfg_dir = None,
-                cfg_stem = None,
-                cfg_encoding = 'utf8',
-                cfg_spec = None,
-                hide_default_config = False,
-                need_config_file = False,
-                ):
+    # -------------------------------------------------------------------------
+    def __init__(
+        self, appname=None, pidfile=None, verbose=0, version=__version__,
+            base_dir=None, use_stderr=False, initialized=False, usage=None,
+            description=None, argparse_epilog=None, argparse_prefix_chars='-',
+            env_prefix=None, cfg_dir=None, cfg_stem=None, cfg_encoding='utf8',
+            cfg_spec=None, hide_default_config=False, need_config_file=False):
         """
         Initialisation of the daemon object.
 
@@ -172,23 +160,23 @@ class PidfileApp(PbCfgApp):
         """
 
         super(PidfileApp, self).__init__(
-                appname = appname,
-                verbose = verbose,
-                version = version,
-                base_dir = base_dir,
-                use_stderr = use_stderr,
-                initialized = False,
-                usage = usage,
-                description = description,
-                argparse_epilog = argparse_epilog,
-                argparse_prefix_chars = argparse_prefix_chars,
-                env_prefix = env_prefix,
-                cfg_dir = cfg_dir,
-                cfg_stem = cfg_stem,
-                cfg_encoding = cfg_encoding,
-                cfg_spec = cfg_spec,
-                hide_default_config = hide_default_config,
-                need_config_file = need_config_file,
+            appname=appname,
+            verbose=verbose,
+            version=version,
+            base_dir=base_dir,
+            use_stderr=use_stderr,
+            initialized=False,
+            usage=usage,
+            description=description,
+            argparse_epilog=argparse_epilog,
+            argparse_prefix_chars=argparse_prefix_chars,
+            env_prefix=env_prefix,
+            cfg_dir=cfg_dir,
+            cfg_stem=cfg_stem,
+            cfg_encoding=cfg_encoding,
+            cfg_spec=cfg_spec,
+            hide_default_config=hide_default_config,
+            need_config_file=need_config_file,
         )
 
         if not self.pidfilename:
@@ -200,20 +188,20 @@ class PidfileApp(PbCfgApp):
 
         self._simulate = getattr(self.args, 'simulate', False)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def pidfilename(self):
         """The resulting filename of the pidfile."""
         return self._pidfilename
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def simulate(self):
         """Simulation mode, nothing is really done."""
         return self._simulate
 
-    #--------------------------------------------------------------------------
-    def as_dict(self, short = False):
+    # -------------------------------------------------------------------------
+    def as_dict(self, short=False):
         """
         Transforms the elements of the object into a dict
 
@@ -224,18 +212,18 @@ class PidfileApp(PbCfgApp):
         @rtype:  dict
         """
 
-        res = super(PidfileApp, self).as_dict(short = short)
+        res = super(PidfileApp, self).as_dict(short=short)
         res['pidfilename'] = self.pidfilename
         res['simulate'] = self.simulate
 
         return res
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __del__(self):
 
         self.pidfile = None
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def init_cfg_spec(self):
         """
         Method to complete the initialisation of the config
@@ -248,23 +236,22 @@ class PidfileApp(PbCfgApp):
 
         super(PidfileApp, self).init_cfg_spec()
 
-        if not 'general' in self.cfg_spec:
+        if 'general' not in self.cfg_spec:
             self.cfg_spec['general'] = {}
 
         if not self._default_pidfilename:
             self._default_pidfilename = self.appname + '.pid'
 
         pidfile_spec = "string(default = '%s')" % (
-                to_unicode_or_bust(self._default_pidfilename))
+            to_unicode_or_bust(self._default_pidfilename))
 
-        if not 'pidfile' in self.cfg_spec['general']:
+        if 'pidfile' not in self.cfg_spec['general']:
             self.cfg_spec['general']['pidfile'] = pidfile_spec
             self.cfg_spec['general'].comments['pidfile'].append('')
             self.cfg_spec['general'].comments['pidfile'].append(
-                    'The filename of the pidfile (absolute or relative' +
-                    ' to base_dir).')
+                'The filename of the pidfile (absolute or relative to base_dir).')
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def perform_config(self):
         """
         Execute some actions after reading the configuration.
@@ -279,11 +266,11 @@ class PidfileApp(PbCfgApp):
             # Not set by commandline, but set in configuration
             pidfile = to_str_or_bust(self.cfg['general']['pidfile'])
             if pidfile and (pidfile != self._default_pidfilename):
-                log.debug(_("Setting pidfile to %r by configuration."),
-                        pidfile)
+                log.debug(
+                    _("Setting pidfile to %r by configuration."), pidfile)
                 self._pidfilename = pidfile
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def init_arg_parser(self):
         """
         Method to initiate the argument parser.
@@ -295,27 +282,28 @@ class PidfileApp(PbCfgApp):
         if not self._default_pidfilename:
             self._default_pidfilename = self.appname + '.pid'
 
-        help_txt = _('The name of the pidfile (Default: %s).') % (
-                self._default_pidfilename)
+        help_txt = _(
+            'The name of the pidfile (Default: %s).') % (
+            self._default_pidfilename)
 
         self.arg_parser.add_argument(
-                '--pfile', "--pidfile",
-                metavar = 'FILE',
-                action = 'store',
-                dest = "pidfile",
-                help = help_txt,
+            '--pfile', "--pidfile",
+            metavar='FILE',
+            action='store',
+            dest="pidfile",
+            help=help_txt,
         )
 
         self.arg_parser.add_argument(
-                '-T', '--test', '--simulate', '--dry-run',
-                action = "store_true",
-                dest = "simulate",
-                help = _("Simulation mode, nothing is really done."),
+            '-T', '--test', '--simulate', '--dry-run',
+            action="store_true",
+            dest="simulate",
+            help=_("Simulation mode, nothing is really done."),
         )
 
         super(PidfileApp, self).init_arg_parser()
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def perform_arg_parser(self):
         """
         Execute some actions after parsing the command line parameters.
@@ -328,13 +316,13 @@ class PidfileApp(PbCfgApp):
 
         pidfile = getattr(self.args, 'pidfile', None)
         if pidfile and (pidfile != self._default_pidfilename):
-            log.debug(_("Setting pidfile to %r by commandline parameter."),
-                    pidfile)
+            log.debug(
+                _("Setting pidfile to %r by commandline parameter."), pidfile)
             self._pidfilename = pidfile
 
         self._simulate = getattr(self.args, 'simulate', False)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def post_init(self):
         """
         Method to execute before calling run(). Here could be done some
@@ -353,17 +341,17 @@ class PidfileApp(PbCfgApp):
         if self.verbose > 1:
             log.debug(_("Initialising PidFile object ..."))
         self.pidfile = PidFile(
-                self.pidfilename,
-                appname = self.appname,
-                verbose = self.verbose,
-                base_dir = self.base_dir,
-                use_stderr = self.use_stderr,
-                simulate = self.simulate,
+            self.pidfilename,
+            appname=self.appname,
+            verbose=self.verbose,
+            base_dir=self.base_dir,
+            use_stderr=self.use_stderr,
+            simulate=self.simulate,
         )
 
         self.initialized = True
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def pre_run(self):
         """
         Code executing before executing the main routine.
@@ -395,12 +383,12 @@ class PidfileApp(PbCfgApp):
             self.exit(5)
 
 
-#==============================================================================
+# =============================================================================
 
 if __name__ == "__main__":
 
     pass
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
