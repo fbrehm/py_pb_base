@@ -7,7 +7,7 @@
 msgid ""
 msgstr "Project-Id-Version: profitbricks-python-base 0.5.6\n"
       "Report-Msgid-Bugs-To: frank.brehm@profitbricks.com\n"
-      "POT-Creation-Date: 2014-11-02 15:28+0100\n"
+      "POT-Creation-Date: 2014-11-02 16:46+0100\n"
       "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
       "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
       "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -397,41 +397,44 @@ msgstr ""
 msgid "I'm a daemon now - Boooaaaahhh!!!"
 msgstr ""
 
-#: pb_base/errors.py:66
+#: pb_base/errors.py:66 pb_base/errors.py:68
 #, python-format
 msgid "Function %(func)s() has to be overridden in class '%(cls)s'."
 msgstr ""
 
-#: pb_base/errors.py:88
-#, python-format
-msgid "Invalid call to method %(method)s() in a object of class %(class)r (maybe "
-      "not overridden?)."
-msgstr ""
-
-#: pb_base/errors.py:91
+#: pb_base/errors.py:91 pb_base/errors.py:96
 #, python-format
 msgid "Given positional arguments: %r."
 msgstr ""
 
-#: pb_base/errors.py:92
+#: pb_base/errors.py:92 pb_base/errors.py:97
 #, python-format
 msgid "Given keyword arguments: %r."
 msgstr ""
 
-#: pb_base/errors.py:124
+#: pb_base/errors.py:92
+#, python-format
+msgid "Invalid call to method %(m)s() in a object of class %(c)r."
+msgstr ""
+
+#: pb_base/errors.py:93
+msgid "(probably not overridden?)."
+msgstr ""
+
+#: pb_base/errors.py:124 pb_base/errors.py:130
 #, python-format
 msgid " (timeout after %0.1f secs)"
 msgstr ""
 
-#: pb_base/errors.py:150
+#: pb_base/errors.py:150 pb_base/errors.py:157
 msgid "Timeout error on reading"
 msgstr ""
 
-#: pb_base/errors.py:171
+#: pb_base/errors.py:171 pb_base/errors.py:179
 msgid "Timeout error on writing"
 msgstr ""
 
-#: pb_base/errors.py:202
+#: pb_base/errors.py:202 pb_base/errors.py:212
 #, python-format
 msgid "Couldn't occupy lockfile %(file)r in %(secs)0.1f seconds with %(tries)d "
       "tries."

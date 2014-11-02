@@ -266,12 +266,14 @@ msgstr "Ich bin dämonisiert worden, wau - ·▷▶◊◀◁·"
 msgid "Function %(func)s() has to be overridden in class '%(cls)s'."
 msgstr "Die Funktion %(func)s() muss in der Klasse '%(cls)s' überschrieben werden."
 
-#: pb_base/errors.py:85
+#: pb_base/errors.py:92
 #, python-format
-msgid "Invalid call to method %(method)s() in a object of class %(class)r (maybe "
-      "not overridden?)."
-msgstr "Ungültiger Aufruf der Methode %(method)s() in einem Objekt der Klasse %(class)r "
-       "(möglicherweise nicht überschrieben?)."
+msgid "Invalid call to method %(m)s() in a object of class %(c)r."
+msgstr "Ungültiger Aufruf der Methode %(m)s() in einem Objekt der Klasse %(c)r."
+
+#: pb_base/errors.py:93
+msgid "(probably not overridden?)."
+msgstr "(Höchstwahrscheinlich nicht überschrieben?)"
 
 #: pb_base/errors.py:88
 #, python-format
