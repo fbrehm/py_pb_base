@@ -45,24 +45,24 @@ if sys.version_info[0] > 2:
     _ = translator.gettext
     __ = translator.ngettext
 
-#==============================================================================
+
+# =============================================================================
 class Crc64AppError(PbApplicationError):
     """Base error class for all exceptions happened during
     execution this application"""
 
     pass
 
-#==============================================================================
+
+# =============================================================================
 class Crc64App(PbApplication):
     """
     Application class for the 'crc64' application.
     """
 
-    #--------------------------------------------------------------------------
-    def __init__(self,
-            verbose = 0,
-            version = my_version.__version__,
-            *arg, **kwargs):
+    # -------------------------------------------------------------------------
+    def __init__(
+            self, verbose=0, version=my_version.__version__, *arg, **kwargs):
         """
         Initialisation of the crc64 application object.
         """
@@ -77,17 +77,17 @@ class Crc64App(PbApplication):
         desc = _("Generates a 64 bit checksum for all given positional arguments.")
 
         super(Crc64App, self).__init__(
-                usage = usage,
-                description = desc,
-                verbose = verbose,
-                version = version,
-                *arg, **kwargs
+            usage=usage,
+            description=desc,
+            verbose=verbose,
+            version=version,
+            *arg, **kwargs
         )
 
         self.post_init()
         self.initialized = True
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def _run(self):
         """The underlaying startpoint of the application."""
 
@@ -95,7 +95,7 @@ class Crc64App(PbApplication):
             digest = crc64_digest(token)
             print(digest)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def init_arg_parser(self):
         """
         Method to initiate the argument parser.
@@ -104,19 +104,19 @@ class Crc64App(PbApplication):
         super(Crc64App, self).init_arg_parser()
 
         self.arg_parser.add_argument(
-                'tokens',
-                metavar = 'TOKEN',
-                type = str,
-                nargs = '+',
-                help = _('The token to generate a CRC64 digest from.'),
+            'tokens',
+            metavar='TOKEN',
+            type=str,
+            nargs='+',
+            help=_('The token to generate a CRC64 digest from.'),
         )
 
-#==============================================================================
+# =============================================================================
 
 if __name__ == "__main__":
 
     pass
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
