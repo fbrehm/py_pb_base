@@ -47,18 +47,20 @@ if sys.version_info[0] > 2:
     argparse._ = translator.gettext
 
 
-#----------------------------------------------------------
+# ---------------------------------------------------------
 # _fake_exit flag, for testing
 _fake_exit = False
 
-#==============================================================================
+
+# =============================================================================
 class PbApplicationError(PbBaseObjectError):
     """Base error class for all exceptions happened during
     execution this application"""
 
     pass
 
-#==============================================================================
+
+# =============================================================================
 class FakeExitError(PbApplicationError):
     """
     Special exception class indicating a faked app.exit().
@@ -67,8 +69,8 @@ class FakeExitError(PbApplicationError):
 
     """
 
-    #--------------------------------------------------------------------------
-    def __init__(self, exit_value, msg = None):
+    # -------------------------------------------------------------------------
+    def __init__(self, exit_value, msg=None):
         """
         Constructor.
 
@@ -82,33 +84,26 @@ class FakeExitError(PbApplicationError):
         self.exit_value = int(exit_value)
         self.msg = msg
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __str__(self):
         """Typecasting into a string for error output."""
 
-        return _("Faked exit to OS. Exit value: %(rv)d, message: %(msg)r") % {
+        return _(
+            "Faked exit to OS. Exit value: %(rv)d, message: %(msg)r") % {
                 'rv': self.exit_value, 'msg': self.msg}
 
-#==============================================================================
+
+# =============================================================================
 class PbApplication(PbBaseObject):
     """
     Base class for all application objects.
     """
 
-    #--------------------------------------------------------------------------
-    def __init__(self,
-                appname = None,
-                verbose = 0,
-                version = __version__,
-                base_dir = None,
-                use_stderr = False,
-                initialized = False,
-                usage = None,
-                description = None,
-                argparse_epilog = None,
-                argparse_prefix_chars = '-',
-                env_prefix = None,
-                ):
+    # -------------------------------------------------------------------------
+    def __init__(
+        self, appname=None, verbose=0, version=__version__, base_dir=None,
+            use_stderr=False, initialized=False, usage=None, description=None,
+            argparse_epilog=None, argparse_prefix_chars='-', env_prefix=None):
         """
         Initialisation of the base object.
 
@@ -149,12 +144,12 @@ class PbApplication(PbBaseObject):
         """
 
         super(PbApplication, self).__init__(
-                appname = appname,
-                verbose = verbose,
-                version = version,
-                base_dir = base_dir,
-                use_stderr = use_stderr,
-                initialized = False,
+            appname=appname,
+            verbose=verbose,
+            version=version,
+            base_dir=base_dir,
+            use_stderr=use_stderr,
+            initialized=False,
         )
 
         self.arg_parser = None
@@ -225,14 +220,15 @@ class PbApplication(PbBaseObject):
             ep = str(env_prefix).strip()
             if not ep:
                 msg = "Invalid env_prefix %r given - it may not be empty." % (
-                        env_prefix)
+                    env_prefix)
                 raise PbApplicationError(msg)
             match = re.search(r'^[a-z0-9][a-z0-9_]*$', ep, re.IGNORECASE)
             if not match:
-                msg = ("Invalid characters found in env_prefix %r, only " +
-                        "alphanumeric characters and digits and underscore " +
-                        "(this not as the first character) are allowed.") % (
-                        env_prefix)
+                msg = (
+                    "Invalid characters found in env_prefix %r, only " +
+                    "alphanumeric characters and digits and underscore " +
+                    "(this not as the first character) are allowed.") % (
+                    env_prefix)
                 raise PbApplicationError(msg)
             self._env_prefix = ep
 
@@ -242,7 +238,7 @@ class PbApplication(PbBaseObject):
         self._init_env()
         self._perform_env()
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def exit_value(self):
         """The return value of the application for exiting with sys.exit()."""
@@ -256,7 +252,7 @@ class PbApplication(PbBaseObject):
         else:
             log.warn("Wrong exit_value %r, must be >= 0", value)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def exitvalue(self):
         """The return value of the application for exiting with sys.exit()."""
@@ -270,56 +266,56 @@ class PbApplication(PbBaseObject):
         else:
             log.warn("Wrong exit_value %r, must be >= 0", value)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def usage(self):
         """The usage text used on argparse."""
         return self._usage
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def description(self):
         """A short text describing the application."""
         return self._description
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def argparse_epilog(self):
         """An epilog displayed at the end of the argparse help screen."""
         return self._argparse_epilog
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def argparse_prefix_chars(self):
         """The set of characters that prefix optional arguments."""
         return self._argparse_prefix_chars
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def terminal_has_colors(self):
         """A flag, that the current terminal understands color ANSI codes."""
         return self._terminal_has_colors
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def env_prefix(self):
         """A prefix for environment variables to detect them."""
         return self._env_prefix
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def usage_term(self):
         """The localized version of 'usage: '"""
         return _('usage: ')
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def usage_term_len(self):
         """The length of the localized version of 'usage: '"""
         return len(self.usage_term)
 
-    #--------------------------------------------------------------------------
-    def exit(self, retval = -1, msg = None, trace = False):
+    # -------------------------------------------------------------------------
+    def exit(self, retval=-1, msg=None, trace=False):
         """
         Universal method to call sys.exit(). If fake_exit is set, a
         FakeExitError exception is raised instead (useful for unittests.)
@@ -366,8 +362,8 @@ class PbApplication(PbBaseObject):
         else:
             sys.exit(retval)
 
-    #--------------------------------------------------------------------------
-    def as_dict(self, short = False):
+    # -------------------------------------------------------------------------
+    def as_dict(self, short=False):
         """
         Transforms the elements of the object into a dict
 
@@ -378,7 +374,7 @@ class PbApplication(PbBaseObject):
         @rtype:  dict
         """
 
-        res = super(PbApplication, self).as_dict(short = short)
+        res = super(PbApplication, self).as_dict(short=short)
         res['exit_value'] = self.exit_value
         res['usage'] = self.usage
         res['description'] = self.description
@@ -389,7 +385,7 @@ class PbApplication(PbBaseObject):
 
         return res
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def init_logging(self):
         """
         Initialize the logger object.
@@ -433,7 +429,7 @@ class PbApplication(PbBaseObject):
 
         return
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def terminal_can_color(self):
         """
         Method to detect, whether the current terminal (stdout and stderr)
@@ -447,9 +443,9 @@ class PbApplication(PbBaseObject):
         term_debug = False
         if self.verbose > 3:
             term_debug = True
-        return terminal_can_colors(debug = term_debug)
+        return terminal_can_colors(debug=term_debug)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def post_init(self):
         """
         Method to execute before calling run(). Here could be done some
@@ -467,7 +463,7 @@ class PbApplication(PbBaseObject):
 
         self.initialized = True
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def pre_run(self):
         """
         Dummy function to run before the main routine.
@@ -478,7 +474,7 @@ class PbApplication(PbBaseObject):
         if self.verbose > 1:
             log.info(_("executing pre_run() ..."))
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def _run(self):
         """
         Dummy function as main routine.
@@ -489,7 +485,7 @@ class PbApplication(PbBaseObject):
 
         raise FunctionNotImplementedError('_run()', self.__class__.__name__)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __call__(self):
         """
         Helper method to make the resulting object callable, e.g.::
@@ -503,7 +499,7 @@ class PbApplication(PbBaseObject):
 
         self.run()
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def run(self):
         """
         The visible start point of this object.
@@ -513,8 +509,8 @@ class PbApplication(PbBaseObject):
         """
 
         if not self.initialized:
-            self.handle_error(_("The application is not complete initialized."),
-                    '', True)
+            self.handle_error(
+                _("The application is not complete initialized."), '', True)
             self.exit(9)
 
         try:
@@ -524,8 +520,9 @@ class PbApplication(PbBaseObject):
             self.exit(98)
 
         if not self.initialized:
-            raise PbApplicationError(_("Object '%s' seems not to be completely initialized.") %
-                    (self.__class__.__name__))
+            raise PbApplicationError(
+                _("Object '%s' seems not to be completely initialized.") % (
+                    self.__class__.__name__))
 
         try:
             self._run()
@@ -544,7 +541,7 @@ class PbApplication(PbBaseObject):
 
         self.exit(self.exit_value)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def post_run(self):
         """
         Dummy function to run after the main routine.
@@ -555,7 +552,7 @@ class PbApplication(PbBaseObject):
         if self.verbose > 1:
             log.info(_("executing post_run() ..."))
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def _init_arg_parser(self):
         """
         Local called method to initiate the argument parser.
@@ -565,53 +562,53 @@ class PbApplication(PbBaseObject):
         """
 
         self.arg_parser = argparse.ArgumentParser(
-            prog = self.appname,
-            description = self.description,
-            usage = self.usage,
-            epilog = self.argparse_epilog,
-            prefix_chars = self.argparse_prefix_chars,
-            add_help = False,
+            prog=self.appname,
+            description=self.description,
+            usage=self.usage,
+            epilog=self.argparse_epilog,
+            prefix_chars=self.argparse_prefix_chars,
+            add_help=False,
         )
 
         self.init_arg_parser()
 
         general_group = self.arg_parser.add_argument_group(_('General options'))
         general_group.add_argument(
-                '--color',
-                action = "store",
-                dest = 'color',
-                const = 'yes',
-                default = 'auto',
-                nargs = '?',
-                choices = ['yes', 'no', 'auto'],
-                help = _("Use colored output for messages."),
+            '--color',
+            action="store",
+            dest='color',
+            const='yes',
+            default='auto',
+            nargs='?',
+            choices=['yes', 'no', 'auto'],
+            help=_("Use colored output for messages."),
         )
         general_group.add_argument(
-                "-v", "--verbose",
-                action = "count",
-                dest = 'verbose',
-                help = _('Increase the verbosity level'),
+            "-v", "--verbose",
+            action="count",
+            dest='verbose',
+            help=_('Increase the verbosity level'),
         )
         general_group.add_argument(
-                "-h", "--help",
-                action = 'help',
-                dest = 'help',
-                help = _('Show this help message and exit')
+            "-h", "--help",
+            action='help',
+            dest='help',
+            help=_('Show this help message and exit')
         )
         general_group.add_argument(
-                "--usage",
-                action = 'store_true',
-                dest = 'usage',
-                help = _("Display brief usage message and exit")
+            "--usage",
+            action='store_true',
+            dest='usage',
+            help=_("Display brief usage message and exit")
         )
         general_group.add_argument(
-                "-V", '--version',
-                action = 'version',
-                version = (_('Version of %%(prog)s: %s') % (self.version)),
-                help = _("Show program's version number and exit")
+            "-V", '--version',
+            action='version',
+            version=(_('Version of %%(prog)s: %s') % (self.version)),
+            help=_("Show program's version number and exit")
         )
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def init_arg_parser(self):
         """
         Public available method to initiate the argument parser.
@@ -627,7 +624,7 @@ class PbApplication(PbBaseObject):
 
         pass
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def _perform_arg_parser(self):
         """
         Underlaying method for parsing arguments.
@@ -649,7 +646,7 @@ class PbApplication(PbBaseObject):
         else:
             self._terminal_has_colors = self.terminal_can_color()
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def perform_arg_parser(self):
         """
         Public available method to execute some actions after parsing
@@ -660,7 +657,7 @@ class PbApplication(PbBaseObject):
 
         pass
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def _init_env(self):
         """
         Initialization of self.env by application specific environment
@@ -680,7 +677,7 @@ class PbApplication(PbBaseObject):
 
         self.init_env()
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def init_env(self):
         """
         Public available method to initiate self.env additional to the implicit
@@ -694,7 +691,7 @@ class PbApplication(PbBaseObject):
 
         pass
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def _perform_env(self):
         """
         Method to do some useful things with the found environment.
@@ -715,7 +712,7 @@ class PbApplication(PbBaseObject):
 
         self.perform_env()
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def perform_env(self):
         """
         Public available method to perform found environment variables after
@@ -727,7 +724,7 @@ class PbApplication(PbBaseObject):
 
         pass
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def colored(self, msg, color):
         """
         Wrapper function to colorize the message. Depending, whether the current
@@ -747,12 +744,12 @@ class PbApplication(PbBaseObject):
             return msg
         return colorstr(msg, color)
 
-#==============================================================================
+# =============================================================================
 
 if __name__ == "__main__":
 
     pass
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
