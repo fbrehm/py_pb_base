@@ -5,9 +5,9 @@
 #
 #, fuzzy
 msgid ""
-msgstr "Project-Id-Version: profitbricks-python-base 0.5.2\n"
+msgstr "Project-Id-Version: profitbricks-python-base 0.5.6\n"
       "Report-Msgid-Bugs-To: frank.brehm@profitbricks.com\n"
-      "POT-Creation-Date: 2014-03-20 16:25+0100\n"
+      "POT-Creation-Date: 2014-11-02 09:49+0100\n"
       "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
       "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
       "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -249,141 +249,146 @@ msgstr ""
 msgid "Reading in configuration file '%s' ..."
 msgstr ""
 
-#: pb_base/cfg_app.py:475
+#: pb_base/cfg_app.py:475 pb_base/cfg_app.py:481
 msgid "Found configuration:"
 msgstr ""
 
-#: pb_base/cfg_app.py:480
-msgid "Validation result:"
-msgstr ""
-
-#: pb_base/cfg_app.py:484
+#: pb_base/cfg_app.py:475 pb_base/cfg_app.py:484 pb_base/cfg_app.py:490
 #, python-format
 msgid "Wrong configuration in %r found:"
 msgstr ""
 
-#: pb_base/cfg_app.py:486
+#: pb_base/cfg_app.py:477 pb_base/cfg_app.py:486 pb_base/cfg_app.py:492
 msgid "Configuration error"
 msgstr ""
 
-#: pb_base/cfg_app.py:496
+#: pb_base/cfg_app.py:480 pb_base/cfg_app.py:486
+msgid "Validation result:"
+msgstr ""
+
+#: pb_base/cfg_app.py:496 pb_base/cfg_app.py:502
 msgid "Using merged configuration:"
 msgstr ""
 
-#: pb_base/cfg_app.py:499
+#: pb_base/cfg_app.py:499 pb_base/cfg_app.py:505
 msgid "Using configuration:"
 msgstr ""
 
-#: pb_base/cfg_app.py:519 pb_base/handler/df.py:463 pb_base/handler/fuser.py:207
+#: pb_base/cfg_app.py:519 pb_base/cfg_app.py:525 pb_base/handler/df.py:463
+#: pb_base/handler/fuser.py:207
 msgid "Undefined error"
 msgstr ""
 
-#: pb_base/cfg_app.py:540
+#: pb_base/cfg_app.py:540 pb_base/cfg_app.py:546
 #, python-format
 msgid "In section %(section)s key '%(key)s': %(value)s"
 msgstr ""
 
-#: pb_base/crc64_app.py:108
+#: pb_base/crc64_app.py:77
+msgid "Generates a 64 bit checksum for all given positional arguments."
+msgstr ""
+
+#: pb_base/crc64_app.py:111
 msgid "The token to generate a CRC64 digest from."
 msgstr ""
 
-#: pb_base/daemon.py:175
+#: pb_base/daemon.py:175 pb_base/daemon.py:176
 #, python-format
 msgid "Invalid facility name '%s' given."
 msgstr ""
 
-#: pb_base/daemon.py:414
+#: pb_base/daemon.py:414 pb_base/daemon.py:415
 #, python-format
 msgid "The syslog facility to use when logging as a daemon (default: %s)."
 msgstr ""
 
-#: pb_base/daemon.py:424
+#: pb_base/daemon.py:424 pb_base/daemon.py:425
 msgid "Log to console instead to syslog. Don't daemonize the application, running "
       "in foreground."
 msgstr ""
 
-#: pb_base/daemon.py:532
+#: pb_base/daemon.py:532 pb_base/daemon.py:533
 #, python-format
 msgid "Got a signal %s."
 msgstr ""
 
-#: pb_base/daemon.py:534
+#: pb_base/daemon.py:534 pb_base/daemon.py:535
 #, python-format
 msgid "Process with PID %(pid)d got signal %(signal)s."
 msgstr ""
 
-#: pb_base/daemon.py:539
+#: pb_base/daemon.py:539 pb_base/daemon.py:540
 msgid "Nothing to do on signal USR1 or USR2."
 msgstr ""
 
-#: pb_base/daemon.py:547
+#: pb_base/daemon.py:547 pb_base/daemon.py:548
 msgid "Got a signal for forced shutdown."
 msgstr ""
 
-#: pb_base/daemon.py:569
+#: pb_base/daemon.py:569 pb_base/daemon.py:570
 #, python-format
 msgid "Exit from %s, so sad ..."
 msgstr ""
 
-#: pb_base/daemon.py:586
+#: pb_base/daemon.py:586 pb_base/daemon.py:587
 #, python-format
 msgid "Using '%s' as error log file."
 msgstr ""
 
-#: pb_base/daemon.py:589
+#: pb_base/daemon.py:589 pb_base/daemon.py:590
 #, python-format
 msgid "Using '%s' as parent directory of error log file."
 msgstr ""
 
-#: pb_base/daemon.py:593
+#: pb_base/daemon.py:593 pb_base/daemon.py:594
 #, python-format
 msgid "Log directory '%s' doesn't exists."
 msgstr ""
 
-#: pb_base/daemon.py:597
+#: pb_base/daemon.py:597 pb_base/daemon.py:598
 #, python-format
 msgid "Log directory '%s' exists, but is not a directory."
 msgstr ""
 
-#: pb_base/daemon.py:605
+#: pb_base/daemon.py:605 pb_base/daemon.py:606
 #, python-format
 msgid "Could not open error logfile: %s"
 msgstr ""
 
-#: pb_base/daemon.py:609
+#: pb_base/daemon.py:609 pb_base/daemon.py:610
 #, python-format
 msgid "Could not open error logfile %(log)s: %(err)s"
 msgstr ""
 
 #. do the first fork
-#: pb_base/daemon.py:615
+#: pb_base/daemon.py:615 pb_base/daemon.py:616
 msgid "First fork ..."
 msgstr ""
 
-#: pb_base/daemon.py:622
+#: pb_base/daemon.py:622 pb_base/daemon.py:623
 msgid "Fork #1 failed: "
 msgstr ""
 
 #. do second fork
-#: pb_base/daemon.py:631
+#: pb_base/daemon.py:631 pb_base/daemon.py:632
 msgid "Second fork ..."
 msgstr ""
 
-#: pb_base/daemon.py:638
+#: pb_base/daemon.py:638 pb_base/daemon.py:639
 msgid "Fork #2 failed: "
 msgstr ""
 
-#: pb_base/daemon.py:641
+#: pb_base/daemon.py:641 pb_base/daemon.py:642
 #, python-format
 msgid "%(app)s (v%(ver)s) started as daemon with PID %(pid)d."
 msgstr ""
 
 #. redirect standard file descriptors
-#: pb_base/daemon.py:647
+#: pb_base/daemon.py:647 pb_base/daemon.py:648
 msgid "Redirect standard file descriptors ..."
 msgstr ""
 
-#: pb_base/daemon.py:659
+#: pb_base/daemon.py:659 pb_base/daemon.py:660
 msgid "I'm a daemon now - Boooaaaahhh!!!"
 msgstr ""
 
@@ -1089,35 +1094,35 @@ msgstr ""
 msgid "Unknown error: %r."
 msgstr ""
 
-#: pb_base/pidfile_app.py:198
+#: pb_base/pidfile_app.py:198 pb_base/pidfile_app.py:199
 #, python-format
 msgid "Using pidfile: %r."
 msgstr ""
 
-#: pb_base/pidfile_app.py:203
+#: pb_base/pidfile_app.py:203 pb_base/pidfile_app.py:354
 msgid "Initialising PidFile object ..."
 msgstr ""
 
-#: pb_base/pidfile_app.py:294
+#: pb_base/pidfile_app.py:282 pb_base/pidfile_app.py:294
 #, python-format
 msgid "Setting pidfile to %r by configuration."
 msgstr ""
 
-#: pb_base/pidfile_app.py:310
+#: pb_base/pidfile_app.py:298 pb_base/pidfile_app.py:310
 #, python-format
 msgid "The name of the pidfile (Default: %s)."
 msgstr ""
 
-#: pb_base/pidfile_app.py:325
+#: pb_base/pidfile_app.py:313 pb_base/pidfile_app.py:325
 msgid "Simulation mode, nothing is really done."
 msgstr ""
 
-#: pb_base/pidfile_app.py:343
+#: pb_base/pidfile_app.py:331 pb_base/pidfile_app.py:343
 #, python-format
 msgid "Setting pidfile to %r by commandline parameter."
 msgstr ""
 
-#: pb_base/pidfile_app.py:366
+#: pb_base/pidfile_app.py:366 pb_base/pidfile_app.py:383
 #, python-format
 msgid "Creating pidfile %r ..."
 msgstr ""

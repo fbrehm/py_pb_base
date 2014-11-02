@@ -74,8 +74,11 @@ class Crc64App(PbApplication):
         usage += indent + "%(prog)s -h|--help\n"
         usage += indent + "%(prog)s -V|--version"
 
+        desc = _("Generates a 64 bit checksum for all given positional arguments.")
+
         super(Crc64App, self).__init__(
                 usage = usage,
+                description = desc,
                 verbose = verbose,
                 version = version,
                 *arg, **kwargs

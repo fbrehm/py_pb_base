@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: profitbricks-python-base 0.3.11\n"
+"Project-Id-Version: profitbricks-python-base 0.5.6\n"
 "Report-Msgid-Bugs-To: frank.brehm@profitbricks.com\n"
-"POT-Creation-Date: 2013-01-14 17:31+0100\n"
-"PO-Revision-Date: 2013-04-11 23:40+0100\n"
+"POT-Creation-Date: 2014-11-02 09:49+0100\n"
+"PO-Revision-Date: 2014-11-02 10:00+0100\n"
 "Last-Translator: Frank Brehm <frank.brehm@profitbricks.com>\n"
 "Language-Team: German\n"
 "Language: de\n"
@@ -82,10 +82,6 @@ msgstr "Programmversion von %%(prog)s: %s"
 msgid "Show program's version number and exit"
 msgstr "Stellt die Programmversion dar und beendet sich."
 
-#: pb_base/crc64_app.py:100
-msgid "The token to generate a CRC64 digest from."
-msgstr "Die Zeichenkette, von der das CRC64-Digest generiert werden soll."
-
 #: pb_base/cfg_app.py:313
 msgid ""
 "Configuration file to use additional to the standard configuration files."
@@ -151,6 +147,14 @@ msgstr "Undefinierter Fehler"
 #, python-format
 msgid "In section %(section)s key '%(key)s': %(value)s"
 msgstr "In Abschnitt %(section)s Schlüssel '%(key)s': %(value)s"
+
+#: pb_base/crc64_app.py:77
+msgid "Generates a 64 bit checksum for all given positional arguments."
+msgstr "Generiert eine 64-Bit Prüfsumme für alle übergebenen Positionsargumente."
+
+#: pb_base/crc64_app.py:111
+msgid "The token to generate a CRC64 digest from."
+msgstr "Die Zeichenkette, von der das CRC64-Digest generiert werden soll."
 
 #: pb_base/daemon.py:172
 #, python-format
