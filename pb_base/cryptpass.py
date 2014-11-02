@@ -37,8 +37,9 @@ hash_algo_names = {
 
 log = logging.getLogger(__name__)
 
-#==============================================================================
-def gensalt(length = 8):
+
+# =============================================================================
+def gensalt(length=8):
     """
     Generating a salt, a string of randomly generated characters from the range
     of the decimal numbers, uppercase and lowercase letters, the dot ('.')
@@ -58,19 +59,21 @@ def gensalt(length = 8):
     length = int(length)
     if length <= 0:
         msg = "An invalid length of %d was given, must be greater than 0." % (
-                length)
+            length)
         raise ValueError(msg)
 
-    chars = [chr(x) for x in list(range(46, 57)) +
-            list(range(65, 90)) + list(range(97, 122))]
-    salt=[]
+    chars = [
+        chr(x) for x in list(range(46, 57)) +
+        list(range(65, 90)) + list(range(97, 122))]
+    salt = []
     for i in range(length):
         salt.append(random.choice(chars))
 
     return "".join(salt)
 
-#==============================================================================
-def shadowcrypt(password, hashalgo = 'sha512', saltlen = None, salt = None):
+
+# =============================================================================
+def shadowcrypt(password, hashalgo='sha512', saltlen=None, salt=None):
     """
     Crypt the given password with the given hashing algorithm and salt in a
     format, suitable for /etc/shadow.
@@ -95,7 +98,7 @@ def shadowcrypt(password, hashalgo = 'sha512', saltlen = None, salt = None):
 
     """
 
-    if not hashalgo in valid_hash_algos:
+    if hashalgo not in valid_hash_algos:
         msg = "Invalid hashing algorithm %r given." % (hashalgo)
         raise ValueError(msg)
 
@@ -118,11 +121,12 @@ def shadowcrypt(password, hashalgo = 'sha512', saltlen = None, salt = None):
 
     return crypt.crypt(password, salt2use)
 
-#==============================================================================
+
+# =============================================================================
 
 if __name__ == "__main__":
     pass
 
-#==============================================================================
+# =============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
