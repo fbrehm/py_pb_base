@@ -10,7 +10,7 @@
 '''
 
 import sys
-import os 
+import os
 import logging
 
 # own modules:
@@ -23,17 +23,17 @@ del cur_dir
 
 from pb_base.common import terminal_can_colors
 
-#==============================================================================
+# =============================================================================
 
 if __name__ == "__main__":
 
-    if terminal_can_colors(debug = False):
+    if terminal_can_colors(debug=False):
         print("yes")
         sys.exit(0)
     else:
         print("no")
         sys.exit(1)
 
-#==============================================================================
+# =============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
