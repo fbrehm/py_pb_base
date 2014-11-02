@@ -7,7 +7,7 @@
 msgid ""
 msgstr "Project-Id-Version: profitbricks-python-base 0.5.6\n"
       "Report-Msgid-Bugs-To: frank.brehm@profitbricks.com\n"
-      "POT-Creation-Date: 2014-11-02 09:49+0100\n"
+      "POT-Creation-Date: 2014-11-02 15:28+0100\n"
       "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
       "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
       "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -164,122 +164,124 @@ msgstr ""
 msgid "Crc64-Application object:"
 msgstr ""
 
-#: pb_base/app.py:89
+#: pb_base/app.py:89 pb_base/app.py:92
 #, python-format
 msgid "Faked exit to OS. Exit value: %(rv)d, message: %(msg)r"
 msgstr ""
 
-#: pb_base/app.py:313
+#: pb_base/app.py:309 pb_base/app.py:313
 msgid "usage: "
 msgstr ""
 
-#: pb_base/app.py:479
+#: pb_base/app.py:475 pb_base/app.py:479
 msgid "executing pre_run() ..."
 msgstr ""
 
-#: pb_base/app.py:516
+#: pb_base/app.py:513 pb_base/app.py:516
 msgid "The application is not complete initialized."
 msgstr ""
 
-#: pb_base/app.py:527
+#: pb_base/app.py:524 pb_base/app.py:527
 #, python-format
 msgid "Object '%s' seems not to be completely initialized."
 msgstr ""
 
-#: pb_base/app.py:537 pb_base/fork_daemon.py:366
+#: pb_base/app.py:534 pb_base/app.py:537 pb_base/fork_daemon.py:366
 msgid "Ending."
 msgstr ""
 
-#: pb_base/app.py:556
+#: pb_base/app.py:553 pb_base/app.py:556
 msgid "executing post_run() ..."
 msgstr ""
 
-#: pb_base/app.py:578 pb_base/crc64_app.py:72
+#: pb_base/app.py:575 pb_base/app.py:578 pb_base/crc64_app.py:72
 msgid "General options"
 msgstr ""
 
-#: pb_base/app.py:587
+#: pb_base/app.py:584 pb_base/app.py:587
 msgid "Use colored output for messages."
 msgstr ""
 
-#: pb_base/app.py:593
+#: pb_base/app.py:590 pb_base/app.py:593
 msgid "Increase the verbosity level"
 msgstr ""
 
-#: pb_base/app.py:599
+#: pb_base/app.py:596 pb_base/app.py:599
 msgid "Show this help message and exit"
 msgstr ""
 
-#: pb_base/app.py:605
+#: pb_base/app.py:602 pb_base/app.py:605
 msgid "Display brief usage message and exit"
 msgstr ""
 
-#: pb_base/app.py:610
+#: pb_base/app.py:607 pb_base/app.py:610
 #, python-format
 msgid "Version of %%(prog)s: %s"
 msgstr ""
 
-#: pb_base/app.py:611
+#: pb_base/app.py:608 pb_base/app.py:611
 msgid "Show program's version number and exit"
 msgstr ""
 
-#: pb_base/cfg_app.py:319
+#: pb_base/cfg_app.py:308 pb_base/cfg_app.py:319
 msgid "Configuration file to use additional to the standard configuration files."
 msgstr ""
 
-#: pb_base/cfg_app.py:327
+#: pb_base/cfg_app.py:316 pb_base/cfg_app.py:327
 msgid "The encoding character set of the configuration files."
 msgstr ""
 
-#: pb_base/cfg_app.py:335
+#: pb_base/cfg_app.py:324 pb_base/cfg_app.py:335
 msgid "Generates a default configuration, prints it out to STDOUT and exit."
 msgstr ""
 
-#: pb_base/cfg_app.py:437
+#: pb_base/cfg_app.py:427 pb_base/cfg_app.py:437
 #, python-format
 msgid "Read cfg files with character set '%s' ..."
 msgstr ""
 
-#: pb_base/cfg_app.py:443
+#: pb_base/cfg_app.py:434 pb_base/cfg_app.py:443
 msgid "Used config specification:"
 msgstr ""
 
-#: pb_base/cfg_app.py:464
+#: pb_base/cfg_app.py:454 pb_base/cfg_app.py:464
 #, python-format
 msgid "Reading in configuration file '%s' ..."
 msgstr ""
 
-#: pb_base/cfg_app.py:475 pb_base/cfg_app.py:481
-msgid "Found configuration:"
-msgstr ""
-
-#: pb_base/cfg_app.py:475 pb_base/cfg_app.py:484 pb_base/cfg_app.py:490
+#: pb_base/cfg_app.py:465 pb_base/cfg_app.py:475 pb_base/cfg_app.py:480
+#: pb_base/cfg_app.py:484 pb_base/cfg_app.py:490
 #, python-format
 msgid "Wrong configuration in %r found:"
 msgstr ""
 
-#: pb_base/cfg_app.py:477 pb_base/cfg_app.py:486 pb_base/cfg_app.py:492
+#: pb_base/cfg_app.py:467 pb_base/cfg_app.py:477 pb_base/cfg_app.py:482
+#: pb_base/cfg_app.py:486 pb_base/cfg_app.py:492
 msgid "Configuration error"
 msgstr ""
 
-#: pb_base/cfg_app.py:480 pb_base/cfg_app.py:486
+#: pb_base/cfg_app.py:471 pb_base/cfg_app.py:475 pb_base/cfg_app.py:481
+msgid "Found configuration:"
+msgstr ""
+
+#: pb_base/cfg_app.py:476 pb_base/cfg_app.py:480 pb_base/cfg_app.py:486
 msgid "Validation result:"
 msgstr ""
 
-#: pb_base/cfg_app.py:496 pb_base/cfg_app.py:502
+#: pb_base/cfg_app.py:493 pb_base/cfg_app.py:496 pb_base/cfg_app.py:502
 msgid "Using merged configuration:"
 msgstr ""
 
-#: pb_base/cfg_app.py:499 pb_base/cfg_app.py:505
+#: pb_base/cfg_app.py:495 pb_base/cfg_app.py:499 pb_base/cfg_app.py:505
 msgid "Using configuration:"
 msgstr ""
 
-#: pb_base/cfg_app.py:519 pb_base/cfg_app.py:525 pb_base/handler/df.py:463
-#: pb_base/handler/fuser.py:207
+#: pb_base/cfg_app.py:516 pb_base/cfg_app.py:519 pb_base/cfg_app.py:525
+#: pb_base/handler/df.py:463 pb_base/handler/fuser.py:207
 msgid "Undefined error"
 msgstr ""
 
-#: pb_base/cfg_app.py:540 pb_base/cfg_app.py:546
+#: pb_base/cfg_app.py:538 pb_base/cfg_app.py:540 pb_base/cfg_app.py:546
 #, python-format
 msgid "In section %(section)s key '%(key)s': %(value)s"
 msgstr ""
@@ -292,103 +294,106 @@ msgstr ""
 msgid "The token to generate a CRC64 digest from."
 msgstr ""
 
-#: pb_base/daemon.py:175 pb_base/daemon.py:176
+#: pb_base/daemon.py:163 pb_base/daemon.py:175 pb_base/daemon.py:176
 #, python-format
 msgid "Invalid facility name '%s' given."
 msgstr ""
 
-#: pb_base/daemon.py:414 pb_base/daemon.py:415
+#: pb_base/daemon.py:401 pb_base/daemon.py:414 pb_base/daemon.py:415
 #, python-format
 msgid "The syslog facility to use when logging as a daemon (default: %s)."
 msgstr ""
 
-#: pb_base/daemon.py:424 pb_base/daemon.py:425
-msgid "Log to console instead to syslog. Don't daemonize the application, running "
-      "in foreground."
+#: pb_base/daemon.py:412
+msgid "Log to console instead to syslog."
 msgstr ""
 
-#: pb_base/daemon.py:532 pb_base/daemon.py:533
+#: pb_base/daemon.py:413
+msgid "Don't daemonize the application, running in foreground."
+msgstr ""
+
+#: pb_base/daemon.py:521 pb_base/daemon.py:532 pb_base/daemon.py:533
 #, python-format
 msgid "Got a signal %s."
 msgstr ""
 
-#: pb_base/daemon.py:534 pb_base/daemon.py:535
+#: pb_base/daemon.py:524 pb_base/daemon.py:534 pb_base/daemon.py:535
 #, python-format
 msgid "Process with PID %(pid)d got signal %(signal)s."
 msgstr ""
 
-#: pb_base/daemon.py:539 pb_base/daemon.py:540
+#: pb_base/daemon.py:529 pb_base/daemon.py:539 pb_base/daemon.py:540
 msgid "Nothing to do on signal USR1 or USR2."
 msgstr ""
 
-#: pb_base/daemon.py:547 pb_base/daemon.py:548
+#: pb_base/daemon.py:537 pb_base/daemon.py:547 pb_base/daemon.py:548
 msgid "Got a signal for forced shutdown."
 msgstr ""
 
-#: pb_base/daemon.py:569 pb_base/daemon.py:570
+#: pb_base/daemon.py:559 pb_base/daemon.py:569 pb_base/daemon.py:570
 #, python-format
 msgid "Exit from %s, so sad ..."
 msgstr ""
 
-#: pb_base/daemon.py:586 pb_base/daemon.py:587
+#: pb_base/daemon.py:576 pb_base/daemon.py:586 pb_base/daemon.py:587
 #, python-format
 msgid "Using '%s' as error log file."
 msgstr ""
 
-#: pb_base/daemon.py:589 pb_base/daemon.py:590
+#: pb_base/daemon.py:580 pb_base/daemon.py:589 pb_base/daemon.py:590
 #, python-format
 msgid "Using '%s' as parent directory of error log file."
 msgstr ""
 
-#: pb_base/daemon.py:593 pb_base/daemon.py:594
+#: pb_base/daemon.py:584 pb_base/daemon.py:593 pb_base/daemon.py:594
 #, python-format
 msgid "Log directory '%s' doesn't exists."
 msgstr ""
 
-#: pb_base/daemon.py:597 pb_base/daemon.py:598
+#: pb_base/daemon.py:589 pb_base/daemon.py:597 pb_base/daemon.py:598
 #, python-format
 msgid "Log directory '%s' exists, but is not a directory."
 msgstr ""
 
-#: pb_base/daemon.py:605 pb_base/daemon.py:606
+#: pb_base/daemon.py:597 pb_base/daemon.py:605 pb_base/daemon.py:606
 #, python-format
 msgid "Could not open error logfile: %s"
 msgstr ""
 
-#: pb_base/daemon.py:609 pb_base/daemon.py:610
+#: pb_base/daemon.py:602 pb_base/daemon.py:609 pb_base/daemon.py:610
 #, python-format
 msgid "Could not open error logfile %(log)s: %(err)s"
 msgstr ""
 
 #. do the first fork
-#: pb_base/daemon.py:615 pb_base/daemon.py:616
+#: pb_base/daemon.py:608 pb_base/daemon.py:615 pb_base/daemon.py:616
 msgid "First fork ..."
 msgstr ""
 
-#: pb_base/daemon.py:622 pb_base/daemon.py:623
+#: pb_base/daemon.py:615 pb_base/daemon.py:622 pb_base/daemon.py:623
 msgid "Fork #1 failed: "
 msgstr ""
 
 #. do second fork
-#: pb_base/daemon.py:631 pb_base/daemon.py:632
+#: pb_base/daemon.py:624 pb_base/daemon.py:631 pb_base/daemon.py:632
 msgid "Second fork ..."
 msgstr ""
 
-#: pb_base/daemon.py:638 pb_base/daemon.py:639
+#: pb_base/daemon.py:631 pb_base/daemon.py:638 pb_base/daemon.py:639
 msgid "Fork #2 failed: "
 msgstr ""
 
-#: pb_base/daemon.py:641 pb_base/daemon.py:642
+#: pb_base/daemon.py:635 pb_base/daemon.py:641 pb_base/daemon.py:642
 #, python-format
 msgid "%(app)s (v%(ver)s) started as daemon with PID %(pid)d."
 msgstr ""
 
 #. redirect standard file descriptors
-#: pb_base/daemon.py:647 pb_base/daemon.py:648
+#: pb_base/daemon.py:641 pb_base/daemon.py:647 pb_base/daemon.py:648
 msgid "Redirect standard file descriptors ..."
 msgstr ""
 
-#: pb_base/daemon.py:659 pb_base/daemon.py:660
+#: pb_base/daemon.py:653 pb_base/daemon.py:659 pb_base/daemon.py:660
 msgid "I'm a daemon now - Boooaaaahhh!!!"
 msgstr ""
 

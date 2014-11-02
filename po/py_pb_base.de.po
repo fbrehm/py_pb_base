@@ -168,13 +168,13 @@ msgstr ""
 "Die zu verwendende Syslog-Facility, wenn die Anwendung als Daemon laufen "
 "soll (Default: %s)."
 
-#: pb_base/daemon.py:418
-msgid ""
-"Log to console instead to syslog. Don't daemonize the application, "
-"running in foreground."
-msgstr ""
-"Logging zur Konsole anstatt nach Syslog. Die Anwendung soll im Verdergrund"
-"anstelle als eines Daemons laufen."
+#: pb_base/daemon.py:412
+msgid "Log to console instead to syslog."
+msgstr "Logging zur Konsole anstatt nach Syslog."
+
+#: pb_base/daemon.py:413
+msgid "Don't daemonize the application, running in foreground."
+msgstr "Die Anwendung soll im Verdergrund anstelle als eines Daemons laufen."
 
 #: pb_base/daemon.py:527
 #, python-format

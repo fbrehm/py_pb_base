@@ -53,7 +53,7 @@ if sys.version_info[0] > 2:
     _ = translator.gettext
     __ = translator.ngettext
 
-#--------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 signal_names = {
     signal.SIGHUP: 'HUP',
@@ -65,43 +65,29 @@ signal_names = {
     signal.SIGUSR2: 'USR2',
 }
 
-#==============================================================================
+
+# =============================================================================
 class PbDaemonError(PidfileAppError):
     """Base error class for all exceptions happened during
     execution this daemon application"""
 
     pass
 
-#==============================================================================
+
+# =============================================================================
 class PbDaemon(PidfileApp):
     """
     Base class for all daemon application objects.
     """
 
-    #--------------------------------------------------------------------------
-    def __init__(self,
-                appname = None,
-                do_daemonize = True,
-                pidfile = None,
-                error_log = None,
-                facility = None,
-                verbose = 0,
-                version = __version__,
-                base_dir = None,
-                use_stderr = False,
-                initialized = False,
-                usage = None,
-                description = None,
-                argparse_epilog = None,
-                argparse_prefix_chars = '-',
-                env_prefix = None,
-                cfg_dir = None,
-                cfg_stem = None,
-                cfg_encoding = 'utf8',
-                cfg_spec = None,
-                hide_default_config = False,
-                need_config_file = False,
-                ):
+    # -------------------------------------------------------------------------
+    def __init__(
+        self, appname=None, do_daemonize=True, pidfile=None, error_log=None,
+            facility=None, verbose=0, version=__version__, base_dir=None,
+            use_stderr=False, initialized=False, usage=None, description=None,
+            argparse_epilog=None, argparse_prefix_chars='-', env_prefix=None,
+            cfg_dir=None, cfg_stem=None, cfg_encoding='utf8', cfg_spec=None,
+            hide_default_config=False, need_config_file=False):
         """
         Initialisation of the daemon object.
 
@@ -172,9 +158,9 @@ class PbDaemon(PidfileApp):
         """
 
         if facility:
-            if not facility in valid_syslog_facility:
-                raise PbDaemonError(_("Invalid facility name '%s' given.") % (
-                        facility))
+            if facility not in valid_syslog_facility:
+                raise PbDaemonError(
+                    _("Invalid facility name '%s' given.") % (facility))
         else:
             facility = 'daemon'
 
@@ -221,24 +207,24 @@ class PbDaemon(PidfileApp):
         '''
 
         super(PbDaemon, self).__init__(
-                appname = appname,
-                pidfile = pidfile,
-                verbose = verbose,
-                version = version,
-                base_dir = base_dir,
-                use_stderr = use_stderr,
-                initialized = False,
-                usage = usage,
-                description = description,
-                argparse_epilog = argparse_epilog,
-                argparse_prefix_chars = argparse_prefix_chars,
-                env_prefix = env_prefix,
-                cfg_dir = cfg_dir,
-                cfg_stem = cfg_stem,
-                cfg_encoding = cfg_encoding,
-                cfg_spec = cfg_spec,
-                hide_default_config = hide_default_config,
-                need_config_file = need_config_file,
+            appname=appname,
+            pidfile=pidfile,
+            verbose=verbose,
+            version=version,
+            base_dir=base_dir,
+            use_stderr=use_stderr,
+            initialized=False,
+            usage=usage,
+            description=description,
+            argparse_epilog=argparse_epilog,
+            argparse_prefix_chars=argparse_prefix_chars,
+            env_prefix=env_prefix,
+            cfg_dir=cfg_dir,
+            cfg_stem=cfg_stem,
+            cfg_encoding=cfg_encoding,
+            cfg_spec=cfg_spec,
+            hide_default_config=hide_default_config,
+            need_config_file=need_config_file,
         )
 
         self._is_daemon = False
@@ -251,19 +237,19 @@ class PbDaemon(PidfileApp):
         if not self._default_error_log:
             self._default_error_log = 'error.log'
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     @property
     def facility_name(self):
         """The name of the facility to use to log to syslog."""
         return self._facility_name
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     @property
     def facility(self):
         """The integer value of the elected syslog facility."""
         return self._facility
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     @property
     def do_daemonize(self):
         """A flag indicating, that the application should daemonize itself."""
@@ -273,7 +259,7 @@ class PbDaemon(PidfileApp):
     def do_daemonize(self, value):
         self._do_daemonize = bool(value)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     @property
     def is_daemon(self):
         """
@@ -282,20 +268,20 @@ class PbDaemon(PidfileApp):
         """
         return self._is_daemon
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     @property
     def forced_shutdown(self):
         """Flag for a forced shutdown."""
         return self._forced_shutdown
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     @property
     def error_log(self):
         """The logfile for stderr substitute in daemon mode."""
         return self._error_log
 
-    #--------------------------------------------------------------------------
-    def as_dict(self, short = False):
+    # -------------------------------------------------------------------------
+    def as_dict(self, short=False):
         """
         Transforms the elements of the object into a dict
 
@@ -306,7 +292,7 @@ class PbDaemon(PidfileApp):
         @rtype:  dict
         """
 
-        res = super(PbDaemon, self).as_dict(short = short)
+        res = super(PbDaemon, self).as_dict(short=short)
         res['facility_name'] = self.facility_name
         res['facility'] = self.facility
         res['do_daemonize'] = self.do_daemonize
@@ -316,7 +302,7 @@ class PbDaemon(PidfileApp):
 
         return res
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def init_cfg_spec(self):
         """
         Method to complete the initialisation of the config
@@ -329,46 +315,45 @@ class PbDaemon(PidfileApp):
 
         super(PbDaemon, self).init_cfg_spec()
 
-        if not 'general' in self.cfg_spec:
+        if 'general' not in self.cfg_spec:
             self.cfg_spec['general'] = {}
 
         daemon_spec = 'boolean(default = %r)' % (self.do_daemonize)
 
-        if not 'do_daemon' in self.cfg_spec['general']:
+        if 'do_daemon' not in self.cfg_spec['general']:
             self.cfg_spec['general']['do_daemon'] = daemon_spec
             self.cfg_spec['general'].comments['do_daemon'].append('')
             self.cfg_spec['general'].comments['do_daemon'].append(
-                    'Execute scstadmd as a standalone daemon (default) or ' +
-                    'under control')
+                'Execute scstadmd as a standalone daemon (default) or under control')
             self.cfg_spec['general'].comments['do_daemon'].append(
-                    'of some kind of daemonisation tool, e.g. supervisor')
+                'of some kind of daemonisation tool, e.g. supervisor')
 
-        choices = ', '.join(["'" + to_unicode_or_bust(x) + "'" for x in sorted(
+        choices = ', '.join(
+            ["'" + to_unicode_or_bust(x) + "'" for x in sorted(
                 valid_syslog_facility.keys())])
-        facility_spec = "option(%s, default = '%s')" % (choices,
-                to_unicode_or_bust(self._default_facility_name))
+        facility_spec = "option(%s, default = '%s')" % (
+            choices, to_unicode_or_bust(self._default_facility_name))
 
-        if not 'syslog_facility' in self.cfg_spec['general']:
+        if 'syslog_facility' not in self.cfg_spec['general']:
             self.cfg_spec['general']['syslog_facility'] = facility_spec
             self.cfg_spec['general'].comments['syslog_facility'].append('')
             self.cfg_spec['general'].comments['syslog_facility'].append(
-                    'The syslog facility to use when logging as a daemon.')
+                'The syslog facility to use when logging as a daemon.')
 
         def_errlog = self._default_error_log
         if not def_errlog:
             def_errlog = 'error.log'
 
-        log_spec = "string(default = '%s')" % (
-                to_unicode_or_bust(def_errlog))
+        log_spec = "string(default = '%s')" % (to_unicode_or_bust(def_errlog))
 
-        if not 'error_log' in self.cfg_spec['general']:
+        if 'error_log' not in self.cfg_spec['general']:
             self.cfg_spec['general']['error_log'] = log_spec
             self.cfg_spec['general'].comments['error_log'].append('')
             self.cfg_spec['general'].comments['error_log'].append(
-                    'The logfile for stderr substitute in daemon mode (' +
-                    'absolute or relative to base_dir).')
+                'The logfile for stderr substitute in daemon mode (' +
+                'absolute or relative to base_dir).')
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def perform_config(self):
         """
         Execute some actions after reading the configuration.
@@ -386,7 +371,7 @@ class PbDaemon(PidfileApp):
                 'syslog_facility' in self.cfg['general']):
 
             # Not set by commandline, but set in configuration
-            fac_name  = to_str_or_bust(self.cfg['general']['syslog_facility'])
+            fac_name = to_str_or_bust(self.cfg['general']['syslog_facility'])
 
             if fac_name and (fac_name != self._default_facility_name):
                 self._facility_name = fac_name
@@ -401,7 +386,7 @@ class PbDaemon(PidfileApp):
             if error_log:
                 self._error_log = error_log
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def init_arg_parser(self):
         """
         Method to initiate the argument parser.
@@ -412,26 +397,29 @@ class PbDaemon(PidfileApp):
 
         super(PbDaemon, self).init_arg_parser()
 
-        help_txt = _("The syslog facility to use when logging as a daemon (default: %s).") % (
-                self._default_facility_name)
+        help_txt = _(
+            "The syslog facility to use when logging as a daemon (default: %s).") % (
+            self._default_facility_name)
 
         self.arg_parser.add_argument(
-                "-F", "--syslog-facility",
-                dest = 'syslog_facility',
-                choices = sorted(valid_syslog_facility.keys()),
-                help = help_txt,
+            "-F", "--syslog-facility",
+            dest='syslog_facility',
+            choices=sorted(valid_syslog_facility.keys()),
+            help=help_txt,
         )
 
-        help_txt = _("Log to console instead to syslog. Don't daemonize the application, running in foreground.")
+        help_txt = _(
+            "Log to console instead to syslog.") + " " + _(
+            "Don't daemonize the application, running in foreground.")
 
         self.arg_parser.add_argument(
-                "-N", "--no-syslog", "--no-daemon",
-                action = "store_true",
-                dest = "no_syslog",
-                help = help_txt,
+            "-N", "--no-syslog", "--no-daemon",
+            action="store_true",
+            dest="no_syslog",
+            help=help_txt,
         )
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def perform_arg_parser(self):
         """
         Execute some actions after parsing the command line parameters.
@@ -451,7 +439,7 @@ class PbDaemon(PidfileApp):
         if no_syslog:
             self._do_daemonize = False
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def init_logging(self):
         """
         Initialize the logger object.
@@ -483,15 +471,15 @@ class PbDaemon(PidfileApp):
         formatter = logging.Formatter(format_str)
 
         lh_syslog = PbSysLogHandler(
-                address = '/dev/log',
-                facility = self.facility,
+            address='/dev/log',
+            facility=self.facility,
         )
         lh_syslog.setFormatter(formatter)
         root_log.addHandler(lh_syslog)
 
         return
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def post_init(self):
         """
         Method to execute before calling run(). Here could be done some
@@ -515,7 +503,7 @@ class PbDaemon(PidfileApp):
 
         self.initialized = True
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def signal_handler(self, signum, frame):
         """
         Handler as a callback function for getting a signal from somewhere.
@@ -527,13 +515,14 @@ class PbDaemon(PidfileApp):
 
         """
 
-        signame = "%d"  % (signum)
+        signame = "%d" % (signum)
         if signum in signal_names:
             signame = signal_names[signum]
         log.info(_("Got a signal %s.") % (signame))
 
-        msg = _("Process with PID %(pid)d got signal %(signal)s.") % {
-                'pid': os.getpid(), 'signal': signame}
+        msg = _(
+            "Process with PID %(pid)d got signal %(signal)s.") % {
+            'pid': os.getpid(), 'signal': signame}
         self.handle_info(msg, self.appname)
 
         if (signum == signal.SIGUSR1) or (signum == signal.SIGUSR2):
@@ -542,17 +531,17 @@ class PbDaemon(PidfileApp):
 
         # set forced shutdown, except SIGHUP
         forced = False
-        if ( (signum == signal.SIGINT) or
+        if ((signum == signal.SIGINT) or
                 (signum == signal.SIGABRT) or
-                (signum == signal.SIGTERM) ):
+                (signum == signal.SIGTERM)):
             log.info(_("Got a signal for forced shutdown."))
             forced = True
 
         self._forced_shutdown = forced
         self.exit_action(forced)
 
-    #--------------------------------------------------------------------------
-    def exit_action(self, forced = False):
+    # -------------------------------------------------------------------------
+    def exit_action(self, forced=False):
         """
         Method for indicating the application to clearly exit to OS.
         In this implemention only a simple os.exit(0) is done, but this method
@@ -571,7 +560,7 @@ class PbDaemon(PidfileApp):
 
         self.exit(0)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def _daemonize(self):
         """
         The underlaying daemonization process.
@@ -587,15 +576,17 @@ class PbDaemon(PidfileApp):
         log.debug(_("Using '%s' as error log file."), error_log)
 
         log_dir = os.path.dirname(error_log)
-        log.debug(_("Using '%s' as parent directory of error log file."),
-                log_dir)
+        log.debug(
+            _("Using '%s' as parent directory of error log file."), log_dir)
 
         if not os.path.exists(log_dir):
-            self.handle_error(_("Log directory '%s' doesn't exists.") %
-                    (log_dir), self.appname, False)
+            self.handle_error(
+                _("Log directory '%s' doesn't exists.") % (log_dir),
+                self.appname, False)
             self.exit(6)
         if not os.path.isdir(log_dir):
-            self.handle_error(_("Log directory '%s' exists, but is not a directory.") % (
+            self.handle_error(
+                _("Log directory '%s' exists, but is not a directory.") % (
                     log_dir), self.appname, False)
             self.exit(6)
 
@@ -607,8 +598,9 @@ class PbDaemon(PidfileApp):
             self.handle_error(msg, self.appname, False)
             self.exit(7)
         except Exception as e:
-            msg = _("Could not open error logfile %(log)s: %(err)s") % {
-                    'log': self.error_log, 'err': str(e)}
+            msg = _(
+                "Could not open error logfile %(log)s: %(err)s") % {
+                'log': self.error_log, 'err': str(e)}
             self.handle_error(msg, e.__class__.__name__, True)
             self.exit(8)
 
@@ -639,8 +631,9 @@ class PbDaemon(PidfileApp):
             log.error((_("Fork #2 failed: ") + "%d (%s)"), e.errno, e.strerror)
             self.exit(1)
 
-        start_msg = _("%(app)s (v%(ver)s) started as daemon with PID %(pid)d.") % {
-                'app': self.appname, 'ver': self.version, 'pid': os.getpid()}
+        start_msg = _(
+            "%(app)s (v%(ver)s) started as daemon with PID %(pid)d.") % {
+            'app': self.appname, 'ver': self.version, 'pid': os.getpid()}
 
         sys.stdout.write(start_msg + '\n')
 
@@ -651,7 +644,7 @@ class PbDaemon(PidfileApp):
 
         si = file('/dev/null', 'r')
         so = file('/dev/null', 'a+')
-        #se = file(self.error_log, 'a', 0)
+        # se = file(self.error_log, 'a', 0)
         os.dup2(si.fileno(), sys.stdin.fileno())
         os.dup2(so.fileno(), sys.stdout.fileno())
         os.dup2(se.fileno(), sys.stderr.fileno())
@@ -660,7 +653,7 @@ class PbDaemon(PidfileApp):
         log.debug(_("I'm a daemon now - Boooaaaahhh!!!"))
         self.handle_info(start_msg, self.appname)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def pre_run(self):
         """
         Code executing before executing the main routine.
@@ -694,12 +687,12 @@ class PbDaemon(PidfileApp):
         signal.signal(signal.SIGUSR2, self.signal_handler)
 
 
-#==============================================================================
+# =============================================================================
 
 if __name__ == "__main__":
 
     pass
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
