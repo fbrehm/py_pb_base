@@ -685,11 +685,11 @@ msgstr "Der Wert für %(what)s muss größer als Null sein "
 #: pb_base/handler/lock.py:519 pb_base/handler/lock.py:691
 #, python-format
 msgid ""
-"The value for %(what)s must be greater than or equal to zero "
-"(is %(val)r)."
+"The value for %(w)s must be greater than or equal to zero "
+"(is %(v)r)."
 msgstr ""
-"Der Wert für %(what)s muss größer oder gleich Null sein "
-"(ist aber %(val)r)."
+"Der Wert für %(w)s muss größer oder gleich Null sein "
+"(ist aber %(v)r)."
 
 #: pb_base/handler/lock.py:733
 #, python-format
