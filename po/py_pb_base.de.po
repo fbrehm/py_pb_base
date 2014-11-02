@@ -605,19 +605,14 @@ msgid "Could not evaluate line %(line)r in output of command %(cmd)r."
 msgstr ""
 "Konnte Zeile %(line)r in der Ausgabe des Kommandos %(cmd)r nicht auswerten."
 
-#: pb_base/handler/fuser.py:164
-#, python-format
-msgid ""
-"Filesystem object %r doesn't seems to exist. "
-"Continue because of the 'force' flag."
-msgstr ""
-"Das Dateisystemobjekt %r scheint nicht zu existieren. "
-"Mache wegen gesetztem 'force'-Flag trotzdem weiter."
-
-#: pb_base/handler/fuser.py:167
+#: pb_base/handler/fuser.py:186
 #, python-format
 msgid "Filesystem object %r doesn't seems to exist."
 msgstr "Das Dateisystemobjekt %r scheint nicht zu existieren."
+
+#: pb_base/handler/fuser.py:181
+msgid "Continue because of the 'force' flag."
+msgstr "Mache wegen gesetztem 'force'-Flag trotzdem weiter."
 
 #: pb_base/handler/fuser.py:184
 #, python-format

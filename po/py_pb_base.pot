@@ -7,7 +7,7 @@
 msgid ""
 msgstr "Project-Id-Version: profitbricks-python-base 0.5.6\n"
       "Report-Msgid-Bugs-To: frank.brehm@profitbricks.com\n"
-      "POT-Creation-Date: 2014-11-02 16:46+0100\n"
+      "POT-Creation-Date: 2014-11-02 17:33+0100\n"
       "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
       "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
       "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -186,7 +186,8 @@ msgstr ""
 msgid "Object '%s' seems not to be completely initialized."
 msgstr ""
 
-#: pb_base/app.py:534 pb_base/app.py:537 pb_base/fork_daemon.py:366
+#: pb_base/app.py:534 pb_base/app.py:537 pb_base/fork_daemon.py:353
+#: pb_base/fork_daemon.py:366
 msgid "Ending."
 msgstr ""
 
@@ -277,7 +278,8 @@ msgid "Using configuration:"
 msgstr ""
 
 #: pb_base/cfg_app.py:516 pb_base/cfg_app.py:519 pb_base/cfg_app.py:525
-#: pb_base/handler/df.py:463 pb_base/handler/fuser.py:207
+#: pb_base/handler/df.py:452 pb_base/handler/df.py:463 pb_base/handler/fuser.py:204
+#: pb_base/handler/fuser.py:207
 msgid "Undefined error"
 msgstr ""
 
@@ -440,73 +442,73 @@ msgid "Couldn't occupy lockfile %(file)r in %(secs)0.1f seconds with %(tries)d "
       "tries."
 msgstr ""
 
-#: pb_base/fork_daemon.py:257
+#: pb_base/fork_daemon.py:244 pb_base/fork_daemon.py:257
 #, python-format
 msgid "Wrong value for max_children %(val)d, must be between 1 and %(max)d."
 msgstr ""
 
-#: pb_base/fork_daemon.py:278
+#: pb_base/fork_daemon.py:265 pb_base/fork_daemon.py:278
 #, python-format
 msgid "Wrong value for timeout_collect_children %d, must be greater than zero."
 msgstr ""
 
-#: pb_base/fork_daemon.py:359
+#: pb_base/fork_daemon.py:346 pb_base/fork_daemon.py:359
 msgid "Cleaning up ..."
 msgstr ""
 
-#: pb_base/fork_daemon.py:369
+#: pb_base/fork_daemon.py:357 pb_base/fork_daemon.py:369
 #, python-format
 msgid "Daemon (v%s) ended."
 msgstr ""
 
-#: pb_base/fork_daemon.py:396
+#: pb_base/fork_daemon.py:383 pb_base/fork_daemon.py:396
 msgid "Collecting all child processes ..."
 msgstr ""
 
-#: pb_base/fork_daemon.py:399
+#: pb_base/fork_daemon.py:386 pb_base/fork_daemon.py:399
 msgid "Collecting finished child processes ..."
 msgstr ""
 
-#: pb_base/fork_daemon.py:403
+#: pb_base/fork_daemon.py:390 pb_base/fork_daemon.py:403
 msgid "No active children found."
 msgstr ""
 
-#: pb_base/fork_daemon.py:435
+#: pb_base/fork_daemon.py:423 pb_base/fork_daemon.py:435
 #, python-format
 msgid "Sending signal %d to all child processes."
 msgstr ""
 
-#: pb_base/fork_daemon.py:445
+#: pb_base/fork_daemon.py:432 pb_base/fork_daemon.py:445
 #, python-format
 msgid "Maximum timeout of %d seconds for waiting on finished child processes "
       "reached."
 msgstr ""
 
-#: pb_base/fork_daemon.py:449
+#: pb_base/fork_daemon.py:436 pb_base/fork_daemon.py:449
 #, python-format
 msgid "New stage %d in waiting for child processes."
 msgstr ""
 
-#: pb_base/fork_daemon.py:452
+#: pb_base/fork_daemon.py:439 pb_base/fork_daemon.py:452
 #, python-format
 msgid "Waiting for finished children, stage %d."
 msgstr ""
 
-#: pb_base/fork_daemon.py:500
+#: pb_base/fork_daemon.py:487 pb_base/fork_daemon.py:500
 #, python-format
 msgid "Removing child %d from active child list ..."
 msgstr ""
 
-#: pb_base/fork_daemon.py:523
+#: pb_base/fork_daemon.py:510 pb_base/fork_daemon.py:523
 msgid "Forking a child process ..."
 msgstr ""
 
-#: pb_base/fork_daemon.py:541
+#: pb_base/fork_daemon.py:528 pb_base/fork_daemon.py:541
 #, python-format
 msgid "Forked with process ID %d."
 msgstr ""
 
-#: pb_base/fork_daemon.py:548
+#: pb_base/fork_daemon.py:535 pb_base/fork_daemon.py:548
 msgid "And here is the child ..."
 msgstr ""
 
@@ -685,79 +687,78 @@ msgstr ""
 msgid "Error dumping binary zeroes to target %(tgt)r: %(msg)s"
 msgstr ""
 
-#: pb_base/handler/df.py:334 pb_base/handler/fuser.py:136
+#: pb_base/handler/df.py:322 pb_base/handler/df.py:334 pb_base/handler/fuser.py:131
+#: pb_base/handler/fuser.py:136
 msgid "Initialized."
 msgstr ""
 
-#: pb_base/handler/df.py:410
+#: pb_base/handler/df.py:399 pb_base/handler/df.py:410
 #, python-format
 msgid "Checking existence of %r ..."
 msgstr ""
 
-#: pb_base/handler/df.py:412
+#: pb_base/handler/df.py:402 pb_base/handler/df.py:412
 #, python-format
 msgid "Filesystem object %r doesn't exists."
 msgstr ""
 
-#: pb_base/handler/df.py:416
+#: pb_base/handler/df.py:406 pb_base/handler/df.py:416
 #, python-format
 msgid "%r is not given as an absolute path."
 msgstr ""
 
-#: pb_base/handler/df.py:421
+#: pb_base/handler/df.py:411 pb_base/handler/df.py:421
 #, python-format
 msgid "Calling 'df' for the following objects:"
 msgstr ""
 
-#: pb_base/handler/df.py:425
+#: pb_base/handler/df.py:414 pb_base/handler/df.py:425
 msgid "Calling 'df' for real all filesystems."
 msgstr ""
 
-#: pb_base/handler/df.py:427
+#: pb_base/handler/df.py:416 pb_base/handler/df.py:427
 msgid "Calling 'df' for local filesystems."
 msgstr ""
 
-#: pb_base/handler/df.py:429
+#: pb_base/handler/df.py:418 pb_base/handler/df.py:429
 msgid "Calling 'df' for all filesystems."
 msgstr ""
 
-#: pb_base/handler/df.py:468
+#: pb_base/handler/df.py:458 pb_base/handler/df.py:468
 #, python-format
 msgid "Error %(nr)d on getting free space of %(obj)r: %(err)s"
 msgstr ""
 
-#: pb_base/handler/df.py:474
+#: pb_base/handler/df.py:465 pb_base/handler/df.py:474
 #, python-format
 msgid "Didn't found any usable information in output of %r:"
 msgstr ""
 
-#: pb_base/handler/df.py:486
+#: pb_base/handler/df.py:478 pb_base/handler/df.py:486
 #, python-format
 msgid "Could not evaluate line %(line)r in output of command %(cmd)r."
 msgstr ""
 
-#: pb_base/handler/fuser.py:184
-#, python-format
-msgid "Filesystem object %r doesn't seems to exist. Continue because of the "
-      "'force' flag."
-msgstr ""
-
-#: pb_base/handler/fuser.py:186
+#: pb_base/handler/fuser.py:180 pb_base/handler/fuser.py:183
 #, python-format
 msgid "Filesystem object %r doesn't seems to exist."
 msgstr ""
 
-#: pb_base/handler/fuser.py:203
+#: pb_base/handler/fuser.py:181
+msgid "Continue because of the 'force' flag."
+msgstr ""
+
+#: pb_base/handler/fuser.py:201 pb_base/handler/fuser.py:203
 #, python-format
 msgid "%r will not be used by some other processes."
 msgstr ""
 
-#: pb_base/handler/fuser.py:212
+#: pb_base/handler/fuser.py:210 pb_base/handler/fuser.py:212
 #, python-format
 msgid "Error %(nr)d on getting fuser information of %(obj)r: %(err)s"
 msgstr ""
 
-#: pb_base/handler/fuser.py:226
+#: pb_base/handler/fuser.py:224 pb_base/handler/fuser.py:226
 #, python-format
 msgid "%r is not an integer value usable as PID."
 msgstr ""
