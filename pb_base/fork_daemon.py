@@ -56,50 +56,36 @@ if sys.version_info[0] > 2:
     _ = translator.gettext
     __ = translator.ngettext
 
-#--------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 default_max_children = 10
 maximum_max_children = 4096
 default_timeout_collect_children = 10
 
-#==============================================================================
+
+# =============================================================================
 class ForkingDaemonError(PbDaemonError):
     """Base error class for all exceptions happened during
     execution this daemon application"""
 
     pass
 
-#==============================================================================
+
+# =============================================================================
 class ForkingDaemon(PbDaemon):
     """
     Base class for a forking daemon application objects.
     """
 
-    #--------------------------------------------------------------------------
-    def __init__(self,
-                appname = None,
-                do_daemonize = True,
-                pidfile = None,
-                error_log = None,
-                facility = None,
-                verbose = 0,
-                version = __version__,
-                base_dir = None,
-                use_stderr = False,
-                initialized = False,
-                usage = None,
-                description = None,
-                argparse_epilog = None,
-                argparse_prefix_chars = '-',
-                env_prefix = None,
-                cfg_dir = None,
-                cfg_stem = None,
-                cfg_encoding = 'utf8',
-                cfg_spec = None,
-                hide_default_config = False,
-                need_config_file = False,
-                max_children = default_max_children,
-                ):
+    # -------------------------------------------------------------------------
+    def __init__(
+        self, appname=None, do_daemonize=True, pidfile=None, error_log=None,
+            facility=None, verbose=0, version=__version__, base_dir=None,
+            use_stderr=False, initialized=False, usage=None, description=None,
+            argparse_epilog=None, argparse_prefix_chars='-', env_prefix=None,
+            cfg_dir=None, cfg_stem=None, cfg_encoding='utf8', cfg_spec=None,
+            hide_default_config=False, need_config_file=False,
+            max_children=default_max_children):
         """
         Initialisation of the daemon object.
 
@@ -215,36 +201,36 @@ class ForkingDaemon(PbDaemon):
         """
 
         super(ForkingDaemon, self).__init__(
-                appname = appname,
-                do_daemonize = do_daemonize,
-                pidfile = pidfile,
-                error_log = error_log,
-                facility = facility,
-                verbose = verbose,
-                version = version,
-                base_dir = base_dir,
-                use_stderr = use_stderr,
-                initialized = False,
-                usage = usage,
-                description = description,
-                argparse_epilog = argparse_epilog,
-                argparse_prefix_chars = argparse_prefix_chars,
-                env_prefix = env_prefix,
-                cfg_dir = cfg_dir,
-                cfg_stem = cfg_stem,
-                cfg_encoding = cfg_encoding,
-                cfg_spec = cfg_spec,
-                hide_default_config = hide_default_config,
-                need_config_file = need_config_file,
+            appname=appname,
+            do_daemonize=do_daemonize,
+            pidfile=pidfile,
+            error_log=error_log,
+            facility=facility,
+            verbose=verbose,
+            version=version,
+            base_dir=base_dir,
+            use_stderr=use_stderr,
+            initialized=False,
+            usage=usage,
+            description=description,
+            argparse_epilog=argparse_epilog,
+            argparse_prefix_chars=argparse_prefix_chars,
+            env_prefix=env_prefix,
+            cfg_dir=cfg_dir,
+            cfg_stem=cfg_stem,
+            cfg_encoding=cfg_encoding,
+            cfg_spec=cfg_spec,
+            hide_default_config=hide_default_config,
+            need_config_file=need_config_file,
         )
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def is_child(self):
         """Flag, whether the current process is a child handling process."""
         return self._is_child
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def max_children(self):
         """The maximum number of child processes."""
@@ -254,18 +240,19 @@ class ForkingDaemon(PbDaemon):
     def max_children(self, value):
         v = int(value)
         if v < 1 or v > maximum_max_children:
-            msg = _("Wrong value for max_children %(val)d, must be between 1 and %(max)d.") % {
-                    'val': v, 'max': maximum_max_children}
+            msg = _(
+                "Wrong value for max_children %(val)d, must be between 1 and %(max)d.") % {
+                'val': v, 'max': maximum_max_children}
             raise ValueError(msg)
         self._max_children = v
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def child_id(self):
         """The ID of the current child process."""
         return self._child_id
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def timeout_collect_children(self):
         """The maximum timeout on collecting finished children per stage"""
@@ -279,8 +266,8 @@ class ForkingDaemon(PbDaemon):
             raise ValueError(msg)
         self._timeout_collect_children = v
 
-    #--------------------------------------------------------------------------
-    def as_dict(self, short = False):
+    # -------------------------------------------------------------------------
+    def as_dict(self, short=False):
         """
         Transforms the elements of the object into a dict
 
@@ -291,7 +278,7 @@ class ForkingDaemon(PbDaemon):
         @rtype:  dict
         """
 
-        res = super(ForkingDaemon, self).as_dict(short = short)
+        res = super(ForkingDaemon, self).as_dict(short=short)
         res['is_child'] = self.is_child
         res['max_children'] = self.max_children
         res['child_id'] = self.child_id
@@ -299,7 +286,7 @@ class ForkingDaemon(PbDaemon):
 
         return res
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def init_cfg_spec(self):
         """
         Method to complete the initialisation of the config
@@ -312,28 +299,28 @@ class ForkingDaemon(PbDaemon):
 
         super(ForkingDaemon, self).init_cfg_spec()
 
-        if not 'general' in self.cfg_spec:
+        if 'general' not in self.cfg_spec:
             self.cfg_spec['general'] = {}
 
         max_spec = 'integer(min = 1, max = %d, default = %d)' % (
-                maximum_max_children, self._max_children)
+            maximum_max_children, self._max_children)
 
-        if not 'max_children' in self.cfg_spec['general']:
+        if 'max_children' not in self.cfg_spec['general']:
             self.cfg_spec['general']['max_children'] = max_spec
             self.cfg_spec['general'].comments['max_children'].append('')
             self.cfg_spec['general'].comments['max_children'].append(
-                    'The maximum number of child processes.')
+                'The maximum number of child processes.')
 
         to_spec = 'integer(min = 1, default = %d)' % (
-                default_timeout_collect_children)
+            default_timeout_collect_children)
 
-        if not 'timeout_collect_children' in self.cfg_spec['general']:
+        if 'timeout_collect_children' not in self.cfg_spec['general']:
             self.cfg_spec['general']['timeout_collect_children'] = to_spec
             self.cfg_spec['general'].comments['timeout_collect_children'].append('')
             self.cfg_spec['general'].comments['timeout_collect_children'].append(
-                    'The maximum timeout on collecting finished children per stage.')
+                'The maximum timeout on collecting finished children per stage.')
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def perform_config(self):
         """
         Execute some actions after reading the configuration.
@@ -351,7 +338,7 @@ class ForkingDaemon(PbDaemon):
                 'timeout_collect_children' in self.cfg['general']):
             self.timeout_collect_children = self.cfg['general']['timeout_collect_children']
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def post_run(self):
         """Code executing after executing the main routine."""
 
@@ -359,17 +346,17 @@ class ForkingDaemon(PbDaemon):
             log.info(_("Cleaning up ..."))
 
         # Collect all children processes
-        self.collect_children(collect_all = True)
+        self.collect_children(collect_all=True)
         self.pidfile = None
 
         if self.initialized or self.verbose > 1:
             log.info(_("Ending."))
 
         if self.is_daemon:
-            self.handle_info(_("Daemon (v%s) ended.") % (self.version),
-                    self.appname)
+            self.handle_info(
+                _("Daemon (v%s) ended.") % (self.version), self.appname)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def handle_timeout(self):
         '''
         Wait for zombies after an unsuccessful polling intervall and
@@ -378,8 +365,8 @@ class ForkingDaemon(PbDaemon):
 
         self.collect_children()
 
-    #--------------------------------------------------------------------------
-    def collect_children(self, collect_all = False):
+    # -------------------------------------------------------------------------
+    def collect_children(self, collect_all=False):
         """
         Internal routine to wait for children that have exited.
 
@@ -432,8 +419,8 @@ class ForkingDaemon(PbDaemon):
                 elif stage == 3:
                     the_signal = signal.SIGKILL
 
-                log.info(_("Sending signal %d to all child processes."),
-                        the_signal)
+                log.info(
+                    _("Sending signal %d to all child processes."), the_signal)
                 for pid in list(self.active_children.keys()):
                     try:
                         os.kill(pid, the_signal)
@@ -481,7 +468,7 @@ class ForkingDaemon(PbDaemon):
 
         return
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def _deregister_child(self, pid):
         '''
         Deleting the child process with the given PID from self.active_children
@@ -508,7 +495,7 @@ class ForkingDaemon(PbDaemon):
         if child_id in self.child_ids:
             del self.child_ids[child_id]
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def become_child(self):
         """
         Fork a new subprocess.
@@ -552,12 +539,12 @@ class ForkingDaemon(PbDaemon):
 
         return True
 
-#==============================================================================
+# =============================================================================
 
 if __name__ == "__main__":
 
     pass
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
