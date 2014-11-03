@@ -54,19 +54,21 @@ max_buffer_size = (1024 * 1024 * 10)
 
 re_first_line = re.compile(r'^([^\n]*)(\r?\n)')
 
-#==============================================================================
+
+# =============================================================================
 class GenericSocketError(PbError):
     """
     Base error class for all special exceptions raised in this module.
     """
 
-#==============================================================================
+
+# =============================================================================
 class SocketReadTimeoutError(PbIoTimeoutError):
     """
     Special error class indicating a timout error on reading from socket.
     """
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __init__(self, timeout):
         """
         Constructor.
@@ -79,13 +81,14 @@ class SocketReadTimeoutError(PbIoTimeoutError):
         strerror = _("Timeout error on reading from socket")
         super(SocketReadTimeoutError, self).__init__(strerror, timeout)
 
-#==============================================================================
+
+# =============================================================================
 class SocketWriteTimeoutError(PbIoTimeoutError):
     """
     Special error class indicating a timout error on writing to a socket.
     """
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __init__(self, timeout):
         """
         Constructor.
@@ -98,26 +101,21 @@ class SocketWriteTimeoutError(PbIoTimeoutError):
         strerror = _("Timeout error on writing to socket")
         super(SocketWriteTimeoutError, self).__init__(strerror, timeout)
 
-#==============================================================================
+
+# =============================================================================
 # Syntax fro Python3:
-#class GenericSocket(PbBaseObject, metaclass = ABCMeta):
+# class GenericSocket(PbBaseObject, metaclass = ABCMeta):
 
 class GenericSocket(PbBaseObject):
     """Class for capsulation a generic socket somehow."""
 
     __metaclass__ = ABCMeta
 
-    #--------------------------------------------------------------------------
-    def __init__(self,
-            timeout = 5,
-            request_queue_size = 5,
-            buffer_size = default_buffer_size,
-            appname = None,
-            verbose = 0,
-            version = __version__,
-            base_dir = None,
-            use_stderr = False,
-            ):
+    # -------------------------------------------------------------------------
+    def __init__(
+        self, timeout=5, request_queue_size=5, buffer_size=default_buffer_size,
+            appname=None, verbose=0, version=__version__, base_dir=None,
+            use_stderr=False):
         """
         Initialisation of the GenericSocket object.
 
@@ -147,12 +145,12 @@ class GenericSocket(PbBaseObject):
         """
 
         super(GenericSocket, self).__init__(
-                appname = appname,
-                base_dir = base_dir,
-                verbose = verbose,
-                version = version,
-                use_stderr = use_stderr,
-                initialized = False,
+            appname=appname,
+            base_dir=base_dir,
+            verbose=verbose,
+            version=version,
+            use_stderr=use_stderr,
+            initialized=False,
         )
 
         self._timeout = int(timeout)
@@ -167,8 +165,9 @@ class GenericSocket(PbBaseObject):
         @type: int
         """
         if self._request_queue_size < 0 or self._request_queue_size > 5:
-            raise ValueError(_("Invalid request_queue_size %r, must be between 0 and 5.") % (
-                    request_queue_size))
+            raise ValueError(_(
+                "Invalid request_queue_size %r, must be between 0 and 5.") % (
+                request_queue_size))
 
         self._buffer_size = buffer_size
         """
@@ -177,8 +176,9 @@ class GenericSocket(PbBaseObject):
         """
         if (self._buffer_size < min_buffer_size or
                 self._buffer_size > max_buffer_size):
-            raise ValueError(_("Invalid buffer size %(bs)r, must be between %(min)d and %(max)d.") % {
-                    'bs': buffer_size, 'min': min_buffer_size, 'max': max_buffer_size})
+            raise ValueError(_(
+                "Invalid buffer size %(bs)r, must be between %(min)d and %(max)d.") % {
+                'bs': buffer_size, 'min': min_buffer_size, 'max': max_buffer_size})
 
         self._bonded = False
         """
@@ -231,7 +231,7 @@ class GenericSocket(PbBaseObject):
         @type: str
         """
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def timeout(self):
         """timeout in seconds for all opening and IO operations"""
@@ -241,7 +241,7 @@ class GenericSocket(PbBaseObject):
     def timeout(self, value):
         self._timeout = int(value)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def fileno(self):
         """The file number of the socket after binding or connecting."""
@@ -254,19 +254,19 @@ class GenericSocket(PbBaseObject):
         else:
             self._fileno = int(value)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def connected(self):
         """A flag indicating, that the application is connected to the UNIX socket."""
         return self._connected
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def bonded(self):
         """A flag indicating, that the socket is bonded for listening."""
         return self._bonded
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def interrupted(self):
         """
@@ -279,34 +279,34 @@ class GenericSocket(PbBaseObject):
     def interrupted(self, value):
         self._interrupted = bool(value)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def request_queue_size(self):
         """The maximum number of queued connections."""
         return self._request_queue_size
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def buffer_size(self):
         """The size of the buffer for receiving data from sockets."""
         return self._buffer_size
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     @abstractmethod
     def connect(self):
         """Connecting to the saved socket as a client."""
 
         raise FunctionNotImplementedError('connect', self.__class__.__name__)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     @abstractmethod
     def bind(self):
         """Create the socket and listen on it."""
 
         raise FunctionNotImplementedError('bind', self.__class__.__name__)
 
-    #--------------------------------------------------------------------------
-    def as_dict(self, short = False):
+    # -------------------------------------------------------------------------
+    def as_dict(self, short=False):
         """
         Transforms the elements of the object into a dict
 
@@ -317,7 +317,7 @@ class GenericSocket(PbBaseObject):
         @rtype:  dict
         """
 
-        res = super(GenericSocket, self).as_dict(short = short)
+        res = super(GenericSocket, self).as_dict(short=short)
         res['timeout'] = self.timeout
         res['fileno'] = self.fileno
         res['connected'] = self.connected
@@ -328,7 +328,7 @@ class GenericSocket(PbBaseObject):
 
         return res
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def close(self):
         """Closing the current socket."""
 
@@ -341,13 +341,13 @@ class GenericSocket(PbBaseObject):
         self._connected = False
         self._bonded = False
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __del__(self):
         """Destructor, closes current socket, if necessary."""
 
         self.close()
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def reset(self):
         """
         Resetting the socket after interruption of communication.
@@ -362,7 +362,7 @@ class GenericSocket(PbBaseObject):
         self.client_address = None
         self.interrupted = False
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def send(self, message):
         """
         Sends the message over the socket to the communication partner.
@@ -373,7 +373,8 @@ class GenericSocket(PbBaseObject):
         """
 
         if self.interrupted:
-            msg = _("Cannot send message to the receipient, because the socket connection is interrupted.")
+            msg = _(
+                "Cannot send message to the receipient, because the socket connection is interrupted.")
             raise GenericSocketError(msg)
 
         ok = False
@@ -383,7 +384,8 @@ class GenericSocket(PbBaseObject):
             ok = True
 
         if not ok:
-            msg = _("Cannot send message to the receipient, because the socket connection is closed.")
+            msg = _(
+                "Cannot send message to the receipient, because the socket connection is closed.")
             raise GenericSocketError(msg)
 
         if self.verbose > 3:
@@ -394,7 +396,7 @@ class GenericSocket(PbBaseObject):
         else:
             self.sock.sendall(message)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def accept(self):
         """Accept a connection, if the socket is bonded in listening mode."""
 
@@ -415,7 +417,7 @@ class GenericSocket(PbBaseObject):
             cla = _("Got a request from somewhere from system.")
         log.debug(cla)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def _read(self):
         """
         Reading data from current socket (from self.connection, if
@@ -451,8 +453,8 @@ class GenericSocket(PbBaseObject):
         self.interrupted = True
         return
 
-    #--------------------------------------------------------------------------
-    def read_line(self, socket_has_data = False):
+    # -------------------------------------------------------------------------
+    def read_line(self, socket_has_data=False):
         """
         Reads exact one line of data from socket and gives it back.
 
@@ -509,16 +511,17 @@ class GenericSocket(PbBaseObject):
                 self._input_buffer = re_first_line.sub('', self._input_buffer)
                 if self.verbose > 3:
                     log.debug(_("Got a line: %r"), line)
-                    log.debug(_("Current input buffer after read_line(): %r"),
-                            self._input_buffer)
+                    log.debug(_(
+                        "Current input buffer after read_line(): %r"),
+                        self._input_buffer)
                 return line
             else:
                 return ''
 
         return ''
 
-    #--------------------------------------------------------------------------
-    def has_data(self, polling_interval = 0.05):
+    # -------------------------------------------------------------------------
+    def has_data(self, polling_interval=0.05):
         """
         Looks, whether the current socket has data in his input buffer, that
         can be read in.
@@ -532,10 +535,10 @@ class GenericSocket(PbBaseObject):
 
         try:
             rlist, wlist, elist = select.select(
-                    [self.fileno],
-                    [],
-                    [],
-                    polling_interval
+                [self.fileno],
+                [],
+                [],
+                polling_interval
             )
             if self.fileno in rlist:
                 result = True
@@ -545,12 +548,12 @@ class GenericSocket(PbBaseObject):
 
         return result
 
-#==============================================================================
+# =============================================================================
 
 if __name__ == "__main__":
 
     pass
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
