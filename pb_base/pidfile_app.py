@@ -3,7 +3,7 @@
 """
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
-@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
+@copyright: © 2010 - 2014 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: The module for a application object supporting an application,
           which should use a pidfile to ensure a singelton execution
           on the system.
@@ -40,7 +40,7 @@ from pb_base.pidfile import PidFile
 
 from pb_base.translate import translator
 
-__version__ = '0.4.1'
+__version__ = '0.5.1'
 
 log = logging.getLogger(__name__)
 

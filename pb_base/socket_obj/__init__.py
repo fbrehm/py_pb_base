@@ -37,7 +37,7 @@ from pb_base.translate import translator
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
 __copyright__ = '(C) 2010 - 2014 by Frank Brehm, ProfitBricks GmbH, Berlin'
 __contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.3.1'
+__version__ = '0.4.1'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)

@@ -3,7 +3,7 @@
 """
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
-@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
+@copyright: © 2010 - 2014 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: module for some common used error classes
 """
 
@@ -14,7 +14,7 @@ import sys
 # Own modules
 from pb_base.translate import translator
 
-__version__ = '0.2.1'
+__version__ = '0.3.1'
 
 _ = translator.lgettext
 __ = translator.lngettext

@@ -3,7 +3,7 @@
 """
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
-@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
+@copyright: © 2010 - 2014 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: The module for a pidfile object.
           It provides methods to define, check,  create
           and remove a pidfile.
@@ -31,7 +31,7 @@ from pb_base.common import to_utf8_or_bust
 
 from pb_base.translate import translator
 
-__version__ = '0.4.2'
+__version__ = '0.5.1'
 
 log = logging.getLogger(__name__)
 

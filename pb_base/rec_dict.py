@@ -3,7 +3,7 @@
 """
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
-@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
+@copyright: © 2010 - 2014 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: The module provides an object class with a dict, which can
           be updated in a recursive way.
           It is originated by Jannis Andrija Schnitzer::
@@ -18,7 +18,7 @@ import logging
 __author__ = 'jannis@itisme.org (Jannis Andrija Schnitzer)'
 __copyright__ = '(c) 2009 Jannis Andrija Schnitzer'
 __contact__ = 'jannis@itisme.org'
-__version__ = '0.1.1'
+__version__ = '0.2.1'
 __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)

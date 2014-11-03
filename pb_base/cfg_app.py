@@ -3,7 +3,7 @@
 """
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
-@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
+@copyright: © 2010 - 2014 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: The module for a base configured application object.
           It provides all from the base application object with additional
           methods and properties to read different configuration files.
@@ -39,7 +39,7 @@ from pb_base.app import PbApplication
 
 from pb_base.translate import translator
 
-__version__ = '0.5.6'
+__version__ = '0.6.1'
 
 log = logging.getLogger(__name__)
 

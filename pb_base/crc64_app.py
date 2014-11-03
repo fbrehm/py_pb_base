@@ -3,7 +3,7 @@
 """
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
-@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
+@copyright: © 2010 - 2014 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: The module for an application object for the 'crc64' application.
 """
 
@@ -35,7 +35,7 @@ try:
 except ImportError:
     import pb_base.global_version as my_version
 
-__version__ = '0.2.3'
+__version__ = '0.3.1'
 
 log = logging.getLogger(__name__)
 
