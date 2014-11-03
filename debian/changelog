@@ -1,3 +1,14 @@
+pb-base (0.6.0-1) wheezy; urgency=low
+
+  * Version bump
+  * Applied PEP8 rules to all Python scripts.
+  * Added generation of manpages
+  * Defined new binary Debian package 'pb-base' containing all exeutable
+    scripts in bin/* and removed them in binary package 'python-pb-
+    base'.
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Mon, 03 Nov 2014 15:55:21 +0100
+
 pb-base (0.5.6-1) wheezy; urgency=low
 
   * Bugfing and updating in pb_base/pidfile_app.py because of
