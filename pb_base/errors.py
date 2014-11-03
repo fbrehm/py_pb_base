@@ -89,7 +89,7 @@ class CallAbstractMethodError(PbError, NotImplementedError):
         """Typecasting into a string for error output."""
 
         msg = _(
-            "Invalid call to method %(m)s() in a object of class %(c)r.") + " " _(
+            "Invalid call to method %(m)s() in a object of class %(c)r.") + " " + _(
             "(probably not overridden?).") % {
             'm': self.method, 'c': self.classname}
 
