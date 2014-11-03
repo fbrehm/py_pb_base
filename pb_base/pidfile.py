@@ -41,18 +41,20 @@ if sys.version_info[0] > 2:
     _ = translator.gettext
     __ = translator.ngettext
 
-#==============================================================================
+
+# =============================================================================
 class PidFileError(PbBaseObjectError):
     """Base error class for all exceptions happened during
     handling a pidfile."""
 
     pass
 
-#==============================================================================
+
+# =============================================================================
 class InvalidPidFileError(PidFileError):
     """An error class indicating, that the given pidfile is unusable"""
 
-    def __init__(self, pidfile, reason = None):
+    def __init__(self, pidfile, reason=None):
         """
         Constructor.
 
@@ -66,20 +68,22 @@ class InvalidPidFileError(PidFileError):
         self.pidfile = pidfile
         self.reason = reason
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __str__(self):
         """Typecasting into a string for error output."""
 
         msg = None
         if self.reason:
-            msg = _("Invalid pidfile '%(pidfile)s' given: %(reason)s") % {
-                    'pidfile': self.pidfile, 'reason': self.reason}
+            msg = _(
+                "Invalid pidfile '%(pidfile)s' given: %(reason)s") % {
+                'pidfile': self.pidfile, 'reason': self.reason}
         else:
             msg = _("Invalid pidfile %r given.") % (self.pidfile)
 
         return msg
 
-#==============================================================================
+
+# =============================================================================
 class PidFileInUseError(PidFileError):
     """
     An error class indicating, that the given pidfile is in use
@@ -100,34 +104,28 @@ class PidFileInUseError(PidFileError):
         self.pidfile = pidfile
         self.pid = pid
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __str__(self):
         """Typecasting into a string for error output."""
 
-        msg = _("The pidfile '%(pidfile)s is currently in use by the application with the PID %(pid)d.") % {
-                'pidfile': self.pidfile, 'pid': self.pid}
+        msg = _(
+            "The pidfile '%(pf)s is currently in use by the application with the PID %(pid)d.") % {
+            'pf': self.pidfile, 'pid': self.pid}
 
         return msg
 
-#==============================================================================
+
+# =============================================================================
 class PidFile(PbBaseObject):
     """
     Base class for a pidfile object.
     """
 
-    #--------------------------------------------------------------------------
-    def __init__(self,
-                filename,
-                auto_remove = True,
-                appname = None,
-                verbose = 0,
-                version = __version__,
-                base_dir = None,
-                use_stderr = False,
-                initialized = False,
-                simulate = False,
-                timeout = 10,
-                ):
+    # -------------------------------------------------------------------------
+    def __init__(
+        self, filename, auto_remove=True, appname=None, verbose=0,
+            version=__version__, base_dir=None, use_stderr=False,
+            initialized=False, simulate=False, timeout=10):
         """
         Initialisation of the pidfile object.
 
@@ -169,12 +167,12 @@ class PidFile(PbBaseObject):
         """
 
         super(PidFile, self).__init__(
-                appname = appname,
-                verbose = verbose,
-                version = version,
-                base_dir = base_dir,
-                use_stderr = use_stderr,
-                initialized = False,
+            appname=appname,
+            verbose=verbose,
+            version=version,
+            base_dir=base_dir,
+            use_stderr=use_stderr,
+            initialized=False,
         )
 
         if not filename:
@@ -204,13 +202,13 @@ class PidFile(PbBaseObject):
         @type: int
         """
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def filename(self):
         """The filename of the pidfile."""
         return self._filename
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def auto_remove(self):
         """Remove the self created pidfile on destroying the current object."""
@@ -220,32 +218,32 @@ class PidFile(PbBaseObject):
     def auto_remove(self, value):
         self._auto_remove = bool(value)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def simulate(self):
         """Simulation mode."""
         return self._simulate
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def created(self):
         """The pidfile was created by this current object."""
         return self._created
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def timeout(self):
         """The timeout in seconds for IO operations on pidfile."""
         return self._timeout
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def parent_dir(self):
         """The directory containing the pidfile."""
         return os.path.dirname(self.filename)
 
-    #--------------------------------------------------------------------------
-    def as_dict(self, short = False):
+    # -------------------------------------------------------------------------
+    def as_dict(self, short=False):
         """
         Transforms the elements of the object into a dict
 
@@ -256,7 +254,7 @@ class PidFile(PbBaseObject):
         @rtype:  dict
         """
 
-        res = super(PidFile, self).as_dict(short = short)
+        res = super(PidFile, self).as_dict(short=short)
         res['filename'] = self.filename
         res['auto_remove'] = self.auto_remove
         res['simulate'] = self.simulate
@@ -266,7 +264,7 @@ class PidFile(PbBaseObject):
 
         return res
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __repr__(self):
         """Typecasting into a string for reproduction."""
 
@@ -286,7 +284,7 @@ class PidFile(PbBaseObject):
         out += ", ".join(fields) + ")>"
         return out
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __del__(self):
         """Destructor. Removes the pidfile, if it was created by ourselfes."""
 
@@ -295,14 +293,15 @@ class PidFile(PbBaseObject):
 
         if not os.path.exists(self.filename):
             if self.verbose > 3:
-                log.debug(_("Pidfile '%s' doesn't exists, not removing."),
-                        self.filename)
+                log.debug(
+                    _("Pidfile '%s' doesn't exists, not removing."), self.filename)
             return
 
         if not self.auto_remove:
             if self.verbose > 3:
-                log.debug(_("Auto removing disabled, don't deleting '%s'."),
-                        self.filename)
+                log.debug(
+                    _("Auto removing disabled, don't deleting '%s'."),
+                    self.filename)
             return
 
         if self.verbose > 1:
@@ -314,13 +313,14 @@ class PidFile(PbBaseObject):
         try:
             os.remove(self.filename)
         except OSError as e:
-            log.err(_("Could not delete pidfile %(file)r: %(err)s"),
-                    self.filename, str(e))
+            log.err(
+                _("Could not delete pidfile %(file)r: %(err)s"),
+                self.filename, str(e))
         except Exception as e:
             self.handle_error(str(e), e.__class__.__name__, True)
 
-    #--------------------------------------------------------------------------
-    def create(self, pid = None):
+    # -------------------------------------------------------------------------
+    def create(self, pid=None):
         """
         The main method of this class. It tries to write the PID of the process
         into the pidfile.
@@ -334,8 +334,9 @@ class PidFile(PbBaseObject):
         if pid:
             pid = int(pid)
             if pid <= 0:
-                msg = _("Invalid PID %(pid)d for creating pidfile %(pidfile)r given.") % {
-                        'pid': pid, 'pidfile': self.filename}
+                msg = _(
+                    "Invalid PID %(pid)d for creating pidfile %(pidfile)r given.") % {
+                    'pid': pid, 'pidfile': self.filename}
                 raise PidFileError(msg)
         else:
             pid = os.getpid()
@@ -355,25 +356,27 @@ class PidFile(PbBaseObject):
             log.debug(_("Trying opening '%s' exclusive ..."), self.filename)
 
         if self.simulate:
-            log.debug(_("Simulation mode - don't real writing in '%s'."),
-                    self.filename)
+            log.debug(
+                _("Simulation mode - don't real writing in '%s'."), self.filename)
             self._created = True
             return
 
         fd = None
         try:
-            fd = os.open(self.filename,
-                    os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+            fd = os.open(
+                self.filename, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
         except OSError as e:
-            msg = _("Error on creating pidfile '%(pidfile)s': %(err)s") % {
-                    'pidfile': self.filename, 'err': str(e)}
+            msg = _(
+                "Error on creating pidfile '%(pidfile)s': %(err)s") % {
+                'pidfile': self.filename, 'err': str(e)}
             raise PidFileError(msg)
 
         if self.verbose > 2:
-            log.debug(_("Writing %(pid)d into '%(pidfile)s' ...") % {
-                    'pid': pid, 'pidfile': self.filename})
+            log.debug(_(
+                "Writing %(pid)d into '%(pidfile)s' ...") % {
+                'pid': pid, 'pidfile': self.filename})
 
-        out = "%d\n" %(pid)
+        out = "%d\n" % (pid)
         if sys.version_info[0] > 2:
             out = to_utf8_or_bust(out)
         try:
@@ -383,8 +386,8 @@ class PidFile(PbBaseObject):
 
         self._created = True
 
-    #--------------------------------------------------------------------------
-    def recreate(self, pid = None):
+    # -------------------------------------------------------------------------
+    def recreate(self, pid=None):
         """
         Rewrites an even created pidfile with the current PID.
 
@@ -401,8 +404,9 @@ class PidFile(PbBaseObject):
         if pid:
             pid = int(pid)
             if pid <= 0:
-                msg = _("Invalid PID %(pid)d for creating pidfile %(pidfile)r given.") % {
-                        'pid': pid, 'pidfile': self.filename}
+                msg = _(
+                    "Invalid PID %(pid)d for creating pidfile %(pidfile)r given.") % {
+                    'pid': pid, 'pidfile': self.filename}
                 raise PidFileError(msg)
         else:
             pid = os.getpid()
@@ -411,29 +415,30 @@ class PidFile(PbBaseObject):
             log.debug(_("Trying opening '%s' for recreate ..."), self.filename)
 
         if self.simulate:
-            log.debug(_("Simulation mode - don't real writing in '%s'."),
-                    self.filename)
+            log.debug(
+                _("Simulation mode - don't real writing in '%s'."), self.filename)
             return
 
         fh = None
         try:
             fh = open(self.filename, 'w')
         except OSError as e:
-            msg = _("Error on recreating pidfile '%(pidfile)s': %(err)s") % {
-                    'pidfile': self.filename, 'err': str(e)}
+            msg = _(
+                "Error on recreating pidfile '%(pidfile)s': %(err)s") % {
+                'pidfile': self.filename, 'err': str(e)}
             raise PidFileError(msg)
 
         if self.verbose > 2:
-            log.debug(_("Writing %(pid)d into '%(pidfile)s' ...") % {
-                    'pid': pid, 'pidfile': self.filename})
+            log.debug(_(
+                "Writing %(pid)d into '%(pidfile)s' ...") % {
+                'pid': pid, 'pidfile': self.filename})
 
         try:
-            fh.write("%d\n" %(pid))
+            fh.write("%d\n" % (pid))
         finally:
             fh.close()
 
-
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def check(self):
         """
         This methods checks the usability of the pidfile.
@@ -455,16 +460,19 @@ class PidFile(PbBaseObject):
 
         if not os.path.exists(self.filename):
             if not os.path.exists(self.parent_dir):
-                reason = _("Pidfile parent directory '%s' doesn't exists.") % (
-                        self.parent_dir)
+                reason = _(
+                    "Pidfile parent directory '%s' doesn't exists.") % (
+                    self.parent_dir)
                 raise InvalidPidFileError(self.filename, reason)
             if not os.path.isdir(self.parent_dir):
-                reason = _("Pidfile parent directory '%s' is not a directory.") % (
-                        self.parent_dir)
+                reason = _(
+                    "Pidfile parent directory '%s' is not a directory.") % (
+                    self.parent_dir)
                 raise InvalidPidFileError(self.filename, reason)
             if not os.access(self.parent_dir, os.X_OK):
-                reason = _("No write access to pidfile parent directory '%s'.") % (
-                        self.parent_dir)
+                reason = _(
+                    "No write access to pidfile parent directory '%s'.") % (
+                    self.parent_dir)
                 raise InvalidPidFileError(self.filename, reason)
 
             return False
@@ -473,7 +481,7 @@ class PidFile(PbBaseObject):
             reason = _("It is not a regular file.")
             raise InvalidPidFileError(self.filename, self.parent_dir)
 
-        #----------
+        # ---------
         def pidfile_read_alarm_caller(signum, sigframe):
             """
             This nested function will be called in event of a timeout.
@@ -538,12 +546,12 @@ class PidFile(PbBaseObject):
         return False
 
 
-#==============================================================================
+# =============================================================================
 
 if __name__ == "__main__":
 
     pass
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

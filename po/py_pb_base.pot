@@ -7,7 +7,7 @@
 msgid ""
 msgstr "Project-Id-Version: profitbricks-python-base 0.5.6\n"
       "Report-Msgid-Bugs-To: frank.brehm@profitbricks.com\n"
-      "POT-Creation-Date: 2014-11-02 18:32+0100\n"
+      "POT-Creation-Date: 2014-11-03 11:01+0100\n"
       "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
       "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
       "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -976,42 +976,42 @@ msgstr ""
 msgid "Invalid PID %(pid)d in %(file)r found."
 msgstr ""
 
-#: pb_base/pidfile.py:75
+#: pb_base/pidfile.py:78
 #, python-format
 msgid "Invalid pidfile '%(pidfile)s' given: %(reason)s"
 msgstr ""
 
-#: pb_base/pidfile.py:78
+#: pb_base/pidfile.py:81
 #, python-format
 msgid "Invalid pidfile %r given."
 msgstr ""
 
-#: pb_base/pidfile.py:107
+#: pb_base/pidfile.py:112
 #, python-format
-msgid "The pidfile '%(pidfile)s is currently in use by the application with the "
-      "PID %(pid)d."
+msgid "The pidfile '%(pf)s is currently in use by the application with the PID "
+      "%(pid)d."
 msgstr ""
 
-#: pb_base/pidfile.py:181
+#: pb_base/pidfile.py:179
 msgid "No filename given on initializing PidFile object."
 msgstr ""
 
-#: pb_base/pidfile.py:298
+#: pb_base/pidfile.py:297
 #, python-format
 msgid "Pidfile '%s' doesn't exists, not removing."
 msgstr ""
 
-#: pb_base/pidfile.py:304
+#: pb_base/pidfile.py:303
 #, python-format
 msgid "Auto removing disabled, don't deleting '%s'."
 msgstr ""
 
-#: pb_base/pidfile.py:309
+#: pb_base/pidfile.py:308
 #, python-format
 msgid "Removing pidfile '%s' ..."
 msgstr ""
 
-#: pb_base/pidfile.py:312 pb_base/pidfile.py:347
+#: pb_base/pidfile.py:311 pb_base/pidfile.py:348
 msgid "Just kidding .."
 msgstr ""
 
@@ -1020,128 +1020,128 @@ msgstr ""
 msgid "Could not delete pidfile %(file)r: %(err)s"
 msgstr ""
 
-#: pb_base/pidfile.py:337 pb_base/pidfile.py:404
+#: pb_base/pidfile.py:338 pb_base/pidfile.py:408
 #, python-format
 msgid "Invalid PID %(pid)d for creating pidfile %(pidfile)r given."
 msgstr ""
 
-#: pb_base/pidfile.py:345
+#: pb_base/pidfile.py:346
 #, python-format
 msgid "Deleting pidfile '%s' ..."
 msgstr ""
 
-#: pb_base/pidfile.py:355
+#: pb_base/pidfile.py:356
 #, python-format
 msgid "Trying opening '%s' exclusive ..."
 msgstr ""
 
-#: pb_base/pidfile.py:358 pb_base/pidfile.py:414
+#: pb_base/pidfile.py:360 pb_base/pidfile.py:419
 #, python-format
 msgid "Simulation mode - don't real writing in '%s'."
 msgstr ""
 
-#: pb_base/pidfile.py:368
+#: pb_base/pidfile.py:370
 #, python-format
 msgid "Error on creating pidfile '%(pidfile)s': %(err)s"
 msgstr ""
 
-#: pb_base/pidfile.py:373 pb_base/pidfile.py:427
+#: pb_base/pidfile.py:376 pb_base/pidfile.py:433
 #, python-format
 msgid "Writing %(pid)d into '%(pidfile)s' ..."
 msgstr ""
 
-#: pb_base/pidfile.py:398
+#: pb_base/pidfile.py:401
 msgid "Calling recreate() on a not self created pidfile."
 msgstr ""
 
-#: pb_base/pidfile.py:411
+#: pb_base/pidfile.py:415
 #, python-format
 msgid "Trying opening '%s' for recreate ..."
 msgstr ""
 
-#: pb_base/pidfile.py:422
+#: pb_base/pidfile.py:427
 #, python-format
 msgid "Error on recreating pidfile '%(pidfile)s': %(err)s"
 msgstr ""
 
-#: pb_base/pidfile.py:458
+#: pb_base/pidfile.py:464
 #, python-format
 msgid "Pidfile parent directory '%s' doesn't exists."
 msgstr ""
 
-#: pb_base/pidfile.py:462
+#: pb_base/pidfile.py:469
 #, python-format
 msgid "Pidfile parent directory '%s' is not a directory."
 msgstr ""
 
-#: pb_base/pidfile.py:466
+#: pb_base/pidfile.py:474
 #, python-format
 msgid "No write access to pidfile parent directory '%s'."
 msgstr ""
 
-#: pb_base/pidfile.py:473
+#: pb_base/pidfile.py:481
 msgid "It is not a regular file."
 msgstr ""
 
-#: pb_base/pidfile.py:490
+#: pb_base/pidfile.py:498
 #, python-format
 msgid "Reading content of pidfile %r ..."
 msgstr ""
 
-#: pb_base/pidfile.py:515
+#: pb_base/pidfile.py:523
 #, python-format
 msgid "No useful information found in pidfile %(file)r: %(line)r"
 msgstr ""
 
-#: pb_base/pidfile.py:520
+#: pb_base/pidfile.py:528
 #, python-format
 msgid "Trying check for process with PID %d ..."
 msgstr ""
 
-#: pb_base/pidfile.py:527
+#: pb_base/pidfile.py:535
 #, python-format
 msgid "Process with PID %d anonymous died."
 msgstr ""
 
-#: pb_base/pidfile.py:530
+#: pb_base/pidfile.py:538
 #, python-format
 msgid "No permission to signal the process %d ..."
 msgstr ""
 
-#: pb_base/pidfile.py:533
+#: pb_base/pidfile.py:541
 #, python-format
 msgid "Unknown error: %r."
 msgstr ""
 
-#: pb_base/pidfile_app.py:198 pb_base/pidfile_app.py:199
+#: pb_base/pidfile_app.py:187
 #, python-format
 msgid "Using pidfile: %r."
 msgstr ""
 
-#: pb_base/pidfile_app.py:203 pb_base/pidfile_app.py:354
-msgid "Initialising PidFile object ..."
-msgstr ""
-
-#: pb_base/pidfile_app.py:282 pb_base/pidfile_app.py:294
+#: pb_base/pidfile_app.py:270
 #, python-format
 msgid "Setting pidfile to %r by configuration."
 msgstr ""
 
-#: pb_base/pidfile_app.py:298 pb_base/pidfile_app.py:310
+#: pb_base/pidfile_app.py:286
 #, python-format
 msgid "The name of the pidfile (Default: %s)."
 msgstr ""
 
-#: pb_base/pidfile_app.py:313 pb_base/pidfile_app.py:325
+#: pb_base/pidfile_app.py:301
 msgid "Simulation mode, nothing is really done."
 msgstr ""
 
-#: pb_base/pidfile_app.py:331 pb_base/pidfile_app.py:343
+#: pb_base/pidfile_app.py:320
 #, python-format
 msgid "Setting pidfile to %r by commandline parameter."
 msgstr ""
 
-#: pb_base/pidfile_app.py:366 pb_base/pidfile_app.py:383
+#: pb_base/pidfile_app.py:342
+msgid "Initialising PidFile object ..."
+msgstr ""
+
+#: pb_base/pidfile_app.py:371
 #, python-format
 msgid "Creating pidfile %r ..."
 msgstr ""

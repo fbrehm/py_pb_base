@@ -850,13 +850,13 @@ msgstr "Ungültige PID-Datei %(pidfile)r angegeben: %(reason)s"
 msgid "Invalid pidfile %r given."
 msgstr "Ungültige PID-Datei %r angegeben."
 
-#: pb_base/pidfile.py:102
+#: pb_base/pidfile.py:112
 #, python-format
 msgid ""
-"The pidfile '%(pidfile)s is currently in use by the application "
+"The pidfile '%(pf)s is currently in use by the application "
 "with the PID %(pid)d."
 msgstr ""
-"Die PID-Datei %(pidfile)r ist gegenwärtig durch die Anwendung mit der "
+"Die PID-Datei %(pf)r ist gegenwärtig durch die Anwendung mit der "
 "PID %(pid)d in Verwendung."
 
 #: pb_base/pidfile.py:177
