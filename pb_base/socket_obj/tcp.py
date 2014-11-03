@@ -49,37 +49,32 @@ if sys.version_info[0] > 2:
 
 PORT_ERR_MSG = _("The TCP port number must be a positive integer value, not %d.")
 
-#==============================================================================
+
+# =============================================================================
 class TcpSocketError(GenericSocketError):
     """
     Base error class for all special exceptions raised in this module.
     """
     pass
 
-#==============================================================================
+
+# =============================================================================
 class CouldNotOpenSocketError(TcpSocketError):
     """Special exception class for the case, the socket could not opened."""
     pass
 
-#==============================================================================
+
+# =============================================================================
 class TcpSocket(GenericSocket):
     """Class for capsulation a TCP socket."""
 
-    #--------------------------------------------------------------------------
-    def __init__(self,
-            address,
-            port,
-            addr_family = None,
-            address_info_flags = 0,
-            timeout = 5,
-            request_queue_size = 5,
-            buffer_size = pb_base.socket_obj.default_buffer_size,
-            appname = None,
-            verbose = 0,
-            version = __version__,
-            base_dir = None,
-            use_stderr = False,
-            ):
+    # -------------------------------------------------------------------------
+    def __init__(
+        self, address, port, addr_family=None, address_info_flags=0, timeout=5,
+            request_queue_size=5,
+            buffer_size=pb_base.socket_obj.default_buffer_size,
+            appname=None, verbose=0, version=__version__, base_dir=None,
+            use_stderr=False):
         """
         Initialisation of the TcpSocket object.
 
@@ -132,14 +127,14 @@ class TcpSocket(GenericSocket):
         """
 
         super(TcpSocket, self).__init__(
-                timeout = timeout,
-                request_queue_size = request_queue_size,
-                buffer_size = buffer_size,
-                appname = appname,
-                base_dir = base_dir,
-                verbose = verbose,
-                version = version,
-                use_stderr = use_stderr,
+            timeout=timeout,
+            request_queue_size=request_queue_size,
+            buffer_size=buffer_size,
+            appname=appname,
+            base_dir=base_dir,
+            verbose=verbose,
+            version=version,
+            use_stderr=use_stderr,
         )
 
         self._address = address
@@ -177,8 +172,9 @@ class TcpSocket(GenericSocket):
         """
         if addr_family is not None:
             if addr_family not in (socket.AF_INET, socket.AF_INET6):
-                msg = (_("The IP address family must be one of %(a1)r, %(a2)r or %(a3)r.") % {
-                        'a1': 'socket.AF_INET', 'a2': 'socket.AF_INET6', 'a3': None})
+                msg = (_(
+                    "The IP address family must be one of %(a1)r, %(a2)r or %(a3)r.") % {
+                    'a1': 'socket.AF_INET', 'a2': 'socket.AF_INET6', 'a3': None})
                 raise TcpSocketError(msg)
 
         self._used_addr_family = None
@@ -190,25 +186,25 @@ class TcpSocket(GenericSocket):
 
         self.initialized = True
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def address(self):
         """The hostname or IP address, where to connect to or on which listening to."""
         return self._address
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def address_info_flags(self):
         """Additional address information flags, used by socket.getaddrinfo()."""
         return self._address_info_flags
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def resolved_address(self):
-        """The resolved IP address, where to connect to or on which listening to.""" 
+        """The resolved IP address, where to connect to or on which listening to."""
         return self._resolved_address
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def port(self):
         """The TCP port number, where to connect to or on which should be listened."""
@@ -220,31 +216,31 @@ class TcpSocket(GenericSocket):
         if v < 1:
             raise TcpSocketError(PORT_ERR_MSG % (v))
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def addr_family(self):
         """The IP address family."""
         return self._addr_family
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def used_addr_family(self):
         """The used IP address family after connecting or binding."""
         return self._used_addr_family
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def used_socket_type(self):
         """The used socket type after connecting or binding."""
         return self._used_socket_type
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def used_protocol(self):
         """The used IP protocol after connecting or binding."""
         return self._used_protocol
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def used_canon_name(self):
         """A string representing the canonical name of the host,
@@ -252,7 +248,7 @@ class TcpSocket(GenericSocket):
             else used_canon_name will be empty."""
         return self._used_canon_name
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def used_socket_addr(self):
         """A tuple describing a socket address, whose format depends
@@ -261,14 +257,14 @@ class TcpSocket(GenericSocket):
             and is meant to be passed to the socket.connect() method.."""
         return self._used_socket_addr
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def own_address(self):
         """The socket’s own address."""
         return self._own_address
 
-    #--------------------------------------------------------------------------
-    def as_dict(self, short = False):
+    # -------------------------------------------------------------------------
+    def as_dict(self, short=False):
         """
         Transforms the elements of the object into a dict
 
@@ -276,7 +272,7 @@ class TcpSocket(GenericSocket):
         @rtype:  dict
         """
 
-        res = super(TcpSocket, self).as_dict(short = short)
+        res = super(TcpSocket, self).as_dict(short=short)
         res['address'] = self.address
         res['resolved_address'] = self.resolved_address
         res['address_info_flags'] = self.address_info_flags
@@ -291,7 +287,7 @@ class TcpSocket(GenericSocket):
 
         return res
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def close(self):
         """Closing the current socket."""
 
@@ -304,7 +300,7 @@ class TcpSocket(GenericSocket):
         self._own_address = None
         self.fileno = None
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def connect(self):
         """Connecting to the TCP socket as a client."""
 
@@ -313,17 +309,20 @@ class TcpSocket(GenericSocket):
             raise TcpSocketError(msg)
 
         if self.verbose > 2:
-            log.debug(_("Connecting to TCP address %(addr)r, port %(port)d ...") % {
-                    'addr': self.address, 'port': self.port})
+            log.debug(_(
+                "Connecting to TCP address %(addr)r, port %(port)d ...") % {
+                'addr': self.address, 'port': self.port})
 
         if self.connected:
-            msg = _("The socket is already connected to %(addr)r, port %(port)d ...") % {
-                    'addr': self.address, 'port': self.port}
+            msg = _(
+                "The socket is already connected to %(addr)r, port %(port)d ...") % {
+                'addr': self.address, 'port': self.port}
             raise TcpSocketError(msg)
 
         if self.bonded:
-            msg = _("The application is allready bonded to %(addr)r, port %(port)d ...") % {
-                    'addr': self.address, 'port': self.port}
+            msg = _(
+                "The application is allready bonded to %(addr)r, port %(port)d ...") % {
+                'addr': self.address, 'port': self.port}
             raise TcpSocketError(msg)
 
         ai_flags = self.address_info_flags & ~socket.AI_PASSIVE
@@ -372,8 +371,9 @@ class TcpSocket(GenericSocket):
 
         # Could not open socket
         if self.sock is None:
-            msg = _("Could not open socket to %(addr)r, port %(port)d.") % {
-                    'addr': self.address, 'port': self.port}
+            msg = _(
+                "Could not open socket to %(addr)r, port %(port)d.") % {
+                'addr': self.address, 'port': self.port}
             raise CouldNotOpenSocketError(msg)
 
         self._connected = True
@@ -386,7 +386,7 @@ class TcpSocket(GenericSocket):
         self._resolved_address = sockaddr[0]
         self._own_address = self.sock.getsockname()
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def bind(self):
         """Create a TCP socket and listen on it."""
 
@@ -474,12 +474,12 @@ class TcpSocket(GenericSocket):
 
         log.debug(_("Binding TCP socket to server address: %s"), self.own_address)
 
-#==============================================================================
+# =============================================================================
 
 if __name__ == "__main__":
 
     pass
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
