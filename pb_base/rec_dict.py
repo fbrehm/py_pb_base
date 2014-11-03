@@ -11,8 +11,8 @@
 """
 
 # Standard modules
-#import sys
-#import os
+# import sys
+# import os
 import logging
 
 __author__ = 'jannis@itisme.org (Jannis Andrija Schnitzer)'
@@ -23,13 +23,14 @@ __license__ = 'GPL3'
 
 log = logging.getLogger(__name__)
 
-#==============================================================================
+
+# =============================================================================
 class RecursiveDictionary(dict):
     """RecursiveDictionary provides the methods rec_update and iter_rec_update
     that can be used to update member dictionaries rather than overwriting
     them."""
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def rec_update(self, other, **third):
         """Recursively update the dictionary with the contents of other and
         third like dict.update() does - but don't overwrite sub-dictionaries.
@@ -48,7 +49,7 @@ class RecursiveDictionary(dict):
         self.iter_rec_update(iterator)
         self.iter_rec_update(iter(third.items()))
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def iter_rec_update(self, iterator):
         for (key, value) in iterator:
             if key in self and \
@@ -58,16 +59,16 @@ class RecursiveDictionary(dict):
             else:
                 self[key] = value
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __repr__(self):
         return super(self.__class__, self).__repr__()
 
-#==============================================================================
+# =============================================================================
 
 if __name__ == "__main__":
 
     pass
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
