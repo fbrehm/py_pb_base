@@ -48,13 +48,15 @@ if sys.version_info[0] > 2:
     _ = translator.gettext
     __ = translator.ngettext
 
-#==============================================================================
+
+# =============================================================================
 class UnixSocketError(GenericSocketError):
     """
     Base error class for all special exceptions raised in this module.
     """
 
-#==============================================================================
+
+# =============================================================================
 class NoSocketFileError(UnixSocketError):
     """
     Error class indicating, that the Unix socket file was not found
@@ -65,7 +67,8 @@ class NoSocketFileError(UnixSocketError):
         msg = _("The Unix socket file %r was not found.") % (filename)
         super(NoSocketFileError, self).__init__(msg)
 
-#==============================================================================
+
+# =============================================================================
 class NoPermissionsToSocketError(UnixSocketError):
     """
     Error class indicating, that the current user doesn't have the right
@@ -76,26 +79,18 @@ class NoPermissionsToSocketError(UnixSocketError):
         msg = _("Invalid permissions to connect to Unix socket %r.") % (filename)
         super(NoPermissionsToSocketError, self).__init__(msg)
 
-#==============================================================================
+
+# =============================================================================
 class UnixSocket(GenericSocket):
     """Class for capsulation a UNIX socket."""
 
-    #--------------------------------------------------------------------------
-    def __init__(self,
-            filename,
-            mode = 0o40660,
-            owner = None,
-            group = None,
-            auto_remove = True,
-            timeout = 5,
-            request_queue_size = 5,
-            buffer_size = pb_base.socket_obj.default_buffer_size,
-            appname = None,
-            verbose = 0,
-            version = __version__,
-            base_dir = None,
-            use_stderr = False,
-            ):
+    # -------------------------------------------------------------------------
+    def __init__(
+        self, filename, mode=0o40660, owner=None, group=None, auto_remove=True,
+            timeout=5, request_queue_size=5,
+            buffer_size=pb_base.socket_obj.default_buffer_size,
+            appname=None, verbose=0, version=__version__, base_dir=None,
+            use_stderr=False):
         """
         Initialisation of the UnixSocket object.
 
@@ -136,14 +131,14 @@ class UnixSocket(GenericSocket):
         """
 
         super(UnixSocket, self).__init__(
-                timeout = timeout,
-                request_queue_size = request_queue_size,
-                buffer_size = buffer_size,
-                appname = appname,
-                base_dir = base_dir,
-                verbose = verbose,
-                version = version,
-                use_stderr = use_stderr,
+            timeout=timeout,
+            request_queue_size=request_queue_size,
+            buffer_size=buffer_size,
+            appname=appname,
+            base_dir=base_dir,
+            verbose=verbose,
+            version=version,
+            use_stderr=use_stderr,
         )
 
         self._filename = filename
@@ -182,31 +177,31 @@ class UnixSocket(GenericSocket):
         # Create an UDS socket
         self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def filename(self):
         """The filename of the socket, that should be used."""
         return self._filename
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def mode(self):
         """The creation mode of the scstadm communication socket."""
         return self._mode
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def owner(self):
         """The owning user of the scstadm communication socket."""
         return self._owner
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def group(self):
         """The owning group of the scstadm communication socket."""
         return self._group
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def auto_remove(self):
         """
@@ -219,14 +214,14 @@ class UnixSocket(GenericSocket):
     def auto_remove(self, value):
         self._auto_remove = bool(value)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def was_bonded(self):
         """Flag, that the socket was bonded by the current object."""
         return self._was_bonded
 
-    #--------------------------------------------------------------------------
-    def as_dict(self, short = False):
+    # -------------------------------------------------------------------------
+    def as_dict(self, short=False):
         """
         Transforms the elements of the object into a dict
 
@@ -234,7 +229,7 @@ class UnixSocket(GenericSocket):
         @rtype:  dict
         """
 
-        res = super(UnixSocket, self).as_dict(short = short)
+        res = super(UnixSocket, self).as_dict(short=short)
         res['filename'] = self.filename
         res['mode'] = "%04o" % (self.mode)
         res['owner'] = self.owner
@@ -243,7 +238,7 @@ class UnixSocket(GenericSocket):
 
         return res
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def close(self):
         """Closing the current socket."""
 
@@ -258,21 +253,22 @@ class UnixSocket(GenericSocket):
 
         self.fileno = None
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def connect(self):
         """Connecting to the saved socket as a client."""
 
         if self.verbose > 1:
-            log.debug(_("Connecting to Unix Domain Socket '%s' ..."),
-                    self.filename)
+            log.debug(_(
+                "Connecting to Unix Domain Socket '%s' ..."), self.filename)
 
         if self.connected:
             msg = _("The socket is already connected to '%s' ...") % (self.filename)
             raise UnixSocketError(msg)
 
         if self.bonded:
-            msg = _("The application is already bonded to '%s' ...") % (
-                    self.filename)
+            msg = _(
+                "The application is already bonded to '%s' ...") % (
+                self.filename)
             raise UnixSocketError(msg)
 
         try:
@@ -283,27 +279,29 @@ class UnixSocket(GenericSocket):
             if e.errno == errno.EACCES:
                 raise NoPermissionsToSocketError(self.filename)
             msg = _("Error connecting to Unix Socket '%(sock)s': %(err)s") % {
-                    'sock': self.filename, 'err': str(e)}
+                'sock': self.filename, 'err': str(e)}
             raise UnixSocketError(msg)
 
         self._connected = True
         self.fileno = self.sock.fileno()
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def bind(self):
         """Create the socket and listen on it."""
 
         if self.verbose > 1:
-            log.debug(_("Creating and binding to Unix Domain Socket '%s' ..."),
-                    self.filename)
+            log.debug(_(
+                "Creating and binding to Unix Domain Socket '%s' ..."),
+                self.filename)
 
         if self.connected:
-            msg = _("The socket is already connected to '%s' ...") % (self.filename)
+            msg = _(
+                "The socket is already connected to '%s' ...") % (self.filename)
             raise UnixSocketError(msg)
 
         if self.bonded:
-            msg = _("The application is already bonded to '%s' ...") % (
-                    self.filename)
+            msg = _(
+                "The application is already bonded to '%s' ...") % (self.filename)
             raise UnixSocketError(msg)
 
         self._was_bonded = False
@@ -322,8 +320,9 @@ class UnixSocket(GenericSocket):
 
         if self.mode is not None:
             if self.verbose > 2:
-                log.debug(_("Setting permissions of '%(sock)s' to 0%(perm)o.") % {
-                        'sock': self.filename, 'perm': self.mode})
+                log.debug(_(
+                    "Setting permissions of '%(sock)s' to 0%(perm)o.") % {
+                    'sock': self.filename, 'perm': self.mode})
             os.chmod(self.filename, self.mode)
 
         # Setting owner and group of socket
@@ -335,8 +334,9 @@ class UnixSocket(GenericSocket):
                 try:
                     uid = pwd.getpwnam(self.owner).pw_uid
                 except KeyError as e:
-                    msg = _("Invalid owner name '%s' for socket creation given.") % (
-                            self.owner)
+                    msg = _(
+                        "Invalid owner name '%s' for socket creation given.") % (
+                        self.owner)
                     raise UnixSocketError(msg)
 
         gid = -1
@@ -347,8 +347,9 @@ class UnixSocket(GenericSocket):
                 try:
                     gid = grp.getgrnam(self.group).gr_gid
                 except KeyError as e:
-                    msg = _("Invalid group name '%s' for socket creation given.") % (
-                            self.group)
+                    msg = _(
+                        "Invalid group name '%s' for socket creation given.") % (
+                        self.group)
                     raise UnixSocketError(msg)
 
         uid_changed = False
@@ -370,21 +371,23 @@ class UnixSocket(GenericSocket):
                 log.warn(_("Only root may change ownership of a socket."))
             else:
                 if self.verbose > 2:
-                    log.debug(_("Setting ownership of '%(sock)s' to %(uid)d:%(gid)d ...") % {
-                            'sock': self.filename, 'uid': uid, 'gid': gid})
+                    log.debug(_(
+                        "Setting ownership of '%(sock)s' to %(uid)d:%(gid)d ...") % {
+                        'sock': self.filename, 'uid': uid, 'gid': gid})
                 os.chown(self.filename, uid, gid)
 
         if self.verbose > 2:
-            log.debug(_("Start listening on socket with a queue size of %d."),
-                    self.request_queue_size)
+            log.debug(_(
+                "Start listening on socket with a queue size of %d."),
+                self.request_queue_size)
         self.sock.listen(self.request_queue_size)
 
-#==============================================================================
+# =============================================================================
 
 if __name__ == "__main__":
 
     pass
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
