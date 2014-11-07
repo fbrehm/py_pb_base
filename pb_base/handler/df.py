@@ -3,7 +3,7 @@
 """
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
-@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
+@copyright: © 2010 - 2014 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: A special handler module for a handling the df-command and his results.
 """
 
@@ -29,7 +29,7 @@ from pb_base.handler import PbBaseHandler
 
 from pb_base.translate import translator
 
-__version__ = '0.2.2'
+__version__ = '0.3.1'
 
 log = logging.getLogger(__name__)
 
@@ -42,7 +42,8 @@ if sys.version_info[0] > 2:
 # Some module varriables
 DF_CMD = os.sep + os.path.join('bin', 'df')
 
-#==============================================================================
+
+# =============================================================================
 class DfError(PbBaseHandlerError):
     """
     Special exception class on executing the df command.
@@ -50,21 +51,14 @@ class DfError(PbBaseHandlerError):
 
     pass
 
-#==============================================================================
+
+# =============================================================================
 class DfResult(PbBaseObject):
 
-    #--------------------------------------------------------------------------
-    def __init__(self,
-            dev = None,
-            fs_type = None,
-            total = 0,
-            used = 0,
-            free = 0,
-            fs = None,
-            appname = None,
-            verbose = 0,
-            base_dir = None
-            ):
+    # -------------------------------------------------------------------------
+    def __init__(
+        self, dev=None, fs_type=None, total=0, used=0, free=0, fs=None,
+            appname=None, verbose=0, base_dir=None):
         """
         Initialisation of the DfResult object.
 
@@ -84,10 +78,10 @@ class DfResult(PbBaseObject):
         """
 
         super(DfResult, self).__init__(
-                appname = appname,
-                verbose = verbose,
-                base_dir = base_dir,
-                initialized = False
+            appname=appname,
+            verbose=verbose,
+            base_dir=base_dir,
+            initialized=False
         )
 
         self._dev = str(dev)
@@ -128,79 +122,79 @@ class DfResult(PbBaseObject):
 
         self.initialized = True
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def dev(self):
         """The appropriate device of the filesystem from 'df'"""
         return self._dev
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def fs_type(self):
         """The type of the filesystem (e.g. 'ext3', 'nfs' a.s.o.)"""
         return self._fs_type
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def total(self):
         """The total size of the filesystem in Bytes."""
         return self._total
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def total_kb(self):
         """The total size of the filesystem in KiBytes."""
         return self._total / 1024
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def total_mb(self):
         """The total size of the filesystem in MiBytes."""
         return int(self._total / 1024 / 1024)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def used(self):
         """The used area of the filesystem in Bytes."""
         return self._used
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def used_kb(self):
         """The used area of the filesystem in KiBytes."""
         return self._used / 1024
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def used_mb(self):
         """The used area of the filesystem in MiBytes."""
         return int(self._used / 1024 / 1024)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def free(self):
         """The free space of the filesystem in Bytes."""
         return self._free
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def free_kb(self):
         """The free space of the filesystem in KiBytes."""
         return self._free / 1024
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def free_mb(self):
         """The free space of the filesystem in MiBytes."""
         return int(self._free / 1024 / 1024)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def fs(self):
         """The name of the filesystem."""
         return self._fs
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def used_percent(self):
         """The percentual value of used space on filesystem."""
@@ -208,7 +202,7 @@ class DfResult(PbBaseObject):
             return None
         return float(self.used) / float(self.total) * 100.0
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def free_percent(self):
         """The percentual value of free space on filesystem."""
@@ -216,8 +210,8 @@ class DfResult(PbBaseObject):
             return None
         return float(self.free) / float(self.total) * 100.0
 
-    #--------------------------------------------------------------------------
-    def as_dict(self, short = False):
+    # -------------------------------------------------------------------------
+    def as_dict(self, short=False):
         """
         Transforms the elements of the object into a dict
 
@@ -228,7 +222,7 @@ class DfResult(PbBaseObject):
         @rtype:  dict
         """
 
-        res = super(DfResult, self).as_dict(short = short)
+        res = super(DfResult, self).as_dict(short=short)
         res['dev'] = self.dev
         res['fs'] = self.fs
         res['fs_type'] = self.fs_type
@@ -246,7 +240,8 @@ class DfResult(PbBaseObject):
 
         return res
 
-#==============================================================================
+
+# =============================================================================
 class DfHandler(PbBaseHandler):
     """
     A special handler class to retrieve informations about space of filesystems.
@@ -255,17 +250,10 @@ class DfHandler(PbBaseHandler):
 
     """
 
-    #--------------------------------------------------------------------------
-    def __init__(self,
-            appname = None,
-            verbose = 0,
-            version = __version__,
-            base_dir = None,
-            use_stderr = False,
-            initialized = False,
-            sudo = False,
-            quiet = False,
-            ):
+    # -------------------------------------------------------------------------
+    def __init__(
+        self, appname=None, verbose=0, version=__version__, base_dir=None,
+            use_stderr=False, initialized=False, sudo=False, quiet=False):
         """
         Initialisation of the df handler object.
         The execution of executing 'df' should never been simulated.
@@ -297,15 +285,15 @@ class DfHandler(PbBaseHandler):
         """
 
         super(DfHandler, self).__init__(
-                appname = appname,
-                verbose = verbose,
-                version = version,
-                base_dir = base_dir,
-                use_stderr = use_stderr,
-                initialized = False,
-                simulate = False,
-                sudo = sudo,
-                quiet = quiet,
+            appname=appname,
+            verbose=verbose,
+            version=version,
+            base_dir=base_dir,
+            use_stderr=use_stderr,
+            initialized=False,
+            simulate=False,
+            sudo=sudo,
+            quiet=quiet,
         )
         self.initialized = False
 
@@ -323,7 +311,7 @@ class DfHandler(PbBaseHandler):
             failed_commands.append('df')
 
         self.re_df_line = re.compile(
-                r'(\S+)\s+(\S+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(?:\d+\s*%|-)\s+(.*)')
+            r'(\S+)\s+(\S+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(?:\d+\s*%|-)\s+(.*)')
 
         # Some commands are missing
         if failed_commands:
@@ -333,14 +321,14 @@ class DfHandler(PbBaseHandler):
         if self.verbose > 3:
             log.debug(_("Initialized."))
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def df_cmd(self):
         """The absolute path to the OS command 'df'."""
         return self._df_cmd
 
-    #--------------------------------------------------------------------------
-    def as_dict(self, short = False):
+    # -------------------------------------------------------------------------
+    def as_dict(self, short=False):
         """
         Transforms the elements of the object into a dict
 
@@ -351,15 +339,16 @@ class DfHandler(PbBaseHandler):
         @rtype:  dict
         """
 
-        res = super(DfHandler, self).as_dict(short = short)
+        res = super(DfHandler, self).as_dict(short=short)
         res['df_cmd'] = self.df_cmd
         res['re_df_line_pattern'] = self.re_df_line.pattern
 
         return res
 
-    #--------------------------------------------------------------------------
-    def __call__(self, fs = None, all_fs = False, local = False, sync = False,
-            fs_type = None, exclude_type = None):
+    # -------------------------------------------------------------------------
+    def __call__(
+        self, fs=None, all_fs=False, local=False, sync=False,
+            fs_type=None, exclude_type=None):
         """
         Executes the df command and returns a list of all found filesystems.
 
@@ -409,17 +398,17 @@ class DfHandler(PbBaseHandler):
             if self.verbose > 2:
                 log.debug(_("Checking existence of %r ..."), fs_object)
             if not os.path.exists(fs_object):
-                raise DfError(_("Filesystem object %r doesn't exists.") %
-                        (fs_object))
+                raise DfError(
+                    _("Filesystem object %r doesn't exists.") % (fs_object))
 
             if not os.path.isabs(fs_object):
-                raise DfError(_("%r is not given as an absolute path.") %
-                        (fs_object))
+                raise DfError(
+                    _("%r is not given as an absolute path.") % (fs_object))
 
         if self.verbose > 1:
             if fs:
-                msg = (_("Calling 'df' for the following objects:") +
-                        "\n%r") % (fs)
+                msg = (
+                    _("Calling 'df' for the following objects:") + "\n%r") % (fs)
             else:
                 if all_fs:
                     msg = _("Calling 'df' for real all filesystems.")
@@ -465,14 +454,16 @@ class DfHandler(PbBaseHandler):
                 e = std_err.replace('\n', ' ').strip()
                 if e:
                     err = e
-            msg = _("Error %(nr)d on getting free space of %(obj)r: %(err)s") % {
-                    'nr': ret_code, 'obj': fs, 'err': err}
+            msg = _(
+                "Error %(nr)d on getting free space of %(obj)r: %(err)s") % {
+                'nr': ret_code, 'obj': fs, 'err': err}
             raise DfError(msg)
 
         lines = std_out.splitlines()
         if not lines or len(lines) < 2:
-            msg = (_("Didn't found any usable information in output of %r:") +
-                    " %r") % ( cmdline, std_out)
+            msg = (
+                _("Didn't found any usable information in output of %r:") +
+                " %r") % (cmdline, std_out)
             raise DfError(msg)
 
         del lines[0]
@@ -483,31 +474,32 @@ class DfHandler(PbBaseHandler):
             line = line.strip()
             match = self.re_df_line.search(line)
             if not match:
-                msg = _("Could not evaluate line %(line)r in output of command %(cmd)r.") % {
-                        'line': line, 'cmd': cmdline}
+                msg = _(
+                    "Could not evaluate line %(line)r in output of command %(cmd)r.") % {
+                    'line': line, 'cmd': cmdline}
                 raise DfError(msg)
 
             df_result = DfResult(
-                    dev = match.group(1),
-                    fs_type = match.group(2),
-                    total = int(match.group(3)) * 1024,
-                    used = int(match.group(4)) * 1024,
-                    free = int(match.group(5)) * 1024,
-                    fs =  match.group(6),
-                    appname = self.appname,
-                    verbose = self.verbose,
-                    base_dir = self.base_dir,
+                dev=match.group(1),
+                fs_type=match.group(2),
+                total=int(match.group(3)) * 1024,
+                used=int(match.group(4)) * 1024,
+                free=int(match.group(5)) * 1024,
+                fs=match.group(6),
+                appname=self.appname,
+                verbose=self.verbose,
+                base_dir=self.base_dir,
             )
             df_list.append(df_result)
 
         return df_list
 
-#==============================================================================
+# =============================================================================
 
 if __name__ == "__main__":
 
     pass
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

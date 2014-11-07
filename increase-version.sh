@@ -227,7 +227,7 @@ if [ "${CUR_STAGE}" != "${WANT_STAGE}" ] ; then
     echo -e "[${GREEN}OK${NORMAL}]"
 fi
 
-scripts="pb_base/__init__.py"
+scripts="pb_base/__init__.py pb_base/global_version.py"
 for script in $scripts; do
     if [ -f $script ] ; then
         echo -n "Performing $script ... "

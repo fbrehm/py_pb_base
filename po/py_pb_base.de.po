@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: profitbricks-python-base 0.3.11\n"
+"Project-Id-Version: profitbricks-python-base 0.5.6\n"
 "Report-Msgid-Bugs-To: frank.brehm@profitbricks.com\n"
-"POT-Creation-Date: 2013-01-14 17:31+0100\n"
-"PO-Revision-Date: 2013-04-11 23:40+0100\n"
+"POT-Creation-Date: 2014-11-02 09:49+0100\n"
+"PO-Revision-Date: 2014-11-02 10:00+0100\n"
 "Last-Translator: Frank Brehm <frank.brehm@profitbricks.com>\n"
 "Language-Team: German\n"
 "Language: de\n"
@@ -82,10 +82,6 @@ msgstr "Programmversion von %%(prog)s: %s"
 msgid "Show program's version number and exit"
 msgstr "Stellt die Programmversion dar und beendet sich."
 
-#: pb_base/crc64_app.py:100
-msgid "The token to generate a CRC64 digest from."
-msgstr "Die Zeichenkette, von der das CRC64-Digest generiert werden soll."
-
 #: pb_base/cfg_app.py:313
 msgid ""
 "Configuration file to use additional to the standard configuration files."
@@ -128,8 +124,8 @@ msgstr "Ergebnis der Validierung:"
 
 #: pb_base/cfg_app.py:480
 #, python-format
-msgid "Wrong configuration in '%s' found:"
-msgstr "Ungültige Konfigurationsanweisung in '%s' gefunden:"
+msgid "Wrong configuration in %r found:"
+msgstr "Ungültige Konfigurationsanweisung in %r gefunden:"
 
 #: pb_base/cfg_app.py:482
 msgid "Configuration error"
@@ -152,6 +148,14 @@ msgstr "Undefinierter Fehler"
 msgid "In section %(section)s key '%(key)s': %(value)s"
 msgstr "In Abschnitt %(section)s Schlüssel '%(key)s': %(value)s"
 
+#: pb_base/crc64_app.py:77
+msgid "Generates a 64 bit checksum for all given positional arguments."
+msgstr "Generiert eine 64-Bit Prüfsumme für alle übergebenen Positionsargumente."
+
+#: pb_base/crc64_app.py:111
+msgid "The token to generate a CRC64 digest from."
+msgstr "Die Zeichenkette, von der das CRC64-Digest generiert werden soll."
+
 #: pb_base/daemon.py:172
 #, python-format
 msgid "Invalid facility name '%s' given."
@@ -164,13 +168,13 @@ msgstr ""
 "Die zu verwendende Syslog-Facility, wenn die Anwendung als Daemon laufen "
 "soll (Default: %s)."
 
-#: pb_base/daemon.py:418
-msgid ""
-"Log to console instead to syslog. Don't daemonize the application, "
-"running in foreground."
-msgstr ""
-"Logging zur Konsole anstatt nach Syslog. Die Anwendung soll im Verdergrund"
-"anstelle als eines Daemons laufen."
+#: pb_base/daemon.py:412
+msgid "Log to console instead to syslog."
+msgstr "Logging zur Konsole anstatt nach Syslog."
+
+#: pb_base/daemon.py:413
+msgid "Don't daemonize the application, running in foreground."
+msgstr "Die Anwendung soll im Verdergrund anstelle als eines Daemons laufen."
 
 #: pb_base/daemon.py:527
 #, python-format
@@ -262,12 +266,14 @@ msgstr "Ich bin dämonisiert worden, wau - ·▷▶◊◀◁·"
 msgid "Function %(func)s() has to be overridden in class '%(cls)s'."
 msgstr "Die Funktion %(func)s() muss in der Klasse '%(cls)s' überschrieben werden."
 
-#: pb_base/errors.py:85
+#: pb_base/errors.py:92
 #, python-format
-msgid "Invalid call to method %(method)s() in a object of class %(class)r (maybe "
-      "not overridden?)."
-msgstr "Ungültiger Aufruf der Methode %(method)s() in einem Objekt der Klasse %(class)r "
-       "(möglicherweise nicht überschrieben?)."
+msgid "Invalid call to method %(m)s() in a object of class %(c)r."
+msgstr "Ungültiger Aufruf der Methode %(m)s() in einem Objekt der Klasse %(c)r."
+
+#: pb_base/errors.py:93
+msgid "(probably not overridden?)."
+msgstr "(Höchstwahrscheinlich nicht überschrieben?)"
 
 #: pb_base/errors.py:88
 #, python-format
@@ -599,19 +605,14 @@ msgid "Could not evaluate line %(line)r in output of command %(cmd)r."
 msgstr ""
 "Konnte Zeile %(line)r in der Ausgabe des Kommandos %(cmd)r nicht auswerten."
 
-#: pb_base/handler/fuser.py:164
-#, python-format
-msgid ""
-"Filesystem object %r doesn't seems to exist. "
-"Continue because of the 'force' flag."
-msgstr ""
-"Das Dateisystemobjekt %r scheint nicht zu existieren. "
-"Mache wegen gesetztem 'force'-Flag trotzdem weiter."
-
-#: pb_base/handler/fuser.py:167
+#: pb_base/handler/fuser.py:186
 #, python-format
 msgid "Filesystem object %r doesn't seems to exist."
 msgstr "Das Dateisystemobjekt %r scheint nicht zu existieren."
+
+#: pb_base/handler/fuser.py:181
+msgid "Continue because of the 'force' flag."
+msgstr "Mache wegen gesetztem 'force'-Flag trotzdem weiter."
 
 #: pb_base/handler/fuser.py:184
 #, python-format
@@ -684,11 +685,11 @@ msgstr "Der Wert für %(what)s muss größer als Null sein "
 #: pb_base/handler/lock.py:519 pb_base/handler/lock.py:691
 #, python-format
 msgid ""
-"The value for %(what)s must be greater than or equal to zero "
-"(is %(val)r)."
+"The value for %(w)s must be greater than or equal to zero "
+"(is %(v)r)."
 msgstr ""
-"Der Wert für %(what)s muss größer oder gleich Null sein "
-"(ist aber %(val)r)."
+"Der Wert für %(w)s muss größer oder gleich Null sein "
+"(ist aber %(v)r)."
 
 #: pb_base/handler/lock.py:733
 #, python-format
@@ -849,13 +850,13 @@ msgstr "Ungültige PID-Datei %(pidfile)r angegeben: %(reason)s"
 msgid "Invalid pidfile %r given."
 msgstr "Ungültige PID-Datei %r angegeben."
 
-#: pb_base/pidfile.py:102
+#: pb_base/pidfile.py:112
 #, python-format
 msgid ""
-"The pidfile '%(pidfile)s is currently in use by the application "
+"The pidfile '%(pf)s is currently in use by the application "
 "with the PID %(pid)d."
 msgstr ""
-"Die PID-Datei %(pidfile)r ist gegenwärtig durch die Anwendung mit der "
+"Die PID-Datei %(pf)r ist gegenwärtig durch die Anwendung mit der "
 "PID %(pid)d in Verwendung."
 
 #: pb_base/pidfile.py:177

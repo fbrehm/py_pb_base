@@ -3,7 +3,7 @@
 """
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
-@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
+@copyright: © 2010 - 2014 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: A special handler module for a handling the fuser command
 """
 
@@ -29,7 +29,7 @@ from pb_base.handler import PbBaseHandler
 
 from pb_base.translate import translator
 
-__version__ = '0.1.1'
+__version__ = '0.2.1'
 
 log = logging.getLogger(__name__)
 
@@ -42,7 +42,8 @@ if sys.version_info[0] > 2:
     _ = translator.gettext
     __ = translator.ngettext
 
-#==============================================================================
+
+# =============================================================================
 class FuserError(PbBaseHandlerError):
     """
     Special exception class on executing the fuser command.
@@ -50,7 +51,8 @@ class FuserError(PbBaseHandlerError):
 
     pass
 
-#==============================================================================
+
+# =============================================================================
 class FuserHandler(PbBaseHandler):
     """
     A special handler class to retrieve informations about processes opening
@@ -60,17 +62,10 @@ class FuserHandler(PbBaseHandler):
 
     """
 
-    #--------------------------------------------------------------------------
-    def __init__(self,
-            appname = None,
-            verbose = 0,
-            version = __version__,
-            base_dir = None,
-            use_stderr = False,
-            initialized = False,
-            sudo = False,
-            quiet = False,
-            ):
+    # -------------------------------------------------------------------------
+    def __init__(
+        self, appname=None, verbose=0, version=__version__, base_dir=None,
+            use_stderr=False, initialized=False, sudo=False, quiet=False):
         """
         Initialisation of the df handler object.
         The execution of executing 'fuser' should never been simulated.
@@ -102,15 +97,15 @@ class FuserHandler(PbBaseHandler):
         """
 
         super(FuserHandler, self).__init__(
-                appname = appname,
-                verbose = verbose,
-                version = version,
-                base_dir = base_dir,
-                use_stderr = use_stderr,
-                initialized = False,
-                simulate = False,
-                sudo = sudo,
-                quiet = quiet,
+            appname=appname,
+            verbose=verbose,
+            version=version,
+            base_dir=base_dir,
+            use_stderr=use_stderr,
+            initialized=False,
+            simulate=False,
+            sudo=sudo,
+            quiet=quiet,
         )
         self.initialized = False
 
@@ -135,14 +130,14 @@ class FuserHandler(PbBaseHandler):
         if self.verbose > 3:
             log.debug(_("Initialized."))
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def fuser_cmd(self):
         """The absolute path to the OS command 'fuser'."""
         return self._fuser_cmd
 
-    #--------------------------------------------------------------------------
-    def as_dict(self, short = False):
+    # -------------------------------------------------------------------------
+    def as_dict(self, short=False):
         """
         Transforms the elements of the object into a dict
 
@@ -153,13 +148,13 @@ class FuserHandler(PbBaseHandler):
         @rtype:  dict
         """
 
-        res = super(FuserHandler, self).as_dict(short = short)
+        res = super(FuserHandler, self).as_dict(short=short)
         res['fuser_cmd'] = self.fuser_cmd
 
         return res
 
-    #--------------------------------------------------------------------------
-    def __call__(self, fs_object, force = False):
+    # -------------------------------------------------------------------------
+    def __call__(self, fs_object, force=False):
         """
         Executes the fuser command and returns a list of all process IDs using
         this filesystem object.
@@ -181,10 +176,12 @@ class FuserHandler(PbBaseHandler):
 
         if not os.path.exists(fs_object):
             if force:
-                log.warn(_("Filesystem object %r doesn't seems to exist. Continue because of the 'force' flag."), fs_object)
+                log.warn(
+                    _("Filesystem object %r doesn't seems to exist.") + _(
+                        "Continue because of the 'force' flag."), fs_object)
             else:
                 msg = _("Filesystem object %r doesn't seems to exist.") % (
-                        fs_object)
+                    fs_object)
                 raise FuserError(msg)
 
         do_sudo = False
@@ -193,15 +190,15 @@ class FuserHandler(PbBaseHandler):
 
         cmd = [self.fuser_cmd, fs_object]
         cmdline = ' '.join(cmd)
-        (ret_code, std_out, std_err) = self.call(cmd, sudo = do_sudo)
+        (ret_code, std_out, std_err) = self.call(cmd, sudo=do_sudo)
 
         if ret_code:
 
             if ret_code == 1:
 
                 if self.verbose > 1:
-                    log.debug(_("%r will not be used by some other processes."),
-                            fs_object)
+                    log.debug(
+                        _("%r will not be used by some other processes."), fs_object)
                 return []
 
             err = _('Undefined error')
@@ -209,8 +206,9 @@ class FuserHandler(PbBaseHandler):
                 e = std_err.replace('\n', ' ').strip()
                 if e:
                     err = e
-            msg = _("Error %(nr)d on getting fuser information of %(obj)r: %(err)s") % {
-                    'nr': ret_code, 'obj': fs_object, 'err': err}
+            msg = _(
+                "Error %(nr)d on getting fuser information of %(obj)r: %(err)s") % {
+                'nr': ret_code, 'obj': fs_object, 'err': err}
             raise FuserError(msg)
 
         pid_list = []
@@ -229,12 +227,12 @@ class FuserHandler(PbBaseHandler):
 
         return pid_list
 
-#==============================================================================
+# =============================================================================
 
 if __name__ == "__main__":
 
     pass
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

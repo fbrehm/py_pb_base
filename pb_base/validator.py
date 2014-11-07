@@ -3,7 +3,7 @@
 """
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
-@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
+@copyright: © 2010 - 2014 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: The module is for additional check functions used by validate.Validator
 """
 
@@ -24,8 +24,8 @@ from validate import VdtValueTooShortError
 from validate import VdtValueTooLongError
 
 
-#------------------------------------------------------------------------------
-def oct_check(value, min_val = None, max_val = None):
+# -----------------------------------------------------------------------------
+def oct_check(value, min_val=None, max_val=None):
     """
     Check, that the supplied value is an octal integer value.
     """
@@ -95,18 +95,18 @@ def oct_check(value, min_val = None, max_val = None):
         return "0"
     return "0%o" % (v)
 
-#==============================================================================
+# =============================================================================
 
 pbvalidator_checks = {
-        'oct': oct_check,
+    'oct': oct_check,
 }
 
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 if __name__ == "__main__":
 
     pass
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

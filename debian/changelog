@@ -1,8 +1,13 @@
-pb-base (0.5.6-2) stable; urgency=low
+pb-base (0.6.0-1) squeeze wheezy jessie; urgency=low
 
-  * Build for squeeze
+  * Version bump
+  * Applied PEP8 rules to all Python scripts.
+  * Added generation of manpages
+  * Defined new binary Debian package 'pb-base' containing all exeutable
+    scripts in bin/* and removed them in binary package 'python-pb-
+    base'.
 
- -- Frank Brehm <frank.brehm@profitbricks.com>  Fri, 04 Jul 2014 12:58:44 +0200
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Mon, 03 Nov 2014 15:55:21 +0100
 
 pb-base (0.5.6-1) wheezy; urgency=low
 

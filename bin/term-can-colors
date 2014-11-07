@@ -4,13 +4,13 @@
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
 @organization: Profitbricks GmbH
-@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
+@copyright: © 2010 - 2014 by Frank Brehm, ProfitBricks GmbH, Berlin
 @license: GPL3
 @summary: a script to detect, whther the current terminal can colors
 '''
 
 import sys
-import os 
+import os
 import logging
 
 # own modules:
@@ -23,17 +23,17 @@ del cur_dir
 
 from pb_base.common import terminal_can_colors
 
-#==============================================================================
+# =============================================================================
 
 if __name__ == "__main__":
 
-    if terminal_can_colors(debug = False):
+    if terminal_can_colors(debug=False):
         print("yes")
         sys.exit(0)
     else:
         print("no")
         sys.exit(1)
 
-#==============================================================================
+# =============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

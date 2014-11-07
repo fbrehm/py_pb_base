@@ -3,7 +3,7 @@
 """
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
-@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
+@copyright: © 2010 - 2014 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: The module for the base object.
           It provides properties and methods used
           by all objects.
@@ -24,11 +24,12 @@ from pb_base.common import pp
 from pb_base.errors import PbError
 from pb_base.errors import FunctionNotImplementedError
 
-__version__ = '0.3.2'
+__version__ = '0.4.1'
 
 log = logging.getLogger(__name__)
 
-#==============================================================================
+
+# =============================================================================
 class PbBaseObjectError(PbError):
     """
     Base error class useable by all descendand objects.
@@ -36,21 +37,17 @@ class PbBaseObjectError(PbError):
 
     pass
 
-#==============================================================================
+
+# =============================================================================
 class PbBaseObject(object):
     """
     Base class for all objects.
     """
 
-    #--------------------------------------------------------------------------
-    def __init__(self,
-                appname = None,
-                verbose = 0,
-                version = __version__,
-                base_dir = None,
-                use_stderr = False,
-                initialized = False,
-                ):
+    # -------------------------------------------------------------------------
+    def __init__(
+        self, appname=None, verbose=0, version=__version__, base_dir=None,
+            use_stderr=False, initialized=False):
         """
         Initialisation of the base object.
 
@@ -136,7 +133,7 @@ class PbBaseObject(object):
 
         self._initialized = bool(initialized)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def appname(self):
         """The name of the current running application."""
@@ -149,13 +146,13 @@ class PbBaseObject(object):
             if v:
                 self._appname = v
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def version(self):
         """The version string of the current object or application."""
         return self._version
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def verbose(self):
         """The verbosity level."""
@@ -169,7 +166,7 @@ class PbBaseObject(object):
         else:
             log.warn("Wrong verbose level %r, must be >= 0", value)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def use_stderr(self):
         """A flag indicating, that on handle_error() the output should go to STDERR."""
@@ -179,7 +176,7 @@ class PbBaseObject(object):
     def use_stderr(self, value):
         self._use_stderr = bool(value)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def initialized(self):
         """The initialisation of this object is complete."""
@@ -189,7 +186,7 @@ class PbBaseObject(object):
     def initialized(self, value):
         self._initialized = bool(value)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def base_dir(self):
         """The base directory used for different purposes."""
@@ -205,7 +202,7 @@ class PbBaseObject(object):
         else:
             self._base_dir = value
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __str__(self):
         """
         Typecasting function for translating object structure
@@ -215,9 +212,9 @@ class PbBaseObject(object):
         @rtype:  str
         """
 
-        return pp(self.as_dict(short = True))
+        return pp(self.as_dict(short=True))
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __repr__(self):
         """Typecasting into a string for reproduction."""
 
@@ -234,8 +231,8 @@ class PbBaseObject(object):
         out += ", ".join(fields) + ")>"
         return out
 
-    #--------------------------------------------------------------------------
-    def as_dict(self, short = False):
+    # -------------------------------------------------------------------------
+    def as_dict(self, short=False):
         """
         Transforms the elements of the object into a dict
 
@@ -253,7 +250,7 @@ class PbBaseObject(object):
                 continue
             val = self.__dict__[key]
             if isinstance(val, PbBaseObject):
-                res[key] = val.as_dict(short = short)
+                res[key] = val.as_dict(short=short)
             else:
                 res[key] = val
         res['__class_name__'] = self.__class__.__name__
@@ -266,9 +263,9 @@ class PbBaseObject(object):
 
         return res
 
-    #--------------------------------------------------------------------------
-    def handle_error(self, error_message = None, exception_name = None,
-                        do_traceback = False):
+    # -------------------------------------------------------------------------
+    def handle_error(
+            self, error_message=None, exception_name=None, do_traceback=False):
         """
         Handle an error gracefully.
 
@@ -315,8 +312,8 @@ class PbBaseObject(object):
 
         return
 
-    #--------------------------------------------------------------------------
-    def handle_info(self, message, info_name = None):
+    # -------------------------------------------------------------------------
+    def handle_info(self, message, info_name=None):
         """
         Shows an information. This happens both to STDERR and to all
         initialized log handlers.
@@ -351,12 +348,12 @@ class PbBaseObject(object):
 
         return
 
-#==============================================================================
+# =============================================================================
 
 if __name__ == "__main__":
 
     pass
 
-#==============================================================================
+# =============================================================================
 
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 nu
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

@@ -3,7 +3,7 @@
 """
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
-@copyright: © 2010 - 2013 by Frank Brehm, ProfitBricks GmbH, Berlin
+@copyright: © 2010 - 2014 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: The module for a base configured application object.
           It provides all from the base application object with additional
           methods and properties to read different configuration files.
@@ -18,7 +18,7 @@ import datetime
 from io import StringIO
 
 # Third party modules
-from configobj import ConfigObj
+from configobj import ConfigObj, ConfigObjError
 from validate import Validator
 from validate import ValidateError
 
@@ -39,7 +39,7 @@ from pb_base.app import PbApplication
 
 from pb_base.translate import translator
 
-__version__ = '0.5.6'
+__version__ = '0.6.1'
 
 log = logging.getLogger(__name__)
 
@@ -49,39 +49,28 @@ if sys.version_info[0] > 2:
     _ = translator.gettext
     __ = translator.ngettext
 
-#==============================================================================
+
+# =============================================================================
 class PbCfgAppError(PbApplicationError):
     """Base error class for all exceptions happened during
     execution this configured application"""
 
     pass
 
-#==============================================================================
+
+# =============================================================================
 class PbCfgApp(PbApplication):
     """
     Base class for all configured application objects.
     """
 
-    #--------------------------------------------------------------------------
-    def __init__(self,
-                appname = None,
-                verbose = 0,
-                version = __version__,
-                base_dir = None,
-                use_stderr = False,
-                initialized = False,
-                usage = None,
-                description = None,
-                argparse_epilog = None,
-                argparse_prefix_chars = '-',
-                env_prefix = None,
-                cfg_dir = None,
-                cfg_stem = None,
-                cfg_encoding = 'utf8',
-                cfg_spec = None,
-                hide_default_config = False,
-                need_config_file = False,
-                ):
+    # -------------------------------------------------------------------------
+    def __init__(
+        self, appname=None, verbose=0, version=__version__, base_dir=None,
+            use_stderr=False, initialized=False, usage=None, description=None,
+            argparse_epilog=None, argparse_prefix_chars='-', env_prefix=None,
+            cfg_dir=None, cfg_stem=None, cfg_encoding='utf8', cfg_spec=None,
+            hide_default_config=False, need_config_file=False):
         """
         Initialisation of the base object.
 
@@ -162,17 +151,17 @@ class PbCfgApp(PbApplication):
         """
 
         super(PbCfgApp, self).__init__(
-                appname = appname,
-                verbose = verbose,
-                version = version,
-                base_dir = base_dir,
-                use_stderr = use_stderr,
-                initialized = False,
-                usage = usage,
-                description = description,
-                argparse_epilog = argparse_epilog,
-                argparse_prefix_chars = argparse_prefix_chars,
-                env_prefix = env_prefix,
+            appname=appname,
+            verbose=verbose,
+            version=version,
+            base_dir=base_dir,
+            use_stderr=use_stderr,
+            initialized=False,
+            usage=usage,
+            description=description,
+            argparse_epilog=argparse_epilog,
+            argparse_prefix_chars=argparse_prefix_chars,
+            env_prefix=env_prefix,
         )
 
         self.cfg = RecursiveDictionary()
@@ -247,7 +236,7 @@ class PbCfgApp(PbApplication):
 
         self._read_config()
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def need_config_file(self):
         """
@@ -256,7 +245,7 @@ class PbCfgApp(PbApplication):
         """
         return getattr(self, '_need_config_file', False)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def hide_default_config(self):
         """
@@ -265,26 +254,26 @@ class PbCfgApp(PbApplication):
         """
         return getattr(self, '_hide_default_config', False)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def cfg_encoding(self):
         """The encoding character set of the configuration files."""
         return self._cfg_encoding
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def cfg_dir(self):
         """The directory containing the configuration files."""
         return self._cfg_dir
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def cfg_stem(self):
         """The basename of the configuration file without any file extension."""
         return self._cfg_stem
 
-    #--------------------------------------------------------------------------
-    def as_dict(self, short = False):
+    # -------------------------------------------------------------------------
+    def as_dict(self, short=False):
         """
         Transforms the elements of the object into a dict
 
@@ -295,7 +284,7 @@ class PbCfgApp(PbApplication):
         @rtype:  dict
         """
 
-        res = super(PbCfgApp, self).as_dict(short = short)
+        res = super(PbCfgApp, self).as_dict(short=short)
         res['need_config_file'] = self.need_config_file
         res['hide_default_config'] = self.hide_default_config
         res['cfg_encoding'] = self.cfg_encoding
@@ -304,7 +293,7 @@ class PbCfgApp(PbApplication):
 
         return res
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def init_arg_parser(self):
         """
         Method to initiate the argument parser.
@@ -313,29 +302,29 @@ class PbCfgApp(PbApplication):
         methods in descendant classes.
         """
         self.arg_parser.add_argument(
-                "-C", "--cfgfile", "--cfg-file", "--config",
-                metavar = "FILE",
-                dest = "cfg_file",
-                help = _("Configuration file to use additional to the standard configuration files."),
+            "-C", "--cfgfile", "--cfg-file", "--config",
+            metavar="FILE",
+            dest="cfg_file",
+            help=_("Configuration file to use additional to the standard configuration files."),
         )
 
         self.arg_parser.add_argument(
-                "--cfg-encoding",
-                metavar = "ENCODING",
-                dest = "cfg_encoding",
-                default = self.cfg_encoding,
-                help = _("The encoding character set of the configuration files.")
+            "--cfg-encoding",
+            metavar="ENCODING",
+            dest="cfg_encoding",
+            default=self.cfg_encoding,
+            help=_("The encoding character set of the configuration files.")
         )
 
         if not self.hide_default_config:
             self.arg_parser.add_argument(
-                    "--default-config",
-                    action = 'store_true',
-                    dest = "show_default_config",
-                    help = _('Generates a default configuration, prints it out to STDOUT and exit.'),
+                "--default-config",
+                action='store_true',
+                dest="show_default_config",
+                help=_('Generates a default configuration, prints it out to STDOUT and exit.'),
             )
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def init_cfgfiles(self):
         """Method to generate the self.cfg_files list."""
 
@@ -360,11 +349,11 @@ class PbCfgApp(PbApplication):
                 log.debug("home_dir: %s", home_dir)
             usercfg_fn = None
             if self.cfg_dir:
-                usercfg_fn = os.path.join(home_dir, (".%s" % (self.cfg_dir)),
-                        ('%s.cfg' % (self.cfg_stem)))
+                usercfg_fn = os.path.join(
+                    home_dir, (".%s" % (self.cfg_dir)), ('%s.cfg' % (self.cfg_stem)))
             else:
-                usercfg_fn = os.path.join(home_dir,
-                        (".%s.cfg" % (self.cfg_stem)))
+                usercfg_fn = os.path.join(
+                    home_dir, (".%s.cfg" % (self.cfg_stem)))
             self.cfg_files.append(usercfg_fn)
 
         # add a configfile given on command line with --cfg-file
@@ -372,7 +361,7 @@ class PbCfgApp(PbApplication):
         if cmdline_cfg:
             self.cfg_files.append(cmdline_cfg)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def _init_cfg_spec(self):
         """
         Initialize self.cfg_spec with the content of a config specification
@@ -388,25 +377,25 @@ class PbCfgApp(PbApplication):
 
         self.init_cfg_spec()
 
-        if not 'general' in self.cfg_spec:
+        if 'general' not in self.cfg_spec:
             self.cfg_spec['general'] = {}
 
         self.cfg_spec.comments['general'].append('')
         self.cfg_spec.comments['general'].append(
-                'General configuration parameters')
+            'General configuration parameters')
 
-        if not 'verbose' in self.cfg_spec['general']:
+        if 'verbose' not in self.cfg_spec['general']:
             self.cfg_spec['general']['verbose'] = 'integer(0, 10, default = 0)'
             self.cfg_spec['general'].comments['verbose'].append('')
             self.cfg_spec['general'].comments['verbose'].append(
-                    'Defines a minimum verbosity of the application')
+                'Defines a minimum verbosity of the application')
 
         self.cfg_spec.final_comment.append('')
         self.cfg_spec.final_comment.append('')
         self.cfg_spec.final_comment.append(
-                'vim: filetype=cfg fileencoding=utf-8 ts=4 expandtab')
+            'vim: filetype=cfg fileencoding=utf-8 ts=4 expandtab')
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def init_cfg_spec(self):
         """
         Dummy method to complete the initialisation of the config
@@ -421,7 +410,7 @@ class PbCfgApp(PbApplication):
 
         pass
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def _read_config(self):
         """
         Read in configuration from all configuration files
@@ -434,14 +423,15 @@ class PbCfgApp(PbApplication):
         """
 
         if self.verbose > 2:
-            log.debug(_("Read cfg files with character set '%s' ..."),
-                    self.cfg_encoding)
+            log.debug(
+                _("Read cfg files with character set '%s' ..."),
+                self.cfg_encoding)
 
         if self.verbose > 3:
             cfgspec = StringIO()
             self.cfg_spec.write(cfgspec)
-            log.debug((_("Used config specification:") + "\n%s"),
-                    cfgspec.getvalue())
+            log.debug(
+                (_("Used config specification:") + "\n%s"), cfgspec.getvalue())
             cfgspec.close()
             del cfgspec
 
@@ -464,24 +454,30 @@ class PbCfgApp(PbApplication):
                 log.debug(_("Reading in configuration file '%s' ..."),
                           cfg_file)
 
-            cfg = ConfigObj(
+            try:
+                cfg = ConfigObj(
                     cfg_file,
-                    encoding = self.cfg_encoding,
-                    stringify = True,
-                    configspec = self.cfg_spec,
-            )
+                    encoding=self.cfg_encoding,
+                    stringify=True,
+                    configspec=self.cfg_spec,
+                )
+            except ConfigObjError:
+                msg = _("Wrong configuration in %r found:") % (cfg_file)
+                msg += ' ' + str(e)
+                self.handle_error(msg, _("Configuration error"))
+                continue
 
             if self.verbose > 2:
                 log.debug((_("Found configuration:") + "\n%r"), pp(cfg))
 
             result = cfg.validate(
-                    validator, preserve_errors = True, copy = True)
+                validator, preserve_errors=True, copy=True)
             if self.verbose > 2:
                 log.debug((_("Validation result:") + "\n%s"), pp(result))
 
-            if not result is True:
+            if result is not True:
                 cfgfiles_ok = False
-                msg = _("Wrong configuration in '%s' found:") % (cfg_file)
+                msg = _("Wrong configuration in %r found:") % (cfg_file)
                 msg += '\n' + self._transform_cfg_errors(result)
                 self.handle_error(msg, _("Configuration error"))
                 continue
@@ -493,16 +489,17 @@ class PbCfgApp(PbApplication):
 
         if self.verbose > 2:
             if len(existing_cfg_files) > 1:
-                log.debug((_("Using merged configuration:") + "\n%r"),
-                        pp(self.cfg))
+                log.debug(
+                    (_("Using merged configuration:") + "\n%r"), pp(self.cfg))
             else:
                 log.debug((_("Using configuration:") + "\n%r"), pp(self.cfg))
 
-    #--------------------------------------------------------------------------
-    def _transform_cfg_errors(self, result, div = None):
+    # -------------------------------------------------------------------------
+    def _transform_cfg_errors(self, result, div=None):
         """
         Transforms a validation result of the form::
-            {u'general': {u'verbose': VdtValueTooSmallError('the value "-1" is too small.',)}}
+            {u'general': {u'verbose': VdtValueTooSmallError(
+                'the value "-1" is too small.',)}}
 
         to a string in the form::
             In section [general] key 'verbose': the value "-1" is too small.
@@ -537,14 +534,16 @@ class PbCfgApp(PbApplication):
                 section = '-'
                 if div:
                     section = ', '.join([('[' + x.encode('utf8') + ']') for x in div])
-                msg = (_("In section %(section)s key '%(key)s': %(value)s") +
-                        "\n") % {'section': section, 'key': key.encode('utf8'),
-                        'value': str(val).encode('utf8')}
+                msg = (
+                    _("In section %(section)s key '%(key)s': %(value)s") + "\n") % {
+                    'section': section,
+                    'key': key.encode('utf8'),
+                    'value': str(val).encode('utf8')}
                 error_str += msg
 
         return error_str
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def perform_config(self):
         """
         Execute some actions after reading the configuration.
@@ -560,7 +559,7 @@ class PbCfgApp(PbApplication):
             if new_verbose > self.verbose:
                 self.verbose = new_verbose
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def post_init(self):
         """
         Method to execute before calling run(). Here could be done some
@@ -579,7 +578,7 @@ class PbCfgApp(PbApplication):
 
         self.initialized = True
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def pre_run(self):
         """
         Code executing before executing the main routine.
@@ -602,7 +601,7 @@ class PbCfgApp(PbApplication):
         self.show_default_config()
         self.exit(0)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def show_default_config(self):
         """
         Print out the default configuration is printed out to stdout.
@@ -612,26 +611,26 @@ class PbCfgApp(PbApplication):
 
         self.cfg_spec.initial_comment.append('')
         self.cfg_spec.initial_comment.append(
-                ('Generated at: %s UTC' % (curdate.isoformat(' '))))
+            ('Generated at: %s UTC' % (curdate.isoformat(' '))))
         self.cfg_spec.initial_comment.append('')
 
         cfg = ConfigObj(
-                infile = None,
-                encoding = self.cfg_encoding,
-                stringify = True,
-                configspec = self.cfg_spec,
+            infile=None,
+            encoding=self.cfg_encoding,
+            stringify=True,
+            configspec=self.cfg_spec,
         )
 
         vdt = Validator(pbvalidator_checks)
-        cfg.validate(vdt, copy = True)
+        cfg.validate(vdt, copy=True)
         cfg.write(sys.stdout)
 
-#==============================================================================
+# =============================================================================
 
 if __name__ == "__main__":
 
     pass
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

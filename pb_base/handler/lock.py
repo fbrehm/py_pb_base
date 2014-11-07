@@ -4,7 +4,7 @@
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
 @organization: Profitbricks GmbH
-@copyright: © 2010 - 2013 by Profitbricks GmbH
+@copyright: © 2010 - 2014 by Profitbricks GmbH
 @license: GPL3
 @summary: Module for a extended handler module, which has additional
           methods for locking
@@ -26,7 +26,7 @@ from numbers import Number
 # Own modules
 from pb_base.common import pp, to_unicode_or_bust, to_utf8_or_bust
 
-from  pb_base.errors import CouldntOccupyLockfileError
+from pb_base.errors import CouldntOccupyLockfileError
 
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
@@ -37,7 +37,7 @@ from pb_base.handler import PbBaseHandler
 
 from pb_base.translate import translator
 
-__version__ = '0.2.3'
+__version__ = '0.3.1'
 
 log = logging.getLogger(__name__)
 
@@ -54,7 +54,8 @@ default_lockretry_max_delay = 10
 default_locking_use_pid = True
 default_max_lockfile_age = 300
 
-#==============================================================================
+
+# =============================================================================
 class LockHandlerError(PbBaseHandlerError):
     """
     Base exception class for all exceptions belonging to locking issues
@@ -63,7 +64,8 @@ class LockHandlerError(PbBaseHandlerError):
 
     pass
 
-#==============================================================================
+
+# =============================================================================
 class LockObjectError(LockHandlerError):
     """
     Special exception class for exceptions raising inside methods of
@@ -72,14 +74,15 @@ class LockObjectError(LockHandlerError):
 
     pass
 
-#==============================================================================
+
+# =============================================================================
 class LockdirNotExistsError(LockHandlerError):
     """
     Exception class for the case, that the parent directory of the lockfile
     (lockdir) doesn't exists.
     """
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __init__(self, lockdir):
         """
         Constructor.
@@ -91,21 +94,23 @@ class LockdirNotExistsError(LockHandlerError):
 
         self.lockdir = lockdir
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __str__(self):
         """Typecasting into a string for error output."""
 
-        return _("Locking directory %r doesn't exists or is not a directory.") % (
-                self.lockdir)
+        return _(
+            "Locking directory %r doesn't exists or is not a directory.") % (
+            self.lockdir)
 
-#==============================================================================
+
+# =============================================================================
 class LockdirNotWriteableError(LockHandlerError):
     """
     Exception class for the case, that the parent directory of the lockfile
     (lockdir) isn't writeable for the current process.
     """
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __init__(self, lockdir):
         """
         Constructor.
@@ -117,13 +122,14 @@ class LockdirNotWriteableError(LockHandlerError):
 
         self.lockdir = lockdir
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __str__(self):
         """Typecasting into a string for error output."""
 
         return _("Locking directory %r isn't writeable.") % (self.lockdir)
 
-#==============================================================================
+
+# =============================================================================
 class PbLock(PbBaseObject):
     """
     Capsulation class as a result of a successful lock action. It contains all
@@ -134,20 +140,11 @@ class PbLock(PbBaseObject):
 
     """
 
-    #--------------------------------------------------------------------------
-    def __init__(self,
-            lockfile,
-            ctime = None,
-            mtime = None,
-            fcontent = None,
-            simulate = False,
-            autoremove = False,
-            appname = None,
-            verbose = 0,
-            version = __version__,
-            base_dir = None,
-            use_stderr = False,
-    ):
+    # -------------------------------------------------------------------------
+    def __init__(
+        self, lockfile, ctime=None, mtime=None, fcontent=None, simulate=False,
+            autoremove=False, appname=None, verbose=0, version=__version__,
+            base_dir=None, use_stderr=False):
         """
         Initialisation of the PbLock object.
 
@@ -182,12 +179,12 @@ class PbLock(PbBaseObject):
         """
 
         super(PbLock, self).__init__(
-                appname = appname,
-                verbose = verbose,
-                version = version,
-                base_dir = base_dir,
-                use_stderr = use_stderr,
-                initialized = False,
+            appname=appname,
+            verbose=verbose,
+            version=version,
+            base_dir=base_dir,
+            use_stderr=use_stderr,
+            initialized=False,
         )
 
         if not lockfile:
@@ -225,31 +222,31 @@ class PbLock(PbBaseObject):
 
         self.initialized = True
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def lockfile(self):
         """The file, which represents the lock."""
         return self._lockfile
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def ctime(self):
         """The creation time of the lockfile."""
         return self._ctime
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def mtime(self):
         """The last modification time of the lockfile."""
         return self._mtime
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def fcontent(self):
         """The content of the lockfile."""
         return self._fcontent
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def simulate(self):
         """Don't execute actions, only display them."""
@@ -259,7 +256,7 @@ class PbLock(PbBaseObject):
     def simulate(self, value):
         self._simulate = bool(value)
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def autoremove(self):
         """Removing the lockfile on deleting the current object."""
@@ -269,8 +266,8 @@ class PbLock(PbBaseObject):
     def autoremove(self, value):
         self._autoremove = bool(value)
 
-    #--------------------------------------------------------------------------
-    def as_dict(self, short = False):
+    # -------------------------------------------------------------------------
+    def as_dict(self, short=False):
         """
         Transforms the elements of the object into a dict
 
@@ -281,7 +278,7 @@ class PbLock(PbBaseObject):
         @rtype:  dict
         """
 
-        res = super(PbLock, self).as_dict(short = short)
+        res = super(PbLock, self).as_dict(short=short)
         res['lockfile'] = self.lockfile
         res['ctime'] = self.ctime
         res['mtime'] = self.mtime
@@ -291,7 +288,7 @@ class PbLock(PbBaseObject):
 
         return res
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __repr__(self):
         """Typecasting into a string for reproduction."""
 
@@ -312,7 +309,7 @@ class PbLock(PbBaseObject):
         out += ")>"
         return out
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __del__(self):
         """Destructor.
 
@@ -331,7 +328,7 @@ class PbLock(PbBaseObject):
             if not self.simulate:
                 os.remove(self.lockfile)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def exists(self):
         """Returns, whether the lockfile exists or not."""
 
@@ -340,14 +337,15 @@ class PbLock(PbBaseObject):
 
         return os.path.exists(self.lockfile)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def refresh(self):
         """
         Refreshes the atime and mtime of the lockfile to the current time.
         """
 
-        msg = _("Refreshing atime and mtime of %r to the current timestamp.") % (
-                self.lockfile)
+        msg = _(
+            "Refreshing atime and mtime of %r to the current timestamp.") % (
+            self.lockfile)
         log.debug(msg)
 
         if not self.simulate:
@@ -355,32 +353,25 @@ class PbLock(PbBaseObject):
 
         self._mtime = datetime.datetime.utcnow()
 
-#==============================================================================
+
+# =============================================================================
 class PbLockHandler(PbBaseHandler):
     """
     Handler class with additional properties and methods to create,
     check and remove lock files.
     """
 
-    #--------------------------------------------------------------------------
-    def __init__(self,
-            lockdir = None,
-            lockretry_delay_start = default_lockretry_delay_start,
-            lockretry_delay_increase = default_lockretry_delay_increase,
-            lockretry_max_delay = default_lockretry_max_delay,
-            max_lockfile_age = default_max_lockfile_age,
-            locking_use_pid = default_locking_use_pid,
-            appname = None,
-            verbose = 0,
-            version = __version__,
-            base_dir = None,
-            use_stderr = False,
-            simulate = False,
-            sudo = False,
-            quiet = False,
-            *targs,
-            **kwargs
-            ):
+    # -------------------------------------------------------------------------
+    def __init__(
+        self, lockdir=None,
+            lockretry_delay_start=default_lockretry_delay_start,
+            lockretry_delay_increase=default_lockretry_delay_increase,
+            lockretry_max_delay=default_lockretry_max_delay,
+            max_lockfile_age=default_max_lockfile_age,
+            locking_use_pid=default_locking_use_pid,
+            appname=None, verbose=0, version=__version__, base_dir=None,
+            use_stderr=False, simulate=False, sudo=False, quiet=False,
+            *targs, **kwargs):
         """
         Initialisation of the locking handler object.
 
@@ -433,15 +424,15 @@ class PbLockHandler(PbBaseHandler):
         """
 
         super(PbLockHandler, self).__init__(
-                appname = appname,
-                verbose = verbose,
-                version = version,
-                base_dir = base_dir,
-                use_stderr = use_stderr,
-                initialized = False,
-                simulate = simulate,
-                sudo = sudo,
-                quiet = quiet,
+            appname=appname,
+            verbose=verbose,
+            version=version,
+            base_dir=base_dir,
+            use_stderr=use_stderr,
+            initialized=False,
+            simulate=simulate,
+            sudo=sudo,
+            quiet=quiet,
         )
 
         self._lockdir = None
@@ -463,7 +454,7 @@ class PbLockHandler(PbBaseHandler):
         self._locking_use_pid = default_locking_use_pid
         self.locking_use_pid = locking_use_pid
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def lockdir(self):
         """The directory for searching and creating the lockfiles."""
@@ -482,7 +473,7 @@ class PbLockHandler(PbBaseHandler):
         else:
             self._lockdir = os.path.normpath(os.path.join(self.base_dir, value))
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def lockretry_delay_start(self):
         """
@@ -493,18 +484,20 @@ class PbLockHandler(PbBaseHandler):
     @lockretry_delay_start.setter
     def lockretry_delay_start(self, value):
         if not isinstance(value, Number):
-            msg = _("Value %(val)r for %(what)s is not a Number.") % {
-                    'val': value, 'what': 'lockretry_delay_start'}
+            msg = _(
+                "Value %(val)r for %(what)s is not a Number.") % {
+                'val': value, 'what': 'lockretry_delay_start'}
             raise LockHandlerError(msg)
 
         if value <= 0:
-            msg = _("The value for %(what)s must be greater than zero (is %(val)r).") % {
-                    'val': value, 'what': 'lockretry_delay_start'}
+            msg = _(
+                "The value for %(what)s must be greater than zero (is %(val)r).") % {
+                'val': value, 'what': 'lockretry_delay_start'}
             raise LockHandlerError(msg)
 
         self._lockretry_delay_start = value
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def lockretry_delay_increase(self):
         """
@@ -515,18 +508,20 @@ class PbLockHandler(PbBaseHandler):
     @lockretry_delay_increase.setter
     def lockretry_delay_increase(self, value):
         if not isinstance(value, Number):
-            msg = _("Value %(val)r for %(what)s is not a Number.") % {
-                    'val': value, 'what': 'lockretry_delay_increase'}
+            msg = _(
+                "Value %(val)r for %(what)s is not a Number.") % {
+                'val': value, 'what': 'lockretry_delay_increase'}
             raise LockHandlerError(msg)
 
         if value < 0:
-            msg = _("The value for %(what)s must be greater than or equal to zero (is %(val)r).") % {
-                    'val': value, 'what': 'lockretry_delay_increase'}
+            msg = _(
+                "The value for %(w)s must be greater than or equal to zero (is %(v)r).") % {
+                'v': value, 'w': 'lockretry_delay_increase'}
             raise LockHandlerError(msg)
 
         self._lockretry_delay_increase = value
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def lockretry_max_delay(self):
         """
@@ -537,18 +532,20 @@ class PbLockHandler(PbBaseHandler):
     @lockretry_max_delay.setter
     def lockretry_max_delay(self, value):
         if not isinstance(value, Number):
-            msg = _("Value %(val)r for %(what)s is not a Number.") % {
-                    'val': value, 'what': 'lockretry_max_delay'}
+            msg = _(
+                "Value %(val)r for %(what)s is not a Number.") % {
+                'val': value, 'what': 'lockretry_max_delay'}
             raise LockHandlerError(msg)
 
         if value <= 0:
-            msg = _("The value for %(what)s must be greater than zero (is %(val)r).") % {
-                    'val': value, 'what': 'lockretry_max_delay'}
+            msg = _(
+                "The value for %(what)s must be greater than zero (is %(val)r).") % {
+                'val': value, 'what': 'lockretry_max_delay'}
             raise LockHandlerError(msg)
 
         self._lockretry_max_delay = value
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def max_lockfile_age(self):
         """
@@ -560,18 +557,20 @@ class PbLockHandler(PbBaseHandler):
     @max_lockfile_age.setter
     def max_lockfile_age(self, value):
         if not isinstance(value, Number):
-            msg = _("Value %(val)r for %(what)s is not a Number.") % {
-                    'val': value, 'what': 'max_lockfile_age'}
+            msg = _(
+                "Value %(val)r for %(what)s is not a Number.") % {
+                'val': value, 'what': 'max_lockfile_age'}
             raise LockHandlerError(msg)
 
         if value <= 0:
-            msg = _("The value for %(what)s must be greater than zero (is %(val)r).") % {
-                    'val': value, 'what': 'max_lockfile_age'}
+            msg = _(
+                "The value for %(what)s must be greater than zero (is %(val)r).") % {
+                'val': value, 'what': 'max_lockfile_age'}
             raise LockHandlerError(msg)
 
         self._max_lockfile_age = value
 
-    #------------------------------------------------------------
+    # -----------------------------------------------------------
     @property
     def locking_use_pid(self):
         """
@@ -583,8 +582,8 @@ class PbLockHandler(PbBaseHandler):
     def locking_use_pid(self, value):
         self._locking_use_pid = bool(value)
 
-    #--------------------------------------------------------------------------
-    def as_dict(self, short = False):
+    # -------------------------------------------------------------------------
+    def as_dict(self, short=False):
         """
         Transforms the elements of the object into a dict
 
@@ -595,7 +594,7 @@ class PbLockHandler(PbBaseHandler):
         @rtype:  dict
         """
 
-        res = super(PbLockHandler, self).as_dict(short = short)
+        res = super(PbLockHandler, self).as_dict(short=short)
         res['lockdir'] = self.lockdir
         res['lockretry_delay_start'] = self.lockretry_delay_start
         res['lockretry_delay_increase'] = self.lockretry_delay_increase
@@ -605,7 +604,7 @@ class PbLockHandler(PbBaseHandler):
 
         return res
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __repr__(self):
         """Typecasting into a string for reproduction."""
 
@@ -625,10 +624,10 @@ class PbLockHandler(PbBaseHandler):
         out += ")>"
         return out
 
-    #--------------------------------------------------------------------------
-    def create_lockfile(self, lockfile,
-            delay_start = None, delay_increase = None, max_delay = None,
-            use_pid = None, max_age = None, pid = None, raise_on_fail = True):
+    # -------------------------------------------------------------------------
+    def create_lockfile(
+        self, lockfile, delay_start=None, delay_increase=None, max_delay=None,
+            use_pid=None, max_age=None, pid=None, raise_on_fail=True):
         """
         Tries to create the given lockfile exclusive.
 
@@ -678,36 +677,42 @@ class PbLockHandler(PbBaseHandler):
             delay_start = self.lockretry_delay_start
         else:
             if not isinstance(delay_start, Number):
-                msg = _("Value %(val)r for %(what)s is not a Number.") % {
-                        'val': delay_start, 'what': 'delay_start'}
+                msg = _(
+                    "Value %(val)r for %(what)s is not a Number.") % {
+                    'val': delay_start, 'what': 'delay_start'}
                 raise LockHandlerError(msg)
             if delay_start <= 0:
-                msg = _("The value for %(what)s must be greater than zero (is %(val)r).") % {
-                        'val': delay_start, 'what': 'delay_start'}
+                msg = _(
+                    "The value for %(what)s must be greater than zero (is %(val)r).") % {
+                    'val': delay_start, 'what': 'delay_start'}
                 raise LockHandlerError(msg)
 
         if delay_increase is None:
             delay_increase = self.lockretry_delay_increase
         else:
             if not isinstance(delay_increase, Number):
-                msg = _("Value %(val)r for %(what)s is not a Number.") % {
-                        'val': delay_increase, 'what': 'delay_increase'}
+                msg = _(
+                    "Value %(val)r for %(what)s is not a Number.") % {
+                    'val': delay_increase, 'what': 'delay_increase'}
                 raise LockHandlerError(msg)
             if delay_increase < 0:
-                msg = _("The value for %(what)s must be greater than or equal to zero (is %(val)r).") % {
-                        'val': delay_increase, 'what': 'delay_increase'}
+                msg = _(
+                    "The value for %(w)s must be greater than or equal to zero (is %(v)r).") % {
+                    'v': delay_increase, 'w': 'delay_increase'}
                 raise LockHandlerError(msg)
 
         if max_delay is None:
             max_delay = self.lockretry_max_delay
         else:
             if not isinstance(max_delay, Number):
-                msg = _("Value %(val)r for %(what)s is not a Number.") % {
-                        'val': max_delay, 'what': 'max_delay'}
+                msg = _(
+                    "Value %(val)r for %(what)s is not a Number.") % {
+                    'val': max_delay, 'what': 'max_delay'}
                 raise LockHandlerError(msg)
             if max_delay <= 0:
-                msg = _("The value for %(what)s must be greater than zero (is %(val)r).") % {
-                        'val': max_delay, 'what': 'max_delay'}
+                msg = _(
+                    "The value for %(what)s must be greater than zero (is %(val)r).") % {
+                    'val': max_delay, 'what': 'max_delay'}
                 raise LockHandlerError(msg)
             pass
 
@@ -720,12 +725,14 @@ class PbLockHandler(PbBaseHandler):
             max_age = self.max_lockfile_age
         else:
             if not isinstance(max_age, Number):
-                msg = _("Value %(val)r for %(what)s is not a Number.") % {
-                        'val': max_age, 'what': 'max_age'}
+                msg = _(
+                    "Value %(val)r for %(what)s is not a Number.") % {
+                    'val': max_age, 'what': 'max_age'}
                 raise LockHandlerError(msg)
             if max_age <= 0:
-                msg = _("The value for %(what)s must be greater than zero (is %(val)r).") % {
-                        'val': max_age, 'what': 'max_age'}
+                msg = _(
+                    "The value for %(what)s must be greater than zero (is %(val)r).") % {
+                    'val': max_age, 'what': 'max_age'}
                 raise LockHandlerError(msg)
 
         if pid is None:
@@ -733,8 +740,8 @@ class PbLockHandler(PbBaseHandler):
         else:
             pid = int(pid)
             if pid <= 0:
-                msg = _("Invalid PID %d given on calling create_lockfile().") % (
-                        pid)
+                msg = _(
+                    "Invalid PID %d given on calling create_lockfile().") % (pid)
                 raise LockHandlerError(msg)
 
         if os.path.isabs(lockfile):
@@ -779,7 +786,8 @@ class PbLockHandler(PbBaseHandler):
                 break
 
             # Try creating lockfile exclusive
-            log.debug(_("Try %(try_nr)d on creating lockfile %(lfile)r ...") % {
+            log.debug(
+                _("Try %(try_nr)d on creating lockfile %(lfile)r ...") % {
                     'try_nr': counter, 'lfile': lockfile})
             ctime = datetime.datetime.utcnow()
             fd = self._create_lockfile(lockfile)
@@ -796,8 +804,9 @@ class PbLockHandler(PbBaseHandler):
                     if not self.simulate:
                         os.remove(lockfile)
                 except Exception as e:
-                    msg = _("Error on removing lockfile %(lfile)r: %(err)s") % {
-                            'lfile': lockfile, 'err': e}
+                    msg = _(
+                        "Error on removing lockfile %(lfile)r: %(err)s") % {
+                        'lfile': lockfile, 'err': e}
                     log.error(msg)
                     time.sleep(delay)
                     delay += delay_increase
@@ -828,8 +837,9 @@ class PbLockHandler(PbBaseHandler):
         out = "%d\n" % (pid)
         if sys.version_info[0] > 2:
             out = to_utf8_or_bust(out)
-        log.debug(_("Write %(what)r in lockfile %(lfile)r ...") % {
-                'what': out, 'lfile': lockfile})
+        log.debug(_(
+            "Write %(what)r in lockfile %(lfile)r ...") % {
+            'what': out, 'lfile': lockfile})
         if not self.simulate:
             os.write(fd, out)
             os.close(fd)
@@ -837,20 +847,20 @@ class PbLockHandler(PbBaseHandler):
         mtime = datetime.datetime.utcnow()
 
         lock_object = PbLock(
-                lockfile,
-                ctime = ctime,
-                mtime = mtime,
-                fcontent = out,
-                simulate = self.simulate,
-                appname = self.appname,
-                verbose = self.verbose,
-                base_dir = self.base_dir,
-                use_stderr = self.use_stderr,
+            lockfile,
+            ctime=ctime,
+            mtime=mtime,
+            fcontent=out,
+            simulate=self.simulate,
+            appname=self.appname,
+            verbose=self.verbose,
+            base_dir=self.base_dir,
+            use_stderr=self.use_stderr,
         )
 
         return lock_object
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def _create_lockfile(self, lockfile):
         """
         Handles exclusive creation of a lockfile.
@@ -870,8 +880,9 @@ class PbLockHandler(PbBaseHandler):
         try:
             fd = os.open(lockfile, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
         except OSError as e:
-            msg = _("Error on creating lockfile %(lfile)r: %(err)s") % {
-                    'lfile': lockfile, 'err': e}
+            msg = _(
+                "Error on creating lockfile %(lfile)r: %(err)s") % {
+                'lfile': lockfile, 'err': e}
             if e.errno == errno.EEXIST:
                 log.debug(msg)
                 return None
@@ -880,7 +891,7 @@ class PbLockHandler(PbBaseHandler):
 
         return fd
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def remove_lockfile(self, lockfile):
         """
         Removing lockfile.
@@ -919,8 +930,8 @@ class PbLockHandler(PbBaseHandler):
 
         return True
 
-    #--------------------------------------------------------------------------
-    def check_lockfile(self, lockfile, max_age = None, use_pid = None):
+    # -------------------------------------------------------------------------
+    def check_lockfile(self, lockfile, max_age=None, use_pid=None):
         """
         Checks the validity of the given lockfile.
 
@@ -955,12 +966,14 @@ class PbLockHandler(PbBaseHandler):
             max_age = self.max_lockfile_age
         else:
             if not isinstance(max_age, Number):
-                msg = _("Value %(val)r for %(what)s is not a Number.") % {
-                        'val': max_age, 'what': 'max_age'}
+                msg = _(
+                    "Value %(val)r for %(what)s is not a Number.") % {
+                    'val': max_age, 'what': 'max_age'}
                 raise LockHandlerError(msg)
             if max_age <= 0:
-                msg = _("The value for %(what)s must be greater than zero (is %(val)r).") % {
-                        'val': max_age, 'what': 'max_age'}
+                msg = _(
+                    "The value for %(what)s must be greater than zero (is %(val)r).") % {
+                    'val': max_age, 'what': 'max_age'}
                 raise LockHandlerError(msg)
 
         log.debug(_("Checking lockfile %r ..."), lockfile)
@@ -1008,8 +1021,8 @@ class PbLockHandler(PbBaseHandler):
         log.debug(msg % {'lfile': lockfile, 'max': int(max_age), 'age': int(age)})
         return True
 
-    #--------------------------------------------------------------------------
-    def get_pid_from_file(self, pidfile, force = False):
+    # -------------------------------------------------------------------------
+    def get_pid_from_file(self, pidfile, force=False):
         """
         Tries to read the PID of some process from the given file.
 
@@ -1055,8 +1068,9 @@ class PbLockHandler(PbBaseHandler):
         try:
             pid = int(content)
         except Exception as e:
-            msg = _("Could not interprete %(cont)r as a PID from %(file)r:") % {
-                    'cont': content, 'file': pidfile}
+            msg = _(
+                "Could not interprete %(cont)r as a PID from %(file)r:") % {
+                'cont': content, 'file': pidfile}
             msg += " " + str(e)
             if force:
                 log.warn(msg)
@@ -1065,8 +1079,9 @@ class PbLockHandler(PbBaseHandler):
                 raise LockHandlerError(msg)
 
         if pid <= 0:
-            msg = _("Invalid PID %(pid)d in %(file)r found.") % {
-                    'pid': pid, 'file': pidfile}
+            msg = _(
+                "Invalid PID %(pid)d in %(file)r found.") % {
+                'pid': pid, 'file': pidfile}
             if force:
                 log.warn(msg)
                 return None
@@ -1075,8 +1090,8 @@ class PbLockHandler(PbBaseHandler):
 
         return pid
 
-    #--------------------------------------------------------------------------
-    def kill(self, pid, signal = 0):
+    # -------------------------------------------------------------------------
+    def kill(self, pid, signal=0):
         """
         Sends a signal to a process.
 
@@ -1097,17 +1112,17 @@ class PbLockHandler(PbBaseHandler):
         try:
             return os.kill(pid, signal)
         except OSError as e:
-            #process is dead
+            # process is dead
             if e.errno == errno.ESRCH:
                 return True
-            #no permissions
+            # no permissions
             elif e.errno == errno.EPERM:
                 return False
             else:
-                #reraise the error
+                # reraise the error
                 raise
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def dead(self, pid):
         """
         Gives back, whether the process with the given pid is dead
@@ -1125,13 +1140,13 @@ class PbLockHandler(PbBaseHandler):
         if self.kill(pid):
             return True
 
-        #maybe the pid is a zombie that needs us to wait4 it
+        # maybe the pid is a zombie that needs us to wait4 it
         from os import waitpid, WNOHANG
 
         try:
             dead = waitpid(pid, WNOHANG)[0]
         except OSError as e:
-            #pid is not a child
+            # pid is not a child
             if e.errno == errno.ECHILD:
                 return False
             else:
@@ -1139,11 +1154,11 @@ class PbLockHandler(PbBaseHandler):
 
         return dead
 
-#==============================================================================
+# =============================================================================
 if __name__ == "__main__":
 
     pass
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

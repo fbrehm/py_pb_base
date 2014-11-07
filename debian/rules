@@ -4,45 +4,68 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-BIN2_PKGNAME    := python-pb-base
-BIN3_PKGNAME    := python3-pb-base
-NLS_PKGNAME     := python-pb-base-nls
-DOC_PKGNAME     := python-pb-base-doc
+BIN_PKGNAME  := pb-base
+LIB2_PKGNAME := python-pb-base
+LIB3_PKGNAME := python3-pb-base
+NLS_PKGNAME  := python-pb-base-nls
+DOC_PKGNAME  := python-pb-base-doc
+MODULE_NAME  := pb_base
 
-INSTALL2_DIR    := $(CURDIR)/debian/$(BIN2_PKGNAME)
-INSTALL3_DIR    := $(CURDIR)/debian/$(BIN3_PKGNAME)
-INSTALL_NLS_DIR := $(CURDIR)/debian/$(NLS_PKGNAME)
-DOC_DIR         := $(CURDIR)/debian/$(DOC_PKGNAME)/usr/share/doc/$(DOC_PKGNAME)
+INSTALL_DIR_BIN  := $(CURDIR)/debian/$(BIN_PKGNAME)
+INSTALL_DIR_LIB2 := $(CURDIR)/debian/$(LIB2_PKGNAME)
+INSTALL_DIR_LIB3 := $(CURDIR)/debian/$(LIB3_PKGNAME)
+INSTALL_NLS_DIR  := $(CURDIR)/debian/$(NLS_PKGNAME)
+DOC_DIR          := $(CURDIR)/debian/$(DOC_PKGNAME)/usr/share/doc/$(DOC_PKGNAME)
 
-PYTHONS         := $(shell pyversions -vr || true)
-PYTHON3S        := $(shell py3versions -vr || true)
+PYTHON2S := $(shell pyversions -vr || true)
+PYTHON3S := $(shell py3versions -vr || true)
 
 %:
 	dh $@ --with python2,python3
 
 override_dh_auto_build:
+	@echo ""
 	@echo "Building Python 2 stuff ..."
-	set -e && for pyvers in $(PYTHONS); do python$$pyvers setup.py build; done
+	set -e && for pyvers in $(PYTHON2S); do python$$pyvers setup.py build; done
+	@echo ""
 	@echo "Building Python 3 stuff ..."
 	set -e && for pyvers in $(PYTHON3S); do python$$pyvers setup.py build; done
+	@echo ""
 	@echo "Compiling language message files ..."
 	$(MAKE) -C po
+	./generate-manpages.sh
 
 override_dh_auto_clean:
 	dh_auto_clean
 	rm -rf build
+	rm -fv man/*
 	$(MAKE) -C po clean
 
 override_dh_auto_install:
+	@echo ""
 	@echo "Installing Python 2 stuff ..."
-	set -e && for pyvers in $(PYTHONS); do python$$pyvers setup.py install --root=$(INSTALL2_DIR) --install-layout=deb; done
+	set -e && for pyvers in $(PYTHON2S); do python$$pyvers setup.py install --root=$(INSTALL_DIR_LIB2) --install-layout=deb; done
+	@echo ""
 	@echo "Installing Python 3 stuff ..."
-	set -e && for pyvers in $(PYTHON3S); do python$$pyvers setup.py install --root=$(INSTALL3_DIR) --install-layout=deb; done
-	rm -vfr $(INSTALL3_DIR)/usr/bin
+	set -e && for pyvers in $(PYTHON3S); do python$$pyvers setup.py install --root=$(INSTALL_DIR_LIB3) --install-layout=deb; done
+	@echo ""
+	@echo "Installing bin package ..."
+	install -d $(INSTALL_DIR_BIN)/usr/bin
+	install -m 0755 bin/crc64 $(INSTALL_DIR_BIN)/usr/bin/crc64
+	install -m 0755 bin/term-can-colors $(INSTALL_DIR_BIN)/usr/bin/term-can-colors
+	@echo ""
+	@echo "Removing unnessecary stuff ..."
+	rm -vfr $(INSTALL_DIR_LIB2)/usr/bin
+	rm -vfr $(INSTALL_DIR_LIB3)/usr/bin
+	@echo ""
 	@echo "Installing i18n stuff ..."
 	$(MAKE) -C po DESTDIR=$(INSTALL_NLS_DIR) install
+	@echo ""
 	@echo "Documentation ..."
 	mkdir -p $(DOC_DIR)/html
 	mkdir -p $(DOC_DIR)/pdf
 	epydoc --html -v -o $(DOC_DIR)/html $(CURDIR)/pb_base
 	epydoc --pdf -o $(DOC_DIR)/pdf $(CURDIR)/pb_base
+	@echo ""
+	@echo "Manpages ..."
+	dh_installman

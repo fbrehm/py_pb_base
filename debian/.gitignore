@@ -2,6 +2,7 @@
 *.log
 *.substvars
 files
+pb-base
 profitbricks-python-base
 profitbricks-python-base-doc
 profitbricks-python-base-nls
