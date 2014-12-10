@@ -1,3 +1,13 @@
+pb-base (0.6.1) all; urgency=medium
+
+  * Update homepage and Vcs URL to point to GitLab
+  * Bump Standards-Version to 3.9.6
+  * Switch to dpkg-source 3.0 (native) format
+  * Run generate-manpages.sh with "set -e" to catch failures
+  * Build depend on help2man for man page creation
+
+ -- Benjamin Drung <benjamin.drung@profitbricks.com>  Wed, 10 Dec 2014 12:59:48 +0100
+
 pb-base (0.6.0-1) squeeze wheezy jessie; urgency=low
 
   * Version bump
