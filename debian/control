@@ -24,9 +24,9 @@ X-Python3-Version: >= 3.2
 Package: pb-base
 Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
-Depends: ${misc:Depends},
-         ${python:Depends},
-         python-pb-base (= ${binary:Version})
+Depends: python-pb-base (= ${binary:Version}),
+         ${misc:Depends},
+         ${python:Depends}
 Description: Python modules for common used objects, error classes and functions
  .
  This package includes the executable binaries.
