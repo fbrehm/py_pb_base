@@ -5,6 +5,7 @@ Maintainer: Frank Brehm <frank.brehm@profitbricks.com>
 Build-Depends: debhelper (>= 7.0.50~),
                gettext,
                ghostscript,
+               help2man,
                python-all,
                python-argparse,
                python-configobj,
