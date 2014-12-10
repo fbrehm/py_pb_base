@@ -18,8 +18,8 @@ Standards-Version: 3.9.5
 Homepage: https://gitlab.pb.local/dcops/pb-base
 Vcs-Browser: https://gitlab.pb.local/dcops/pb-base
 Vcs-Git: git@gitlab.pb.local:dcops/pb-base.git
-X-Python-Version: >=2.6
-X-Python3-Version: >=3.2
+X-Python-Version: >= 2.6
+X-Python3-Version: >= 3.2
 
 Package: pb-base
 Architecture: all
