@@ -34,7 +34,7 @@ from pb_base.object import PbBaseObject
 
 from pb_base.translate import translator
 
-__version__ = '0.7.1'
+__version__ = '0.7.2'
 
 log = logging.getLogger(__name__)
 
@@ -210,7 +210,7 @@ class PbApplication(PbBaseObject):
         @type: dict
         """
 
-        self._env_prefix = self.appname.upper() + '_'
+        self._env_prefix = None
         """
         @ivar: a prefix for environment variables to detect them and to assign
                their transformed names and their values in self.env
@@ -231,6 +231,9 @@ class PbApplication(PbBaseObject):
                     env_prefix)
                 raise PbApplicationError(msg)
             self._env_prefix = ep
+        else:
+            ep = self.appname.upper() + '_'
+            self._env_prefix = re.sub(r'[^A-Z0-9_]+', '_', ep, re.IGNORECASE)
 
         self._init_arg_parser()
         self._perform_arg_parser()
