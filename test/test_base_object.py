@@ -9,10 +9,14 @@
 @summary: test script (and module) for unit tests on base object
 '''
 
-import unittest
 import os
 import sys
 import logging
+
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 
 libdir = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
 sys.path.insert(0, libdir)
@@ -20,7 +24,7 @@ sys.path.insert(0, libdir)
 import general
 from general import PbBaseTestcase, get_arg_verbose, init_root_logger
 
-log = logging.getLogger(__name__)
+log = logging.getLogger('test_base_object')
 
 #==============================================================================
 

@@ -9,11 +9,15 @@
 @summary: test script (and module) for unit tests on common.py
 """
 
-import unittest
 import os
 import sys
 import logging
 import locale
+
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 
 # Setting the user’s preferred locale settings
 locale.setlocale(locale.LC_ALL, '')
@@ -24,7 +28,7 @@ sys.path.insert(0, libdir)
 import general
 from general import PbBaseTestcase, get_arg_verbose, init_root_logger
 
-log = logging.getLogger(__name__)
+log = logging.getLogger('test_common')
 
 #==============================================================================
 

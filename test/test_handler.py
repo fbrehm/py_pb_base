@@ -10,13 +10,17 @@
           and df and fuser handler objects
 """
 
-import unittest
 import os
 import sys
 import logging
 import tempfile
 import time
 import locale
+
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 
 libdir = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
 sys.path.insert(0, libdir)
@@ -29,7 +33,7 @@ from general import PbBaseTestcase, get_arg_verbose, init_root_logger
 
 locale.setlocale(locale.LC_ALL, '')
 
-log = logging.getLogger(__name__)
+log = logging.getLogger('test_handler')
 
 #==============================================================================
 
