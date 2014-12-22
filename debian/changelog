@@ -1,3 +1,11 @@
+pb-base (0.6.2) all; urgency=medium
+
+  * Bugfix in generation of environment prefix in pb_base/app.py
+  * Switched tests to unittest2
+  * Added build dependency to python-unittest2 in debian/control
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Mon, 22 Dec 2014 11:40:31 +0100
+
 pb-base (0.6.1) all; urgency=medium
 
   * Update homepage and Vcs URL to point to GitLab
