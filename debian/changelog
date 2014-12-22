@@ -6,6 +6,12 @@ pb-base (0.6.2) all; urgency=medium
 
  -- Frank Brehm <frank.brehm@profitbricks.com>  Mon, 22 Dec 2014 11:40:31 +0100
 
+pb-base (0.6.1) trusty utopic; urgency=medium
+
+  * No-change rebuild for Ubuntu 
+
+ -- Marcelo Grebois <marcelo.grebois@profitbricks.com>  Mon, 22 Dec 2014 11:38:43 +0100
+
 pb-base (0.6.1) all; urgency=medium
 
   * Update homepage and Vcs URL to point to GitLab
