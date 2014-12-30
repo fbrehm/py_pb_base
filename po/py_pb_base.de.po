@@ -408,6 +408,16 @@ msgstr "Das Betriebssystemkommando '%s' existiert nicht."
 msgid "Command '%s' is not executable."
 msgstr "Das Betriebssystemkommando '%s' ist nicht ausführbar."
 
+#: pb_base/handler/__init__.py:341
+#, python-format
+msgid "Searching command in '%s' ..."
+msgstr "Suche Betriebssystemkommando in '%s' ..."
+
+#: pb_base/handler/__init__.py:345
+#, python-format
+msgid "Found '%s' ..."
+msgstr "Fand '%s' ..."
+
 #: pb_base/handler/__init__.py:356 pb_base/handler/__init__.py:358
 #, python-format
 msgid "Command '%s' not found."
@@ -561,7 +571,7 @@ msgstr "Initialisiert."
 #: pb_base/handler/df.py:400
 #, python-format
 msgid "Checking existence of %r ..."
-msgstr "Überprüfe existenz von %r ..."
+msgstr "Überprüfe Existenz von %r ..."
 
 #: pb_base/handler/df.py:402
 #, python-format

@@ -5,9 +5,9 @@
 #
 #, fuzzy
 msgid ""
-msgstr "Project-Id-Version: profitbricks-python-base 0.5.6\n"
+msgstr "Project-Id-Version: profitbricks-python-base 0.6.0\n"
       "Report-Msgid-Bugs-To: frank.brehm@profitbricks.com\n"
-      "POT-Creation-Date: 2014-11-03 14:57+0100\n"
+      "POT-Creation-Date: 2014-12-30 15:20+0100\n"
       "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
       "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
       "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -169,57 +169,57 @@ msgstr ""
 msgid "Faked exit to OS. Exit value: %(rv)d, message: %(msg)r"
 msgstr ""
 
-#: pb_base/app.py:309
+#: pb_base/app.py:309 pb_base/app.py:312
 msgid "usage: "
 msgstr ""
 
-#: pb_base/app.py:475
+#: pb_base/app.py:475 pb_base/app.py:478
 msgid "executing pre_run() ..."
 msgstr ""
 
-#: pb_base/app.py:513
+#: pb_base/app.py:513 pb_base/app.py:516
 msgid "The application is not complete initialized."
 msgstr ""
 
-#: pb_base/app.py:524
+#: pb_base/app.py:524 pb_base/app.py:527
 #, python-format
 msgid "Object '%s' seems not to be completely initialized."
 msgstr ""
 
-#: pb_base/app.py:534 pb_base/fork_daemon.py:353
+#: pb_base/app.py:534 pb_base/app.py:537 pb_base/fork_daemon.py:353
 msgid "Ending."
 msgstr ""
 
-#: pb_base/app.py:553
+#: pb_base/app.py:553 pb_base/app.py:556
 msgid "executing post_run() ..."
 msgstr ""
 
-#: pb_base/app.py:575 pb_base/crc64_app.py:72
+#: pb_base/app.py:575 pb_base/app.py:578 pb_base/crc64_app.py:72
 msgid "General options"
 msgstr ""
 
-#: pb_base/app.py:584
+#: pb_base/app.py:584 pb_base/app.py:587
 msgid "Use colored output for messages."
 msgstr ""
 
-#: pb_base/app.py:590
+#: pb_base/app.py:590 pb_base/app.py:593
 msgid "Increase the verbosity level"
 msgstr ""
 
-#: pb_base/app.py:596
+#: pb_base/app.py:596 pb_base/app.py:599
 msgid "Show this help message and exit"
 msgstr ""
 
-#: pb_base/app.py:602
+#: pb_base/app.py:602 pb_base/app.py:605
 msgid "Display brief usage message and exit"
 msgstr ""
 
-#: pb_base/app.py:607
+#: pb_base/app.py:607 pb_base/app.py:610
 #, python-format
 msgid "Version of %%(prog)s: %s"
 msgstr ""
 
-#: pb_base/app.py:608
+#: pb_base/app.py:608 pb_base/app.py:611
 msgid "Show program's version number and exit"
 msgstr ""
 
@@ -507,183 +507,206 @@ msgstr ""
 msgid "And here is the child ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:80
+#: pb_base/handler/__init__.py:78 pb_base/handler/__init__.py:80
 msgid "Unknown OS command."
 msgstr ""
 
-#: pb_base/handler/__init__.py:87
+#: pb_base/handler/__init__.py:85 pb_base/handler/__init__.py:87
 msgid "Empty command list given."
 msgstr ""
 
-#: pb_base/handler/__init__.py:97
+#: pb_base/handler/__init__.py:95 pb_base/handler/__init__.py:97
 msgid "Could not found OS command"
 msgid_plural    "Could not found OS commands"
 msgstr[0]       ""
 msgstr[1]       ""
 
-#: pb_base/handler/__init__.py:327
+#: pb_base/handler/__init__.py:212 pb_base/handler/df.py:322
+#: pb_base/handler/fuser.py:131
+msgid "Initialized."
+msgstr ""
+
+#: pb_base/handler/__init__.py:325 pb_base/handler/__init__.py:327
 #, python-format
 msgid "Searching for command '%s' ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:332
+#: pb_base/handler/__init__.py:330 pb_base/handler/__init__.py:332
 #, python-format
 msgid "Command '%s' doesn't exists."
 msgstr ""
 
-#: pb_base/handler/__init__.py:335 pb_base/handler/__init__.py:351
+#: pb_base/handler/__init__.py:333 pb_base/handler/__init__.py:335
+#: pb_base/handler/__init__.py:349 pb_base/handler/__init__.py:351
 #, python-format
 msgid "Command '%s' is not executable."
 msgstr ""
 
-#: pb_base/handler/__init__.py:356 pb_base/handler/__init__.py:358
+#: pb_base/handler/__init__.py:341
+#, python-format
+msgid "Searching command in '%s' ..."
+msgstr ""
+
+#: pb_base/handler/__init__.py:345
+#, python-format
+msgid "Found '%s' ..."
+msgstr ""
+
+#: pb_base/handler/__init__.py:354 pb_base/handler/__init__.py:356
+#: pb_base/handler/__init__.py:358
 #, python-format
 msgid "Command '%s' not found."
 msgstr ""
 
-#: pb_base/handler/__init__.py:431
+#: pb_base/handler/__init__.py:429 pb_base/handler/__init__.py:431
 #, python-format
 msgid "Executing %r"
 msgstr ""
 
-#: pb_base/handler/__init__.py:434
+#: pb_base/handler/__init__.py:432 pb_base/handler/__init__.py:434
 msgid "Quiet execution"
 msgstr ""
 
-#: pb_base/handler/__init__.py:474 pb_base/handler/__init__.py:490
+#: pb_base/handler/__init__.py:472 pb_base/handler/__init__.py:474
+#: pb_base/handler/__init__.py:489 pb_base/handler/__init__.py:490
 #, python-format
 msgid "Decoding %(what)s from %(enc)r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:480 pb_base/handler/__init__.py:506
+#: pb_base/handler/__init__.py:478 pb_base/handler/__init__.py:480
+#: pb_base/handler/__init__.py:505 pb_base/handler/__init__.py:506
 #, python-format
 msgid "Output on %(where)s: %(what)r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:512
+#: pb_base/handler/__init__.py:511 pb_base/handler/__init__.py:512
 #, python-format
 msgid "Returncode: %s"
 msgstr ""
 
 #: pb_base/handler/__init__.py:556 pb_base/handler/__init__.py:626
+#: pb_base/handler/__init__.py:630
 msgid "File doesn't exists."
 msgstr ""
 
-#: pb_base/handler/__init__.py:558
+#: pb_base/handler/__init__.py:558 pb_base/handler/__init__.py:559
 msgid "Read permission denied."
 msgstr ""
 
-#: pb_base/handler/__init__.py:561
+#: pb_base/handler/__init__.py:561 pb_base/handler/__init__.py:563
 #, python-format
 msgid "Reading file content of %r ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:631 pb_base/handler/__init__.py:639
+#: pb_base/handler/__init__.py:631 pb_base/handler/__init__.py:636
+#: pb_base/handler/__init__.py:639 pb_base/handler/__init__.py:647
 #, python-format
 msgid "Write permission to %r denied."
 msgstr ""
 
-#: pb_base/handler/__init__.py:634 pb_base/handler/__init__.py:642
+#: pb_base/handler/__init__.py:634 pb_base/handler/__init__.py:640
+#: pb_base/handler/__init__.py:642 pb_base/handler/__init__.py:651
 msgid "Write permission denied."
 msgstr ""
 
-#: pb_base/handler/__init__.py:646
+#: pb_base/handler/__init__.py:646 pb_base/handler/__init__.py:656
 #, python-format
 msgid "Write %(what)r into %(to)r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:649
+#: pb_base/handler/__init__.py:649 pb_base/handler/__init__.py:659
 #, python-format
 msgid "Writing %r ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:653
+#: pb_base/handler/__init__.py:653 pb_base/handler/__init__.py:664
 #, python-format
 msgid "Simulating write into %r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:661
+#: pb_base/handler/__init__.py:661 pb_base/handler/__init__.py:673
 #, python-format
 msgid "Opening '%s' for write unbuffered ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:668
+#: pb_base/handler/__init__.py:668 pb_base/handler/__init__.py:680
 #, python-format
 msgid "Closing '%s' ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:702
+#: pb_base/handler/__init__.py:702 pb_base/handler/__init__.py:714
 #, python-format
 msgid "Dumping data from %(src)r to %(tgt)r ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:719
+#: pb_base/handler/__init__.py:719 pb_base/handler/__init__.py:731
 #, python-format
 msgid "Opening %r for read."
 msgstr ""
 
-#: pb_base/handler/__init__.py:723
+#: pb_base/handler/__init__.py:723 pb_base/handler/__init__.py:735
 #, python-format
 msgid "Error opening source %(src)r: %(msg)s"
 msgstr ""
 
-#: pb_base/handler/__init__.py:728 pb_base/handler/__init__.py:822
+#: pb_base/handler/__init__.py:728 pb_base/handler/__init__.py:740
+#: pb_base/handler/__init__.py:822 pb_base/handler/__init__.py:835
 #, python-format
 msgid "Opening %r for write"
 msgstr ""
 
-#: pb_base/handler/__init__.py:733
+#: pb_base/handler/__init__.py:733 pb_base/handler/__init__.py:745
 #, python-format
 msgid "Error opening target %(tgt)r: %(msg)s"
 msgstr ""
 
-#: pb_base/handler/__init__.py:738 pb_base/handler/__init__.py:832
+#: pb_base/handler/__init__.py:738 pb_base/handler/__init__.py:751
+#: pb_base/handler/__init__.py:832 pb_base/handler/__init__.py:845
 #, python-format
 msgid "Copying (buffer size %d Bytes)..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:745
+#: pb_base/handler/__init__.py:745 pb_base/handler/__init__.py:758
 #, python-format
 msgid "Seeking %(bytes)d Bytes (%(human)s) in input to %(src)r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:750 pb_base/handler/__init__.py:839
+#: pb_base/handler/__init__.py:750 pb_base/handler/__init__.py:763
+#: pb_base/handler/__init__.py:839 pb_base/handler/__init__.py:852
 #, python-format
 msgid "Seeking %(bytes)d Bytes (%(human)s) in output to %(tgt)r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:763 pb_base/handler/__init__.py:853
+#: pb_base/handler/__init__.py:763 pb_base/handler/__init__.py:776
+#: pb_base/handler/__init__.py:853 pb_base/handler/__init__.py:868
 #, python-format
 msgid "No space left on output device %r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:768
+#: pb_base/handler/__init__.py:768 pb_base/handler/__init__.py:780
 #, python-format
 msgid "Error copying source %(src)r to target %(tgt)r: %(msg)s"
 msgstr ""
 
-#: pb_base/handler/__init__.py:777 pb_base/handler/__init__.py:866
+#: pb_base/handler/__init__.py:777 pb_base/handler/__init__.py:789
+#: pb_base/handler/__init__.py:866 pb_base/handler/__init__.py:881
 #, python-format
 msgid "%(bytes)d Bytes (%(human)s) written to output device %(tgt)r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:808
+#: pb_base/handler/__init__.py:808 pb_base/handler/__init__.py:821
 #, python-format
 msgid "Dumping binary zeroes to %r ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:827
+#: pb_base/handler/__init__.py:827 pb_base/handler/__init__.py:840
 #, python-format
 msgid "%(errname)s opening target %(tgt)r: %(msg)s"
 msgstr ""
 
-#: pb_base/handler/__init__.py:858
+#: pb_base/handler/__init__.py:858 pb_base/handler/__init__.py:873
 #, python-format
 msgid "Error dumping binary zeroes to target %(tgt)r: %(msg)s"
-msgstr ""
-
-#: pb_base/handler/df.py:322 pb_base/handler/fuser.py:131
-msgid "Initialized."
 msgstr ""
 
 #: pb_base/handler/df.py:399
