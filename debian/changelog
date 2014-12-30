@@ -1,3 +1,9 @@
+pb-base (0.6.3) all; urgency=medium
+
+  * Added failing import to pb_base/handler/__init__.py
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Tue, 30 Dec 2014 13:16:15 +0100
+
 pb-base (0.6.2) all; urgency=medium
 
   * Bugfix in generation of environment prefix in pb_base/app.py
