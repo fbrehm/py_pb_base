@@ -24,6 +24,7 @@ import locale
 
 # Own modules
 from pb_base.common import pp, caller_search_path, bytes2human
+from pb_base.common import to_str_or_bust
 
 from pb_base.errors import PbError
 from pb_base.errors import FunctionNotImplementedError
@@ -32,17 +33,14 @@ from pb_base.errors import PbReadTimeoutError, PbWriteTimeoutError
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
-from pb_base.translate import translator
+from pb_base.translate import translator, pb_gettext, pb_ngettext
 
 __version__ = '0.4.2'
 
 log = logging.getLogger(__name__)
 
-_ = translator.lgettext
-__ = translator.lngettext
-if sys.version_info[0] > 2:
-    _ = translator.gettext
-    __ = translator.ngettext
+_ = pb_gettext
+__ = pb_ngettext
 
 # Some module varriables
 CHOWN_CMD = os.sep + os.path.join('bin', 'chown')
@@ -211,7 +209,7 @@ class PbBaseHandler(PbBaseObject):
 
         self.initialized = True
         if self.verbose > 3:
-            log.debug("Initialized.")
+            log.debug(_("Initialized."))
 
     # -----------------------------------------------------------
     @property
@@ -332,7 +330,7 @@ class PbBaseHandler(PbBaseObject):
                 log.warning(_("Command '%s' doesn't exists.") % (cmd))
                 return None
             if not os.access(cmd, os.X_OK):
-                msg = (_("Command '%s' is not executable.") % (cmd))
+                msg = _("Command '%s' is not executable.") % (cmd)
                 log.warning(msg)
                 return None
             return os.path.normpath(cmd)
@@ -340,11 +338,11 @@ class PbBaseHandler(PbBaseObject):
         # Checking a relative path
         for d in caller_search_path():
             if self.verbose > 3:
-                log.debug("Searching command in '%s' ...", d)
+                log.debug(_("Searching command in '%s' ..."), d)
             p = os.path.join(d, cmd)
             if os.path.exists(p):
                 if self.verbose > 2:
-                    log.debug("Found '%s' ..." % (p))
+                    log.debug(_("Found '%s' ...") % (p))
                 if os.access(p, os.X_OK):
                     return os.path.normpath(p)
                 else:
@@ -470,8 +468,8 @@ class PbBaseHandler(PbBaseObject):
         if stderrdata:
             if sys.version_info[0] > 2:
                 if self.verbose > 2:
-                    log.debug(
-                        _("Decoding %(what)s from %(enc)r.") % {
+                    log.debug(_(
+                        "Decoding %(what)s from %(enc)r.") % {
                             'what': 'STDERR', 'enc': cur_encoding})
                 stderrdata = stderrdata.decode(cur_encoding)
             if quiet and not self.verbose:
@@ -487,7 +485,8 @@ class PbBaseHandler(PbBaseObject):
         if stdoutdata:
             if sys.version_info[0] > 2:
                 if self.verbose > 2:
-                    log.debug(_("Decoding %(what)s from %(enc)r.") % {
+                    log.debug(_(
+                        "Decoding %(what)s from %(enc)r.") % {
                         'what': 'STDOUT', 'enc': cur_encoding})
                 stdoutdata = stdoutdata.decode(cur_encoding)
             do_out = False
@@ -553,12 +552,15 @@ class PbBaseHandler(PbBaseObject):
         timeout = abs(int(timeout))
 
         if not os.path.isfile(filename):
-            raise IOError(errno.ENOENT, _("File doesn't exists."), filename)
+            raise IOError(
+                errno.ENOENT, _("File doesn't exists."), filename)
         if not os.access(filename, os.R_OK):
-            raise IOError(errno.EACCES, _('Read permission denied.'), filename)
+            raise IOError(
+                errno.EACCES, _('Read permission denied.'), filename)
 
         if self.verbose > needed_verbose_level:
-            log.debug(_("Reading file content of %r ..."), filename)
+            log.debug(_(
+                "Reading file content of %r ..."), filename)
 
         signal.signal(signal.SIGALRM, read_alarm_caller)
         signal.alarm(timeout)
@@ -623,23 +625,31 @@ class PbBaseHandler(PbBaseObject):
 
         if must_exists:
             if not os.path.isfile(filename):
-                raise IOError(errno.ENOENT, _("File doesn't exists."), filename)
+                raise IOError(
+                    errno.ENOENT,
+                    _("File doesn't exists."), filename)
 
         if os.path.exists(filename):
             if not os.access(filename, os.W_OK):
                 if self.simulate:
-                    log.error(_("Write permission to %r denied."), filename)
+                    log.error(_(
+                        "Write permission to %r denied."), filename)
                 else:
                     raise IOError(
-                        errno.EACCES, _('Write permission denied.'), filename)
+                        errno.EACCES,
+                        _('Write permission denied.'),
+                        filename)
         else:
             parent_dir = os.path.dirname(filename)
             if not os.access(parent_dir, os.W_OK):
                 if self.simulate:
-                    log.error(_("Write permission to %r denied."), parent_dir)
+                    log.error(_(
+                        "Write permission to %r denied."), parent_dir)
                 else:
                     raise IOError(
-                        errno.EACCES, _('Write permission denied.'), parent_dir)
+                        errno.EACCES,
+                        _('Write permission denied.'),
+                        parent_dir)
 
         if self.verbose > verb_level1:
             if self.verbose > verb_level2:
@@ -650,7 +660,8 @@ class PbBaseHandler(PbBaseObject):
 
         if self.simulate:
             if self.verbose > verb_level2:
-                log.debug(_("Simulating write into %r."), filename)
+                log.debug(_(
+                    "Simulating write into %r."), filename)
             return
 
         signal.signal(signal.SIGALRM, write_alarm_caller)
@@ -658,7 +669,8 @@ class PbBaseHandler(PbBaseObject):
 
         # Open filename for writing unbuffered
         if self.verbose > verb_level3:
-            log.debug(_("Opening '%s' for write unbuffered ..."), filename)
+            log.debug(_(
+                "Opening '%s' for write unbuffered ..."), filename)
         fh = open(filename, 'w', 0)
 
         try:
@@ -735,19 +747,20 @@ class PbBaseHandler(PbBaseObject):
             raise PbBaseHandlerError(msg)
 
         if self.verbose > 1:
-            log.debug(_("Copying (buffer size %d Bytes)..."), blocksize)
+            log.debug(_(
+                "Copying (buffer size %d Bytes)..."), blocksize)
 
         blocks_written = 0
 
         try:
             if input_seek:
-                log.debug(
-                    _("Seeking %(bytes)d Bytes (%(human)s) in input to %(src)r.") % {
+                log.debug(_(
+                    "Seeking %(bytes)d Bytes (%(human)s) in input to %(src)r.") % {
                         'bytes': input_seek, 'human': bytes2human(input_seek), 'src': source})
                 src_fh.seek(input_seek)
             if output_seek:
-                log.debug(
-                    _("Seeking %(bytes)d Bytes (%(human)s) in output to %(tgt)r.") % {
+                log.debug(_(
+                    "Seeking %(bytes)d Bytes (%(human)s) in output to %(tgt)r.") % {
                         'bytes': output_seek, 'human': bytes2human(output_seek), 'tgt': target})
                 target_fh.seek(output_seek)
             cache = src_fh.read(blocksize)
@@ -764,17 +777,16 @@ class PbBaseHandler(PbBaseObject):
             else:
                 raise
         except Exception as e:
-            msg = _(
-                "Error copying source %(src)r to target %(tgt)r: %(msg)s") % {
-                    'src': source, 'tgt': target, 'msg': e}
+            msg = _("Error copying source %(src)r to target %(tgt)r: %(msg)s") % {
+                'src': source, 'tgt': target, 'msg': e}
             raise PbBaseHandlerError(msg)
         finally:
             src_fh.close()
             target_fh.close()
             bytes_written = int(blocks_written) * int(blocksize)
             written_human = bytes2human(bytes_written)
-            log.debug(
-                _("%(bytes)d Bytes (%(human)s) written to output device %(tgt)r.",) % {
+            log.debug(_(
+                "%(bytes)d Bytes (%(human)s) written to output device %(tgt)r.") % {
                     'bytes': bytes_written, 'human': written_human, 'tgt': target})
 
         return True
@@ -805,7 +817,8 @@ class PbBaseHandler(PbBaseObject):
         @rtype: bool
         """
 
-        log.debug(_("Dumping binary zeroes to %r ..."), target)
+        log.debug(_(
+            "Dumping binary zeroes to %r ..."), target)
 
         if self.simulate:
             return True
@@ -835,10 +848,11 @@ class PbBaseHandler(PbBaseObject):
 
         try:
             if output_seek:
-                log.debug(
-                    _("Seeking %(bytes)d Bytes (%(human)s) in output to %(tgt)r.") % {
-                        'bytes': output_seek, 'human': bytes2human(output_seek),
-                        'tgt': target})
+                msg = _(
+                    "Seeking %(bytes)d Bytes (%(human)s) in output to %(tgt)r.") % {
+                    'bytes': output_seek, 'human': bytes2human(output_seek),
+                    'tgt': target}
+                log.debug(msg)
                 target_fh.seek(output_seek)
             while True:
                 target_fh.write(block)
@@ -850,7 +864,8 @@ class PbBaseHandler(PbBaseObject):
                 if count and not force:
                     raise
                 else:
-                    log.debug(_("No space left on output device %r."), target)
+                    log.debug(_(
+                        "No space left on output device %r."), target)
             else:
                 raise
         except Exception as e:
@@ -862,9 +877,10 @@ class PbBaseHandler(PbBaseObject):
             target_fh.close()
             bytes_written = int(blocks_written) * int(blocksize)
             written_human = bytes2human(bytes_written)
-            log.debug(
-                _("%(bytes)d Bytes (%(human)s) written to output device %(tgt)r.",) % {
-                    'bytes': bytes_written, 'human': written_human, 'tgt': target})
+            msg = _(
+                "%(bytes)d Bytes (%(human)s) written to output device %(tgt)r.") % {
+                'bytes': bytes_written, 'human': written_human, 'tgt': target}
+            log.debug(msg)
 
         return True
 
