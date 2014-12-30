@@ -23,7 +23,7 @@ import errno
 import locale
 
 # Own modules
-from pb_base.common import pp, caller_search_path
+from pb_base.common import pp, caller_search_path, bytes2human
 
 from pb_base.errors import PbError
 from pb_base.errors import FunctionNotImplementedError
@@ -34,7 +34,7 @@ from pb_base.object import PbBaseObject
 
 from pb_base.translate import translator
 
-__version__ = '0.4.1'
+__version__ = '0.4.2'
 
 log = logging.getLogger(__name__)
 
