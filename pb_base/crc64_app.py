@@ -28,22 +28,19 @@ from pb_base.app import PbApplication
 
 from pb_base.crc import crc64, crc64_digest
 
-from pb_base.translate import translator
+from pb_base.translate import translator, pb_gettext, pb_ngettext
 
 try:
     import pb_base.local_version as my_version
 except ImportError:
     import pb_base.global_version as my_version
 
-__version__ = '0.3.1'
+__version__ = '0.3.2'
 
 log = logging.getLogger(__name__)
 
-_ = translator.lgettext
-__ = translator.lngettext
-if sys.version_info[0] > 2:
-    _ = translator.gettext
-    __ = translator.ngettext
+_ = pb_gettext
+__ = pb_ngettext
 
 
 # =============================================================================

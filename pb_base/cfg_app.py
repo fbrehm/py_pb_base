@@ -37,17 +37,14 @@ from pb_base.validator import pbvalidator_checks
 from pb_base.app import PbApplicationError
 from pb_base.app import PbApplication
 
-from pb_base.translate import translator
+from pb_base.translate import translator, pb_gettext, pb_ngettext
 
-__version__ = '0.6.1'
+__version__ = '0.6.2'
 
 log = logging.getLogger(__name__)
 
-_ = translator.lgettext
-__ = translator.lngettext
-if sys.version_info[0] > 2:
-    _ = translator.gettext
-    __ = translator.ngettext
+_ = pb_gettext
+__ = pb_ngettext
 
 
 # =============================================================================

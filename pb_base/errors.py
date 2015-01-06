@@ -12,16 +12,12 @@ import errno
 import sys
 
 # Own modules
-from pb_base.translate import translator
+from pb_base.translate import translator, pb_gettext, pb_ngettext
 
-__version__ = '0.3.1'
+__version__ = '0.3.2'
 
-_ = translator.lgettext
-__ = translator.lngettext
-
-if sys.version_info[0] > 2:
-    _ = translator.gettext
-    __ = translator.ngettext
+_ = pb_gettext
+__ = pb_ngettext
 
 
 # =============================================================================

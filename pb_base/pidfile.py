@@ -29,17 +29,14 @@ from pb_base.object import PbBaseObject
 
 from pb_base.common import to_utf8_or_bust
 
-from pb_base.translate import translator
+from pb_base.translate import translator, pb_gettext, pb_ngettext
 
-__version__ = '0.5.1'
+__version__ = '0.5.2'
 
 log = logging.getLogger(__name__)
 
-_ = translator.lgettext
-__ = translator.lngettext
-if sys.version_info[0] > 2:
-    _ = translator.gettext
-    __ = translator.ngettext
+_ = pb_gettext
+__ = pb_ngettext
 
 
 # =============================================================================

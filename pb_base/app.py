@@ -32,19 +32,15 @@ from pb_base.errors import FunctionNotImplementedError
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
-from pb_base.translate import translator
+from pb_base.translate import translator, pb_gettext, pb_ngettext
 
-__version__ = '0.7.2'
+__version__ = '0.7.3'
 
 log = logging.getLogger(__name__)
 
-_ = translator.lgettext
-__ = translator.lngettext
-argparse._ = translator.lgettext
-if sys.version_info[0] > 2:
-    _ = translator.gettext
-    __ = translator.ngettext
-    argparse._ = translator.gettext
+_ = pb_gettext
+__ = pb_ngettext
+argparse._ = pb_gettext
 
 
 # ---------------------------------------------------------

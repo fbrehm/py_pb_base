@@ -32,21 +32,14 @@ from pb_base.errors import PbError
 from pb_base.errors import FunctionNotImplementedError
 from pb_base.errors import PbIoTimeoutError
 
-from pb_base.translate import translator
+from pb_base.translate import translator, pb_gettext, pb_ngettext
 
-__author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
-__copyright__ = '(C) 2010 - 2014 by Frank Brehm, ProfitBricks GmbH, Berlin'
-__contact__ = 'frank.brehm@profitbricks.com'
-__version__ = '0.4.1'
-__license__ = 'GPL3'
+__version__ = '0.4.2'
 
 log = logging.getLogger(__name__)
 
-_ = translator.lgettext
-__ = translator.lngettext
-if sys.version_info[0] > 2:
-    _ = translator.gettext
-    __ = translator.ngettext
+_ = pb_gettext
+__ = pb_ngettext
 
 default_buffer_size = 8192
 min_buffer_size = 512
