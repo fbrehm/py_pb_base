@@ -49,13 +49,14 @@ def pb_ngettext(singular, plural, n):
     else:
         return to_str_or_bust(translator.lngettext(singular, plural, n))
 
+_ = pb_gettext
 
 # =============================================================================
 
 if __name__ == "__main__":
 
-    print(pb_lgettext("Basedir: %r") % (basedir))
-    print(pb_lgettext("Found .mo-file: %r") % (mo_file))
+    print(_("Basedir: %r") % (basedir))
+    print(_("Found .mo-file: %r") % (mo_file))
 
 # =============================================================================
 
