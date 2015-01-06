@@ -4,7 +4,7 @@
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
 @organization: Profitbricks GmbH
-@copyright: © 2010 - 2014 by Profitbricks GmbH
+@copyright: © 2010 - 2015 by Profitbricks GmbH
 @license: GPL3
 @summary: crc64 script for generating crc64digests of given parameters
 """
@@ -37,7 +37,7 @@ _ = pb_gettext
 __ = pb_ngettext
 
 __author__ = 'Frank Brehm <frank.brehm@profitbricks.com>'
-__copyright__ = '(C) 2010 - 2014 by Frank Brehm, Profitbricks GmbH, Berlin'
+__copyright__ = '(C) 2010 - 2015 by Frank Brehm, Profitbricks GmbH, Berlin'
 
 
 app = Crc64App()

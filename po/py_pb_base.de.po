@@ -1,6 +1,6 @@
 # German translations for profitbricks-python-base package
 # German messages for profitbricks-python-base.
-# Copyright (C) 2013 THE profitbricks-python-base'S COPYRIGHT HOLDER
+# Copyright (C) 2015 THE profitbricks-python-base'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the profitbricks-python-base package.
 # Frank Brehm <frank.brehm@profitbricks.com>, 2013.
 #
