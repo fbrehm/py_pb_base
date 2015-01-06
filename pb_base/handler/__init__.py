@@ -24,7 +24,7 @@ import locale
 
 # Own modules
 from pb_base.common import pp, caller_search_path, bytes2human
-from pb_base.common import to_str_or_bust
+from pb_base.common import to_str_or_bust, to_utf8_or_bust
 
 from pb_base.errors import PbError
 from pb_base.errors import FunctionNotImplementedError
@@ -35,7 +35,7 @@ from pb_base.object import PbBaseObject
 
 from pb_base.translate import translator, pb_gettext, pb_ngettext
 
-__version__ = '0.4.2'
+__version__ = '0.4.3'
 
 log = logging.getLogger(__name__)
 
@@ -827,7 +827,7 @@ class PbBaseHandler(PbBaseObject):
         if seek:
             output_seek = int(seek) * int(blocksize)
 
-        block = chr(0) * blocksize
+        block = to_utf8_or_bust(chr(0) * blocksize)
 
         target_fh = None
 
@@ -872,6 +872,7 @@ class PbBaseHandler(PbBaseObject):
             msg = _(
                 "Error dumping binary zeroes to target %(tgt)r: %(msg)s") % {
                     'tgt': target, 'msg': e}
+            self.handle_error(msg, e.__class__.__name__, True)
             raise PbBaseHandlerError(msg)
         finally:
             target_fh.close()
