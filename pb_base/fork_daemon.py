@@ -426,7 +426,8 @@ class ForkingDaemon(PbDaemon):
 
                 stage += 1
                 if stage > 3:
-                    msg = _("Maximum timeout of %d seconds for waiting on finished child processes reached.")
+                    msg = _("Maximum timeout of %d seconds for waiting on finished "
+                            "child processes reached.")
                     log.error(msg, (timeout * 3))
                     raise ForkingDaemonError(msg)
                 begin = time.time()

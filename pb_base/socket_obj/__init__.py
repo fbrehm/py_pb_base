@@ -367,7 +367,8 @@ class GenericSocket(PbBaseObject):
 
         if self.interrupted:
             msg = _(
-                "Cannot send message to the receipient, because the socket connection is interrupted.")
+                "Cannot send message to the receipient, because the socket "
+                "connection is interrupted.")
             raise GenericSocketError(msg)
 
         ok = False
