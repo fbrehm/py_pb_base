@@ -11,7 +11,7 @@
 """
 
 import os
-import sys 
+import sys
 import logging
 import argparse
 
@@ -24,31 +24,34 @@ except ImportError:
 
 from pb_logging.colored import ColoredFormatter
 
-#==============================================================================
+# =============================================================================
 
 log = logging.getLogger(__name__)
 
-#==============================================================================
+
+# =============================================================================
 def get_arg_verbose():
 
     arg_parser = argparse.ArgumentParser()
 
     arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument("-v", "--verbose", action = "count",
-            dest = 'verbose', help = 'Increase the verbosity level')
+    arg_parser.add_argument(
+        "-v", "--verbose", action="count",
+        dest='verbose', help='Increase the verbosity level')
     args = arg_parser.parse_args()
 
     return args.verbose
 
-#==============================================================================
-def init_root_logger(verbose = 0):
+
+# =============================================================================
+def init_root_logger(verbose=0):
 
     root_log = logging.getLogger()
     root_log.setLevel(logging.WARNING)
     if verbose > 1:
-         root_log.setLevel(logging.DEBUG)
+        root_log.setLevel(logging.DEBUG)
     elif verbose:
-         root_log.setLevel(logging.INFO)
+        root_log.setLevel(logging.INFO)
 
     appname = os.path.basename(sys.argv[0])
     format_str = appname + ': '
@@ -71,38 +74,39 @@ def init_root_logger(verbose = 0):
 
     root_log.addHandler(lh_console)
 
-#==============================================================================
+
+# =============================================================================
 class PbBaseTestcase(unittest.TestCase):
 
-    #--------------------------------------------------------------------------
-    def __init__(self, methodName = 'runTest', verbose = 0):
+    # -------------------------------------------------------------------------
+    def __init__(self, methodName='runTest', verbose=0):
 
         self._verbose = int(verbose)
 
         super(PbBaseTestcase, self).__init__(methodName)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     @property
     def verbose(self):
         """The verbosity level."""
         return getattr(self, '_verbose', 0)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def setUp(self):
 
         pass
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def tearDown(self):
 
         pass
 
-#==============================================================================
+# =============================================================================
 
 if __name__ == '__main__':
 
     pass
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

@@ -30,24 +30,24 @@ from general import PbBaseTestcase, get_arg_verbose, init_root_logger
 
 log = logging.getLogger('test_pidfile')
 
-#==============================================================================
 
+# =============================================================================
 class TestPbLockHandler(PbBaseTestcase):
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def setUp(self):
         self.lock_dir = '/tmp'
         self.lock_basename = 'test-%d.lock' % (os.getpid())
         self.lock_file = os.path.join(self.lock_dir, self.lock_basename)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def tearDown(self):
 
         if os.path.exists(self.lock_file):
             log.debug("Removing %r ...", self.lock_file)
             os.remove(self.lock_file)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def create_lockfile(self, content):
 
         (fd, filename) = tempfile.mkstemp()
@@ -61,7 +61,7 @@ class TestPbLockHandler(PbBaseTestcase):
 
         return filename
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def remove_lockfile(self, filename):
 
         if os.path.exists(filename):
@@ -70,33 +70,38 @@ class TestPbLockHandler(PbBaseTestcase):
         else:
             log.debug("Lockfile %r doesn't exists.", filename)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_import(self):
 
         log.info("Testing import of pb_base.handler.lock ...")
         import pb_base.handler.lock
         log.debug("Module pb_base.handler.lock imported.")
         from pb_base.errors import CouldntOccupyLockfileError
-        log.debug("Exception class %r from %r imported.",
-                'CouldntOccupyLockfileError', 'pb_base.errors')
+        log.debug(
+            "Exception class %r from %r imported.",
+            'CouldntOccupyLockfileError', 'pb_base.errors')
 
         from pb_base.handler.lock import LockHandlerError
-        log.debug("Exception class %r from %r imported.",
-                'LockHandlerError', 'pb_base.handler.lock')
+        log.debug(
+            "Exception class %r from %r imported.",
+            'LockHandlerError', 'pb_base.handler.lock')
 
         from pb_base.handler.lock import LockdirNotExistsError
-        log.debug("Exception class %r from %r imported.",
-                'LockdirNotExistsError', 'pb_base.handler.lock')
+        log.debug(
+            "Exception class %r from %r imported.",
+            'LockdirNotExistsError', 'pb_base.handler.lock')
 
         from pb_base.handler.lock import LockdirNotWriteableError
-        log.debug("Exception class %r from %r imported.",
-                'LockdirNotWriteableError', 'pb_base.handler.lock')
+        log.debug(
+            "Exception class %r from %r imported.",
+            'LockdirNotWriteableError', 'pb_base.handler.lock')
 
         from pb_base.handler.lock import PbLockHandler
-        log.debug("Class %r from %r imported.",
-                'PbLockHandler', 'pb_base.handler.lock')
+        log.debug(
+            "Class %r from %r imported.",
+            'PbLockHandler', 'pb_base.handler.lock')
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_could_not_occupy_lockfile_error(self):
 
         log.info("Test raising a CouldntOccupyLockfileError exception ...")
@@ -108,7 +113,7 @@ class TestPbLockHandler(PbBaseTestcase):
         e = cm.exception
         log.debug("%s raised: %s", e.__class__.__name__, e)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_object(self):
 
         log.info("Testing init of a simple object.")
@@ -116,14 +121,14 @@ class TestPbLockHandler(PbBaseTestcase):
         from pb_base.handler.lock import PbLockHandler
 
         locker = PbLockHandler(
-            appname = 'test_base_object',
-            verbose = self.verbose,
-            lockdir = '/tmp',
+            appname='test_base_object',
+            verbose=self.verbose,
+            lockdir='/tmp',
         )
         log.debug("PbLockHandler %%r: %r", locker)
         log.debug("PbLockHandler %%s: %s", str(locker))
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_simple_lockfile(self):
 
         log.info("Testing creation and removing of a simple lockfile.")
@@ -131,16 +136,16 @@ class TestPbLockHandler(PbBaseTestcase):
         from pb_base.handler.lock import PbLockHandler
 
         locker = PbLockHandler(
-            appname = 'test_base_object',
-            verbose = self.verbose,
-            lockdir = self.lock_dir,
+            appname='test_base_object',
+            verbose=self.verbose,
+            lockdir=self.lock_dir,
         )
         log.debug("Creating lockfile %r ...", self.lock_file)
         locker.create_lockfile(self.lock_basename)
         log.debug("Removing lockfile %r ...", self.lock_file)
         locker.remove_lockfile(self.lock_basename)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_lockobject(self):
 
         log.info("Testing lock object on creation of a simple lockfile.")
@@ -148,9 +153,9 @@ class TestPbLockHandler(PbBaseTestcase):
         from pb_base.handler.lock import PbLockHandler
 
         locker = PbLockHandler(
-            appname = 'test_lock',
-            verbose = self.verbose,
-            lockdir = self.lock_dir,
+            appname='test_lock',
+            verbose=self.verbose,
+            lockdir=self.lock_dir,
         )
         try:
             log.debug("Creating lockfile %r ...", self.lock_file)
@@ -161,7 +166,7 @@ class TestPbLockHandler(PbBaseTestcase):
             log.debug("Removing lockfile %r ...", self.lock_file)
             locker.remove_lockfile(self.lock_basename)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_refresh_lockobject(self):
 
         log.info("Testing refreshing of a lock object.")
@@ -169,9 +174,9 @@ class TestPbLockHandler(PbBaseTestcase):
         from pb_base.handler.lock import PbLockHandler
 
         locker = PbLockHandler(
-            appname = 'test_lock',
-            verbose = self.verbose,
-            lockdir = self.lock_dir,
+            appname='test_lock',
+            verbose=self.verbose,
+            lockdir=self.lock_dir,
         )
         try:
             log.debug("Creating lockfile %r ...", self.lock_file)
@@ -193,7 +198,7 @@ class TestPbLockHandler(PbBaseTestcase):
             log.debug("Removing lockfile %r ...", self.lock_file)
             locker.remove_lockfile(self.lock_basename)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_invalid_dir(self):
 
         log.info("Testing creation lockfile in an invalid lock directory.")
@@ -204,31 +209,33 @@ class TestPbLockHandler(PbBaseTestcase):
 
         ldir = '/etc/passwd'
         locker = PbLockHandler(
-            appname = 'test_lock',
-            verbose = self.verbose,
-            lockdir = ldir,
+            appname='test_lock',
+            verbose=self.verbose,
+            lockdir=ldir,
         )
         with self.assertRaises(LockdirNotExistsError) as cm:
             locker.create_lockfile(self.lock_basename)
         e = cm.exception
-        log.debug("%s raised as expected on lockdir = %r: %s.",
-                'LockdirNotExistsError', ldir, e)
+        log.debug(
+            "%s raised as expected on lockdir = %r: %s.",
+            'LockdirNotExistsError', ldir, e)
         del locker
 
         if os.getegid():
             ldir = '/var'
             locker = PbLockHandler(
-                appname = 'test_lock',
-                verbose = self.verbose,
-                lockdir = ldir,
+                appname='test_lock',
+                verbose=self.verbose,
+                lockdir=ldir,
             )
             with self.assertRaises(LockdirNotWriteableError) as cm:
                 locker.create_lockfile(self.lock_basename)
             e = cm.exception
-            log.debug("%s raised as expected on lockdir = %r: %s.",
-                    'LockdirNotWriteableError', ldir, e)
+            log.debug(
+                "%s raised as expected on lockdir = %r: %s.",
+                'LockdirNotWriteableError', ldir, e)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_valid_lockfile(self):
 
         log.info("Testing fail on creation lockfile with a valid PID.")
@@ -239,9 +246,9 @@ class TestPbLockHandler(PbBaseTestcase):
         content = "%d\n" % (os.getpid())
 
         locker = PbLockHandler(
-            appname = 'test_lock',
-            verbose = self.verbose,
-            lockdir = self.lock_dir,
+            appname='test_lock',
+            verbose=self.verbose,
+            lockdir=self.lock_dir,
         )
 
         lockfile = self.create_lockfile(content)
@@ -250,21 +257,22 @@ class TestPbLockHandler(PbBaseTestcase):
         try:
             with self.assertRaises(CouldntOccupyLockfileError) as cm:
                 result = locker.create_lockfile(
-                        lockfile,
-                        delay_start = 0.2,
-                        delay_increase = 0.4,
-                        max_delay = 5
+                    lockfile,
+                    delay_start=0.2,
+                    delay_increase=0.4,
+                    max_delay=5
                 )
             e = cm.exception
-            log.debug("%s raised as expected on an valid lockfile: %s",
-                    e.__class__.__name__, e)
+            log.debug(
+                "%s raised as expected on an valid lockfile: %s",
+                e.__class__.__name__, e)
             self.assertEqual(lockfile, e.lockfile)
             if result:
                 self.fail("PbLockHandler shouldn't be able to create the lockfile.")
         finally:
             self.remove_lockfile(lockfile)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_invalid_lockfile1(self):
 
         log.info("Testing creation lockfile with an invalid previous lockfile #1.")
@@ -273,9 +281,9 @@ class TestPbLockHandler(PbBaseTestcase):
         from pb_base.errors import CouldntOccupyLockfileError
 
         locker = PbLockHandler(
-            appname = 'test_lock',
-            verbose = self.verbose,
-            lockdir = self.lock_dir,
+            appname='test_lock',
+            verbose=self.verbose,
+            lockdir=self.lock_dir,
         )
 
         content = "\n\n"
@@ -285,19 +293,20 @@ class TestPbLockHandler(PbBaseTestcase):
         try:
             with self.assertRaises(CouldntOccupyLockfileError) as cm:
                 result = locker.create_lockfile(
-                        lockfile,
-                        delay_start = 0.2,
-                        delay_increase = 0.4,
-                        max_delay = 5
+                    lockfile,
+                    delay_start=0.2,
+                    delay_increase=0.4,
+                    max_delay=5
                 )
             e = cm.exception
-            log.debug("%s raised as expected on an invalid lockfile (empty lines): %s",
-                    e.__class__.__name__, e)
+            log.debug(
+                "%s raised as expected on an invalid lockfile (empty lines): %s",
+                e.__class__.__name__, e)
 
         finally:
             self.remove_lockfile(lockfile)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_invalid_lockfile2(self):
 
         log.info("Testing creation lockfile with an invalid previous lockfile #2.")
@@ -306,9 +315,9 @@ class TestPbLockHandler(PbBaseTestcase):
         from pb_base.errors import CouldntOccupyLockfileError
 
         locker = PbLockHandler(
-            appname = 'test_lock',
-            verbose = self.verbose,
-            lockdir = self.lock_dir,
+            appname='test_lock',
+            verbose=self.verbose,
+            lockdir=self.lock_dir,
         )
 
         content = "Bli bla blub\n\n"
@@ -318,14 +327,15 @@ class TestPbLockHandler(PbBaseTestcase):
         try:
             with self.assertRaises(CouldntOccupyLockfileError) as cm:
                 result = locker.create_lockfile(
-                        lockfile,
-                        delay_start = 0.2,
-                        delay_increase = 0.4,
-                        max_delay = 5
+                    lockfile,
+                    delay_start=0.2,
+                    delay_increase=0.4,
+                    max_delay=5
                 )
             e = cm.exception
-            log.debug("%s raised as expected on an invalid lockfile (non-numeric): %s",
-                    e.__class__.__name__, e)
+            log.debug(
+                "%s raised as expected on an invalid lockfile (non-numeric): %s",
+                e.__class__.__name__, e)
 
             locker.remove_lockfile(lockfile)
             if result:
@@ -334,7 +344,7 @@ class TestPbLockHandler(PbBaseTestcase):
         finally:
             self.remove_lockfile(lockfile)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_invalid_lockfile3(self):
 
         log.info("Testing creation lockfile with an invalid previous lockfile #3.")
@@ -343,9 +353,9 @@ class TestPbLockHandler(PbBaseTestcase):
         from pb_base.errors import CouldntOccupyLockfileError
 
         locker = PbLockHandler(
-            appname = 'test_lock',
-            verbose = self.verbose,
-            lockdir = self.lock_dir,
+            appname='test_lock',
+            verbose=self.verbose,
+            lockdir=self.lock_dir,
         )
 
         content = "123456\n\n"
@@ -355,9 +365,9 @@ class TestPbLockHandler(PbBaseTestcase):
         try:
             result = locker.create_lockfile(
                 lockfile,
-                delay_start = 0.2,
-                delay_increase = 0.4,
-                max_delay = 5
+                delay_start=0.2,
+                delay_increase=0.4,
+                max_delay=5
             )
             locker.remove_lockfile(lockfile)
             if not result:
@@ -365,7 +375,7 @@ class TestPbLockHandler(PbBaseTestcase):
         finally:
             self.remove_lockfile(lockfile)
 
-#==============================================================================
+# =============================================================================
 
 
 if __name__ == '__main__':
@@ -392,11 +402,11 @@ if __name__ == '__main__':
     suite.addTest(TestPbLockHandler('test_invalid_lockfile2', verbose))
     suite.addTest(TestPbLockHandler('test_invalid_lockfile3', verbose))
 
-    runner = unittest.TextTestRunner(verbosity = verbose)
+    runner = unittest.TextTestRunner(verbosity=verbose)
 
     result = runner.run(suite)
 
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

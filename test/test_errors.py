@@ -27,15 +27,14 @@ from general import PbBaseTestcase, get_arg_verbose, init_root_logger
 log = logging.getLogger('test_errors')
 
 
-#==============================================================================
-
+# =============================================================================
 class TestPbErrors(PbBaseTestcase):
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def setUp(self):
         pass
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_import(self):
 
         log.info("Testing import of pb_base.errors ...")
@@ -44,7 +43,7 @@ class TestPbErrors(PbBaseTestcase):
         from pb_base.errors import PbIoTimeoutError, PbReadTimeoutError
         from pb_base.errors import PbWriteTimeoutError
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_pb_error(self):
 
         log.info("Test raising a PbError exception ...")
@@ -57,7 +56,7 @@ class TestPbErrors(PbBaseTestcase):
         e = cm.exception
         log.debug("%s raised: %s", e.__class__.__name__, e)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_func_not_implemented(self):
 
         log.info("Test raising a FunctionNotImplementedError exception ...")
@@ -67,11 +66,11 @@ class TestPbErrors(PbBaseTestcase):
 
         with self.assertRaises(FunctionNotImplementedError) as cm:
             raise FunctionNotImplementedError(
-                    'test_func_not_implemented', 'test_errors')
+                'test_func_not_implemented', 'test_errors')
         e = cm.exception
         log.debug("%s raised: %s", e.__class__.__name__, e)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_io_timeout_error(self):
 
         log.info("Test raising a PbIoTimeoutError exception ...")
@@ -84,7 +83,7 @@ class TestPbErrors(PbBaseTestcase):
         e = cm.exception
         log.debug("%s raised: %s", e.__class__.__name__, e)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_read_timeout_error(self):
 
         log.info("Test raising a PbReadTimeoutError exception ...")
@@ -97,7 +96,7 @@ class TestPbErrors(PbBaseTestcase):
         e = cm.exception
         log.debug("%s raised: %s", e.__class__.__name__, e)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_write_timeout_error(self):
 
         log.info("Test raising a PbWriteTimeoutError exception ...")
@@ -110,7 +109,7 @@ class TestPbErrors(PbBaseTestcase):
         e = cm.exception
         log.debug("%s raised: %s", e.__class__.__name__, e)
 
-#==============================================================================
+# =============================================================================
 
 if __name__ == '__main__':
 
@@ -130,10 +129,10 @@ if __name__ == '__main__':
     suite.addTest(TestPbErrors('test_read_timeout_error', verbose))
     suite.addTest(TestPbErrors('test_write_timeout_error', verbose))
 
-    runner = unittest.TextTestRunner(verbosity = verbose)
+    runner = unittest.TextTestRunner(verbosity=verbose)
 
     result = runner.run(suite)
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

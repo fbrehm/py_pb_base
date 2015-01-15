@@ -7,7 +7,7 @@
 msgid ""
 msgstr "Project-Id-Version: profitbricks-python-base 0.6.5\n"
       "Report-Msgid-Bugs-To: frank.brehm@profitbricks.com\n"
-      "POT-Creation-Date: 2015-01-06 17:05+0100\n"
+      "POT-Creation-Date: 2015-01-15 22:51+0100\n"
       "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
       "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
       "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -479,31 +479,31 @@ msgid "Maximum timeout of %d seconds for waiting on finished child processes "
       "reached."
 msgstr ""
 
-#: pb_base/fork_daemon.py:433
+#: pb_base/fork_daemon.py:434
 #, python-format
 msgid "New stage %d in waiting for child processes."
 msgstr ""
 
-#: pb_base/fork_daemon.py:436
+#: pb_base/fork_daemon.py:437
 #, python-format
 msgid "Waiting for finished children, stage %d."
 msgstr ""
 
-#: pb_base/fork_daemon.py:484
+#: pb_base/fork_daemon.py:485
 #, python-format
 msgid "Removing child %d from active child list ..."
 msgstr ""
 
-#: pb_base/fork_daemon.py:507
+#: pb_base/fork_daemon.py:508
 msgid "Forking a child process ..."
 msgstr ""
 
-#: pb_base/fork_daemon.py:525
+#: pb_base/fork_daemon.py:526
 #, python-format
 msgid "Forked with process ID %d."
 msgstr ""
 
-#: pb_base/fork_daemon.py:532
+#: pb_base/fork_daemon.py:533
 msgid "And here is the child ..."
 msgstr ""
 
@@ -677,7 +677,7 @@ msgstr ""
 msgid "Error copying source %(src)r to target %(tgt)r: %(msg)s"
 msgstr ""
 
-#: pb_base/handler/__init__.py:789 pb_base/handler/__init__.py:881
+#: pb_base/handler/__init__.py:789 pb_base/handler/__init__.py:882
 #, python-format
 msgid "%(bytes)d Bytes (%(human)s) written to output device %(tgt)r."
 msgstr ""
@@ -1170,57 +1170,57 @@ msgid "Cannot send message to the receipient, because the socket connection is "
       "interrupted."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:381
+#: pb_base/socket_obj/__init__.py:382
 msgid "Cannot send message to the receipient, because the socket connection is "
       "closed."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:385
+#: pb_base/socket_obj/__init__.py:386
 #, python-format
 msgid "Sending %r to socket."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:400
+#: pb_base/socket_obj/__init__.py:401
 msgid "Cannot accept connection, socket is not bonded."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:408
+#: pb_base/socket_obj/__init__.py:409
 #, python-format
 msgid "Got a request from '%s'."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:410
+#: pb_base/socket_obj/__init__.py:411
 msgid "Got a request from somewhere from system."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:431
+#: pb_base/socket_obj/__init__.py:432
 msgid "Trying to get data ..."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:440
+#: pb_base/socket_obj/__init__.py:441
 #, python-format
 msgid "Got data: %r."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:445
+#: pb_base/socket_obj/__init__.py:446
 msgid "Got EOF, counterpart has interrupted ..."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:496
+#: pb_base/socket_obj/__init__.py:497
 msgid "Performing input buffer ..."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:500
+#: pb_base/socket_obj/__init__.py:501
 #, python-format
 msgid "Current input buffer: %r"
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:506
+#: pb_base/socket_obj/__init__.py:507
 #, python-format
 msgid "Got a line: %r"
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:508
+#: pb_base/socket_obj/__init__.py:509
 #, python-format
 msgid "Current input buffer after read_line(): %r"
 msgstr ""

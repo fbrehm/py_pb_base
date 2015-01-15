@@ -33,7 +33,8 @@ pidfile_normal = 'test_pidfile.pid'
 pidfile_forbidden = '/root/test_pidfile.pid'
 pidfile_invalid = '/bla/blub/blubber.pid'
 
-#==============================================================================
+
+# =============================================================================
 def file_content(filename):
 
     if not os.path.isfile(filename):
@@ -53,15 +54,16 @@ def file_content(filename):
 
     return content
 
-#==============================================================================
+
+# =============================================================================
 
 class TestPidFile(PbBaseTestcase):
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def setUp(self):
         pass
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_import(self):
 
         log.info("Testing import of pb_base.pidfile ...")
@@ -70,25 +72,27 @@ class TestPidFile(PbBaseTestcase):
         log.debug("Module %r imported.", 'pb_base.pidfile')
 
         from pb_base.pidfile import PidFileError
-        log.debug("Exception class %r from module %r imported.",
-                'PidFileError', 'pb_base.pidfile')
+        log.debug(
+            "Exception class %r from module %r imported.",
+            'PidFileError', 'pb_base.pidfile')
 
         from pb_base.pidfile import InvalidPidFileError
-        log.debug("Exception class %r from module %r imported.",
-                'InvalidPidFileError', 'pb_base.pidfile')
+        log.debug(
+            "Exception class %r from module %r imported.",
+            'InvalidPidFileError', 'pb_base.pidfile')
 
         from pb_base.pidfile import PidFileInUseError
-        log.debug("Exception class %r from module %r imported.",
-                'PidFileInUseError', 'pb_base.pidfile')
+        log.debug(
+            "Exception class %r from module %r imported.",
+            'PidFileInUseError', 'pb_base.pidfile')
 
         from pb_base.pidfile import PidFile
-        log.debug("Class %r from module %r imported.",
-                'PidFile', 'pb_base.pidfile')
-
+        log.debug(
+            "Class %r from module %r imported.", 'PidFile', 'pb_base.pidfile')
 
         import pb_base.object
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_object(self):
 
         log.info("Testing init of a simple object.")
@@ -97,14 +101,14 @@ class TestPidFile(PbBaseTestcase):
         from pb_base.pidfile import PidFile
 
         pid_file = PidFile(
-            filename = pidfile_normal,
-            appname = 'test_pidfile',
-            verbose = self.verbose,
+            filename=pidfile_normal,
+            appname='test_pidfile',
+            verbose=self.verbose,
         )
         log.debug("PidFile %%r: %r", pid_file)
         log.debug("PidFile %%s: %s", str(pid_file))
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_no_filename(self):
 
         log.info("Testing fail init of a PidFile object without a filename.")
@@ -114,15 +118,15 @@ class TestPidFile(PbBaseTestcase):
 
         with self.assertRaises(ValueError) as cm:
             pid_file = PidFile(
-                filename = '',
-                appname = 'test_pidfile',
-                verbose = self.verbose,
+                filename='',
+                appname='test_pidfile',
+                verbose=self.verbose,
             )
             log.debug("PidFile %%s: %s", str(pid_file))
         e = cm.exception
         log.debug("%s raised: %s", e.__class__.__name__, e)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_create_normal(self):
 
         log.info("Test creating of a normal PID file.")
@@ -131,16 +135,16 @@ class TestPidFile(PbBaseTestcase):
         from pb_base.pidfile import PidFile
 
         pid_file = PidFile(
-            filename = pidfile_normal,
-            appname = 'test_pidfile',
-            verbose = self.verbose,
+            filename=pidfile_normal,
+            appname='test_pidfile',
+            verbose=self.verbose,
         )
 
         try:
             pid_file.create()
             if not pid_file.created:
-                self.fail("Pidfile %r seems not to be created.",
-                        pidfile_normal)
+                self.fail(
+                    "Pidfile %r seems not to be created.", pidfile_normal)
             if not os.path.exists(pidfile_normal):
                 self.fail("Pidfile %r not created.", pidfile_normal)
             fcontent = file_content(pidfile_normal)
@@ -151,20 +155,22 @@ class TestPidFile(PbBaseTestcase):
             else:
                 match = re.search(r'^\s*(\d+)\s*$', fcontent)
                 if not match:
-                    self.fail("Pidfile %r with invalid content: %r",
-                            pidfile_normal, fcontent)
+                    self.fail(
+                        "Pidfile %r with invalid content: %r",
+                        pidfile_normal, fcontent)
                 else:
                     pid = int(match.group(1))
                     if pid == os.getpid():
-                        log.debug("Found correct PID %d in %r.",
-                                pid, pidfile_normal)
+                        log.debug(
+                            "Found correct PID %d in %r.", pid, pidfile_normal)
                     else:
-                        self.fail("Found invalid PID %d in %r, but should be %d.",
-                                pid, pidfile_normal, os.getpid())
+                        self.fail(
+                            "Found invalid PID %d in %r, but should be %d.",
+                            pid, pidfile_normal, os.getpid())
         finally:
             del pid_file
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     @unittest.skipIf(os.geteuid() <= 0, "Test skipped as root")
     def test_create_forbidden(self):
 
@@ -175,9 +181,9 @@ class TestPidFile(PbBaseTestcase):
         from pb_base.pidfile import InvalidPidFileError
 
         pid_file = PidFile(
-            filename = pidfile_forbidden,
-            appname = 'test_pidfile',
-            verbose = self.verbose,
+            filename=pidfile_forbidden,
+            appname='test_pidfile',
+            verbose=self.verbose,
         )
 
         try:
@@ -189,7 +195,7 @@ class TestPidFile(PbBaseTestcase):
         finally:
             del pid_file
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_create_invalid(self):
 
         log.info("Test fail creating of a PID file with an invalid path.")
@@ -199,9 +205,9 @@ class TestPidFile(PbBaseTestcase):
         from pb_base.pidfile import InvalidPidFileError
 
         pid_file = PidFile(
-            filename = pidfile_invalid,
-            appname = 'test_pidfile',
-            verbose = self.verbose,
+            filename=pidfile_invalid,
+            appname='test_pidfile',
+            verbose=self.verbose,
         )
 
         try:
@@ -213,7 +219,7 @@ class TestPidFile(PbBaseTestcase):
         finally:
             del pid_file
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_create_concurrent(self):
 
         log.info("Test fail creating of concurrent  PID files.")
@@ -225,14 +231,14 @@ class TestPidFile(PbBaseTestcase):
         carry_on = True
 
         pid_file1 = PidFile(
-            filename = pidfile_normal,
-            appname = 'test_pidfile',
-            verbose = self.verbose,
+            filename=pidfile_normal,
+            appname='test_pidfile',
+            verbose=self.verbose,
         )
         pid_file2 = PidFile(
-            filename = pidfile_normal,
-            appname = 'test_pidfile',
-            verbose = self.verbose,
+            filename=pidfile_normal,
+            appname='test_pidfile',
+            verbose=self.verbose,
         )
 
         try:
@@ -247,7 +253,8 @@ class TestPidFile(PbBaseTestcase):
             del pid_file2
             del pid_file1
 
-#==============================================================================
+
+# =============================================================================
 
 if __name__ == '__main__':
 
@@ -268,10 +275,10 @@ if __name__ == '__main__':
     suite.addTest(TestPidFile('test_create_invalid', verbose))
     suite.addTest(TestPidFile('test_create_concurrent', verbose))
 
-    runner = unittest.TextTestRunner(verbosity = verbose)
+    runner = unittest.TextTestRunner(verbosity=verbose)
 
     result = runner.run(suite)
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

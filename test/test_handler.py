@@ -35,20 +35,20 @@ locale.setlocale(locale.LC_ALL, '')
 
 log = logging.getLogger('test_handler')
 
-#==============================================================================
 
+# =============================================================================
 class TestPbBaseHandler(PbBaseTestcase):
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def setUp(self):
         self.appname = 'test_handler'
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def tearDown(self):
         pass
 
-    #--------------------------------------------------------------------------
-    def format_df_results(self, result_list, human = False):
+    # -------------------------------------------------------------------------
+    def format_df_results(self, result_list, human=False):
 
         gr = locale.localeconv()['grouping']
         res_list = []
@@ -63,8 +63,8 @@ class TestPbBaseHandler(PbBaseTestcase):
             if result.used_percent is None:
                 df_entry['used_pc'] = "-"
             else:
-                df_entry['used_pc'] = locale.format("%.2f",
-                        result.used_percent) + " %"
+                df_entry['used_pc'] = locale.format(
+                    "%.2f", result.used_percent) + " %"
             if human:
                 df_entry['total'] = bytes2human(result.total_mb)
                 df_entry['used'] = bytes2human(result.used_mb)
@@ -99,13 +99,13 @@ class TestPbBaseHandler(PbBaseTestcase):
         out = ''
         for result in res_list:
             line = "%-*s  %-*s  %*s  %*s  %*s  %*s  %s\n" % (
-                    length['dev'], result['dev'],
-                    length['type'], result['type'],
-                    length['total'], result['total'],
-                    length['used'], result['used'],
-                    length['free'], result['free'],
-                    length['used_pc'], result['used_pc'],
-                    result['fs'],
+                length['dev'], result['dev'],
+                length['type'], result['type'],
+                length['total'], result['total'],
+                length['used'], result['used'],
+                length['free'], result['free'],
+                length['used_pc'], result['used_pc'],
+                result['fs'],
             )
             out += line
 
@@ -114,7 +114,7 @@ class TestPbBaseHandler(PbBaseTestcase):
 
         return out
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_import(self):
 
         log.info("Testing import of pb_base.handler ...")
@@ -150,7 +150,7 @@ class TestPbBaseHandler(PbBaseTestcase):
         log.info("Testing import of FuserHandler from pb_base.handler.fuser ...")
         from pb_base.handler.fuser import FuserHandler
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_command_not_found_error(self):
 
         log.info("Test raising a CommandNotFoundError exception ...")
@@ -182,7 +182,7 @@ class TestPbBaseHandler(PbBaseTestcase):
         e = cm.exception
         log.debug("%s raised: %s", e.__class__.__name__, e)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_generic_handler_object(self):
 
         log.info("Testing init of a generic handler object.")
@@ -190,13 +190,13 @@ class TestPbBaseHandler(PbBaseTestcase):
         from pb_base.handler import PbBaseHandler
 
         hdlr = PbBaseHandler(
-            appname = self.appname,
-            verbose = self.verbose,
+            appname=self.appname,
+            verbose=self.verbose,
         )
         log.debug("PbBaseHandler %%r: %r", hdlr)
         log.debug("PbBaseHandler %%s: %s", str(hdlr))
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_df_handler_object(self):
 
         log.info("Testing init of a df handler object.")
@@ -204,13 +204,13 @@ class TestPbBaseHandler(PbBaseTestcase):
         from pb_base.handler.df import DfHandler
 
         df = DfHandler(
-            appname = self.appname,
-            verbose = self.verbose,
+            appname=self.appname,
+            verbose=self.verbose,
         )
         log.debug("DfHandler %%r: %r", df)
         log.debug("DfHandler %%s: %s", str(df))
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_fuser_handler_object(self):
 
         log.info("Testing init of a fuser handler object.")
@@ -218,13 +218,13 @@ class TestPbBaseHandler(PbBaseTestcase):
         from pb_base.handler.fuser import FuserHandler
 
         fuser = FuserHandler(
-            appname = self.appname,
-            verbose = self.verbose,
+            appname=self.appname,
+            verbose=self.verbose,
         )
         log.debug("FuserHandler %%r: %r", fuser)
         log.debug("FuserHandler %%s: %s", str(fuser))
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_exec_df_root(self):
 
         log.info("Testing execution of df on the root filesystem.")
@@ -232,8 +232,8 @@ class TestPbBaseHandler(PbBaseTestcase):
         from pb_base.handler.df import DfHandler
 
         df = DfHandler(
-            appname = self.appname,
-            verbose = self.verbose,
+            appname=self.appname,
+            verbose=self.verbose,
         )
 
         result = df('/')
@@ -246,7 +246,7 @@ class TestPbBaseHandler(PbBaseTestcase):
         out = self.format_df_results(result).strip()
         log.debug("DF of root filesystem:\n%s", out)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_exec_df_all(self):
 
         log.info("Testing execution of df on all filesystems.")
@@ -254,11 +254,11 @@ class TestPbBaseHandler(PbBaseTestcase):
         from pb_base.handler.df import DfHandler
 
         df = DfHandler(
-            appname = self.appname,
-            verbose = self.verbose,
+            appname=self.appname,
+            verbose=self.verbose,
         )
 
-        result = df(all_fs = True)
+        result = df(all_fs=True)
         if self.verbose > 2:
             res = []
             for r in result:
@@ -268,7 +268,7 @@ class TestPbBaseHandler(PbBaseTestcase):
         out = self.format_df_results(result).strip()
         log.debug("DF of all filesystems:\n%s", out)
 
-#==============================================================================
+# =============================================================================
 
 
 if __name__ == '__main__':
@@ -291,11 +291,11 @@ if __name__ == '__main__':
     suite.addTest(TestPbBaseHandler('test_exec_df_root', verbose))
     suite.addTest(TestPbBaseHandler('test_exec_df_all', verbose))
 
-    runner = unittest.TextTestRunner(verbosity = verbose)
+    runner = unittest.TextTestRunner(verbosity=verbose)
 
     result = runner.run(suite)
 
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4

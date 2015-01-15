@@ -26,21 +26,21 @@ from general import PbBaseTestcase, get_arg_verbose, init_root_logger
 
 log = logging.getLogger('test_base_object')
 
-#==============================================================================
 
+# =============================================================================
 class TestPbBaseObject(PbBaseTestcase):
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def setUp(self):
         pass
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_import(self):
 
         log.info("Testing import of pb_base.object ...")
         import pb_base.object
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_object(self):
 
         log.info("Testing init of a simple object.")
@@ -49,13 +49,13 @@ class TestPbBaseObject(PbBaseTestcase):
         from pb_base.object import PbBaseObject
 
         obj = PbBaseObject(
-            appname = 'test_base_object',
-            verbose = 1,
+            appname='test_base_object',
+            verbose=1,
         )
         log.debug("PbBaseObject %%r: %r", obj)
         log.debug("PbBaseObject %%s: %s", str(obj))
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_verbose1(self):
 
         log.info("Testing wrong verbose values #1.")
@@ -67,11 +67,11 @@ class TestPbBaseObject(PbBaseTestcase):
         obj = None
 
         with self.assertRaises(ValueError) as cm:
-            obj = PbBaseObject(appname = 'test_base_object', verbose = v)
+            obj = PbBaseObject(appname='test_base_object', verbose=v)
         e = cm.exception
         log.debug("ValueError raised on verbose = %r: %s", v, str(e))
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_verbose2(self):
 
         log.info("Testing wrong verbose values #2.")
@@ -83,11 +83,11 @@ class TestPbBaseObject(PbBaseTestcase):
         obj = None
 
         with self.assertRaises(ValueError) as cm:
-            obj = PbBaseObject(appname = 'test_base_object', verbose = v)
+            obj = PbBaseObject(appname='test_base_object', verbose=v)
         e = cm.exception
         log.debug("ValueError raised on verbose = %r: %s", v, str(e))
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_basedir1(self):
 
         bd = '/blablub'
@@ -96,9 +96,9 @@ class TestPbBaseObject(PbBaseTestcase):
         import pb_base.object
         from pb_base.object import PbBaseObject
 
-        obj = PbBaseObject(appname = 'test_base_object', base_dir = bd)
+        obj = PbBaseObject(appname='test_base_object', base_dir=bd)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_basedir2(self):
 
         bd = '/etc/passwd'
@@ -107,9 +107,9 @@ class TestPbBaseObject(PbBaseTestcase):
         import pb_base.object
         from pb_base.object import PbBaseObject
 
-        obj = PbBaseObject(appname = 'test_base_object', base_dir = bd)
+        obj = PbBaseObject(appname='test_base_object', base_dir=bd)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_as_dict1(self):
 
         log.info("Testing obj.as_dict() #1 - simple")
@@ -117,14 +117,13 @@ class TestPbBaseObject(PbBaseTestcase):
         import pb_base.object
         from pb_base.object import PbBaseObject
 
-
-        obj = PbBaseObject(appname = 'test_base_object', verbose = 1)
+        obj = PbBaseObject(appname='test_base_object', verbose=1)
 
         di = obj.as_dict()
         log.debug("Got PbBaseObject.as_dict(): %r", di)
         self.assertIsInstance(di, dict)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_as_dict2(self):
 
         log.info("Testing obj.as_dict() #2 - stacked")
@@ -132,16 +131,15 @@ class TestPbBaseObject(PbBaseTestcase):
         import pb_base.object
         from pb_base.object import PbBaseObject
 
-
-        obj = PbBaseObject(appname = 'test_base_object', verbose = 1)
-        obj.obj2 = PbBaseObject(appname = 'test_base_object2', verbose = 1)
+        obj = PbBaseObject(appname='test_base_object', verbose=1)
+        obj.obj2 = PbBaseObject(appname='test_base_object2', verbose=1)
 
         di = obj.as_dict()
         log.debug("Got PbBaseObject.as_dict(): %r", di)
         self.assertIsInstance(di, dict)
         self.assertIsInstance(obj.obj2.as_dict(), dict)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_as_dict3(self):
 
         log.info("Testing obj.as_dict() #3 - typecasting to str")
@@ -149,15 +147,14 @@ class TestPbBaseObject(PbBaseTestcase):
         import pb_base.object
         from pb_base.object import PbBaseObject
 
-
-        obj = PbBaseObject(appname = 'test_base_object', verbose = 1)
-        obj.obj2 = PbBaseObject(appname = 'test_base_object2', verbose = 1)
+        obj = PbBaseObject(appname='test_base_object', verbose=1)
+        obj.obj2 = PbBaseObject(appname='test_base_object2', verbose=1)
 
         out = str(obj)
         self.assertIsInstance(out, str)
         log.debug("Got str(PbBaseObject): %s", out)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def test_as_dict_short(self):
 
         log.info("Testing obj.as_dict() #4 - stacked and short")
@@ -165,16 +162,15 @@ class TestPbBaseObject(PbBaseTestcase):
         import pb_base.object
         from pb_base.object import PbBaseObject
 
+        obj = PbBaseObject(appname='test_base_object', verbose=1)
+        obj.obj2 = PbBaseObject(appname='test_base_object2', verbose=1)
 
-        obj = PbBaseObject(appname = 'test_base_object', verbose = 1)
-        obj.obj2 = PbBaseObject(appname = 'test_base_object2', verbose = 1)
-
-        di = obj.as_dict(short = True)
+        di = obj.as_dict(short=True)
         log.debug("Got PbBaseObject.as_dict(): %r", di)
         self.assertIsInstance(di, dict)
         self.assertIsInstance(obj.obj2.as_dict(), dict)
 
-#==============================================================================
+# =============================================================================
 
 if __name__ == '__main__':
 
@@ -198,11 +194,11 @@ if __name__ == '__main__':
     suite.addTest(TestPbBaseObject('test_as_dict3', verbose))
     suite.addTest(TestPbBaseObject('test_as_dict_short', verbose))
 
-    runner = unittest.TextTestRunner(verbosity = verbose)
+    runner = unittest.TextTestRunner(verbosity=verbose)
 
     result = runner.run(suite)
 
 
-#==============================================================================
+# =============================================================================
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
