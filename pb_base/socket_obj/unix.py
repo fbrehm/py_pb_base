@@ -10,7 +10,6 @@
 """
 
 # Standard modules
-import sys
 import os
 import logging
 import socket
@@ -24,17 +23,12 @@ import re
 # Own modules
 import pb_base.common
 
-from pb_base.object import PbBaseObjectError
-
-from pb_base.errors import PbError
-from pb_base.errors import FunctionNotImplementedError
-
 from pb_base.socket_obj import GenericSocketError
 from pb_base.socket_obj import GenericSocket
 
-from pb_base.translate import translator, pb_gettext, pb_ngettext
+from pb_base.translate import pb_gettext, pb_ngettext
 
-__version__ = '0.3.2'
+__version__ = '0.3.3'
 
 log = logging.getLogger(__name__)
 
@@ -235,8 +229,6 @@ class UnixSocket(GenericSocket):
     def close(self):
         """Closing the current socket."""
 
-        was_bonded = self.bonded
-
         super(UnixSocket, self).close()
 
         if self.was_bonded and os.path.exists(self.filename) and self.auto_remove:
@@ -326,7 +318,7 @@ class UnixSocket(GenericSocket):
             else:
                 try:
                     uid = pwd.getpwnam(self.owner).pw_uid
-                except KeyError as e:
+                except KeyError:
                     msg = _(
                         "Invalid owner name '%s' for socket creation given.") % (
                         self.owner)
@@ -339,7 +331,7 @@ class UnixSocket(GenericSocket):
             else:
                 try:
                     gid = grp.getgrnam(self.group).gr_gid
-                except KeyError as e:
+                except KeyError:
                     msg = _(
                         "Invalid group name '%s' for socket creation given.") % (
                         self.group)
