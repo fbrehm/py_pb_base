@@ -22,7 +22,6 @@ except ImportError:
 libdir = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
 sys.path.insert(0, libdir)
 
-import general
 from general import PbBaseTestcase, get_arg_verbose, init_root_logger
 
 log = logging.getLogger('test_cryptpass')
@@ -39,16 +38,15 @@ class TestCryptPass(PbBaseTestcase):
     def test_import(self):
 
         log.info("Testing import of pb_base.cryptpass ...")
-        import pb_base.cryptpass
-        from pb_base.cryptpass import gensalt, shadowcrypt, valid_hash_algos
+        import pb_base.cryptpass                                                # noqa
+        from pb_base.cryptpass import gensalt, shadowcrypt, valid_hash_algos    # noqa
 
     # -------------------------------------------------------------------------
     def test_gensalt(self):
 
         log.info("Testing generation of a salt string.")
 
-        import pb_base.cryptpass
-        from pb_base.cryptpass import gensalt, shadowcrypt, valid_hash_algos
+        from pb_base.cryptpass import gensalt
 
         log.debug("Generation of a valid 8-character salt ...")
         salt = gensalt(8)
@@ -82,7 +80,6 @@ class TestCryptPass(PbBaseTestcase):
 
         log.info("Encrypting password %r with a random generated salt.", pwd)
 
-        import pb_base.cryptpass
         from pb_base.cryptpass import gensalt, shadowcrypt, valid_hash_algos
 
         for algo in ('crypt', 'md5', 'sha256', 'sha512'):

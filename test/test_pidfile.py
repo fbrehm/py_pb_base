@@ -11,7 +11,6 @@
 
 import os
 import sys
-import time
 import re
 import logging
 
@@ -23,7 +22,6 @@ except ImportError:
 libdir = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
 sys.path.insert(0, libdir)
 
-import general
 from general import PbBaseTestcase, get_arg_verbose, init_root_logger
 
 log = logging.getLogger('test_pidfile')
@@ -68,36 +66,33 @@ class TestPidFile(PbBaseTestcase):
 
         log.info("Testing import of pb_base.pidfile ...")
 
-        import pb_base.pidfile
+        import pb_base.pidfile                              # noqa
         log.debug("Module %r imported.", 'pb_base.pidfile')
 
-        from pb_base.pidfile import PidFileError
+        from pb_base.pidfile import PidFileError            # noqa
         log.debug(
             "Exception class %r from module %r imported.",
             'PidFileError', 'pb_base.pidfile')
 
-        from pb_base.pidfile import InvalidPidFileError
+        from pb_base.pidfile import InvalidPidFileError     # noqa
         log.debug(
             "Exception class %r from module %r imported.",
             'InvalidPidFileError', 'pb_base.pidfile')
 
-        from pb_base.pidfile import PidFileInUseError
+        from pb_base.pidfile import PidFileInUseError       # noqa
         log.debug(
             "Exception class %r from module %r imported.",
             'PidFileInUseError', 'pb_base.pidfile')
 
-        from pb_base.pidfile import PidFile
+        from pb_base.pidfile import PidFile                 # noqa
         log.debug(
             "Class %r from module %r imported.", 'PidFile', 'pb_base.pidfile')
-
-        import pb_base.object
 
     # -------------------------------------------------------------------------
     def test_object(self):
 
         log.info("Testing init of a simple object.")
 
-        import pb_base.pidfile
         from pb_base.pidfile import PidFile
 
         pid_file = PidFile(
@@ -113,7 +108,6 @@ class TestPidFile(PbBaseTestcase):
 
         log.info("Testing fail init of a PidFile object without a filename.")
 
-        import pb_base.pidfile
         from pb_base.pidfile import PidFile
 
         with self.assertRaises(ValueError) as cm:
@@ -131,7 +125,6 @@ class TestPidFile(PbBaseTestcase):
 
         log.info("Test creating of a normal PID file.")
 
-        import pb_base.pidfile
         from pb_base.pidfile import PidFile
 
         pid_file = PidFile(
@@ -176,7 +169,6 @@ class TestPidFile(PbBaseTestcase):
 
         log.info("Test fail creating of a PID file on a forbidden place.")
 
-        import pb_base.pidfile
         from pb_base.pidfile import PidFile
         from pb_base.pidfile import InvalidPidFileError
 
@@ -200,7 +192,6 @@ class TestPidFile(PbBaseTestcase):
 
         log.info("Test fail creating of a PID file with an invalid path.")
 
-        import pb_base.pidfile
         from pb_base.pidfile import PidFile
         from pb_base.pidfile import InvalidPidFileError
 
@@ -224,11 +215,8 @@ class TestPidFile(PbBaseTestcase):
 
         log.info("Test fail creating of concurrent  PID files.")
 
-        import pb_base.pidfile
         from pb_base.pidfile import PidFile
         from pb_base.pidfile import PidFileInUseError
-
-        carry_on = True
 
         pid_file1 = PidFile(
             filename=pidfile_normal,

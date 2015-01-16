@@ -23,9 +23,8 @@ except ImportError:
 libdir = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
 sys.path.insert(0, libdir)
 
-from pb_base.common import pp, to_unicode_or_bust, to_utf8_or_bust
+from pb_base.common import to_utf8_or_bust
 
-import general
 from general import PbBaseTestcase, get_arg_verbose, init_root_logger
 
 log = logging.getLogger('test_pidfile')
@@ -74,29 +73,29 @@ class TestPbLockHandler(PbBaseTestcase):
     def test_import(self):
 
         log.info("Testing import of pb_base.handler.lock ...")
-        import pb_base.handler.lock
+        import pb_base.handler.lock                                 # noqa
         log.debug("Module pb_base.handler.lock imported.")
-        from pb_base.errors import CouldntOccupyLockfileError
+        from pb_base.errors import CouldntOccupyLockfileError       # noqa
         log.debug(
             "Exception class %r from %r imported.",
             'CouldntOccupyLockfileError', 'pb_base.errors')
 
-        from pb_base.handler.lock import LockHandlerError
+        from pb_base.handler.lock import LockHandlerError           # noqa
         log.debug(
             "Exception class %r from %r imported.",
             'LockHandlerError', 'pb_base.handler.lock')
 
-        from pb_base.handler.lock import LockdirNotExistsError
+        from pb_base.handler.lock import LockdirNotExistsError      # noqa
         log.debug(
             "Exception class %r from %r imported.",
             'LockdirNotExistsError', 'pb_base.handler.lock')
 
-        from pb_base.handler.lock import LockdirNotWriteableError
+        from pb_base.handler.lock import LockdirNotWriteableError   # noqa
         log.debug(
             "Exception class %r from %r imported.",
             'LockdirNotWriteableError', 'pb_base.handler.lock')
 
-        from pb_base.handler.lock import PbLockHandler
+        from pb_base.handler.lock import PbLockHandler              # noqa
         log.debug(
             "Class %r from %r imported.",
             'PbLockHandler', 'pb_base.handler.lock')
@@ -292,7 +291,7 @@ class TestPbLockHandler(PbBaseTestcase):
 
         try:
             with self.assertRaises(CouldntOccupyLockfileError) as cm:
-                result = locker.create_lockfile(
+                result = locker.create_lockfile(                        # noqa
                     lockfile,
                     delay_start=0.2,
                     delay_increase=0.4,
@@ -350,7 +349,6 @@ class TestPbLockHandler(PbBaseTestcase):
         log.info("Testing creation lockfile with an invalid previous lockfile #3.")
 
         from pb_base.handler.lock import PbLockHandler
-        from pb_base.errors import CouldntOccupyLockfileError
 
         locker = PbLockHandler(
             appname='test_lock',

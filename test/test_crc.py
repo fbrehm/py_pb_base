@@ -21,7 +21,6 @@ except ImportError:
 libdir = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
 sys.path.insert(0, libdir)
 
-import general
 from general import PbBaseTestcase, get_arg_verbose, init_root_logger
 
 log = logging.getLogger('test_crc')
@@ -39,7 +38,7 @@ class TestPbCrc(PbBaseTestcase):
     def test_import(self):
 
         log.info("Testing import of pb_base.crc ...")
-        import pb_base.crc
+        import pb_base.crc                                      # noqa
 
     # -------------------------------------------------------------------------
     def test_checksum(self):

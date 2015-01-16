@@ -13,8 +13,6 @@
 import os
 import sys
 import logging
-import tempfile
-import time
 import locale
 
 try:
@@ -25,10 +23,9 @@ except ImportError:
 libdir = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
 sys.path.insert(0, libdir)
 
-from pb_base.common import pp, to_unicode_or_bust, to_utf8_or_bust
+from pb_base.common import pp
 from pb_base.common import bytes2human
 
-import general
 from general import PbBaseTestcase, get_arg_verbose, init_root_logger
 
 locale.setlocale(locale.LC_ALL, '')
@@ -118,37 +115,37 @@ class TestPbBaseHandler(PbBaseTestcase):
     def test_import(self):
 
         log.info("Testing import of pb_base.handler ...")
-        import pb_base.handler
+        import pb_base.handler                                      # noqa
 
         log.info("Testing import of PbBaseHandlerError from pb_base.handler ...")
-        from pb_base.handler import PbBaseHandlerError
+        from pb_base.handler import PbBaseHandlerError              # noqa
 
         log.info("Testing import of CommandNotFoundError from pb_base.handler ...")
-        from pb_base.handler import CommandNotFoundError
+        from pb_base.handler import CommandNotFoundError            # noqa
 
         log.info("Testing import of PbBaseHandler from pb_base.handler ...")
-        from pb_base.handler import PbBaseHandler
+        from pb_base.handler import PbBaseHandler                   # noqa
 
         log.info("Testing import of pb_base.handler.df ...")
-        import pb_base.handler.df
+        import pb_base.handler.df                                   # noqa
 
         log.info("Testing import of DfError from pb_base.handler.df ...")
-        from pb_base.handler.df import DfError
+        from pb_base.handler.df import DfError                      # noqa
 
         log.info("Testing import of DfResult from pb_base.handler.df ...")
-        from pb_base.handler.df import DfResult
+        from pb_base.handler.df import DfResult                     # noqa
 
         log.info("Testing import of DfHandler from pb_base.handler.df ...")
-        from pb_base.handler.df import DfHandler
+        from pb_base.handler.df import DfHandler                    # noqa
 
         log.info("Testing import of pb_base.handler.fuser ...")
-        import pb_base.handler.fuser
+        import pb_base.handler.fuser                                # noqa
 
         log.info("Testing import of FuserError from pb_base.handler.fuser ...")
-        from pb_base.handler.fuser import FuserError
+        from pb_base.handler.fuser import FuserError                # noqa
 
         log.info("Testing import of FuserHandler from pb_base.handler.fuser ...")
-        from pb_base.handler.fuser import FuserHandler
+        from pb_base.handler.fuser import FuserHandler              # noqa
 
     # -------------------------------------------------------------------------
     def test_command_not_found_error(self):

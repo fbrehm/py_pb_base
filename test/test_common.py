@@ -25,7 +25,6 @@ locale.setlocale(locale.LC_ALL, '')
 libdir = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
 sys.path.insert(0, libdir)
 
-import general
 from general import PbBaseTestcase, get_arg_verbose, init_root_logger
 
 log = logging.getLogger('test_common')
@@ -42,14 +41,13 @@ class TestPbCommon(PbBaseTestcase):
     def test_import(self):
 
         log.info("Testing import of pb_base.common ...")
-        import pb_base.common
+        import pb_base.common                                   # noqa
 
     # -------------------------------------------------------------------------
     def test_to_unicode(self):
 
         log.info("Testing to_unicode_or_bust() ...")
 
-        import pb_base.common
         from pb_base.common import to_unicode_or_bust
 
         data = []
@@ -90,7 +88,6 @@ class TestPbCommon(PbBaseTestcase):
 
         log.info("Testing to_utf8_or_bust() ...")
 
-        import pb_base.common
         from pb_base.common import to_utf8_or_bust
 
         data = []
@@ -131,7 +128,6 @@ class TestPbCommon(PbBaseTestcase):
 
         log.info("Testing to_str_or_bust() ...")
 
-        import pb_base.common
         from pb_base.common import to_str_or_bust
 
         data = []
@@ -172,13 +168,12 @@ class TestPbCommon(PbBaseTestcase):
 
         log.info("Testing human2mbytes() from pb_base.common ...")
 
-        import pb_base.common
         from pb_base.common import human2mbytes
 
         loc = locale.getlocale()    # get current locale
         encoding = loc[1]
         log.debug("Current locale is %r.", loc)
-        german = ('de_DE', encoding)
+        german = ('de_DE', encoding)                                # noqa
 
         log.debug("Setting to locale 'C' to be secure.")
         locale.setlocale(locale.LC_ALL, 'C')
@@ -252,7 +247,6 @@ class TestPbCommon(PbBaseTestcase):
         locale.setlocale(locale.LC_ALL, 'C')
         log.debug("Current locale is now %r.", locale.getlocale())
 
-        import pb_base.common
         from pb_base.common import human2mbytes
 
         pairs_en = (
@@ -321,13 +315,12 @@ class TestPbCommon(PbBaseTestcase):
 
         log.info("Testing bytes2human() from pb_base.common ...")
 
-        import pb_base.common
         from pb_base.common import bytes2human
 
         loc = locale.getlocale()    # get current locale
         encoding = loc[1]
         log.debug("Current locale is %r.", loc)
-        german = ('de_DE', encoding)
+        german = ('de_DE', encoding)                                # noqa
 
         log.debug("Setting to locale 'C' to be secure.")
         locale.setlocale(locale.LC_ALL, 'C')
@@ -363,7 +356,6 @@ class TestPbCommon(PbBaseTestcase):
 
         log.info("Testing to_bool() from pb_base.common ...")
 
-        import pb_base.common
         from pb_base.common import to_bool
 
         class TestClass(object):

@@ -21,7 +21,6 @@ except ImportError:
 libdir = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
 sys.path.insert(0, libdir)
 
-import general
 from general import PbBaseTestcase, get_arg_verbose, init_root_logger
 
 log = logging.getLogger('test_base_object')
@@ -38,14 +37,13 @@ class TestPbBaseObject(PbBaseTestcase):
     def test_import(self):
 
         log.info("Testing import of pb_base.object ...")
-        import pb_base.object
+        import pb_base.object                               # noqa
 
     # -------------------------------------------------------------------------
     def test_object(self):
 
         log.info("Testing init of a simple object.")
 
-        import pb_base.object
         from pb_base.object import PbBaseObject
 
         obj = PbBaseObject(
@@ -60,14 +58,13 @@ class TestPbBaseObject(PbBaseTestcase):
 
         log.info("Testing wrong verbose values #1.")
 
-        import pb_base.object
         from pb_base.object import PbBaseObject
 
         v = 'hh'
         obj = None
 
         with self.assertRaises(ValueError) as cm:
-            obj = PbBaseObject(appname='test_base_object', verbose=v)
+            obj = PbBaseObject(appname='test_base_object', verbose=v)   # noqa
         e = cm.exception
         log.debug("ValueError raised on verbose = %r: %s", v, str(e))
 
@@ -76,14 +73,13 @@ class TestPbBaseObject(PbBaseTestcase):
 
         log.info("Testing wrong verbose values #2.")
 
-        import pb_base.object
         from pb_base.object import PbBaseObject
 
         v = -2
         obj = None
 
         with self.assertRaises(ValueError) as cm:
-            obj = PbBaseObject(appname='test_base_object', verbose=v)
+            obj = PbBaseObject(appname='test_base_object', verbose=v)   # noqa
         e = cm.exception
         log.debug("ValueError raised on verbose = %r: %s", v, str(e))
 
@@ -93,10 +89,9 @@ class TestPbBaseObject(PbBaseTestcase):
         bd = '/blablub'
         log.info("Testing #1 wrong basedir: %r", bd)
 
-        import pb_base.object
         from pb_base.object import PbBaseObject
 
-        obj = PbBaseObject(appname='test_base_object', base_dir=bd)
+        obj = PbBaseObject(appname='test_base_object', base_dir=bd)     # noqa
 
     # -------------------------------------------------------------------------
     def test_basedir2(self):
@@ -104,17 +99,15 @@ class TestPbBaseObject(PbBaseTestcase):
         bd = '/etc/passwd'
         log.info("Testing #2 wrong basedir: %r", bd)
 
-        import pb_base.object
         from pb_base.object import PbBaseObject
 
-        obj = PbBaseObject(appname='test_base_object', base_dir=bd)
+        obj = PbBaseObject(appname='test_base_object', base_dir=bd)     # noqa
 
     # -------------------------------------------------------------------------
     def test_as_dict1(self):
 
         log.info("Testing obj.as_dict() #1 - simple")
 
-        import pb_base.object
         from pb_base.object import PbBaseObject
 
         obj = PbBaseObject(appname='test_base_object', verbose=1)
@@ -128,7 +121,6 @@ class TestPbBaseObject(PbBaseTestcase):
 
         log.info("Testing obj.as_dict() #2 - stacked")
 
-        import pb_base.object
         from pb_base.object import PbBaseObject
 
         obj = PbBaseObject(appname='test_base_object', verbose=1)
@@ -144,7 +136,6 @@ class TestPbBaseObject(PbBaseTestcase):
 
         log.info("Testing obj.as_dict() #3 - typecasting to str")
 
-        import pb_base.object
         from pb_base.object import PbBaseObject
 
         obj = PbBaseObject(appname='test_base_object', verbose=1)
@@ -159,7 +150,6 @@ class TestPbBaseObject(PbBaseTestcase):
 
         log.info("Testing obj.as_dict() #4 - stacked and short")
 
-        import pb_base.object
         from pb_base.object import PbBaseObject
 
         obj = PbBaseObject(appname='test_base_object', verbose=1)

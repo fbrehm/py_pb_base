@@ -21,7 +21,6 @@ except ImportError:
 libdir = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
 sys.path.insert(0, libdir)
 
-import general
 from general import PbBaseTestcase, get_arg_verbose, init_root_logger
 
 log = logging.getLogger('test_errors')
@@ -38,17 +37,16 @@ class TestPbErrors(PbBaseTestcase):
     def test_import(self):
 
         log.info("Testing import of pb_base.errors ...")
-        import pb_base.errors
-        from pb_base.errors import PbError, FunctionNotImplementedError
-        from pb_base.errors import PbIoTimeoutError, PbReadTimeoutError
-        from pb_base.errors import PbWriteTimeoutError
+        import pb_base.errors                                               # noqa
+        from pb_base.errors import PbError, FunctionNotImplementedError     # noqa
+        from pb_base.errors import PbIoTimeoutError, PbReadTimeoutError     # noqa
+        from pb_base.errors import PbWriteTimeoutError                      # noqa
 
     # -------------------------------------------------------------------------
     def test_pb_error(self):
 
         log.info("Test raising a PbError exception ...")
 
-        import pb_base.errors
         from pb_base.errors import PbError
 
         with self.assertRaises(PbError) as cm:
@@ -61,7 +59,6 @@ class TestPbErrors(PbBaseTestcase):
 
         log.info("Test raising a FunctionNotImplementedError exception ...")
 
-        import pb_base.errors
         from pb_base.errors import FunctionNotImplementedError
 
         with self.assertRaises(FunctionNotImplementedError) as cm:
@@ -75,7 +72,6 @@ class TestPbErrors(PbBaseTestcase):
 
         log.info("Test raising a PbIoTimeoutError exception ...")
 
-        import pb_base.errors
         from pb_base.errors import PbIoTimeoutError
 
         with self.assertRaises(PbIoTimeoutError) as cm:
@@ -88,7 +84,6 @@ class TestPbErrors(PbBaseTestcase):
 
         log.info("Test raising a PbReadTimeoutError exception ...")
 
-        import pb_base.errors
         from pb_base.errors import PbReadTimeoutError
 
         with self.assertRaises(PbReadTimeoutError) as cm:
@@ -101,7 +96,6 @@ class TestPbErrors(PbBaseTestcase):
 
         log.info("Test raising a PbWriteTimeoutError exception ...")
 
-        import pb_base.errors
         from pb_base.errors import PbWriteTimeoutError
 
         with self.assertRaises(PbWriteTimeoutError) as cm:
