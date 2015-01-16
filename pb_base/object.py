@@ -22,9 +22,8 @@ import traceback
 from pb_base.common import pp
 
 from pb_base.errors import PbError
-from pb_base.errors import FunctionNotImplementedError
 
-__version__ = '0.4.1'
+__version__ = '0.4.2'
 
 log = logging.getLogger(__name__)
 
@@ -195,7 +194,6 @@ class PbBaseObject(object):
     @base_dir.setter
     def base_dir(self, value):
         if not os.path.exists(value):
-            msg = "Base dir '%s' doesn't exists." % (value)
             log.error("Base dir '%s' doesn't exists.", value)
         elif not os.path.isdir(value):
             log.error("Base dir '%s' isn't a directory.", value)
