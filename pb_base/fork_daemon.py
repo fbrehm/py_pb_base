@@ -11,7 +11,6 @@
 """
 
 # Standard modules
-import sys
 import os
 import logging
 import time
@@ -20,33 +19,12 @@ import signal
 # Third party modules
 
 # Own modules
-from pb_base.common import pp, to_unicode_or_bust, to_utf8_or_bust
-
-from pb_base.errors import PbError
-from pb_base.errors import FunctionNotImplementedError
-
-import pb_logging
-from pb_logging import valid_syslog_facility
-from pb_logging.syslog_handler import PbSysLogHandler
-
-from pb_base.object import PbBaseObjectError
-
-from pb_base.app import PbApplicationError
-
-from pb_base.cfg_app import PbCfgAppError
-
-from pb_base.pidfile import PidFileError
-from pb_base.pidfile import InvalidPidFileError
-from pb_base.pidfile import PidFileInUseError
-
-from pb_base.pidfile_app import PidfileAppError
-
 from pb_base.daemon import PbDaemonError
 from pb_base.daemon import PbDaemon
 
-from pb_base.translate import translator, pb_gettext, pb_ngettext
+from pb_base.translate import pb_gettext, pb_ngettext
 
-__version__ = '0.3.2'
+__version__ = '0.3.3'
 
 log = logging.getLogger(__name__)
 
@@ -259,7 +237,9 @@ class ForkingDaemon(PbDaemon):
     def timeout_collect_children(self, value):
         v = int(value)
         if v < 1:
-            msg = _("Wrong value for timeout_collect_children %d, must be greater than zero.") % (v)
+            msg = _(
+                "Wrong value for timeout_collect_children %d, "
+                "must be greater than zero.") % (v)
             raise ValueError(msg)
         self._timeout_collect_children = v
 
