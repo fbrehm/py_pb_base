@@ -8,20 +8,12 @@
 """
 
 # Standard modules
-import sys
 
 # Third party modules
-from validate import Validator
-from validate import ValidateError
-from validate import VdtMissingValue
-from validate import VdtUnknownCheckError
 from validate import VdtParamError
 from validate import VdtTypeError
-from validate import VdtValueError
 from validate import VdtValueTooSmallError
 from validate import VdtValueTooBigError
-from validate import VdtValueTooShortError
-from validate import VdtValueTooLongError
 
 
 # -----------------------------------------------------------------------------
