@@ -8,28 +8,20 @@
 """
 
 # Standard modules
-import sys
 import os
 import logging
 import re
 
 # Own modules
-from pb_base.common import pp
-
-from pb_base.errors import PbError
-from pb_base.errors import FunctionNotImplementedError
-
-from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
-import pb_base.handler
 from pb_base.handler import PbBaseHandlerError
 from pb_base.handler import CommandNotFoundError
 from pb_base.handler import PbBaseHandler
 
-from pb_base.translate import translator, pb_gettext, pb_ngettext
+from pb_base.translate import pb_gettext, pb_ngettext
 
-__version__ = '0.3.2'
+__version__ = '0.3.3'
 
 log = logging.getLogger(__name__)
 
