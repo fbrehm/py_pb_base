@@ -8,34 +8,24 @@
 """
 
 # Standard modules
-import sys
-import os
 import logging
 
 # Third party modules
-import argparse
 
 # Own modules
-import pb_base
-from pb_base.common import pp, to_unicode_or_bust, to_utf8_or_bust
-
-from pb_base.errors import PbError
-
-from pb_base.object import PbBaseObjectError
-
 from pb_base.app import PbApplicationError
 from pb_base.app import PbApplication
 
-from pb_base.crc import crc64, crc64_digest
+from pb_base.crc import crc64_digest
 
-from pb_base.translate import translator, pb_gettext, pb_ngettext
+from pb_base.translate import pb_gettext, pb_ngettext
 
 try:
     import pb_base.local_version as my_version
 except ImportError:
     import pb_base.global_version as my_version
 
-__version__ = '0.3.2'
+__version__ = '0.3.3'
 
 log = logging.getLogger(__name__)
 

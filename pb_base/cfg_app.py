@@ -20,26 +20,20 @@ from io import StringIO
 # Third party modules
 from configobj import ConfigObj, ConfigObjError
 from validate import Validator
-from validate import ValidateError
 
 # Own modules
-from pb_base.common import pp, to_unicode_or_bust
+from pb_base.common import pp
 
 from pb_base.rec_dict import RecursiveDictionary
-
-from pb_base.errors import PbError
-from pb_base.errors import FunctionNotImplementedError
-
-from pb_base.object import PbBaseObjectError
 
 from pb_base.validator import pbvalidator_checks
 
 from pb_base.app import PbApplicationError
 from pb_base.app import PbApplication
 
-from pb_base.translate import translator, pb_gettext, pb_ngettext
+from pb_base.translate import pb_gettext, pb_ngettext
 
-__version__ = '0.6.2'
+__version__ = '0.6.3'
 
 log = logging.getLogger(__name__)
 
@@ -458,7 +452,7 @@ class PbCfgApp(PbApplication):
                     stringify=True,
                     configspec=self.cfg_spec,
                 )
-            except ConfigObjError:
+            except ConfigObjError as e:
                 msg = _("Wrong configuration in %r found:") % (cfg_file)
                 msg += ' ' + str(e)
                 self.handle_error(msg, _("Configuration error"))

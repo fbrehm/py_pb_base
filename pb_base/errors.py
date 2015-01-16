@@ -9,12 +9,11 @@
 
 # Standard modules
 import errno
-import sys
 
 # Own modules
-from pb_base.translate import translator, pb_gettext, pb_ngettext
+from pb_base.translate import pb_gettext, pb_ngettext
 
-__version__ = '0.3.2'
+__version__ = '0.3.3'
 
 _ = pb_gettext
 __ = pb_ngettext

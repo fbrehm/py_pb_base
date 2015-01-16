@@ -18,32 +18,18 @@ import signal
 # Third party modules
 
 # Own modules
-from pb_base.common import pp, to_unicode_or_bust, to_utf8_or_bust
+from pb_base.common import to_unicode_or_bust
 from pb_base.common import to_str_or_bust
 
-from pb_base.errors import PbError
-from pb_base.errors import FunctionNotImplementedError
-
-import pb_logging
 from pb_logging import valid_syslog_facility
 from pb_logging.syslog_handler import PbSysLogHandler
-
-from pb_base.object import PbBaseObjectError
-
-from pb_base.app import PbApplicationError
-
-from pb_base.cfg_app import PbCfgAppError
-
-from pb_base.pidfile import PidFileError
-from pb_base.pidfile import InvalidPidFileError
-from pb_base.pidfile import PidFileInUseError
 
 from pb_base.pidfile_app import PidfileAppError
 from pb_base.pidfile_app import PidfileApp
 
-from pb_base.translate import translator, pb_gettext, pb_ngettext
+from pb_base.translate import pb_gettext, pb_ngettext
 
-__version__ = '0.4.2'
+__version__ = '0.4.3'
 
 log = logging.getLogger(__name__)
 
