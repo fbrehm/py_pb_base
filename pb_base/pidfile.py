@@ -19,19 +19,16 @@ import errno
 
 # Own modules
 
-from pb_base.errors import PbError
-from pb_base.errors import FunctionNotImplementedError
 from pb_base.errors import PbReadTimeoutError
-from pb_base.errors import PbWriteTimeoutError
 
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
 from pb_base.common import to_utf8_or_bust
 
-from pb_base.translate import translator, pb_gettext, pb_ngettext
+from pb_base.translate import pb_gettext, pb_ngettext
 
-__version__ = '0.5.2'
+__version__ = '0.5.3'
 
 log = logging.getLogger(__name__)
 
