@@ -10,12 +10,7 @@
 """
 
 # Standard modules
-import sys
-import os
 import logging
-import socket
-import errno
-import re
 import socket
 
 # Third party modules
@@ -23,17 +18,12 @@ import socket
 # Own modules
 import pb_base.common
 
-from pb_base.object import PbBaseObjectError
-
-from pb_base.errors import PbError
-from pb_base.errors import FunctionNotImplementedError
-
 from pb_base.socket_obj import GenericSocketError
 from pb_base.socket_obj import GenericSocket
 
-from pb_base.translate import translator, pb_gettext, pb_ngettext
+from pb_base.translate import pb_gettext, pb_ngettext
 
-__version__ = '0.2.2'
+__version__ = '0.2.3'
 
 log = logging.getLogger(__name__)
 
