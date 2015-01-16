@@ -7,6 +7,10 @@ src_dir="pb_base"
 
 cd $(dirname $0)
 
+TEMPFILE=$( mktemp )
+cat "${output_dir}/${pot_file}" | egrep -v '^#: [^a]' > "${TEMPFILE}"
+mv -v "${TEMPFILE}" "${output_dir}/${pot_file}"
+
 xgettext --output="${pot_file}" \
         --output-dir="${output_dir}" \
         --language="Python" \
@@ -17,7 +21,7 @@ xgettext --output="${pot_file}" \
         --force-po \
         --indent \
         --add-location \
-        --width=85 \
+        --width=99 \
         --sort-by-file \
         --package-name="profitbricks-python-base" \
         --package-version="${pkg_version}" \
