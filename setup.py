@@ -12,10 +12,9 @@
 import os
 import sys
 import re
-from distutils.core import setup, Command
+from distutils.core import setup
 import pprint
 import datetime
-import glob
 
 # own modules:
 cur_dir = os.getcwd()
@@ -42,7 +41,8 @@ __contact__ = 'frank.brehm@profitbricks.com'
 __copyright__ = '(C) 2010 - 2015 by ProfitBricks GmbH, Berlin'
 __license__ = 'LGPL3+'
 
-#------------------------------------
+
+# -----------------------------------
 def read(fname):
     fh = open(fname, 'r')
     try:
@@ -51,19 +51,22 @@ def read(fname):
         fh.close()
     return content
 
-#------------------------------------
+
+# -----------------------------------
 def is_python_file(filename):
     if filename.endswith('.py'):
         return True
     else:
         return False
 
-#------------------------------------
+
+# -----------------------------------
 debian_dir = os.path.join(cur_dir, 'debian')
 changelog_file = os.path.join(debian_dir, 'changelog')
 readme_file = os.path.join(cur_dir, 'README.txt')
 
-#------------------------------------
+
+# -----------------------------------
 def get_debian_version():
     if not os.path.isfile(changelog_file):
         return None
@@ -81,7 +84,7 @@ debian_version = get_debian_version()
 if debian_version is not None and debian_version != '':
     packet_version = debian_version
 
-#------------------------------------
+# -----------------------------------
 local_version_file = os.path.join(pkg_dir, 'local_version.py')
 local_version_file_content = '''#!/usr/bin/python
 # -*- coding: utf-8 -*-
@@ -101,19 +104,20 @@ __license__ = %r
 # vim: fileencoding=utf-8 filetype=python ts=4
 '''
 
-#------------------------------------
+
+# -----------------------------------
 def write_local_version():
 
     cur_year = datetime.date.today().year
-    content = local_version_file_content % (__author__, __contact__,
-            cur_year, __author__, __author__, __contact__, cur_year,
-            __contact__, packet_version, __license__)
-    #print(content)
+    content = local_version_file_content % (
+        __author__, __contact__, cur_year, __author__, __author__, __contact__,
+        cur_year, __contact__, packet_version, __license__)
+    # print(content)
 
     fh = None
     try:
         if sys.version_info[0] > 2:
-            fh = open(local_version_file, 'wt', encoding = 'utf-8')
+            fh = open(local_version_file, 'wt', encoding='utf-8')
         else:
             fh = open(local_version_file, 'wt')
         fh.write(content)
@@ -124,29 +128,30 @@ def write_local_version():
 # Write lib/storage_tools/local_version.py
 write_local_version()
 
-#------------------------------------
+
+# -----------------------------------
 def pp(obj):
-    pprinter = pprint.PrettyPrinter(indent = 4)
+    pprinter = pprint.PrettyPrinter(indent=4)
     return pprinter.pformat(obj)
 
 
-#------------------------------------
+# -----------------------------------
 setup(
-    name = 'pb_base',
-    version = packet_version,
-    description = 'Modules for common used objects, error classes and methods.',
-    long_description = read('README.txt'),
-    author = __author__,
-    author_email = __contact__,
-    url = 'ssh://git.profitbricks.localdomain/srv/git/python/pb_base.git',
-    license = __license__,
-    platforms = ['posix'],
-    packages = [
-            'pb_base',
-            'pb_base.handler',
-            'pb_base.socket_obj',
+    name='pb_base',
+    version=packet_version,
+    description='Modules for common used objects, error classes and methods.',
+    long_description=read('README.txt'),
+    author=__author__,
+    author_email=__contact__,
+    url='ssh://git.profitbricks.localdomain/srv/git/python/pb_base.git',
+    license=__license__,
+    platforms=['posix'],
+    packages=[
+        'pb_base',
+        'pb_base.handler',
+        'pb_base.socket_obj',
     ],
-    classifiers = [
+    classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Console',
         'Intended Audience :: Developers',
@@ -159,18 +164,18 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
-    provides = [packet_name],
-    scripts = [
+    provides=[packet_name],
+    scripts=[
         'bin/crc64',
         'bin/term-can-colors',
     ],
-    requires = [
+    requires=[
         'pb_logging',
         'argparse',
         'configobj',
     ]
 )
 
-#========================================================================
+# =======================================================================
 
 # vim: fileencoding=utf-8 filetype=python ts=4 expandtab
