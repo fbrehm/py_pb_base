@@ -12,30 +12,24 @@
 import sys
 import os
 import logging
-import re
-import datetime
 import subprocess
 import pwd
-import grp
-import pipes
 import signal
 import errno
 import locale
 
 # Own modules
-from pb_base.common import pp, caller_search_path, bytes2human
-from pb_base.common import to_str_or_bust, to_utf8_or_bust
+from pb_base.common import caller_search_path, bytes2human
+from pb_base.common import to_utf8_or_bust
 
-from pb_base.errors import PbError
-from pb_base.errors import FunctionNotImplementedError
 from pb_base.errors import PbReadTimeoutError, PbWriteTimeoutError
 
 from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
-from pb_base.translate import translator, pb_gettext, pb_ngettext
+from pb_base.translate import pb_gettext, pb_ngettext
 
-__version__ = '0.4.3'
+__version__ = '0.4.4'
 
 log = logging.getLogger(__name__)
 
