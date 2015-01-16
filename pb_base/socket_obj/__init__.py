@@ -10,12 +10,9 @@
 """
 
 # Standard modules
-import sys
-import os
 import logging
 import re
 import select
-import time
 
 from abc import ABCMeta
 from abc import abstractmethod
@@ -23,18 +20,15 @@ from abc import abstractmethod
 # Third party modules
 
 # Own modules
-import pb_base.common
-
-from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
 from pb_base.errors import PbError
 from pb_base.errors import FunctionNotImplementedError
 from pb_base.errors import PbIoTimeoutError
 
-from pb_base.translate import translator, pb_gettext, pb_ngettext
+from pb_base.translate import pb_gettext, pb_ngettext
 
-__version__ = '0.4.2'
+__version__ = '0.4.3'
 
 log = logging.getLogger(__name__)
 
