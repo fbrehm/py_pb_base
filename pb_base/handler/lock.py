@@ -24,20 +24,18 @@ from numbers import Number
 # Third party modules
 
 # Own modules
-from pb_base.common import pp, to_unicode_or_bust, to_utf8_or_bust
+from pb_base.common import to_utf8_or_bust
 
 from pb_base.errors import CouldntOccupyLockfileError
 
-from pb_base.object import PbBaseObjectError
 from pb_base.object import PbBaseObject
 
 from pb_base.handler import PbBaseHandlerError
-from pb_base.handler import CommandNotFoundError
 from pb_base.handler import PbBaseHandler
 
-from pb_base.translate import translator, pb_gettext, pb_ngettext
+from pb_base.translate import pb_gettext, pb_ngettext
 
-__version__ = '0.3.2'
+__version__ = '0.3.3'
 
 log = logging.getLogger(__name__)
 
