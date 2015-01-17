@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: profitbricks-python-base 0.5.6\n"
 "Report-Msgid-Bugs-To: frank.brehm@profitbricks.com\n"
-"POT-Creation-Date: 2014-11-02 09:49+0100\n"
+"POT-Creation-Date: 2015-01-17 08:33+0100\n"
 "PO-Revision-Date: 2014-11-02 10:00+0100\n"
 "Last-Translator: Frank Brehm <frank.brehm@profitbricks.com>\n"
 "Language-Team: German\n"
@@ -849,6 +849,25 @@ msgstr "Konnte %(cont)r (Inhalt von %(file)r) nicht als PID "
 #, python-format
 msgid "Invalid PID %(pid)d in %(file)r found."
 msgstr "Ungültige PID %(pid)d in %(file)r gefunden."
+
+#: pb_base/object.py:103 pb_base/object.py:171
+#, python-format
+msgid "Wrong verbose level %r, must be >= 0"
+msgstr "Falsches Ausführlichkeits-Niveau %r, es muss >= 0 sein"
+
+#: pb_base/object.py:128 pb_base/object.py:202
+#, python-format
+msgid "Base directory %r does not exists."
+msgstr "Das Basisverzeichnis %r existiert nicht."
+
+#: pb_base/object.py:132 pb_base/object.py:205
+#, python-format
+msgid "Base directory %r is not a directory."
+msgstr "Das Basisverzeichnis %r ist kein Verzeichnis."
+
+#: pb_base/object.py:298
+msgid "undefined error."
+msgstr "unbestimmter Fehler."
 
 #: pb_base/pidfile.py:70
 #, python-format

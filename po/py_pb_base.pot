@@ -7,7 +7,7 @@
 msgid ""
 msgstr "Project-Id-Version: profitbricks-python-base 0.6.5\n"
       "Report-Msgid-Bugs-To: frank.brehm@profitbricks.com\n"
-      "POT-Creation-Date: 2015-01-16 16:50+0100\n"
+      "POT-Creation-Date: 2015-01-17 08:33+0100\n"
       "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
       "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
       "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -960,6 +960,25 @@ msgstr ""
 #: pb_base/handler/lock.py:1078
 #, python-format
 msgid "Invalid PID %(pid)d in %(file)r found."
+msgstr ""
+
+#: pb_base/object.py:103 pb_base/object.py:171
+#, python-format
+msgid "Wrong verbose level %r, must be >= 0"
+msgstr ""
+
+#: pb_base/object.py:128 pb_base/object.py:202
+#, python-format
+msgid "Base directory %r does not exists."
+msgstr ""
+
+#: pb_base/object.py:132 pb_base/object.py:205
+#, python-format
+msgid "Base directory %r is not a directory."
+msgstr ""
+
+#: pb_base/object.py:298
+msgid "undefined error."
 msgstr ""
 
 #: pb_base/pidfile.py:72
