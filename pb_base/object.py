@@ -23,9 +23,14 @@ from pb_base.common import pp
 
 from pb_base.errors import PbError
 
-__version__ = '0.4.2'
+from pb_base.translate import pb_gettext, pb_ngettext
+
+__version__ = '0.5.1'
 
 log = logging.getLogger(__name__)
+
+_ = pb_gettext
+__ = pb_ngettext
 
 
 # =============================================================================
@@ -95,7 +100,7 @@ class PbBaseObject(object):
         @type: int
         """
         if self._verbose < 0:
-            msg = "Wrong verbose level %r, must be >= 0" % (verbose)
+            msg = _("Wrong verbose level %r, must be >= 0") % (verbose)
             raise ValueError(msg)
 
         self._initialized = False
@@ -120,11 +125,11 @@ class PbBaseObject(object):
         """
         if base_dir:
             if not os.path.exists(base_dir):
-                msg = "Base dir '%s' doesn't exists." % (base_dir)
+                msg = _("Base directory %r does not exists.") % (base_dir)
                 self.handle_error(msg)
                 self._base_dir = None
             elif not os.path.isdir(base_dir):
-                msg = "Base dir '%s' isn't a directory." % (base_dir)
+                msg = _("Base directory %r is not a directory.") % (base_dir)
                 self.handle_error(msg)
                 self._base_dir = None
         if not self._base_dir:
@@ -163,7 +168,7 @@ class PbBaseObject(object):
         if v >= 0:
             self._verbose = v
         else:
-            log.warn("Wrong verbose level %r, must be >= 0", value)
+            log.warn(_("Wrong verbose level %r, must be >= 0"), value)
 
     # -----------------------------------------------------------
     @property
@@ -194,9 +199,11 @@ class PbBaseObject(object):
     @base_dir.setter
     def base_dir(self, value):
         if not os.path.exists(value):
-            log.error("Base dir '%s' doesn't exists.", value)
+            msg = _("Base directory %r does not exists.") % (base_dir)
+            log.error(msg)
         elif not os.path.isdir(value):
-            log.error("Base dir '%s' isn't a directory.", value)
+            msg = _("Base directory %r is not a directory.") % (base_dir)
+            log.error(msg)
         else:
             self._base_dir = value
 
@@ -288,7 +295,7 @@ class PbBaseObject(object):
         if error_message:
             msg += str(error_message)
         else:
-            msg += 'undefined error.'
+            msg += _('undefined error.')
 
         root_log = logging.getLogger()
         has_handlers = False
