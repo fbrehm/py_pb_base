@@ -44,11 +44,14 @@ __license__ = 'LGPL3+'
 
 # -----------------------------------
 def read(fname):
-    fh = open(fname, 'r')
-    try:
-        content = fh.read()
-    finally:
-        fh.close()
+    content = None
+    print("Reading %r ..." % (fname))
+    if sys.version_info[0] > 2:
+        with open(fname, 'r', encoding = 'utf-8') as fh:
+            content = fh.read()
+    else:
+        with open(fname, 'r') as fh:
+            content = fh.read()
     return content
 
 
@@ -86,7 +89,8 @@ if debian_version is not None and debian_version != '':
 
 # -----------------------------------
 local_version_file = os.path.join(pkg_dir, 'local_version.py')
-local_version_file_content = '''#!/usr/bin/python
+local_version_file_content = '''\
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
 @author: %s
@@ -101,7 +105,7 @@ __contact__ = %r
 __version__ = %r
 __license__ = %r
 
-# vim: fileencoding=utf-8 filetype=python ts=4
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
 '''
 
 
