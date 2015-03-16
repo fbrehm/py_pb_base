@@ -265,6 +265,31 @@ class TestPbBaseHandler(PbBaseTestcase):
         out = self.format_df_results(result).strip()
         log.debug("DF of all filesystems:\n%s", out)
 
+    # -------------------------------------------------------------------------
+    def test_call_sync(self):
+
+        log.info("Testing synchronous execution of a shell script.")
+
+        from pb_base.handler import CommandNotFoundError
+        from pb_base.handler import PbBaseHandler
+
+        curdir = os.path.abspath(os.path.dirname(sys.argv[0]))
+        call_script = os.path.join(curdir, 'call_script.sh')
+        if not os.path.exists(call_script):
+            raise CommandNotFoundError(call_script)
+
+        log.debug("Trying to execute %r ...", call_script)
+
+        hdlr = PbBaseHandler(
+            appname=self.appname,
+            verbose=self.verbose,
+        )
+
+        (ret, stdoutdata, stderrdata) = hdlr.call([call_script])
+        log.debug("Got return value: %d.", ret)
+        log.debug("Got STDOUT: %r", stdoutdata)
+        log.debug("Got STDERR: %r", stderrdata)
+
 # =============================================================================
 
 
@@ -283,6 +308,7 @@ if __name__ == '__main__':
     suite.addTest(TestPbBaseHandler('test_import', verbose))
     suite.addTest(TestPbBaseHandler('test_command_not_found_error', verbose))
     suite.addTest(TestPbBaseHandler('test_generic_handler_object', verbose))
+    suite.addTest(TestPbBaseHandler('test_call_sync', verbose))
     suite.addTest(TestPbBaseHandler('test_df_handler_object', verbose))
     suite.addTest(TestPbBaseHandler('test_fuser_handler_object', verbose))
     suite.addTest(TestPbBaseHandler('test_exec_df_root', verbose))

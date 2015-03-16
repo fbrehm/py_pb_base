@@ -17,6 +17,9 @@ import pwd
 import signal
 import errno
 import locale
+import time
+import pipes
+from fcntl import fcntl, F_GETFL, F_SETFL
 
 # Own modules
 from pb_base.common import caller_search_path, bytes2human
@@ -355,7 +358,8 @@ class PbBaseHandler(PbBaseObject):
     def call(
         self, cmd, sudo=None, simulate=None, quiet=None, shell=False,
             stdout=None, stderr=None, bufsize=0, drop_stderr=False,
-            close_fds=False, **kwargs):
+            close_fds=False, hb_handler=None, hb_interval=2.0,
+            poll_interval=0.2, **kwargs):
         """
         Executing a OS command.
 
@@ -419,6 +423,8 @@ class PbBaseHandler(PbBaseObject):
         use_shell = bool(shell)
 
         cmd_list = [str(element) for element in cmd_list]
+        cmd_str = ' '.join(map(lambda x: pipes.quote(x), cmd_list))
+
         if not quiet or self.verbose > 1:
             log.debug(_("Executing %r"), cmd_list)
 
@@ -457,7 +463,67 @@ class PbBaseHandler(PbBaseObject):
         # Display Output of executable
         stdoutdata = ''
         stderrdata = ''
-        (stdoutdata, stderrdata) = cmd_obj.communicate()
+
+        if hb_handler is not None:
+
+            if not quiet or self.verbose > 1:
+                log.debug(_(
+                    "Starting asynchronous communication with '%(cmd)s',"
+                    "heartbeat interval is %(interval)0.1f seconds.") % {
+                    'cmd': cmd_str, 'interval': hb_interval, })
+
+            out_flags = fcntl(cmd_obj.stdout, F_GETFL)
+            err_flags = fcntl(cmd_obj.stderr, F_GETFL)
+            fcntl(cmd_obj.stdout, F_SETFL, out_flags | os.O_NONBLOCK)
+            fcntl(cmd_obj.stderr, F_SETFL, err_flags | os.O_NONBLOCK)
+
+            start_time = time.time()
+
+            while True:
+
+                if self.verbose > 3:
+                    log.debug(_("Checking for the end of the communication ..."))
+                if cmd_obj.poll() is not None:
+                    cmd_obj.wait()
+                    break
+
+                # Heartbeat handling ...
+                cur_time = time.time()
+                time_diff = cur_time - start_time
+                if time_diff >= hb_interval:
+                    if not quiet or self.verbose > 1:
+                        log.debug(_("Time to execute the heartbeat handler."))
+                    if hb_handler:
+                        hb_handler()
+                    start_time = cur_time
+                if self.verbose > 3:
+                    log.debug(_("Sleeping %0.2f seconds ..."), poll_interval)
+                time.sleep(poll_interval)
+
+                # Reading out file descriptors
+                if used_stdout is not None:
+                    try:
+                        stdoutdata += os.read(cmd_obj.stdout.fileno(), 1024)
+                        if self.verbose > 3:
+                            log.debug("  stdout is now: (((%s)))", stdoutdata)
+                    except OSError:
+                        pass
+                if used_stderr is not None:
+                    try:
+                        stderrdata += os.read(cmd_obj.stderr.fileno(), 1024)
+                        if self.verbose > 3:
+                            log.debug("  stderr is now: (((%s)))", stderrdata)
+                    except OSError:
+                        pass
+        else:
+            if not quiet or self.verbose > 1:
+                log.debug(_("Starting synchronous communication with '%s'.") % (cmd_str))
+            (stdoutdata, stderrdata) = cmd_obj.communicate()
+
+        if not quiet or self.verbose > 1:
+            log.debug("Finished communication with '%s'" % (cmd_str))
+
+        #(stdoutdata, stderrdata) = cmd_obj.communicate()
 
         if stderrdata:
             if sys.version_info[0] > 2:
