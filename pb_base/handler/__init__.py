@@ -32,7 +32,7 @@ from pb_base.object import PbBaseObject
 
 from pb_base.translate import pb_gettext, pb_ngettext
 
-__version__ = '0.4.4'
+__version__ = '0.5.1'
 
 log = logging.getLogger(__name__)
 
@@ -463,12 +463,15 @@ class PbBaseHandler(PbBaseObject):
         # Display Output of executable
         stdoutdata = ''
         stderrdata = ''
+        if sys.version_info[0] > 2:
+            stdoutdata = bytearray()
+            stderrdata = bytearray()
 
         if hb_handler is not None:
 
             if not quiet or self.verbose > 1:
                 log.debug(_(
-                    "Starting asynchronous communication with '%(cmd)s',"
+                    "Starting asynchronous communication with '%(cmd)s', "
                     "heartbeat interval is %(interval)0.1f seconds.") % {
                     'cmd': cmd_str, 'interval': hb_interval, })
 
@@ -505,14 +508,14 @@ class PbBaseHandler(PbBaseObject):
                     try:
                         stdoutdata += os.read(cmd_obj.stdout.fileno(), 1024)
                         if self.verbose > 3:
-                            log.debug("  stdout is now: (((%s)))", stdoutdata)
+                            log.debug("  stdout is now: %r", stdoutdata)
                     except OSError:
                         pass
                 if used_stderr is not None:
                     try:
                         stderrdata += os.read(cmd_obj.stderr.fileno(), 1024)
                         if self.verbose > 3:
-                            log.debug("  stderr is now: (((%s)))", stderrdata)
+                            log.debug("  stderr is now: %r", stderrdata)
                     except OSError:
                         pass
         else:
@@ -522,8 +525,6 @@ class PbBaseHandler(PbBaseObject):
 
         if not quiet or self.verbose > 1:
             log.debug("Finished communication with '%s'" % (cmd_str))
-
-        #(stdoutdata, stderrdata) = cmd_obj.communicate()
 
         if stderrdata:
             if sys.version_info[0] > 2:
