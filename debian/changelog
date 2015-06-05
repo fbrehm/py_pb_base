@@ -1,3 +1,13 @@
+pb-base (0.6.6) all; urgency=low
+
+  * Version bump for packaging all Debian types.
+  * Applied PEP8 rules with flake8
+  * Updated translation files
+  * Added asynchronous execution of external commands in
+    pb_base/handler/__init.py
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Fri, 05 Jun 2015 13:58:27 +0200
+
 pb-base (0.6.5) all; urgency=low
 
   * Bugfixing in pb_base/handler/__init__.py
