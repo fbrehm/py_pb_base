@@ -20,6 +20,9 @@ from abc import abstractmethod
 # Third party modules
 
 # Own modules
+from pb_base.common import to_utf8_or_bust as to_utf8
+from pb_base.common import to_str_or_bust as to_str
+
 from pb_base.object import PbBaseObject
 
 from pb_base.errors import PbError
@@ -28,7 +31,7 @@ from pb_base.errors import PbIoTimeoutError
 
 from pb_base.translate import pb_gettext, pb_ngettext
 
-__version__ = '0.4.3'
+__version__ = '0.4.4'
 
 log = logging.getLogger(__name__)
 
@@ -376,13 +379,15 @@ class GenericSocket(PbBaseObject):
                 "Cannot send message to the receipient, because the socket connection is closed.")
             raise GenericSocketError(msg)
 
+        msg_utf8 = to_utf8(message)
+
         if self.verbose > 3:
-            log.debug(_("Sending %r to socket."), message)
+            log.debug(_("Sending %r to socket."), msg_utf8)
 
         if self.bonded:
-            self.connection.sendall(message)
+            self.connection.sendall(msg_utf8)
         else:
-            self.sock.sendall(message)
+            self.sock.sendall(msg_utf8)
 
     # -------------------------------------------------------------------------
     def accept(self):
