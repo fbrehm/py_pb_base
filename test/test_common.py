@@ -327,12 +327,14 @@ class TestPbCommon(PbBaseTestcase):
         log.debug("Current locale is now %r.", locale.getlocale())
 
         test_pairs_no_si = (
-            (5, '5'),
-            (5 * 1024, '5KiB'),
-            (1999 * 1024 * 1024, '1999MiB'),
-            (2047 * 1024 * 1024, '2047MiB'),
-            (2048 * 1024 * 1024, '2GiB'),
-            (2304 * 1024 * 1024, '2.25GiB'),
+            (0, '0 Bytes'),
+            (1, '1 Byte'),
+            (5, '5 Bytes'),
+            (5 * 1024, '5 KiB'),
+            (1999 * 1024 * 1024, '1999 MiB'),
+            (2047 * 1024 * 1024, '2047 MiB'),
+            (2048 * 1024 * 1024, '2 GiB'),
+            (2304 * 1024 * 1024, '2.25 GiB'),
         )
 
         for pair in test_pairs_no_si:
@@ -342,6 +344,29 @@ class TestPbCommon(PbBaseTestcase):
             if self.verbose > 1:
                 log.debug("Testing bytes2human(%r) => %r", src, expected)
             result = bytes2human(src)
+            if self.verbose > 1:
+                log.debug("Got result: %r", result)
+            self.assertIsInstance(result, str)
+            self.assertEqual(expected, result)
+
+        test_pairs_no_si = (
+            (0, '0 Bytes'),
+            (1, '1 Byte'),
+            (5, '5 Bytes'),
+            (5 * 1024, '5.00 KiB'),
+            (1999 * 1024 * 1024, '1999.00 MiB'),
+            (2047 * 1024 * 1024, '2047.00 MiB'),
+            (2048 * 1024 * 1024, '2.00 GiB'),
+            (2304 * 1024 * 1024, '2.25 GiB'),
+        )
+
+        for pair in test_pairs_no_si:
+
+            src = pair[0]
+            expected = pair[1]
+            if self.verbose > 1:
+                log.debug("Testing bytes2human(%r) precission 2 => %r", src, expected)
+            result = bytes2human(src, precision=2)
             if self.verbose > 1:
                 log.debug("Got result: %r", result)
             self.assertIsInstance(result, str)

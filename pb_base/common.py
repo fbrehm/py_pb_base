@@ -21,7 +21,7 @@ import locale
 
 # Own modules
 
-__version__ = '0.4.1'
+__version__ = '0.4.2'
 
 log = logging.getLogger(__name__)
 
@@ -225,7 +225,7 @@ def human2mbytes(value, si_conform=False, as_float=False, no_mibibytes=False):
 
 # =============================================================================
 def bytes2human(
-        value, si_conform=False, precision=None, format_str='%(value)s%(unit)s'):
+        value, si_conform=False, precision=None, format_str='%(value)s %(unit)s'):
     """
     Converts the given value in bytes into a human readable format.
     The limit for electing the next higher prefix is at 1500.
@@ -249,6 +249,9 @@ def bytes2human(
     """
 
     val = int(value)
+
+    if not val:
+        return format_str % {'value': '0', 'unit': 'Bytes', }
 
     base = 1024
     prefixes = {
@@ -282,9 +285,15 @@ def bytes2human(
         exponent += 1
 
     unit = ''
-    if exponent:
-        unit = prefixes[exponent]
+    if not exponent:
+        precision = None
+        unit = 'Bytes'
+        if val == 1:
+            unit = 'Byte'
+        value_str = locale.format_string('%d', val)
+        return format_str % {'value': value_str, 'unit': unit, }
 
+    unit = prefixes[exponent]
     value_str = ''
     if precision is None:
         value_str = locale.format_string('%f', float_val)
