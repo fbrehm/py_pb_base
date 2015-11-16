@@ -513,6 +513,13 @@ def encode_or_bust(obj, encoding='utf-8'):
 
 
 # =============================================================================
+def to_bytes(obj, encoding='utf-8'):
+    "Wrapper for encode_or_bust()"
+
+    return encode_or_bust(obj, encoding)
+
+
+# =============================================================================
 def to_str_or_bust(obj, encoding='utf-8'):
     """
     Transformes the given string-like object into the str-type according

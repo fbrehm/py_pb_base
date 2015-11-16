@@ -10,6 +10,7 @@
 """
 
 # Standard modules
+import sys
 import logging
 import re
 import select
@@ -20,8 +21,8 @@ from abc import abstractmethod
 # Third party modules
 
 # Own modules
-from pb_base.common import to_utf8_or_bust as to_utf8
 from pb_base.common import to_str_or_bust as to_str
+from pb_base.common import to_bytes
 
 from pb_base.object import PbBaseObject
 
@@ -31,7 +32,7 @@ from pb_base.errors import PbIoTimeoutError
 
 from pb_base.translate import pb_gettext, pb_ngettext
 
-__version__ = '0.4.4'
+__version__ = '0.4.5'
 
 log = logging.getLogger(__name__)
 
@@ -104,8 +105,8 @@ class GenericSocket(PbBaseObject):
     # -------------------------------------------------------------------------
     def __init__(
         self, timeout=5, request_queue_size=5, buffer_size=default_buffer_size,
-            appname=None, verbose=0, version=__version__, base_dir=None,
-            use_stderr=False):
+            encoding='utf-8', appname=None, verbose=0, version=__version__,
+            base_dir=None, use_stderr=False):
         """
         Initialisation of the GenericSocket object.
 
@@ -215,7 +216,11 @@ class GenericSocket(PbBaseObject):
         @type: object
         """
 
+        self._encoding = encoding
+
         self._input_buffer = ''
+        if sys.version_info[0] > 2:
+            self._input_buffer = bytes('', encoding)
         """
         @ivar: the input buffer for all reading actions
         @type: str
@@ -281,6 +286,12 @@ class GenericSocket(PbBaseObject):
         """The size of the buffer for receiving data from sockets."""
         return self._buffer_size
 
+    # -----------------------------------------------------------
+    @property
+    def encoding(self):
+        """The the encoding used."""
+        return self._encoding
+
     # -------------------------------------------------------------------------
     @abstractmethod
     def connect(self):
@@ -309,6 +320,7 @@ class GenericSocket(PbBaseObject):
 
         res = super(GenericSocket, self).as_dict(short=short)
         res['timeout'] = self.timeout
+        res['encoding'] = self.encoding
         res['fileno'] = self.fileno
         res['connected'] = self.connected
         res['bonded'] = self.bonded
@@ -379,7 +391,7 @@ class GenericSocket(PbBaseObject):
                 "Cannot send message to the receipient, because the socket connection is closed.")
             raise GenericSocketError(msg)
 
-        msg_utf8 = to_utf8(message)
+        msg_utf8 = to_bytes(message, self.encoding)
 
         if self.verbose > 3:
             log.debug(_("Sending %r to socket."), msg_utf8)
@@ -498,10 +510,12 @@ class GenericSocket(PbBaseObject):
         if self._input_buffer:
             if self.verbose > 3:
                 log.debug(_("Current input buffer: %r"), self._input_buffer)
-            match = re_first_line.search(self._input_buffer)
+            ibuffer = to_str(self._input_buffer, self.encoding)
+            match = re_first_line.search(ibuffer)
             if match:
                 line = match.group(1) + match.group(2)
-                self._input_buffer = re_first_line.sub('', self._input_buffer)
+                self._input_buffer = to_bytes(
+                    re_first_line.sub('', ibuffer), self.encoding)
                 if self.verbose > 3:
                     log.debug(_("Got a line: %r"), line)
                     log.debug(_(
