@@ -3,6 +3,7 @@ pb-base (0.6.8) all; urgency=medium
   * Add function to_bytes() to pb_base/common.py
   * Fix encoding problems in method send() in
     pb_base/socket_obj/__init__.py
+  * Completed german translations
 
  -- Frank Brehm <frank.brehm@profitbricks.com>  Tue, 29 Dec 2015 16:25:01 +0100
 
