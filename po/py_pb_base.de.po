@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: profitbricks-python-base 0.5.6\n"
+"Project-Id-Version: profitbricks-python-base 0.6.8\n"
 "Report-Msgid-Bugs-To: frank.brehm@profitbricks.com\n"
-"POT-Creation-Date: 2015-01-17 08:33+0100\n"
-"PO-Revision-Date: 2014-11-02 10:00+0100\n"
+"POT-Creation-Date: 2015-12-29 16:28+0100\n"
+"PO-Revision-Date: 2015-12-29 16:30+0100\n"
 "Last-Translator: Frank Brehm <frank.brehm@profitbricks.com>\n"
 "Language-Team: German\n"
 "Language: de\n"
@@ -18,38 +18,38 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: bin/crc64:45
+#: bin/crc64:46
 msgid "Crc64-Application object:"
 msgstr "Das Crc64-Anwendungsobjekt:"
 
-#: pb_base/app.py:85
+#: pb_base/app.py:86
 #, python-format
 msgid "Faked exit to OS. Exit value: %(rv)d, message: %(msg)r"
 msgstr ""
 "Vorgetäuschter Exit zm Betriebssystem. Exitwert: %(rv)d, Meldung: %(msg)r"
 
-#: pb_base/app.py:309 argparse.py:292
+#: pb_base/app.py:306 argparse.py:292
 msgid "usage: "
 msgstr "Verwendung: "
 
-#: pb_base/app.py:475
+#: pb_base/app.py:472
 msgid "executing pre_run() ..."
 msgstr "führe pre_run() aus ..."
 
-#: pb_base/app.py:512 pb_base/app.py:529
+#: pb_base/app.py:510 pb_base/app.py:529
 msgid "The application is not complete initialized."
 msgstr "Die Anwendung wurde noch nicht vollständig initialisiert."
 
-#: pb_base/app.py:422
+#: pb_base/app.py:421
 #, python-format
 msgid "Object '%s' seems not to be completely initialized."
 msgstr "Das Objekt '%s' scheint noch nicht vollständig initialisiert worden zu sein."
 
-#: pb_base/app.py:433 pb_base/fork_daemon.py:361
+#: pb_base/app.py:431 pb_base/fork_daemon.py:361
 msgid "Ending."
 msgstr "Beenden."
 
-#: pb_base/app.py:452
+#: pb_base/app.py:450
 msgid "executing post_run() ..."
 msgstr "führe post_run() aus ..."
 
@@ -431,6 +431,32 @@ msgstr "Führe %r aus"
 #: pb_base/handler/__init__.py:442
 msgid "Quiet execution"
 msgstr "Stillschweigende Ausführung"
+
+#: pb_base/handler/__init__.py:474
+#, python-format
+msgid "Starting asynchronous communication with '%(cmd)s', heartbeat interval is "
+      "%(interval)0.1f seconds."
+msgstr ""
+"Starte asynchrone Kommunikation mit '%(cmd)s', das Heartbeat-Intervall "
+"beträgt %(interval)0.1f Sekunden."
+
+#: pb_base/handler/__init__.py:488
+msgid "Checking for the end of the communication ..."
+msgstr "Überprüfe auf das Ende der Kommunikation ..."
+
+#: pb_base/handler/__init__.py:498
+msgid "Time to execute the heartbeat handler."
+msgstr "Zeit, den Heartbeat-Handler auszuführen."
+
+#: pb_base/handler/__init__.py:503
+#, python-format
+msgid "Sleeping %0.2f seconds ..."
+msgstr "Schlafe %0.2f Sekunden ..."
+
+#: pb_base/handler/__init__.py:523
+#, python-format
+msgid "Starting synchronous communication with '%s'."
+msgstr "Starte synchrone Kommunikation mit '%s'."
 
 #: pb_base/handler/__init__.py:485 pb_base/handler/__init__.py:501
 #, python-format

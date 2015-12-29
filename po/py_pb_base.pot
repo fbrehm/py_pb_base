@@ -5,9 +5,9 @@
 #
 #, fuzzy
 msgid ""
-msgstr "Project-Id-Version: profitbricks-python-base 0.6.6\n"
+msgstr "Project-Id-Version: profitbricks-python-base 0.6.8\n"
       "Report-Msgid-Bugs-To: frank.brehm@profitbricks.com\n"
-      "POT-Creation-Date: 2015-01-17 08:33+0100\n"
+      "POT-Creation-Date: 2015-12-29 16:28+0100\n"
       "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
       "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
       "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -505,191 +505,215 @@ msgstr ""
 msgid "And here is the child ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:72
+#: pb_base/handler/__init__.py:75
 msgid "Unknown OS command."
 msgstr ""
 
-#: pb_base/handler/__init__.py:79
+#: pb_base/handler/__init__.py:82
 msgid "Empty command list given."
 msgstr ""
 
-#: pb_base/handler/__init__.py:89
+#: pb_base/handler/__init__.py:92
 msgid "Could not found OS command"
 msgid_plural    "Could not found OS commands"
 msgstr[0]       ""
 msgstr[1]       ""
 
-#: pb_base/handler/__init__.py:206 pb_base/handler/df.py:311 pb_base/handler/fuser.py:117
+#: pb_base/handler/__init__.py:209 pb_base/handler/df.py:311 pb_base/handler/fuser.py:117
 msgid "Initialized."
 msgstr ""
 
-#: pb_base/handler/__init__.py:319
+#: pb_base/handler/__init__.py:322
 #, python-format
 msgid "Searching for command '%s' ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:324
+#: pb_base/handler/__init__.py:327
 #, python-format
 msgid "Command '%s' doesn't exists."
 msgstr ""
 
-#: pb_base/handler/__init__.py:327 pb_base/handler/__init__.py:343
+#: pb_base/handler/__init__.py:330 pb_base/handler/__init__.py:346
 #, python-format
 msgid "Command '%s' is not executable."
 msgstr ""
 
-#: pb_base/handler/__init__.py:335
+#: pb_base/handler/__init__.py:338
 #, python-format
 msgid "Searching command in '%s' ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:339
+#: pb_base/handler/__init__.py:342
 #, python-format
 msgid "Found '%s' ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:348 pb_base/handler/__init__.py:350
+#: pb_base/handler/__init__.py:351 pb_base/handler/__init__.py:353
 #, python-format
 msgid "Command '%s' not found."
 msgstr ""
 
-#: pb_base/handler/__init__.py:423
+#: pb_base/handler/__init__.py:429
 #, python-format
 msgid "Executing %r"
 msgstr ""
 
-#: pb_base/handler/__init__.py:426
+#: pb_base/handler/__init__.py:432
 msgid "Quiet execution"
 msgstr ""
 
-#: pb_base/handler/__init__.py:466 pb_base/handler/__init__.py:483
+#: pb_base/handler/__init__.py:474
+#, python-format
+msgid "Starting asynchronous communication with '%(cmd)s', heartbeat interval is "
+      "%(interval)0.1f seconds."
+msgstr ""
+
+#: pb_base/handler/__init__.py:488
+msgid "Checking for the end of the communication ..."
+msgstr ""
+
+#: pb_base/handler/__init__.py:498
+msgid "Time to execute the heartbeat handler."
+msgstr ""
+
+#: pb_base/handler/__init__.py:503
+#, python-format
+msgid "Sleeping %0.2f seconds ..."
+msgstr ""
+
+#: pb_base/handler/__init__.py:523
+#, python-format
+msgid "Starting synchronous communication with '%s'."
+msgstr ""
+
+#: pb_base/handler/__init__.py:533 pb_base/handler/__init__.py:550
 #, python-format
 msgid "Decoding %(what)s from %(enc)r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:472 pb_base/handler/__init__.py:499
+#: pb_base/handler/__init__.py:539 pb_base/handler/__init__.py:566
 #, python-format
 msgid "Output on %(where)s: %(what)r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:505
+#: pb_base/handler/__init__.py:572
 #, python-format
 msgid "Returncode: %s"
 msgstr ""
 
-#: pb_base/handler/__init__.py:550 pb_base/handler/__init__.py:624
+#: pb_base/handler/__init__.py:617 pb_base/handler/__init__.py:691
 msgid "File doesn't exists."
 msgstr ""
 
-#: pb_base/handler/__init__.py:553
+#: pb_base/handler/__init__.py:620
 msgid "Read permission denied."
 msgstr ""
 
-#: pb_base/handler/__init__.py:557
+#: pb_base/handler/__init__.py:624
 #, python-format
 msgid "Reading file content of %r ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:630 pb_base/handler/__init__.py:641
+#: pb_base/handler/__init__.py:697 pb_base/handler/__init__.py:708
 #, python-format
 msgid "Write permission to %r denied."
 msgstr ""
 
-#: pb_base/handler/__init__.py:634 pb_base/handler/__init__.py:645
+#: pb_base/handler/__init__.py:701 pb_base/handler/__init__.py:712
 msgid "Write permission denied."
 msgstr ""
 
-#: pb_base/handler/__init__.py:650
+#: pb_base/handler/__init__.py:717
 #, python-format
 msgid "Write %(what)r into %(to)r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:653
+#: pb_base/handler/__init__.py:720
 #, python-format
 msgid "Writing %r ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:658
+#: pb_base/handler/__init__.py:725
 #, python-format
 msgid "Simulating write into %r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:667
+#: pb_base/handler/__init__.py:734
 #, python-format
 msgid "Opening '%s' for write unbuffered ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:674
+#: pb_base/handler/__init__.py:741
 #, python-format
 msgid "Closing '%s' ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:708
+#: pb_base/handler/__init__.py:775
 #, python-format
 msgid "Dumping data from %(src)r to %(tgt)r ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:725
+#: pb_base/handler/__init__.py:792
 #, python-format
 msgid "Opening %r for read."
 msgstr ""
 
-#: pb_base/handler/__init__.py:729
+#: pb_base/handler/__init__.py:796
 #, python-format
 msgid "Error opening source %(src)r: %(msg)s"
 msgstr ""
 
-#: pb_base/handler/__init__.py:734 pb_base/handler/__init__.py:829
+#: pb_base/handler/__init__.py:801 pb_base/handler/__init__.py:896
 #, python-format
 msgid "Opening %r for write"
 msgstr ""
 
-#: pb_base/handler/__init__.py:739
+#: pb_base/handler/__init__.py:806
 #, python-format
 msgid "Error opening target %(tgt)r: %(msg)s"
 msgstr ""
 
-#: pb_base/handler/__init__.py:745 pb_base/handler/__init__.py:839
+#: pb_base/handler/__init__.py:812 pb_base/handler/__init__.py:906
 #, python-format
 msgid "Copying (buffer size %d Bytes)..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:752
+#: pb_base/handler/__init__.py:819
 #, python-format
 msgid "Seeking %(bytes)d Bytes (%(human)s) in input to %(src)r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:757 pb_base/handler/__init__.py:846
+#: pb_base/handler/__init__.py:824 pb_base/handler/__init__.py:913
 #, python-format
 msgid "Seeking %(bytes)d Bytes (%(human)s) in output to %(tgt)r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:770 pb_base/handler/__init__.py:862
+#: pb_base/handler/__init__.py:837 pb_base/handler/__init__.py:929
 #, python-format
 msgid "No space left on output device %r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:774
+#: pb_base/handler/__init__.py:841
 #, python-format
 msgid "Error copying source %(src)r to target %(tgt)r: %(msg)s"
 msgstr ""
 
-#: pb_base/handler/__init__.py:783 pb_base/handler/__init__.py:876
+#: pb_base/handler/__init__.py:850 pb_base/handler/__init__.py:943
 #, python-format
 msgid "%(bytes)d Bytes (%(human)s) written to output device %(tgt)r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:815
+#: pb_base/handler/__init__.py:882
 #, python-format
 msgid "Dumping binary zeroes to %r ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:834
+#: pb_base/handler/__init__.py:901
 #, python-format
 msgid "%(errname)s opening target %(tgt)r: %(msg)s"
 msgstr ""
 
-#: pb_base/handler/__init__.py:867
+#: pb_base/handler/__init__.py:934
 #, python-format
 msgid "Error dumping binary zeroes to target %(tgt)r: %(msg)s"
 msgstr ""
@@ -1150,86 +1174,86 @@ msgstr ""
 msgid "Creating pidfile %r ..."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:68
+#: pb_base/socket_obj/__init__.py:72
 msgid "Timeout error on reading from socket"
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:88
+#: pb_base/socket_obj/__init__.py:92
 msgid "Timeout error on writing to socket"
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:156
+#: pb_base/socket_obj/__init__.py:160
 #, python-format
 msgid "Invalid request_queue_size %r, must be between 0 and 5."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:167
+#: pb_base/socket_obj/__init__.py:171
 #, python-format
 msgid "Invalid buffer size %(bs)r, must be between %(min)d and %(max)d."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:325
+#: pb_base/socket_obj/__init__.py:340
 msgid "Closing socket ..."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:344
+#: pb_base/socket_obj/__init__.py:359
 msgid "Resetting socket connection ..."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:364
+#: pb_base/socket_obj/__init__.py:379
 msgid "Cannot send message to the receipient, because the socket connection is interrupted."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:376
+#: pb_base/socket_obj/__init__.py:391
 msgid "Cannot send message to the receipient, because the socket connection is closed."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:380
+#: pb_base/socket_obj/__init__.py:397
 #, python-format
 msgid "Sending %r to socket."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:395
+#: pb_base/socket_obj/__init__.py:412
 msgid "Cannot accept connection, socket is not bonded."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:403
+#: pb_base/socket_obj/__init__.py:420
 #, python-format
 msgid "Got a request from '%s'."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:405
+#: pb_base/socket_obj/__init__.py:422
 msgid "Got a request from somewhere from system."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:426
+#: pb_base/socket_obj/__init__.py:443
 msgid "Trying to get data ..."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:435
+#: pb_base/socket_obj/__init__.py:452
 #, python-format
 msgid "Got data: %r."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:440
+#: pb_base/socket_obj/__init__.py:457
 msgid "Got EOF, counterpart has interrupted ..."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:491
+#: pb_base/socket_obj/__init__.py:508
 msgid "Performing input buffer ..."
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:495
+#: pb_base/socket_obj/__init__.py:512
 #, python-format
 msgid "Current input buffer: %r"
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:501
+#: pb_base/socket_obj/__init__.py:520
 #, python-format
 msgid "Got a line: %r"
 msgstr ""
 
-#: pb_base/socket_obj/__init__.py:503
+#: pb_base/socket_obj/__init__.py:522
 #, python-format
 msgid "Current input buffer after read_line(): %r"
 msgstr ""
