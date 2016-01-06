@@ -139,7 +139,7 @@ class PbLock(PbBaseObject):
     def __init__(
         self, lockfile, ctime=None, mtime=None, fcontent=None, simulate=False,
             autoremove=False, appname=None, verbose=0, version=__version__,
-            base_dir=None, use_stderr=False):
+            base_dir=None, use_stderr=False, silent=False):
         """
         Initialisation of the PbLock object.
 
@@ -169,6 +169,8 @@ class PbLock(PbBaseObject):
                            should go to STDERR, even if logging has
                            initialized logging handlers.
         @type use_stderr: bool
+        @param silent: Remove silently the lockfile (except on verbose level >= 2)
+        @type silent: bool
 
         @return: None
         """
@@ -203,6 +205,7 @@ class PbLock(PbBaseObject):
             self._fcontent = str(fcontent)
         self._simulate = bool(simulate)
         self._autoremove = bool(autoremove)
+        self._silent = bool(silent)
 
         self._ctime = ctime
         self._mtime = mtime
@@ -261,6 +264,16 @@ class PbLock(PbBaseObject):
     def autoremove(self, value):
         self._autoremove = bool(value)
 
+    # -----------------------------------------------------------
+    @property
+    def silent(self):
+        """Remove silently the lockfile (except on verbose level >= 2)."""
+        return self._silent
+
+    @silent.setter
+    def silent(self, value):
+        self._silent = bool(value)
+
     # -------------------------------------------------------------------------
     def as_dict(self, short=False):
         """
@@ -280,6 +293,7 @@ class PbLock(PbBaseObject):
         res['fcontent'] = self.fcontent
         res['simulate'] = self.simulate
         res['autoremove'] = self.autoremove
+        res['silent'] = self.silent
 
         return res
 
@@ -298,6 +312,7 @@ class PbLock(PbBaseObject):
         fields.append("fcontent={!r}".format(self.fcontent))
         fields.append("simulate={!r}".format(self.simulate))
         fields.append("autoremove={!r}".format(self.autoremove))
+        fields.append("silent={!r}".format(self.silent))
 
         if fields:
             out += ', ' + ", ".join(fields)
@@ -318,7 +333,11 @@ class PbLock(PbBaseObject):
         if self.autoremove and self.exists:
 
             msg = _("Automatic removing of %r ...") % (self.lockfile)
-            log.info(msg)
+            if self.silent:
+                if self.verbose >= 2:
+                    log.debug(msg)
+            else:
+                log.info(msg)
 
             if not self.simulate:
                 os.remove(self.lockfile)
@@ -366,7 +385,7 @@ class PbLockHandler(PbBaseHandler):
             locking_use_pid=default_locking_use_pid,
             appname=None, verbose=0, version=__version__, base_dir=None,
             use_stderr=False, simulate=False, sudo=False, quiet=False,
-            *targs, **kwargs):
+            silent=False, *targs, **kwargs):
         """
         Initialisation of the locking handler object.
 
@@ -413,6 +432,8 @@ class PbLockHandler(PbBaseHandler):
         @type sudo: bool
         @param quiet: don't display ouput of action after calling
         @type quiet: bool
+        @param silent: Create and remove silently the lockfile (except on verbose level >= 2)
+        @type silent: bool
 
         @return: None
 
@@ -448,6 +469,8 @@ class PbLockHandler(PbBaseHandler):
 
         self._locking_use_pid = default_locking_use_pid
         self.locking_use_pid = locking_use_pid
+
+        self._silent = bool(silent)
 
     # -----------------------------------------------------------
     @property
@@ -577,6 +600,16 @@ class PbLockHandler(PbBaseHandler):
     def locking_use_pid(self, value):
         self._locking_use_pid = bool(value)
 
+    # -----------------------------------------------------------
+    @property
+    def silent(self):
+        """Create and remove silently the lockfile (except on verbose level >= 2)."""
+        return self._silent
+
+    @silent.setter
+    def silent(self, value):
+        self._silent = bool(value)
+
     # -------------------------------------------------------------------------
     def as_dict(self, short=False):
         """
@@ -596,6 +629,7 @@ class PbLockHandler(PbBaseHandler):
         res['lockretry_max_delay'] = self.lockretry_max_delay
         res['max_lockfile_age'] = self.max_lockfile_age
         res['locking_use_pid'] = self.locking_use_pid
+        res['silent'] = self.silent
 
         return res
 
@@ -613,6 +647,7 @@ class PbLockHandler(PbBaseHandler):
         fields.append("lockretry_max_delay=%r" % (self.lockretry_max_delay))
         fields.append("max_lockfile_age=%r" % (self.max_lockfile_age))
         fields.append("locking_use_pid=%r" % (self.locking_use_pid))
+        fields.append("silent=%r" % (self.silent))
 
         if fields:
             out += ', ' + ", ".join(fields)
@@ -828,7 +863,11 @@ class PbLockHandler(PbBaseHandler):
             return None
 
         # or an int for success
-        log.info(_("Got a lock for lockfile %r."), lockfile)
+        msg = _("Got a lock for lockfile %r.") % (lockfile)
+        if self.silent:
+            log.debug(msg)
+        else:
+            log.info(msg)
         out = "%d\n" % (pid)
         if sys.version_info[0] > 2:
             out = to_utf8_or_bust(out)
@@ -851,6 +890,7 @@ class PbLockHandler(PbBaseHandler):
             verbose=self.verbose,
             base_dir=self.base_dir,
             use_stderr=self.use_stderr,
+            silent=self.silent,
         )
 
         return lock_object
