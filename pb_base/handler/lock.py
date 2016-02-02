@@ -804,79 +804,87 @@ class PbLockHandler(PbBaseHandler):
         ctime = None
         mtime = None
 
-        # Big loop on trying to create the lockfile
-        while fd is None and time_diff < max_delay:
+        # Big try block to ensure closing open file descriptor
+        try:
 
-            time_diff = time.time() - start_time
-            counter += 1
+            # Big loop on trying to create the lockfile
+            while fd is None and time_diff < max_delay:
 
-            if self.verbose > 3:
-                log.debug(_("Current time difference: %0.3f seconds.") % (time_diff))
-            if time_diff >= max_delay:
-                break
+                time_diff = time.time() - start_time
+                counter += 1
 
-            # Try creating lockfile exclusive
-            log.debug(
-                _("Try %(try_nr)d on creating lockfile %(lfile)r ...") % {
-                    'try_nr': counter, 'lfile': lockfile})
-            ctime = datetime.datetime.utcnow()
-            fd = self._create_lockfile(lockfile)
-            if fd is not None:
-                # success, then exit
-                break
-
-            # Check for other process, using this lockfile
-            if not self.check_lockfile(lockfile, max_age, use_pid):
-                # No other process is using this lockfile
-                if os.path.exists(lockfile):
-                    log.info(_("Removing lockfile %r ...") % (lockfile))
-                try:
-                    if not self.simulate:
-                        os.remove(lockfile)
-                except Exception as e:
-                    msg = _(
-                        "Error on removing lockfile %(lfile)r: %(err)s") % {
-                        'lfile': lockfile, 'err': e}
-                    log.error(msg)
-                    time.sleep(delay)
-                    delay += delay_increase
-                    continue
-
-                fd = self._create_lockfile(lockfile)
-                if fd:
+                if self.verbose > 3:
+                    log.debug(_("Current time difference: %0.3f seconds.") % (time_diff))
+                if time_diff >= max_delay:
                     break
 
-            # No success, then retry later
-            if self.verbose > 2:
-                log.debug(_("Sleeping for %0.1f seconds."), float(delay))
-            time.sleep(delay)
-            delay += delay_increase
+                # Try creating lockfile exclusive
+                log.debug(
+                    _("Try %(try_nr)d on creating lockfile %(lfile)r ...") % {
+                        'try_nr': counter, 'lfile': lockfile})
+                ctime = datetime.datetime.utcnow()
+                fd = self._create_lockfile(lockfile)
+                if fd is not None:
+                    # success, then exit
+                    break
 
-        # fd is either None, for no success on locking
-        if fd is None:
-            time_diff = time.time() - start_time
-            e = CouldntOccupyLockfileError(lockfile, time_diff, counter)
-            if raise_on_fail:
-                raise e
+                # Check for other process, using this lockfile
+                if not self.check_lockfile(lockfile, max_age, use_pid):
+                    # No other process is using this lockfile
+                    if os.path.exists(lockfile):
+                        log.info(_("Removing lockfile %r ...") % (lockfile))
+                    try:
+                        if not self.simulate:
+                            os.remove(lockfile)
+                    except Exception as e:
+                        msg = _(
+                            "Error on removing lockfile %(lfile)r: %(err)s") % {
+                            'lfile': lockfile, 'err': e}
+                        log.error(msg)
+                        time.sleep(delay)
+                        delay += delay_increase
+                        continue
+
+                    fd = self._create_lockfile(lockfile)
+                    if fd:
+                        break
+
+                # No success, then retry later
+                if self.verbose > 2:
+                    log.debug(_("Sleeping for %0.1f seconds."), float(delay))
+                time.sleep(delay)
+                delay += delay_increase
+
+            # fd is either None, for no success on locking
+            if fd is None:
+                time_diff = time.time() - start_time
+                e = CouldntOccupyLockfileError(lockfile, time_diff, counter)
+                if raise_on_fail:
+                    raise e
+                else:
+                    log.error(msg)
+                return None
+
+            # or an int for success
+            msg = _("Got a lock for lockfile %r.") % (lockfile)
+            if self.silent:
+                log.debug(msg)
             else:
-                log.error(msg)
-            return None
+                log.info(msg)
+            out = "%d\n" % (pid)
+            if sys.version_info[0] > 2:
+                out = to_utf8_or_bust(out)
+            log.debug(_(
+                "Write %(what)r in lockfile %(lfile)r ...") % {
+                'what': out, 'lfile': lockfile})
 
-        # or an int for success
-        msg = _("Got a lock for lockfile %r.") % (lockfile)
-        if self.silent:
-            log.debug(msg)
-        else:
-            log.info(msg)
-        out = "%d\n" % (pid)
-        if sys.version_info[0] > 2:
-            out = to_utf8_or_bust(out)
-        log.debug(_(
-            "Write %(what)r in lockfile %(lfile)r ...") % {
-            'what': out, 'lfile': lockfile})
-        if not self.simulate:
-            os.write(fd, out)
-            os.close(fd)
+        finally:
+
+            if fd is not None and not self.simulate:
+                os.write(fd, out)
+                os.close(fd)
+
+        fd = None
 
         mtime = datetime.datetime.utcnow()
 
@@ -922,7 +930,8 @@ class PbLockHandler(PbBaseHandler):
                 log.debug(msg)
                 return None
             else:
-                raise LockHandlerError(msg)
+                error_tuple = sys.exc_info()
+                raise LockHandlerError, msg, error_tuple[2]
 
         return fd
 
