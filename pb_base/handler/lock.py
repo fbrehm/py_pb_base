@@ -22,6 +22,8 @@ import datetime
 from numbers import Number
 
 # Third party modules
+import six
+from six import reraise
 
 # Own modules
 from pb_base.common import to_utf8_or_bust
@@ -35,7 +37,7 @@ from pb_base.handler import PbBaseHandler
 
 from pb_base.translate import pb_gettext, pb_ngettext
 
-__version__ = '0.3.3'
+__version__ = '0.4.1'
 
 log = logging.getLogger(__name__)
 
@@ -872,7 +874,7 @@ class PbLockHandler(PbBaseHandler):
             else:
                 log.info(msg)
             out = "%d\n" % (pid)
-            if sys.version_info[0] > 2:
+            if six.PY3:
                 out = to_utf8_or_bust(out)
             log.debug(_(
                 "Write %(what)r in lockfile %(lfile)r ...") % {
@@ -931,7 +933,7 @@ class PbLockHandler(PbBaseHandler):
                 return None
             else:
                 error_tuple = sys.exc_info()
-                raise LockHandlerError, msg, error_tuple[2]
+                reraise(LockHandlerError, msg, error_tuple[2])
 
         return fd
 
