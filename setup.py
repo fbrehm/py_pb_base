@@ -162,10 +162,10 @@ setup(
         'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
         'Natural Language :: English',
         'Operating System :: POSIX',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     provides=[packet_name],
@@ -177,6 +177,7 @@ setup(
         'pb_logging',
         'argparse',
         'configobj',
+        'six',
     ]
 )
 
