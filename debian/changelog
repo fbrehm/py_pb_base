@@ -1,3 +1,11 @@
+pb-base (0.7.0) all; urgency=medium
+
+  * Improvements in error handling in pb_base/handler/lock.py
+  * Add dependency to Python six because of different reraising in
+    Python2 and Python3
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Wed, 03 Feb 2016 13:45:38 +0100
+
 pb-base (0.6.8) all; urgency=medium
 
   * Add function to_bytes() to pb_base/common.py

@@ -4,7 +4,7 @@
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
 @organization: Profitbricks GmbH
-@copyright: © 2010 - 2015 by Profitbricks GmbH
+@copyright: © 2010 - 2016 by Profitbricks GmbH
 @license: GPL3
 @summary: Module for a extended handler module, which has additional
           methods for locking

@@ -3,7 +3,7 @@
 """
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
-@copyright: © 2010 - 2015 by Frank Brehm, ProfitBricks GmbH, Berlin
+@copyright: © 2010 - 2016 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: module for some common used objects and routines
 """
 

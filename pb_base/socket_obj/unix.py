@@ -4,7 +4,7 @@
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
 @organization: Profitbricks GmbH
-@copyright: © 2010 - 2015 by Frank Brehm, ProfitBricks GmbH, Berlin
+@copyright: © 2010 - 2016 by Frank Brehm, ProfitBricks GmbH, Berlin
 @license: GPL3
 @summary: module for a UNIX socket object class
 """

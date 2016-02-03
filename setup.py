@@ -5,7 +5,7 @@
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
 @license: LGPL3+
-@copyright: © 2010 - 2015 ProfitBricks GmbH, Berlin
+@copyright: © 2010 - 2016 ProfitBricks GmbH, Berlin
 @summary: Modules for common used objects, error classes and methods.
 """
 
@@ -38,7 +38,7 @@ debian_pkg_name = 'profitbricks-python-base'
 
 __author__ = 'Frank Brehm'
 __contact__ = 'frank.brehm@profitbricks.com'
-__copyright__ = '(C) 2010 - 2015 by ProfitBricks GmbH, Berlin'
+__copyright__ = '(C) 2010 - 2016 by ProfitBricks GmbH, Berlin'
 __license__ = 'LGPL3+'
 
 

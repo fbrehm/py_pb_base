@@ -3,7 +3,7 @@
 """
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
-@copyright: © 2010 - 2015 by Frank Brehm, ProfitBricks GmbH, Berlin
+@copyright: © 2010 - 2016 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: The module for a pidfile object.
           It provides methods to define, check,  create
           and remove a pidfile.

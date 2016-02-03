@@ -3,7 +3,7 @@
 """
 @author: Frank Brehm
 @contact: frank.brehm@profitbricks.com
-@copyright: © 2010 - 2015 by Frank Brehm, ProfitBricks GmbH, Berlin
+@copyright: © 2010 - 2016 by Frank Brehm, ProfitBricks GmbH, Berlin
 @summary: The module for a base daemon application object.
           It provides all from the pidfile application object with
           additional methods and properties to daemonize itself.
