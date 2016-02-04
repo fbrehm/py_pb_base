@@ -10,10 +10,12 @@
 """
 
 # Standard modules
-import sys
 import os
 import logging
 import gettext
+
+# Third party modules
+import six
 
 # Own modules
 from pb_base.common import to_str_or_bust
@@ -36,7 +38,7 @@ from other modules.
 
 # =============================================================================
 def pb_gettext(message):
-    if sys.version_info[0] > 2:
+    if six.PY3:
         return to_str_or_bust(translator.gettext(message))
     else:
         return to_str_or_bust(translator.lgettext(message))
@@ -44,7 +46,7 @@ def pb_gettext(message):
 
 # =============================================================================
 def pb_ngettext(singular, plural, n):
-    if sys.version_info[0] > 2:
+    if six.PY3:
         return to_str_or_bust(translator.ngettext(singular, plural, n))
     else:
         return to_str_or_bust(translator.lngettext(singular, plural, n))
