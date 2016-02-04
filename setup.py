@@ -16,6 +16,9 @@ from distutils.core import setup
 import pprint
 import datetime
 
+# Third party modules
+import six
+
 # own modules:
 cur_dir = os.getcwd()
 if sys.argv[0] != '' and sys.argv[0] != '-c':
@@ -46,8 +49,8 @@ __license__ = 'LGPL3+'
 def read(fname):
     content = None
     print("Reading %r ..." % (fname))
-    if sys.version_info[0] > 2:
-        with open(fname, 'r', encoding = 'utf-8') as fh:
+    if six.PY3:
+        with open(fname, 'r', encoding='utf-8') as fh:
             content = fh.read()
     else:
         with open(fname, 'r') as fh:
@@ -120,7 +123,7 @@ def write_local_version():
 
     fh = None
     try:
-        if sys.version_info[0] > 2:
+        if six.PY3:
             fh = open(local_version_file, 'wt', encoding='utf-8')
         else:
             fh = open(local_version_file, 'wt')
