@@ -2,7 +2,7 @@
 
 pot_file="py_pb_base.pot"
 output_dir="po"
-pkg_version="0.7.0"
+pkg_version="0.7.1"
 src_dir="pb_base"
 
 cd $(dirname $0)
@@ -23,7 +23,7 @@ xgettext --output="${pot_file}" \
         --add-location \
         --width=99 \
         --sort-by-file \
-        --package-name="profitbricks-python-base" \
+        --package-name="python-pb-base" \
         --package-version="${pkg_version}" \
         --msgid-bugs-address=frank.brehm@profitbricks.com \
         $(find bin "${src_dir}" -type f \( -name '*.py' -o -name 'crc64' \) | sort)

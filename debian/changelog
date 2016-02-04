@@ -1,3 +1,10 @@
+pb-base (0.7.1) all; urgency=medium
+
+  * Add support for Python six to some more modules
+  * Fixing dependencies in debian/control
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Thu, 04 Feb 2016 16:40:43 +0100
+
 pb-base (0.7.0) all; urgency=medium
 
   * Improvements in error handling in pb_base/handler/lock.py
