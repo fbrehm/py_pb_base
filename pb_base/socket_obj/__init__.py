@@ -10,7 +10,6 @@
 """
 
 # Standard modules
-import sys
 import logging
 import re
 import select
@@ -19,6 +18,7 @@ from abc import ABCMeta
 from abc import abstractmethod
 
 # Third party modules
+import six
 
 # Own modules
 from pb_base.common import to_str_or_bust as to_str
@@ -32,7 +32,7 @@ from pb_base.errors import PbIoTimeoutError
 
 from pb_base.translate import pb_gettext, pb_ngettext
 
-__version__ = '0.4.5'
+__version__ = '0.4.6'
 
 log = logging.getLogger(__name__)
 
@@ -219,7 +219,7 @@ class GenericSocket(PbBaseObject):
         self._encoding = encoding
 
         self._input_buffer = ''
-        if sys.version_info[0] > 2:
+        if six.PY3:
             self._input_buffer = bytes('', encoding)
         """
         @ivar: the input buffer for all reading actions
