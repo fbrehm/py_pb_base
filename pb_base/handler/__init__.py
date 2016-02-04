@@ -535,7 +535,7 @@ class PbBaseHandler(PbBaseObject):
                 if self.verbose > 2:
                     log.debug(_(
                         "Decoding %(what)s from %(enc)r.") % {
-                            'what': 'STDERR', 'enc': cur_encoding})
+                        'what': 'STDERR', 'enc': cur_encoding})
                 stderrdata = stderrdata.decode(cur_encoding)
             if quiet and not self.verbose:
                 pass
@@ -823,12 +823,12 @@ class PbBaseHandler(PbBaseObject):
             if input_seek:
                 log.debug(_(
                     "Seeking %(bytes)d Bytes (%(human)s) in input to %(src)r.") % {
-                        'bytes': input_seek, 'human': bytes2human(input_seek), 'src': source})
+                    'bytes': input_seek, 'human': bytes2human(input_seek), 'src': source})
                 src_fh.seek(input_seek)
             if output_seek:
                 log.debug(_(
                     "Seeking %(bytes)d Bytes (%(human)s) in output to %(tgt)r.") % {
-                        'bytes': output_seek, 'human': bytes2human(output_seek), 'tgt': target})
+                    'bytes': output_seek, 'human': bytes2human(output_seek), 'tgt': target})
                 target_fh.seek(output_seek)
             cache = src_fh.read(blocksize)
             while cache != '':
@@ -855,7 +855,7 @@ class PbBaseHandler(PbBaseObject):
             written_human = bytes2human(bytes_written)
             log.debug(_(
                 "%(bytes)d Bytes (%(human)s) written to output device %(tgt)r.") % {
-                    'bytes': bytes_written, 'human': written_human, 'tgt': target})
+                'bytes': bytes_written, 'human': written_human, 'tgt': target})
 
         return True
 
@@ -907,7 +907,7 @@ class PbBaseHandler(PbBaseObject):
             error_tuple = sys.exc_info()
             msg = _(
                 "%(errname)s opening target %(tgt)r: %(msg)s") % {
-                    'errname': e.__class__.__name__, 'tgt': target, 'msg': e}
+                'errname': e.__class__.__name__, 'tgt': target, 'msg': e}
             reraise(PbBaseHandlerError, msg, error_tuple[2])
 
         if self.verbose > 1:
@@ -941,7 +941,7 @@ class PbBaseHandler(PbBaseObject):
             error_tuple = sys.exc_info()
             msg = _(
                 "Error dumping binary zeroes to target %(tgt)r: %(msg)s") % {
-                    'tgt': target, 'msg': e}
+                'tgt': target, 'msg': e}
             self.handle_error(msg, e.__class__.__name__, True)
             reraise(PbBaseHandlerError, msg, error_tuple[2])
         finally:

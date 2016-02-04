@@ -11,6 +11,7 @@
 
 # Standard modules
 import os
+import sys
 import logging
 import socket
 import errno

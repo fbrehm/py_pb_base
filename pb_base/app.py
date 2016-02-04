@@ -84,7 +84,7 @@ class FakeExitError(PbApplicationError):
 
         return _(
             "Faked exit to OS. Exit value: %(rv)d, message: %(msg)r") % {
-                'rv': self.exit_value, 'msg': self.msg}
+            'rv': self.exit_value, 'msg': self.msg}
 
 
 # =============================================================================

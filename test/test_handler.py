@@ -313,7 +313,6 @@ class TestPbBaseHandler(PbBaseTestcase):
         def heartbeat():
             log.debug("Do you hear my heartbeat?")
 
-
         (ret, stdoutdata, stderrdata) = hdlr.call(
             [call_script],
             hb_handler=heartbeat,

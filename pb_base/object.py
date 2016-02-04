@@ -199,10 +199,10 @@ class PbBaseObject(object):
     @base_dir.setter
     def base_dir(self, value):
         if not os.path.exists(value):
-            msg = _("Base directory %r does not exists.") % (base_dir)
+            msg = _("Base directory %r does not exists.") % (value)
             log.error(msg)
         elif not os.path.isdir(value):
-            msg = _("Base directory %r is not a directory.") % (base_dir)
+            msg = _("Base directory %r is not a directory.") % (value)
             log.error(msg)
         else:
             self._base_dir = value
