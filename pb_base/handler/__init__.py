@@ -21,6 +21,10 @@ import time
 import pipes
 from fcntl import fcntl, F_GETFL, F_SETFL
 
+# Third party modules
+import six
+from six import reraise
+
 # Own modules
 from pb_base.common import caller_search_path, bytes2human
 from pb_base.common import to_utf8_or_bust
@@ -32,7 +36,7 @@ from pb_base.object import PbBaseObject
 
 from pb_base.translate import pb_gettext, pb_ngettext
 
-__version__ = '0.5.1'
+__version__ = '0.5.2'
 
 log = logging.getLogger(__name__)
 
@@ -463,7 +467,7 @@ class PbBaseHandler(PbBaseObject):
         # Display Output of executable
         stdoutdata = ''
         stderrdata = ''
-        if sys.version_info[0] > 2:
+        if six.PY3:
             stdoutdata = bytearray()
             stderrdata = bytearray()
 
@@ -527,7 +531,7 @@ class PbBaseHandler(PbBaseObject):
             log.debug("Finished communication with '%s'" % (cmd_str))
 
         if stderrdata:
-            if sys.version_info[0] > 2:
+            if six.PY3:
                 if self.verbose > 2:
                     log.debug(_(
                         "Decoding %(what)s from %(enc)r.") % {
@@ -544,7 +548,7 @@ class PbBaseHandler(PbBaseObject):
                     self.handle_error(msg, self.appname)
 
         if stdoutdata:
-            if sys.version_info[0] > 2:
+            if six.PY3:
                 if self.verbose > 2:
                     log.debug(_(
                         "Decoding %(what)s from %(enc)r.") % {
@@ -795,17 +799,19 @@ class PbBaseHandler(PbBaseObject):
         except Exception as e:
             msg = _("Error opening source %(src)r: %(msg)s") % {
                 'src': source, 'msg': e}
-            raise PbBaseHandlerError(msg)
+            error_tuple = sys.exc_info()
+            reraise(PbBaseHandlerError, msg, error_tuple[2])
 
         if self.verbose > 1:
             log.debug(_("Opening %r for write"), target)
         try:
             target_fh = open(target, 'wb', -1)
         except Exception as e:
+            error_tuple = sys.exc_info()
             src_fh.close()
             msg = _("Error opening target %(tgt)r: %(msg)s") % {
                 'tgt': target, 'msg': e}
-            raise PbBaseHandlerError(msg)
+            reraise(PbBaseHandlerError, msg, error_tuple[2])
 
         if self.verbose > 1:
             log.debug(_(
@@ -830,7 +836,7 @@ class PbBaseHandler(PbBaseObject):
                 blocks_written += 1
                 cache = src_fh.read(blocksize)
         except IOError as e:
-            if e.errno == 28:
+            if e.errno == errno.ENOSPC:
                 if raise_on_full:
                     raise
                 else:
@@ -838,9 +844,10 @@ class PbBaseHandler(PbBaseObject):
             else:
                 raise
         except Exception as e:
+            error_tuple = sys.exc_info()
             msg = _("Error copying source %(src)r to target %(tgt)r: %(msg)s") % {
                 'src': source, 'tgt': target, 'msg': e}
-            raise PbBaseHandlerError(msg)
+            reraise(PbBaseHandlerError, msg, error_tuple[2])
         finally:
             src_fh.close()
             target_fh.close()
@@ -897,10 +904,11 @@ class PbBaseHandler(PbBaseObject):
         try:
             target_fh = open(target, 'wb', -1)
         except Exception as e:
+            error_tuple = sys.exc_info()
             msg = _(
                 "%(errname)s opening target %(tgt)r: %(msg)s") % {
                     'errname': e.__class__.__name__, 'tgt': target, 'msg': e}
-            raise PbBaseHandlerError(msg)
+            reraise(PbBaseHandlerError, msg, error_tuple[2])
 
         if self.verbose > 1:
             log.debug(_("Copying (buffer size %d Bytes)..."), blocksize)
@@ -930,11 +938,12 @@ class PbBaseHandler(PbBaseObject):
             else:
                 raise
         except Exception as e:
+            error_tuple = sys.exc_info()
             msg = _(
                 "Error dumping binary zeroes to target %(tgt)r: %(msg)s") % {
                     'tgt': target, 'msg': e}
             self.handle_error(msg, e.__class__.__name__, True)
-            raise PbBaseHandlerError(msg)
+            reraise(PbBaseHandlerError, msg, error_tuple[2])
         finally:
             target_fh.close()
             bytes_written = int(blocks_written) * int(blocksize)
