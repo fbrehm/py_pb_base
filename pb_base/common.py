@@ -18,10 +18,11 @@ import platform
 import locale
 
 # Third party modules
+import six
 
 # Own modules
 
-__version__ = '0.4.2'
+__version__ = '0.4.3'
 
 log = logging.getLogger(__name__)
 
@@ -362,10 +363,10 @@ def to_bool(value):
     v_str = ''
     if isinstance(value, str):
         v_str = value
-        if sys.version_info[0] <= 2:
+        if six.PY2:
             if isinstance(value, unicode):
                 v_str = value.encode('utf-8')
-    elif sys.version_info[0] > 2 and isinstance(value, bytes):
+    elif six.PY3 and isinstance(value, bytes):
         v_str = value.decode('utf-8')
     else:
         v_str = str(value)
@@ -451,7 +452,7 @@ def to_unicode_or_bust(obj, encoding='utf-8'):
     """
 
     do_decode = False
-    if sys.version_info[0] <= 2:
+    if six.PY2:
         if isinstance(obj, str):
             do_decode = True
     else:
@@ -499,7 +500,7 @@ def encode_or_bust(obj, encoding='utf-8'):
     """
 
     do_encode = False
-    if sys.version_info[0] <= 2:
+    if six.PY2:
         if isinstance(obj, unicode):
             do_encode = True
     else:
@@ -526,7 +527,7 @@ def to_str_or_bust(obj, encoding='utf-8'):
     to the current Python version.
     """
 
-    if sys.version_info[0] <= 2:
+    if six.PY2:
         return encode_or_bust(obj, encoding)
     else:
         return to_unicode_or_bust(obj, encoding)
