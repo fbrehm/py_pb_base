@@ -376,7 +376,7 @@ class PidFile(PbBaseObject):
                 'pid': pid, 'pidfile': self.filename})
 
         out = "%d\n" % (pid)
-        if sys.version_info[0] > 2:
+        if six.PY3:
             out = to_utf8_or_bust(out)
         try:
             os.write(fd, out)
