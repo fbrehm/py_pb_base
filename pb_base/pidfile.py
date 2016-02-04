@@ -17,6 +17,10 @@ import re
 import signal
 import errno
 
+# Third party modules
+import six
+from six import reraise
+
 # Own modules
 
 from pb_base.errors import PbReadTimeoutError
@@ -28,7 +32,7 @@ from pb_base.common import to_utf8_or_bust
 
 from pb_base.translate import pb_gettext, pb_ngettext
 
-__version__ = '0.5.3'
+__version__ = '0.5.4'
 
 log = logging.getLogger(__name__)
 
@@ -360,10 +364,11 @@ class PidFile(PbBaseObject):
             fd = os.open(
                 self.filename, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
         except OSError as e:
+            error_tuple = sys.exc_info()
             msg = _(
                 "Error on creating pidfile '%(pidfile)s': %(err)s") % {
                 'pidfile': self.filename, 'err': str(e)}
-            raise PidFileError(msg)
+            reraise(PidFileError, msg, error_tuple[2])
 
         if self.verbose > 2:
             log.debug(_(
@@ -417,10 +422,11 @@ class PidFile(PbBaseObject):
         try:
             fh = open(self.filename, 'w')
         except OSError as e:
+            error_tuple = sys.exc_info()
             msg = _(
                 "Error on recreating pidfile '%(pidfile)s': %(err)s") % {
                 'pidfile': self.filename, 'err': str(e)}
-            raise PidFileError(msg)
+            reraise(PidFileError, msg, error_tuple[2])
 
         if self.verbose > 2:
             log.debug(_(
@@ -529,11 +535,14 @@ class PidFile(PbBaseObject):
                 log.info(_("Process with PID %d anonymous died."), pid)
                 return True
             elif err.errno == errno.EPERM:
+                error_tuple = sys.exc_info()
                 msg = _("No permission to signal the process %d ...") % (pid)
-                raise PidFileError(msg)
+                reraise(PidFileError, msg, error_tuple[2])
             else:
-                msg = _("Unknown error: %r.") % (str(err))
-                raise PidFileError(msg)
+                error_tuple = sys.exc_info()
+                msg = _("Got a %(ecls)s: %(msg)s.") % {
+                    'ecls': err.__class__.__name__, 'msg': err}
+                reraise(PidFileError, msg, error_tuple[2])
         else:
             raise PidFileInUseError(self.filename, pid)
 
