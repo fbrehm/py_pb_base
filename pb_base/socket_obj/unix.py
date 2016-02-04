@@ -19,6 +19,7 @@ import grp
 import re
 
 # Third party modules
+from six import reraise
 
 # Own modules
 import pb_base.common
@@ -28,7 +29,7 @@ from pb_base.socket_obj import GenericSocket
 
 from pb_base.translate import pb_gettext, pb_ngettext
 
-__version__ = '0.3.3'
+__version__ = '0.3.4'
 
 log = logging.getLogger(__name__)
 
@@ -259,13 +260,14 @@ class UnixSocket(GenericSocket):
         try:
             self.sock.connect(self.filename)
         except socket.error as e:
+            error_tuple = sys.exc_info()
             if e.errno == errno.ENOENT:
                 raise NoSocketFileError(self.filename)
             if e.errno == errno.EACCES:
                 raise NoPermissionsToSocketError(self.filename)
             msg = _("Error connecting to Unix Socket '%(sock)s': %(err)s") % {
                 'sock': self.filename, 'err': str(e)}
-            raise UnixSocketError(msg)
+            reraise(UnixSocketError, msg, error_tuple[2])
 
         self._connected = True
         self.fileno = self.sock.fileno()
@@ -319,10 +321,11 @@ class UnixSocket(GenericSocket):
                 try:
                     uid = pwd.getpwnam(self.owner).pw_uid
                 except KeyError:
+                    error_tuple = sys.exc_info()
                     msg = _(
                         "Invalid owner name '%s' for socket creation given.") % (
                         self.owner)
-                    raise UnixSocketError(msg)
+                    reraise(UnixSocketError, msg, error_tuple[2])
 
         gid = -1
         if self.group is not None:
@@ -332,10 +335,11 @@ class UnixSocket(GenericSocket):
                 try:
                     gid = grp.getgrnam(self.group).gr_gid
                 except KeyError:
+                    error_tuple = sys.exc_info()
                     msg = _(
                         "Invalid group name '%s' for socket creation given.") % (
                         self.group)
-                    raise UnixSocketError(msg)
+                    reraise(UnixSocketError, msg, error_tuple[2])
 
         uid_changed = False
         if uid >= 0:
