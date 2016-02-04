@@ -5,9 +5,9 @@
 #
 #, fuzzy
 msgid ""
-msgstr "Project-Id-Version: profitbricks-python-base 0.6.8\n"
+msgstr "Project-Id-Version: python-pb-base 0.7.1\n"
       "Report-Msgid-Bugs-To: frank.brehm@profitbricks.com\n"
-      "POT-Creation-Date: 2015-12-29 16:28+0100\n"
+      "POT-Creation-Date: 2016-02-04 16:44+0100\n"
       "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
       "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
       "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -505,215 +505,215 @@ msgstr ""
 msgid "And here is the child ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:75
+#: pb_base/handler/__init__.py:79
 msgid "Unknown OS command."
 msgstr ""
 
-#: pb_base/handler/__init__.py:82
+#: pb_base/handler/__init__.py:86
 msgid "Empty command list given."
 msgstr ""
 
-#: pb_base/handler/__init__.py:92
+#: pb_base/handler/__init__.py:96
 msgid "Could not found OS command"
 msgid_plural    "Could not found OS commands"
 msgstr[0]       ""
 msgstr[1]       ""
 
-#: pb_base/handler/__init__.py:209 pb_base/handler/df.py:311 pb_base/handler/fuser.py:117
+#: pb_base/handler/__init__.py:213 pb_base/handler/df.py:311 pb_base/handler/fuser.py:117
 msgid "Initialized."
 msgstr ""
 
-#: pb_base/handler/__init__.py:322
+#: pb_base/handler/__init__.py:326
 #, python-format
 msgid "Searching for command '%s' ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:327
+#: pb_base/handler/__init__.py:331
 #, python-format
 msgid "Command '%s' doesn't exists."
 msgstr ""
 
-#: pb_base/handler/__init__.py:330 pb_base/handler/__init__.py:346
+#: pb_base/handler/__init__.py:334 pb_base/handler/__init__.py:350
 #, python-format
 msgid "Command '%s' is not executable."
 msgstr ""
 
-#: pb_base/handler/__init__.py:338
+#: pb_base/handler/__init__.py:342
 #, python-format
 msgid "Searching command in '%s' ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:342
+#: pb_base/handler/__init__.py:346
 #, python-format
 msgid "Found '%s' ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:351 pb_base/handler/__init__.py:353
+#: pb_base/handler/__init__.py:355 pb_base/handler/__init__.py:357
 #, python-format
 msgid "Command '%s' not found."
 msgstr ""
 
-#: pb_base/handler/__init__.py:429
+#: pb_base/handler/__init__.py:433
 #, python-format
 msgid "Executing %r"
 msgstr ""
 
-#: pb_base/handler/__init__.py:432
+#: pb_base/handler/__init__.py:436
 msgid "Quiet execution"
 msgstr ""
 
-#: pb_base/handler/__init__.py:474
+#: pb_base/handler/__init__.py:478
 #, python-format
 msgid "Starting asynchronous communication with '%(cmd)s', heartbeat interval is "
       "%(interval)0.1f seconds."
 msgstr ""
 
-#: pb_base/handler/__init__.py:488
+#: pb_base/handler/__init__.py:492
 msgid "Checking for the end of the communication ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:498
+#: pb_base/handler/__init__.py:502
 msgid "Time to execute the heartbeat handler."
 msgstr ""
 
-#: pb_base/handler/__init__.py:503
+#: pb_base/handler/__init__.py:507
 #, python-format
 msgid "Sleeping %0.2f seconds ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:523
+#: pb_base/handler/__init__.py:527
 #, python-format
 msgid "Starting synchronous communication with '%s'."
 msgstr ""
 
-#: pb_base/handler/__init__.py:533 pb_base/handler/__init__.py:550
+#: pb_base/handler/__init__.py:537 pb_base/handler/__init__.py:554
 #, python-format
 msgid "Decoding %(what)s from %(enc)r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:539 pb_base/handler/__init__.py:566
+#: pb_base/handler/__init__.py:543 pb_base/handler/__init__.py:570
 #, python-format
 msgid "Output on %(where)s: %(what)r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:572
+#: pb_base/handler/__init__.py:576
 #, python-format
 msgid "Returncode: %s"
 msgstr ""
 
-#: pb_base/handler/__init__.py:617 pb_base/handler/__init__.py:691
+#: pb_base/handler/__init__.py:621 pb_base/handler/__init__.py:695
 msgid "File doesn't exists."
 msgstr ""
 
-#: pb_base/handler/__init__.py:620
+#: pb_base/handler/__init__.py:624
 msgid "Read permission denied."
 msgstr ""
 
-#: pb_base/handler/__init__.py:624
+#: pb_base/handler/__init__.py:628
 #, python-format
 msgid "Reading file content of %r ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:697 pb_base/handler/__init__.py:708
+#: pb_base/handler/__init__.py:701 pb_base/handler/__init__.py:712
 #, python-format
 msgid "Write permission to %r denied."
 msgstr ""
 
-#: pb_base/handler/__init__.py:701 pb_base/handler/__init__.py:712
+#: pb_base/handler/__init__.py:705 pb_base/handler/__init__.py:716
 msgid "Write permission denied."
 msgstr ""
 
-#: pb_base/handler/__init__.py:717
+#: pb_base/handler/__init__.py:721
 #, python-format
 msgid "Write %(what)r into %(to)r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:720
+#: pb_base/handler/__init__.py:724
 #, python-format
 msgid "Writing %r ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:725
+#: pb_base/handler/__init__.py:729
 #, python-format
 msgid "Simulating write into %r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:734
+#: pb_base/handler/__init__.py:738
 #, python-format
 msgid "Opening '%s' for write unbuffered ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:741
+#: pb_base/handler/__init__.py:745
 #, python-format
 msgid "Closing '%s' ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:775
+#: pb_base/handler/__init__.py:779
 #, python-format
 msgid "Dumping data from %(src)r to %(tgt)r ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:792
+#: pb_base/handler/__init__.py:796
 #, python-format
 msgid "Opening %r for read."
 msgstr ""
 
-#: pb_base/handler/__init__.py:796
+#: pb_base/handler/__init__.py:800
 #, python-format
 msgid "Error opening source %(src)r: %(msg)s"
 msgstr ""
 
-#: pb_base/handler/__init__.py:801 pb_base/handler/__init__.py:896
+#: pb_base/handler/__init__.py:806 pb_base/handler/__init__.py:903
 #, python-format
 msgid "Opening %r for write"
 msgstr ""
 
-#: pb_base/handler/__init__.py:806
+#: pb_base/handler/__init__.py:812
 #, python-format
 msgid "Error opening target %(tgt)r: %(msg)s"
 msgstr ""
 
-#: pb_base/handler/__init__.py:812 pb_base/handler/__init__.py:906
+#: pb_base/handler/__init__.py:818 pb_base/handler/__init__.py:914
 #, python-format
 msgid "Copying (buffer size %d Bytes)..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:819
+#: pb_base/handler/__init__.py:825
 #, python-format
 msgid "Seeking %(bytes)d Bytes (%(human)s) in input to %(src)r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:824 pb_base/handler/__init__.py:913
+#: pb_base/handler/__init__.py:830 pb_base/handler/__init__.py:921
 #, python-format
 msgid "Seeking %(bytes)d Bytes (%(human)s) in output to %(tgt)r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:837 pb_base/handler/__init__.py:929
+#: pb_base/handler/__init__.py:843 pb_base/handler/__init__.py:937
 #, python-format
 msgid "No space left on output device %r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:841
+#: pb_base/handler/__init__.py:848
 #, python-format
 msgid "Error copying source %(src)r to target %(tgt)r: %(msg)s"
 msgstr ""
 
-#: pb_base/handler/__init__.py:850 pb_base/handler/__init__.py:943
+#: pb_base/handler/__init__.py:857 pb_base/handler/__init__.py:952
 #, python-format
 msgid "%(bytes)d Bytes (%(human)s) written to output device %(tgt)r."
 msgstr ""
 
-#: pb_base/handler/__init__.py:882
+#: pb_base/handler/__init__.py:889
 #, python-format
 msgid "Dumping binary zeroes to %r ..."
 msgstr ""
 
-#: pb_base/handler/__init__.py:901
+#: pb_base/handler/__init__.py:909
 #, python-format
 msgid "%(errname)s opening target %(tgt)r: %(msg)s"
 msgstr ""
 
-#: pb_base/handler/__init__.py:934
+#: pb_base/handler/__init__.py:943
 #, python-format
 msgid "Error dumping binary zeroes to target %(tgt)r: %(msg)s"
 msgstr ""
@@ -789,199 +789,199 @@ msgstr ""
 msgid "%r is not an integer value usable as PID."
 msgstr ""
 
-#: pb_base/handler/lock.py:97
+#: pb_base/handler/lock.py:99
 #, python-format
 msgid "Locking directory %r doesn't exists or is not a directory."
 msgstr ""
 
-#: pb_base/handler/lock.py:124 pb_base/handler/lock.py:756
+#: pb_base/handler/lock.py:126 pb_base/handler/lock.py:793
 #, python-format
 msgid "Locking directory %r isn't writeable."
 msgstr ""
 
-#: pb_base/handler/lock.py:186
+#: pb_base/handler/lock.py:190
 msgid "No lockfile given on init of a PbLock object."
 msgstr ""
 
-#: pb_base/handler/lock.py:190 pb_base/handler/lock.py:978
+#: pb_base/handler/lock.py:194 pb_base/handler/lock.py:1029
 #, python-format
 msgid "Lockfile %r doesn't exists."
 msgstr ""
 
-#: pb_base/handler/lock.py:195
+#: pb_base/handler/lock.py:199
 #, python-format
 msgid "Lockfile %r is not a regular file."
 msgstr ""
 
-#: pb_base/handler/lock.py:320
+#: pb_base/handler/lock.py:337
 #, python-format
 msgid "Automatic removing of %r ..."
 msgstr ""
 
-#: pb_base/handler/lock.py:342
+#: pb_base/handler/lock.py:363
 #, python-format
 msgid "Refreshing atime and mtime of %r to the current timestamp."
 msgstr ""
 
-#: pb_base/handler/lock.py:483 pb_base/handler/lock.py:507 pb_base/handler/lock.py:531
-#: pb_base/handler/lock.py:556 pb_base/handler/lock.py:676 pb_base/handler/lock.py:690
-#: pb_base/handler/lock.py:704 pb_base/handler/lock.py:724 pb_base/handler/lock.py:965
+#: pb_base/handler/lock.py:508 pb_base/handler/lock.py:532 pb_base/handler/lock.py:556
+#: pb_base/handler/lock.py:581 pb_base/handler/lock.py:713 pb_base/handler/lock.py:727
+#: pb_base/handler/lock.py:741 pb_base/handler/lock.py:761 pb_base/handler/lock.py:1016
 #, python-format
 msgid "Value %(val)r for %(what)s is not a Number."
 msgstr ""
 
-#: pb_base/handler/lock.py:489 pb_base/handler/lock.py:537 pb_base/handler/lock.py:562
-#: pb_base/handler/lock.py:681 pb_base/handler/lock.py:709 pb_base/handler/lock.py:729
-#: pb_base/handler/lock.py:970
+#: pb_base/handler/lock.py:514 pb_base/handler/lock.py:562 pb_base/handler/lock.py:587
+#: pb_base/handler/lock.py:718 pb_base/handler/lock.py:746 pb_base/handler/lock.py:766
+#: pb_base/handler/lock.py:1021
 #, python-format
 msgid "The value for %(what)s must be greater than zero (is %(val)r)."
 msgstr ""
 
-#: pb_base/handler/lock.py:513 pb_base/handler/lock.py:695
+#: pb_base/handler/lock.py:538 pb_base/handler/lock.py:732
 #, python-format
 msgid "The value for %(w)s must be greater than or equal to zero (is %(v)r)."
 msgstr ""
 
-#: pb_base/handler/lock.py:739
+#: pb_base/handler/lock.py:776
 #, python-format
 msgid "Invalid PID %d given on calling create_lockfile()."
 msgstr ""
 
-#: pb_base/handler/lock.py:748
+#: pb_base/handler/lock.py:785
 #, python-format
 msgid "Trying to lock lockfile %r ..."
 msgstr ""
 
-#: pb_base/handler/lock.py:750
+#: pb_base/handler/lock.py:787
 #, python-format
 msgid "Using lock directory %r ..."
 msgstr ""
 
-#: pb_base/handler/lock.py:779
+#: pb_base/handler/lock.py:819
 #, python-format
 msgid "Current time difference: %0.3f seconds."
 msgstr ""
 
 #. Try creating lockfile exclusive
-#: pb_base/handler/lock.py:785
+#: pb_base/handler/lock.py:825
 #, python-format
 msgid "Try %(try_nr)d on creating lockfile %(lfile)r ..."
 msgstr ""
 
-#: pb_base/handler/lock.py:797 pb_base/handler/lock.py:911
+#: pb_base/handler/lock.py:837 pb_base/handler/lock.py:962
 #, python-format
 msgid "Removing lockfile %r ..."
 msgstr ""
 
-#: pb_base/handler/lock.py:803 pb_base/handler/lock.py:919
+#: pb_base/handler/lock.py:843 pb_base/handler/lock.py:970
 #, python-format
 msgid "Error on removing lockfile %(lfile)r: %(err)s"
 msgstr ""
 
-#: pb_base/handler/lock.py:816
+#: pb_base/handler/lock.py:856
 #, python-format
 msgid "Sleeping for %0.1f seconds."
 msgstr ""
 
 #. or an int for success
-#: pb_base/handler/lock.py:831
+#: pb_base/handler/lock.py:871
 #, python-format
 msgid "Got a lock for lockfile %r."
 msgstr ""
 
-#: pb_base/handler/lock.py:836
+#: pb_base/handler/lock.py:880
 #, python-format
 msgid "Write %(what)r in lockfile %(lfile)r ..."
 msgstr ""
 
-#: pb_base/handler/lock.py:870
+#: pb_base/handler/lock.py:920
 #, python-format
 msgid "Trying to open %r exclusive ..."
 msgstr ""
 
-#: pb_base/handler/lock.py:872
+#: pb_base/handler/lock.py:922
 msgid "Simulation mode, no real creation of a lockfile."
 msgstr ""
 
-#: pb_base/handler/lock.py:879
+#: pb_base/handler/lock.py:929
 #, python-format
 msgid "Error on creating lockfile %(lfile)r: %(err)s"
 msgstr ""
 
-#: pb_base/handler/lock.py:908
+#: pb_base/handler/lock.py:959
 #, python-format
 msgid "Lockfile %r to remove doesn't exists."
 msgstr ""
 
-#: pb_base/handler/lock.py:913
+#: pb_base/handler/lock.py:964
 msgid "Simulation mode - lockfile won't removed."
 msgstr ""
 
-#: pb_base/handler/lock.py:923
+#: pb_base/handler/lock.py:974
 msgid "Stacktrace"
 msgstr ""
 
-#: pb_base/handler/lock.py:974
+#: pb_base/handler/lock.py:1025
 #, python-format
 msgid "Checking lockfile %r ..."
 msgstr ""
 
-#: pb_base/handler/lock.py:982
+#: pb_base/handler/lock.py:1033
 #, python-format
 msgid "No read access for lockfile %r."
 msgstr ""
 
-#: pb_base/handler/lock.py:986
+#: pb_base/handler/lock.py:1037
 #, python-format
 msgid "No write access for lockfile %r."
 msgstr ""
 
-#: pb_base/handler/lock.py:992
+#: pb_base/handler/lock.py:1043
 #, python-format
 msgid "Unusable lockfile %r."
 msgstr ""
 
-#: pb_base/handler/lock.py:995
+#: pb_base/handler/lock.py:1046
 #, python-format
 msgid "Process with PID %d is unfortunately dead."
 msgstr ""
 
-#: pb_base/handler/lock.py:998
+#: pb_base/handler/lock.py:1049
 #, python-format
 msgid "Process with PID %d is even running."
 msgstr ""
 
-#: pb_base/handler/lock.py:1012
+#: pb_base/handler/lock.py:1063
 #, python-format
 msgid "Lockfile %(lfile)r is older than %(max)d seconds (%(age)d seconds)."
 msgstr ""
 
-#: pb_base/handler/lock.py:1015
+#: pb_base/handler/lock.py:1066
 #, python-format
 msgid "Lockfile %(lfile)r is %(age)d seconds old, but not old enough (%(max)d seconds)."
 msgstr ""
 
-#: pb_base/handler/lock.py:1038
+#: pb_base/handler/lock.py:1089
 #, python-format
 msgid "Trying to open pidfile %r ..."
 msgstr ""
 
-#: pb_base/handler/lock.py:1042
+#: pb_base/handler/lock.py:1093
 #, python-format
 msgid "Could not open pidfile %r for reading:"
 msgstr ""
 
-#: pb_base/handler/lock.py:1055
+#: pb_base/handler/lock.py:1106
 #, python-format
 msgid "First line of pidfile %r was empty."
 msgstr ""
 
-#: pb_base/handler/lock.py:1067
+#: pb_base/handler/lock.py:1118
 #, python-format
 msgid "Could not interprete %(cont)r as a PID from %(file)r:"
 msgstr ""
 
-#: pb_base/handler/lock.py:1078
+#: pb_base/handler/lock.py:1129
 #, python-format
 msgid "Invalid PID %(pid)d in %(file)r found."
 msgstr ""
@@ -1005,140 +1005,140 @@ msgstr ""
 msgid "undefined error."
 msgstr ""
 
-#: pb_base/pidfile.py:72
+#: pb_base/pidfile.py:76
 #, python-format
 msgid "Invalid pidfile '%(pidfile)s' given: %(reason)s"
 msgstr ""
 
-#: pb_base/pidfile.py:75
+#: pb_base/pidfile.py:79
 #, python-format
 msgid "Invalid pidfile %r given."
 msgstr ""
 
-#: pb_base/pidfile.py:106
+#: pb_base/pidfile.py:110
 #, python-format
 msgid "The pidfile '%(pf)s is currently in use by the application with the PID %(pid)d."
 msgstr ""
 
-#: pb_base/pidfile.py:173
+#: pb_base/pidfile.py:177
 msgid "No filename given on initializing PidFile object."
 msgstr ""
 
-#: pb_base/pidfile.py:291
+#: pb_base/pidfile.py:295
 #, python-format
 msgid "Pidfile '%s' doesn't exists, not removing."
 msgstr ""
 
-#: pb_base/pidfile.py:297
+#: pb_base/pidfile.py:301
 #, python-format
 msgid "Auto removing disabled, don't deleting '%s'."
 msgstr ""
 
-#: pb_base/pidfile.py:302
+#: pb_base/pidfile.py:306
 #, python-format
 msgid "Removing pidfile '%s' ..."
 msgstr ""
 
-#: pb_base/pidfile.py:305 pb_base/pidfile.py:342
+#: pb_base/pidfile.py:309 pb_base/pidfile.py:346
 msgid "Just kidding .."
 msgstr ""
 
-#: pb_base/pidfile.py:311
+#: pb_base/pidfile.py:315
 #, python-format
 msgid "Could not delete pidfile %(file)r: %(err)s"
 msgstr ""
 
-#: pb_base/pidfile.py:332 pb_base/pidfile.py:402
+#: pb_base/pidfile.py:336 pb_base/pidfile.py:407
 #, python-format
 msgid "Invalid PID %(pid)d for creating pidfile %(pidfile)r given."
 msgstr ""
 
-#: pb_base/pidfile.py:340
+#: pb_base/pidfile.py:344
 #, python-format
 msgid "Deleting pidfile '%s' ..."
 msgstr ""
 
-#: pb_base/pidfile.py:350
+#: pb_base/pidfile.py:354
 #, python-format
 msgid "Trying opening '%s' exclusive ..."
 msgstr ""
 
-#: pb_base/pidfile.py:354 pb_base/pidfile.py:413
+#: pb_base/pidfile.py:358 pb_base/pidfile.py:418
 #, python-format
 msgid "Simulation mode - don't real writing in '%s'."
 msgstr ""
 
-#: pb_base/pidfile.py:364
+#: pb_base/pidfile.py:369
 #, python-format
 msgid "Error on creating pidfile '%(pidfile)s': %(err)s"
 msgstr ""
 
-#: pb_base/pidfile.py:370 pb_base/pidfile.py:427
+#: pb_base/pidfile.py:375 pb_base/pidfile.py:433
 #, python-format
 msgid "Writing %(pid)d into '%(pidfile)s' ..."
 msgstr ""
 
-#: pb_base/pidfile.py:395
+#: pb_base/pidfile.py:400
 msgid "Calling recreate() on a not self created pidfile."
 msgstr ""
 
-#: pb_base/pidfile.py:409
+#: pb_base/pidfile.py:414
 #, python-format
 msgid "Trying opening '%s' for recreate ..."
 msgstr ""
 
-#: pb_base/pidfile.py:421
+#: pb_base/pidfile.py:427
 #, python-format
 msgid "Error on recreating pidfile '%(pidfile)s': %(err)s"
 msgstr ""
 
-#: pb_base/pidfile.py:458
+#: pb_base/pidfile.py:464
 #, python-format
 msgid "Pidfile parent directory '%s' doesn't exists."
 msgstr ""
 
-#: pb_base/pidfile.py:463
+#: pb_base/pidfile.py:469
 #, python-format
 msgid "Pidfile parent directory '%s' is not a directory."
 msgstr ""
 
-#: pb_base/pidfile.py:468
+#: pb_base/pidfile.py:474
 #, python-format
 msgid "No write access to pidfile parent directory '%s'."
 msgstr ""
 
-#: pb_base/pidfile.py:475
+#: pb_base/pidfile.py:481
 msgid "It is not a regular file."
 msgstr ""
 
-#: pb_base/pidfile.py:492
+#: pb_base/pidfile.py:498
 #, python-format
 msgid "Reading content of pidfile %r ..."
 msgstr ""
 
-#: pb_base/pidfile.py:517
+#: pb_base/pidfile.py:523
 #, python-format
 msgid "No useful information found in pidfile %(file)r: %(line)r"
 msgstr ""
 
-#: pb_base/pidfile.py:522
+#: pb_base/pidfile.py:528
 #, python-format
 msgid "Trying check for process with PID %d ..."
 msgstr ""
 
-#: pb_base/pidfile.py:529
+#: pb_base/pidfile.py:535
 #, python-format
 msgid "Process with PID %d anonymous died."
 msgstr ""
 
-#: pb_base/pidfile.py:532
+#: pb_base/pidfile.py:539
 #, python-format
 msgid "No permission to signal the process %d ..."
 msgstr ""
 
-#: pb_base/pidfile.py:535
+#: pb_base/pidfile.py:543
 #, python-format
-msgid "Unknown error: %r."
+msgid "Got a %(ecls)s: %(msg)s."
 msgstr ""
 
 #: pb_base/pidfile_app.py:174
@@ -1322,81 +1322,81 @@ msgstr ""
 msgid "Binding TCP socket to server address: %s"
 msgstr ""
 
-#: pb_base/socket_obj/unix.py:54
+#: pb_base/socket_obj/unix.py:56
 #, python-format
 msgid "The Unix socket file %r was not found."
 msgstr ""
 
-#: pb_base/socket_obj/unix.py:66
+#: pb_base/socket_obj/unix.py:68
 #, python-format
 msgid "Invalid permissions to connect to Unix socket %r."
 msgstr ""
 
-#: pb_base/socket_obj/unix.py:236
+#: pb_base/socket_obj/unix.py:238
 #, python-format
 msgid "Removing socket file %r ..."
 msgstr ""
 
-#: pb_base/socket_obj/unix.py:247
+#: pb_base/socket_obj/unix.py:249
 #, python-format
 msgid "Connecting to Unix Domain Socket '%s' ..."
 msgstr ""
 
-#: pb_base/socket_obj/unix.py:250 pb_base/socket_obj/unix.py:284
+#: pb_base/socket_obj/unix.py:252 pb_base/socket_obj/unix.py:287
 #, python-format
 msgid "The socket is already connected to '%s' ..."
 msgstr ""
 
-#: pb_base/socket_obj/unix.py:255 pb_base/socket_obj/unix.py:289
+#: pb_base/socket_obj/unix.py:257 pb_base/socket_obj/unix.py:292
 #, python-format
 msgid "The application is already bonded to '%s' ..."
 msgstr ""
 
-#: pb_base/socket_obj/unix.py:266
+#: pb_base/socket_obj/unix.py:269
 #, python-format
 msgid "Error connecting to Unix Socket '%(sock)s': %(err)s"
 msgstr ""
 
-#: pb_base/socket_obj/unix.py:279
+#: pb_base/socket_obj/unix.py:282
 #, python-format
 msgid "Creating and binding to Unix Domain Socket '%s' ..."
 msgstr ""
 
-#: pb_base/socket_obj/unix.py:309
+#: pb_base/socket_obj/unix.py:312
 #, python-format
 msgid "Setting permissions of '%(sock)s' to 0%(perm)o."
 msgstr ""
 
-#: pb_base/socket_obj/unix.py:323
+#: pb_base/socket_obj/unix.py:327
 #, python-format
 msgid "Invalid owner name '%s' for socket creation given."
 msgstr ""
 
-#: pb_base/socket_obj/unix.py:336
+#: pb_base/socket_obj/unix.py:341
 #, python-format
 msgid "Invalid group name '%s' for socket creation given."
 msgstr ""
 
-#: pb_base/socket_obj/unix.py:356
+#: pb_base/socket_obj/unix.py:361
 msgid "Only root may change ownership of a socket."
 msgstr ""
 
-#: pb_base/socket_obj/unix.py:360
+#: pb_base/socket_obj/unix.py:365
 #, python-format
 msgid "Setting ownership of '%(sock)s' to %(uid)d:%(gid)d ..."
 msgstr ""
 
-#: pb_base/socket_obj/unix.py:366
+#: pb_base/socket_obj/unix.py:371
 #, python-format
 msgid "Start listening on socket with a queue size of %d."
 msgstr ""
 
-#: pb_base/translate.py:58
+#: pb_base/translate.py:60
 #, python-format
 msgid "Basedir: %r"
 msgstr ""
 
-#: pb_base/translate.py:59
+#: pb_base/translate.py:61
 #, python-format
 msgid "Found .mo-file: %r"
 msgstr ""
