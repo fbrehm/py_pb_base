@@ -32,7 +32,7 @@ from pb_base.object import PbBaseObject
 
 from pb_base.translate import pb_gettext, pb_ngettext
 
-__version__ = '0.7.4'
+__version__ = '0.7.5'
 
 log = logging.getLogger(__name__)
 
@@ -227,7 +227,8 @@ class PbApplication(PbBaseObject):
             self._env_prefix = ep
         else:
             ep = self.appname.upper() + '_'
-            self._env_prefix = re.sub(r'[^A-Z0-9_]+', '_', ep, re.IGNORECASE)
+            re_anum = re.compile(r'[^A-Z0-9_]+', re.IGNORECASE)
+            self._env_prefix = re_anum.sub('_', ep)
 
         self._init_arg_parser()
         self._perform_arg_parser()
