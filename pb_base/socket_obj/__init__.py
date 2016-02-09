@@ -60,7 +60,7 @@ class SocketReadTimeoutError(PbIoTimeoutError):
     """
 
     # -------------------------------------------------------------------------
-    def __init__(self, timeout):
+    def __init__(self, timeout, filename=None):
         """
         Constructor.
 
@@ -70,7 +70,7 @@ class SocketReadTimeoutError(PbIoTimeoutError):
         """
 
         strerror = _("Timeout error on reading from socket")
-        super(SocketReadTimeoutError, self).__init__(strerror, timeout)
+        super(SocketReadTimeoutError, self).__init__(strerror, timeout, filename)
 
 
 # =============================================================================
@@ -80,7 +80,7 @@ class SocketWriteTimeoutError(PbIoTimeoutError):
     """
 
     # -------------------------------------------------------------------------
-    def __init__(self, timeout):
+    def __init__(self, timeout, filename=None):
         """
         Constructor.
 
@@ -90,7 +90,7 @@ class SocketWriteTimeoutError(PbIoTimeoutError):
         """
 
         strerror = _("Timeout error on writing to socket")
-        super(SocketWriteTimeoutError, self).__init__(strerror, timeout)
+        super(SocketWriteTimeoutError, self).__init__(strerror, timeout, filename)
 
 
 # =============================================================================
