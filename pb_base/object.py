@@ -25,7 +25,7 @@ from pb_base.errors import PbError
 
 from pb_base.translate import pb_gettext, pb_ngettext
 
-__version__ = '0.5.1'
+__version__ = '0.5.2'
 
 log = logging.getLogger(__name__)
 
@@ -198,6 +198,8 @@ class PbBaseObject(object):
 
     @base_dir.setter
     def base_dir(self, value):
+        if value.startswith('~'):
+            value = os.path.expanduser(value)
         if not os.path.exists(value):
             msg = _("Base directory %r does not exists.") % (value)
             log.error(msg)
