@@ -12,12 +12,12 @@
 import os
 import sys
 import re
-from distutils.core import setup
 import pprint
 import datetime
 
 # Third party modules
 import six
+from setuptools import setup
 
 # own modules:
 cur_dir = os.getcwd()
