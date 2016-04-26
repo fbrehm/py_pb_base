@@ -273,7 +273,7 @@ class TestPbBaseHandler(PbBaseTestcase):
         from pb_base.handler import CommandNotFoundError
         from pb_base.handler import PbBaseHandler
 
-        curdir = os.path.abspath(os.path.dirname(sys.argv[0]))
+        curdir = os.path.dirname(os.path.abspath(__file__))
         call_script = os.path.join(curdir, 'call_script.sh')
         if not os.path.exists(call_script):
             raise CommandNotFoundError(call_script)
@@ -298,7 +298,7 @@ class TestPbBaseHandler(PbBaseTestcase):
         from pb_base.handler import CommandNotFoundError
         from pb_base.handler import PbBaseHandler
 
-        curdir = os.path.abspath(os.path.dirname(sys.argv[0]))
+        curdir = os.path.dirname(os.path.abspath(__file__))
         call_script = os.path.join(curdir, 'call_script.sh')
         if not os.path.exists(call_script):
             raise CommandNotFoundError(call_script)

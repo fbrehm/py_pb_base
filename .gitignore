@@ -10,3 +10,4 @@ MANIFEST
 /pb_base.egg-info
 /pb_base/local_version.py
 .idea
+.cache
