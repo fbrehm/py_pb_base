@@ -48,7 +48,6 @@ __license__ = 'LGPL3+'
 # -----------------------------------
 def read(fname):
     content = None
-    print("Reading %r ..." % (fname))
     if six.PY3:
         with open(fname, 'r', encoding='utf-8') as fh:
             content = fh.read()
@@ -169,6 +168,7 @@ setup(
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     provides=[packet_name],
