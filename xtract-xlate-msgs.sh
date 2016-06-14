@@ -2,10 +2,14 @@
 
 pot_file="py_pb_base.pot"
 output_dir="po"
-pkg_version="0.7.3"
+pkg_version="0.7.4"
 src_dir="pb_base"
 
 cd $(dirname $0)
+
+if [[ -f debian/changelog ]] ; then
+    pkg_version=$( head -n 1 debian/changelog | awk '{print $2}' | sed -e 's/[\(\)]//g' )
+fi
 
 TEMPFILE=$( mktemp )
 cat "${output_dir}/${pot_file}" | egrep -v '^#: [^a]' > "${TEMPFILE}"
