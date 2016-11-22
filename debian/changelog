@@ -1,3 +1,10 @@
+pb-base (0.7.5) all; urgency=low
+
+  * Pointless version dump for building packages for Ubuntu zesty
+  * Minor changes to pb_base/translate.py and setup.py
+
+ -- Frank Brehm <frank.brehm@profitbricks.com>  Tue, 22 Nov 2016 11:27:03 +0100
+
 pb-base (0.7.4) all; urgency=medium
 
   * Removing a troublesome print statement in setup.py.
