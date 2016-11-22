@@ -27,9 +27,11 @@ locale_dir = os.path.join(basedir, 'po')
 if not os.path.isdir(locale_dir):
     locale_dir = None
 
-mo_file = gettext.find('py_pb_base', locale_dir)
+DOMAIN = 'py_pb_base'
 
-translator = gettext.translation('py_pb_base', locale_dir, fallback=True)
+mo_file = gettext.find(DOMAIN, locale_dir)
+
+translator = gettext.translation(DOMAIN, locale_dir, fallback=True)
 """
 The main gettext-translator object, which can be imported
 from other modules.
@@ -58,6 +60,8 @@ _ = pb_gettext
 if __name__ == "__main__":
 
     print(_("Basedir: %r") % (basedir))
+    print(_("Locales dir: %r") % (locale_dir))
+    print(_("Domain: %r") % (DOMAIN))
     print(_("Found .mo-file: %r") % (mo_file))
 
 # =============================================================================

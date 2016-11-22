@@ -22,7 +22,7 @@ from setuptools import setup
 # own modules:
 cur_dir = os.getcwd()
 if sys.argv[0] != '' and sys.argv[0] != '-c':
-    cur_dir = os.path.dirname(sys.argv[0])
+    cur_dir = os.path.dirname(__file__)
 
 libdir = os.path.join(cur_dir)
 bindir = os.path.join(cur_dir, 'bin')
