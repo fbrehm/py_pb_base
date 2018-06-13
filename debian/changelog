@@ -1,3 +1,9 @@
+pb-base (0.7.6) all; urgency=low
+
+  * Minor changes for newer Python3
+
+ -- Frank Brehm <frank@brehm-online.com>  Wed, 13 Jun 2018 20:57:54 +0200
+
 pb-base (0.7.5) all; urgency=low
 
   * Pointless version dump for building packages for Ubuntu zesty
